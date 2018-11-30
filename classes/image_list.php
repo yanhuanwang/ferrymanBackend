@@ -379,9 +379,6 @@ class image_list extends image
 		$this->MultiDeleteUrl = "imagedelete.php";
 		$this->MultiUpdateUrl = "imageupdate.php";
 
-		// Table object (user)
-		if (!isset($GLOBALS['user'])) $GLOBALS['user'] = new user();
-
 		// Table object (admin)
 		if (!isset($GLOBALS['admin'])) $GLOBALS['admin'] = new admin();
 
@@ -707,10 +704,13 @@ class image_list extends image
 		// Setup export options
 		$this->setupExportOptions();
 		$this->id->Visible = FALSE;
-		$this->name->setVisibility();
-		$this->_userid->setVisibility();
 		$this->path->setVisibility();
 		$this->description->setVisibility();
+		$this->uuid->setVisibility();
+		$this->user_id->setVisibility();
+		$this->confirmed->setVisibility();
+		$this->createdAt->setVisibility();
+		$this->updatedAt->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Global Page Loading event (in userfn*.php)
@@ -728,9 +728,6 @@ class image_list extends image
 		// Create Token
 		$this->createToken();
 
-		// Set up master detail parameters
-		$this->setupMasterParms();
-
 		// Setup other options
 		$this->setupOtherOptions();
 
@@ -747,9 +744,8 @@ class image_list extends image
 		}
 
 		// Set up lookup cache
-		$this->setupLookupOptions($this->_userid);
-
 		// Search filters
+
 		$srchAdvanced = ""; // Advanced search filter
 		$srchBasic = ""; // Basic search filter
 		$filter = "";
@@ -957,28 +953,8 @@ class image_list extends image
 		$filter = "";
 		if (!$Security->canList())
 			$filter = "(0=1)"; // Filter all records
-
-		// Restore master/detail filter
-		$this->DbMasterFilter = $this->getMasterFilter(); // Restore master filter
-		$this->DbDetailFilter = $this->getDetailFilter(); // Restore detail filter
 		AddFilter($filter, $this->DbDetailFilter);
 		AddFilter($filter, $this->SearchWhere);
-
-		// Load master record
-		if ($this->CurrentMode <> "add" && $this->getMasterFilter() <> "" && $this->getCurrentMasterTable() == "user") {
-			global $user;
-			$rsmaster = $user->loadRs($this->DbMasterFilter);
-			$this->MasterRecordExists = ($rsmaster && !$rsmaster->EOF);
-			if (!$this->MasterRecordExists) {
-				$this->setFailureMessage($Language->Phrase("NoRecord")); // Set no record found
-				$this->terminate("userlist.php"); // Return to master page
-			} else {
-				$user->loadListRowValues($rsmaster);
-				$user->RowType = ROWTYPE_MASTER; // Master row
-				$user->renderListRow();
-				$rsmaster->close();
-			}
-		}
 
 		// Set up filter
 		if ($this->Command == "json") {
@@ -1437,13 +1413,19 @@ class image_list extends image
 	public function emptyRow()
 	{
 		global $CurrentForm;
-		if ($CurrentForm->hasValue("x_name") && $CurrentForm->hasValue("o_name") && $this->name->CurrentValue <> $this->name->OldValue)
-			return FALSE;
-		if ($CurrentForm->hasValue("x__userid") && $CurrentForm->hasValue("o__userid") && $this->_userid->CurrentValue <> $this->_userid->OldValue)
-			return FALSE;
 		if (!EmptyValue($this->path->Upload->Value))
 			return FALSE;
 		if ($CurrentForm->hasValue("x_description") && $CurrentForm->hasValue("o_description") && $this->description->CurrentValue <> $this->description->OldValue)
+			return FALSE;
+		if ($CurrentForm->hasValue("x_uuid") && $CurrentForm->hasValue("o_uuid") && $this->uuid->CurrentValue <> $this->uuid->OldValue)
+			return FALSE;
+		if ($CurrentForm->hasValue("x_user_id") && $CurrentForm->hasValue("o_user_id") && $this->user_id->CurrentValue <> $this->user_id->OldValue)
+			return FALSE;
+		if ($CurrentForm->hasValue("x_confirmed") && $CurrentForm->hasValue("o_confirmed") && $this->confirmed->CurrentValue <> $this->confirmed->OldValue)
+			return FALSE;
+		if ($CurrentForm->hasValue("x_createdAt") && $CurrentForm->hasValue("o_createdAt") && $this->createdAt->CurrentValue <> $this->createdAt->OldValue)
+			return FALSE;
+		if ($CurrentForm->hasValue("x_updatedAt") && $CurrentForm->hasValue("o_updatedAt") && $this->updatedAt->CurrentValue <> $this->updatedAt->OldValue)
 			return FALSE;
 		return TRUE;
 	}
@@ -1528,9 +1510,12 @@ class image_list extends image
 		$filterList = "";
 		$savedFilterList = "";
 		$filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
-		$filterList = Concat($filterList, $this->name->AdvancedSearch->toJson(), ","); // Field name
-		$filterList = Concat($filterList, $this->_userid->AdvancedSearch->toJson(), ","); // Field userid
 		$filterList = Concat($filterList, $this->description->AdvancedSearch->toJson(), ","); // Field description
+		$filterList = Concat($filterList, $this->uuid->AdvancedSearch->toJson(), ","); // Field uuid
+		$filterList = Concat($filterList, $this->user_id->AdvancedSearch->toJson(), ","); // Field user_id
+		$filterList = Concat($filterList, $this->confirmed->AdvancedSearch->toJson(), ","); // Field confirmed
+		$filterList = Concat($filterList, $this->createdAt->AdvancedSearch->toJson(), ","); // Field createdAt
+		$filterList = Concat($filterList, $this->updatedAt->AdvancedSearch->toJson(), ","); // Field updatedAt
 		if ($this->BasicSearch->Keyword <> "") {
 			$wrk = "\"" . TABLE_BASIC_SEARCH . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . TABLE_BASIC_SEARCH_TYPE . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
 			$filterList = Concat($filterList, $wrk, ",");
@@ -1577,22 +1562,6 @@ class image_list extends image
 		$this->id->AdvancedSearch->SearchOperator2 = @$filter["w_id"];
 		$this->id->AdvancedSearch->save();
 
-		// Field name
-		$this->name->AdvancedSearch->SearchValue = @$filter["x_name"];
-		$this->name->AdvancedSearch->SearchOperator = @$filter["z_name"];
-		$this->name->AdvancedSearch->SearchCondition = @$filter["v_name"];
-		$this->name->AdvancedSearch->SearchValue2 = @$filter["y_name"];
-		$this->name->AdvancedSearch->SearchOperator2 = @$filter["w_name"];
-		$this->name->AdvancedSearch->save();
-
-		// Field userid
-		$this->_userid->AdvancedSearch->SearchValue = @$filter["x__userid"];
-		$this->_userid->AdvancedSearch->SearchOperator = @$filter["z__userid"];
-		$this->_userid->AdvancedSearch->SearchCondition = @$filter["v__userid"];
-		$this->_userid->AdvancedSearch->SearchValue2 = @$filter["y__userid"];
-		$this->_userid->AdvancedSearch->SearchOperator2 = @$filter["w__userid"];
-		$this->_userid->AdvancedSearch->save();
-
 		// Field description
 		$this->description->AdvancedSearch->SearchValue = @$filter["x_description"];
 		$this->description->AdvancedSearch->SearchOperator = @$filter["z_description"];
@@ -1600,6 +1569,46 @@ class image_list extends image
 		$this->description->AdvancedSearch->SearchValue2 = @$filter["y_description"];
 		$this->description->AdvancedSearch->SearchOperator2 = @$filter["w_description"];
 		$this->description->AdvancedSearch->save();
+
+		// Field uuid
+		$this->uuid->AdvancedSearch->SearchValue = @$filter["x_uuid"];
+		$this->uuid->AdvancedSearch->SearchOperator = @$filter["z_uuid"];
+		$this->uuid->AdvancedSearch->SearchCondition = @$filter["v_uuid"];
+		$this->uuid->AdvancedSearch->SearchValue2 = @$filter["y_uuid"];
+		$this->uuid->AdvancedSearch->SearchOperator2 = @$filter["w_uuid"];
+		$this->uuid->AdvancedSearch->save();
+
+		// Field user_id
+		$this->user_id->AdvancedSearch->SearchValue = @$filter["x_user_id"];
+		$this->user_id->AdvancedSearch->SearchOperator = @$filter["z_user_id"];
+		$this->user_id->AdvancedSearch->SearchCondition = @$filter["v_user_id"];
+		$this->user_id->AdvancedSearch->SearchValue2 = @$filter["y_user_id"];
+		$this->user_id->AdvancedSearch->SearchOperator2 = @$filter["w_user_id"];
+		$this->user_id->AdvancedSearch->save();
+
+		// Field confirmed
+		$this->confirmed->AdvancedSearch->SearchValue = @$filter["x_confirmed"];
+		$this->confirmed->AdvancedSearch->SearchOperator = @$filter["z_confirmed"];
+		$this->confirmed->AdvancedSearch->SearchCondition = @$filter["v_confirmed"];
+		$this->confirmed->AdvancedSearch->SearchValue2 = @$filter["y_confirmed"];
+		$this->confirmed->AdvancedSearch->SearchOperator2 = @$filter["w_confirmed"];
+		$this->confirmed->AdvancedSearch->save();
+
+		// Field createdAt
+		$this->createdAt->AdvancedSearch->SearchValue = @$filter["x_createdAt"];
+		$this->createdAt->AdvancedSearch->SearchOperator = @$filter["z_createdAt"];
+		$this->createdAt->AdvancedSearch->SearchCondition = @$filter["v_createdAt"];
+		$this->createdAt->AdvancedSearch->SearchValue2 = @$filter["y_createdAt"];
+		$this->createdAt->AdvancedSearch->SearchOperator2 = @$filter["w_createdAt"];
+		$this->createdAt->AdvancedSearch->save();
+
+		// Field updatedAt
+		$this->updatedAt->AdvancedSearch->SearchValue = @$filter["x_updatedAt"];
+		$this->updatedAt->AdvancedSearch->SearchOperator = @$filter["z_updatedAt"];
+		$this->updatedAt->AdvancedSearch->SearchCondition = @$filter["v_updatedAt"];
+		$this->updatedAt->AdvancedSearch->SearchValue2 = @$filter["y_updatedAt"];
+		$this->updatedAt->AdvancedSearch->SearchOperator2 = @$filter["w_updatedAt"];
+		$this->updatedAt->AdvancedSearch->save();
 		$this->BasicSearch->setKeyword(@$filter[TABLE_BASIC_SEARCH]);
 		$this->BasicSearch->setType(@$filter[TABLE_BASIC_SEARCH_TYPE]);
 	}
@@ -1612,9 +1621,12 @@ class image_list extends image
 		if (!$Security->canSearch())
 			return "";
 		$this->buildSearchSql($where, $this->id, $default, FALSE); // id
-		$this->buildSearchSql($where, $this->name, $default, FALSE); // name
-		$this->buildSearchSql($where, $this->_userid, $default, FALSE); // userid
 		$this->buildSearchSql($where, $this->description, $default, FALSE); // description
+		$this->buildSearchSql($where, $this->uuid, $default, FALSE); // uuid
+		$this->buildSearchSql($where, $this->user_id, $default, FALSE); // user_id
+		$this->buildSearchSql($where, $this->confirmed, $default, FALSE); // confirmed
+		$this->buildSearchSql($where, $this->createdAt, $default, FALSE); // createdAt
+		$this->buildSearchSql($where, $this->updatedAt, $default, FALSE); // updatedAt
 
 		// Set up search parm
 		if (!$default && $where <> "" && in_array($this->Command, array("", "reset", "resetall"))) {
@@ -1622,9 +1634,12 @@ class image_list extends image
 		}
 		if (!$default && $this->Command == "search") {
 			$this->id->AdvancedSearch->save(); // id
-			$this->name->AdvancedSearch->save(); // name
-			$this->_userid->AdvancedSearch->save(); // userid
 			$this->description->AdvancedSearch->save(); // description
+			$this->uuid->AdvancedSearch->save(); // uuid
+			$this->user_id->AdvancedSearch->save(); // user_id
+			$this->confirmed->AdvancedSearch->save(); // confirmed
+			$this->createdAt->AdvancedSearch->save(); // createdAt
+			$this->updatedAt->AdvancedSearch->save(); // updatedAt
 		}
 		return $where;
 	}
@@ -1685,9 +1700,9 @@ class image_list extends image
 	protected function basicSearchSql($arKeywords, $type)
 	{
 		$where = "";
-		$this->buildBasicSearchSql($where, $this->name, $arKeywords, $type);
 		$this->buildBasicSearchSql($where, $this->path, $arKeywords, $type);
 		$this->buildBasicSearchSql($where, $this->description, $arKeywords, $type);
+		$this->buildBasicSearchSql($where, $this->uuid, $arKeywords, $type);
 		return $where;
 	}
 
@@ -1805,11 +1820,17 @@ class image_list extends image
 			return TRUE;
 		if ($this->id->AdvancedSearch->issetSession())
 			return TRUE;
-		if ($this->name->AdvancedSearch->issetSession())
-			return TRUE;
-		if ($this->_userid->AdvancedSearch->issetSession())
-			return TRUE;
 		if ($this->description->AdvancedSearch->issetSession())
+			return TRUE;
+		if ($this->uuid->AdvancedSearch->issetSession())
+			return TRUE;
+		if ($this->user_id->AdvancedSearch->issetSession())
+			return TRUE;
+		if ($this->confirmed->AdvancedSearch->issetSession())
+			return TRUE;
+		if ($this->createdAt->AdvancedSearch->issetSession())
+			return TRUE;
+		if ($this->updatedAt->AdvancedSearch->issetSession())
 			return TRUE;
 		return FALSE;
 	}
@@ -1845,9 +1866,12 @@ class image_list extends image
 	protected function resetAdvancedSearchParms()
 	{
 		$this->id->AdvancedSearch->unsetSession();
-		$this->name->AdvancedSearch->unsetSession();
-		$this->_userid->AdvancedSearch->unsetSession();
 		$this->description->AdvancedSearch->unsetSession();
+		$this->uuid->AdvancedSearch->unsetSession();
+		$this->user_id->AdvancedSearch->unsetSession();
+		$this->confirmed->AdvancedSearch->unsetSession();
+		$this->createdAt->AdvancedSearch->unsetSession();
+		$this->updatedAt->AdvancedSearch->unsetSession();
 	}
 
 	// Restore all search parameters
@@ -1860,9 +1884,12 @@ class image_list extends image
 
 		// Restore advanced search values
 		$this->id->AdvancedSearch->load();
-		$this->name->AdvancedSearch->load();
-		$this->_userid->AdvancedSearch->load();
 		$this->description->AdvancedSearch->load();
+		$this->uuid->AdvancedSearch->load();
+		$this->user_id->AdvancedSearch->load();
+		$this->confirmed->AdvancedSearch->load();
+		$this->createdAt->AdvancedSearch->load();
+		$this->updatedAt->AdvancedSearch->load();
 	}
 
 	// Set up sort parameters
@@ -1873,10 +1900,13 @@ class image_list extends image
 		if (Get("order") !== NULL) {
 			$this->CurrentOrder = Get("order");
 			$this->CurrentOrderType = Get("ordertype", "");
-			$this->updateSort($this->name); // name
-			$this->updateSort($this->_userid); // userid
 			$this->updateSort($this->path); // path
 			$this->updateSort($this->description); // description
+			$this->updateSort($this->uuid); // uuid
+			$this->updateSort($this->user_id); // user_id
+			$this->updateSort($this->confirmed); // confirmed
+			$this->updateSort($this->createdAt); // createdAt
+			$this->updateSort($this->updatedAt); // updatedAt
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -1908,22 +1938,17 @@ class image_list extends image
 			if ($this->Command == "reset" || $this->Command == "resetall")
 				$this->resetSearchParms();
 
-			// Reset master/detail keys
-			if ($this->Command == "resetall") {
-				$this->setCurrentMasterTable(""); // Clear master table
-				$this->DbMasterFilter = "";
-				$this->DbDetailFilter = "";
-				$this->_userid->setSessionValue("");
-			}
-
 			// Reset sorting order
 			if ($this->Command == "resetsort") {
 				$orderBy = "";
 				$this->setSessionOrderBy($orderBy);
-				$this->name->setSort("");
-				$this->_userid->setSort("");
 				$this->path->setSort("");
 				$this->description->setSort("");
+				$this->uuid->setSort("");
+				$this->user_id->setSort("");
+				$this->confirmed->setSort("");
+				$this->createdAt->setSort("");
+				$this->updatedAt->setSort("");
 			}
 
 			// Reset start position
@@ -2610,14 +2635,20 @@ class image_list extends image
 	{
 		$this->id->CurrentValue = NULL;
 		$this->id->OldValue = $this->id->CurrentValue;
-		$this->name->CurrentValue = NULL;
-		$this->name->OldValue = $this->name->CurrentValue;
-		$this->_userid->CurrentValue = NULL;
-		$this->_userid->OldValue = $this->_userid->CurrentValue;
 		$this->path->Upload->DbValue = NULL;
 		$this->path->OldValue = $this->path->Upload->DbValue;
 		$this->description->CurrentValue = NULL;
 		$this->description->OldValue = $this->description->CurrentValue;
+		$this->uuid->CurrentValue = NULL;
+		$this->uuid->OldValue = $this->uuid->CurrentValue;
+		$this->user_id->CurrentValue = NULL;
+		$this->user_id->OldValue = $this->user_id->CurrentValue;
+		$this->confirmed->CurrentValue = 0;
+		$this->confirmed->OldValue = $this->confirmed->CurrentValue;
+		$this->createdAt->CurrentValue = NULL;
+		$this->createdAt->OldValue = $this->createdAt->CurrentValue;
+		$this->updatedAt->CurrentValue = NULL;
+		$this->updatedAt->OldValue = $this->updatedAt->CurrentValue;
 	}
 
 	// Load basic search values
@@ -2642,23 +2673,41 @@ class image_list extends image
 			$this->Command = "search";
 		$this->id->AdvancedSearch->setSearchOperator(Get("z_id", ""));
 
-		// name
-		$this->name->AdvancedSearch->setSearchValue(Get("x_name", Get("name", "")));
-		if ($this->name->AdvancedSearch->SearchValue <> "" && $this->Command == "")
-			$this->Command = "search";
-		$this->name->AdvancedSearch->setSearchOperator(Get("z_name", ""));
-
-		// userid
-		$this->_userid->AdvancedSearch->setSearchValue(Get("x__userid", Get("_userid", "")));
-		if ($this->_userid->AdvancedSearch->SearchValue <> "" && $this->Command == "")
-			$this->Command = "search";
-		$this->_userid->AdvancedSearch->setSearchOperator(Get("z__userid", ""));
-
 		// description
 		$this->description->AdvancedSearch->setSearchValue(Get("x_description", Get("description", "")));
 		if ($this->description->AdvancedSearch->SearchValue <> "" && $this->Command == "")
 			$this->Command = "search";
 		$this->description->AdvancedSearch->setSearchOperator(Get("z_description", ""));
+
+		// uuid
+		$this->uuid->AdvancedSearch->setSearchValue(Get("x_uuid", Get("uuid", "")));
+		if ($this->uuid->AdvancedSearch->SearchValue <> "" && $this->Command == "")
+			$this->Command = "search";
+		$this->uuid->AdvancedSearch->setSearchOperator(Get("z_uuid", ""));
+
+		// user_id
+		$this->user_id->AdvancedSearch->setSearchValue(Get("x_user_id", Get("user_id", "")));
+		if ($this->user_id->AdvancedSearch->SearchValue <> "" && $this->Command == "")
+			$this->Command = "search";
+		$this->user_id->AdvancedSearch->setSearchOperator(Get("z_user_id", ""));
+
+		// confirmed
+		$this->confirmed->AdvancedSearch->setSearchValue(Get("x_confirmed", Get("confirmed", "")));
+		if ($this->confirmed->AdvancedSearch->SearchValue <> "" && $this->Command == "")
+			$this->Command = "search";
+		$this->confirmed->AdvancedSearch->setSearchOperator(Get("z_confirmed", ""));
+
+		// createdAt
+		$this->createdAt->AdvancedSearch->setSearchValue(Get("x_createdAt", Get("createdAt", "")));
+		if ($this->createdAt->AdvancedSearch->SearchValue <> "" && $this->Command == "")
+			$this->Command = "search";
+		$this->createdAt->AdvancedSearch->setSearchOperator(Get("z_createdAt", ""));
+
+		// updatedAt
+		$this->updatedAt->AdvancedSearch->setSearchValue(Get("x_updatedAt", Get("updatedAt", "")));
+		if ($this->updatedAt->AdvancedSearch->SearchValue <> "" && $this->Command == "")
+			$this->Command = "search";
+		$this->updatedAt->AdvancedSearch->setSearchOperator(Get("z_updatedAt", ""));
 	}
 
 	// Load form values
@@ -2669,26 +2718,6 @@ class image_list extends image
 		global $CurrentForm;
 		$this->getUploadFiles(); // Get upload files
 
-		// Check field name 'name' first before field var 'x_name'
-		$val = $CurrentForm->hasValue("name") ? $CurrentForm->getValue("name") : $CurrentForm->getValue("x_name");
-		if (!$this->name->IsDetailKey) {
-			if (IsApi() && $val == NULL)
-				$this->name->Visible = FALSE; // Disable update for API request
-			else
-				$this->name->setFormValue($val);
-		}
-		$this->name->setOldValue($CurrentForm->getValue("o_name"));
-
-		// Check field name 'userid' first before field var 'x__userid'
-		$val = $CurrentForm->hasValue("userid") ? $CurrentForm->getValue("userid") : $CurrentForm->getValue("x__userid");
-		if (!$this->_userid->IsDetailKey) {
-			if (IsApi() && $val == NULL)
-				$this->_userid->Visible = FALSE; // Disable update for API request
-			else
-				$this->_userid->setFormValue($val);
-		}
-		$this->_userid->setOldValue($CurrentForm->getValue("o__userid"));
-
 		// Check field name 'description' first before field var 'x_description'
 		$val = $CurrentForm->hasValue("description") ? $CurrentForm->getValue("description") : $CurrentForm->getValue("x_description");
 		if (!$this->description->IsDetailKey) {
@@ -2698,6 +2727,58 @@ class image_list extends image
 				$this->description->setFormValue($val);
 		}
 		$this->description->setOldValue($CurrentForm->getValue("o_description"));
+
+		// Check field name 'uuid' first before field var 'x_uuid'
+		$val = $CurrentForm->hasValue("uuid") ? $CurrentForm->getValue("uuid") : $CurrentForm->getValue("x_uuid");
+		if (!$this->uuid->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->uuid->Visible = FALSE; // Disable update for API request
+			else
+				$this->uuid->setFormValue($val);
+		}
+		$this->uuid->setOldValue($CurrentForm->getValue("o_uuid"));
+
+		// Check field name 'user_id' first before field var 'x_user_id'
+		$val = $CurrentForm->hasValue("user_id") ? $CurrentForm->getValue("user_id") : $CurrentForm->getValue("x_user_id");
+		if (!$this->user_id->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->user_id->Visible = FALSE; // Disable update for API request
+			else
+				$this->user_id->setFormValue($val);
+		}
+		$this->user_id->setOldValue($CurrentForm->getValue("o_user_id"));
+
+		// Check field name 'confirmed' first before field var 'x_confirmed'
+		$val = $CurrentForm->hasValue("confirmed") ? $CurrentForm->getValue("confirmed") : $CurrentForm->getValue("x_confirmed");
+		if (!$this->confirmed->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->confirmed->Visible = FALSE; // Disable update for API request
+			else
+				$this->confirmed->setFormValue($val);
+		}
+		$this->confirmed->setOldValue($CurrentForm->getValue("o_confirmed"));
+
+		// Check field name 'createdAt' first before field var 'x_createdAt'
+		$val = $CurrentForm->hasValue("createdAt") ? $CurrentForm->getValue("createdAt") : $CurrentForm->getValue("x_createdAt");
+		if (!$this->createdAt->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->createdAt->Visible = FALSE; // Disable update for API request
+			else
+				$this->createdAt->setFormValue($val);
+			$this->createdAt->CurrentValue = UnFormatDateTime($this->createdAt->CurrentValue, 0);
+		}
+		$this->createdAt->setOldValue($CurrentForm->getValue("o_createdAt"));
+
+		// Check field name 'updatedAt' first before field var 'x_updatedAt'
+		$val = $CurrentForm->hasValue("updatedAt") ? $CurrentForm->getValue("updatedAt") : $CurrentForm->getValue("x_updatedAt");
+		if (!$this->updatedAt->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->updatedAt->Visible = FALSE; // Disable update for API request
+			else
+				$this->updatedAt->setFormValue($val);
+			$this->updatedAt->CurrentValue = UnFormatDateTime($this->updatedAt->CurrentValue, 0);
+		}
+		$this->updatedAt->setOldValue($CurrentForm->getValue("o_updatedAt"));
 
 		// Check field name 'id' first before field var 'x_id'
 		$val = $CurrentForm->hasValue("id") ? $CurrentForm->getValue("id") : $CurrentForm->getValue("x_id");
@@ -2711,9 +2792,14 @@ class image_list extends image
 		global $CurrentForm;
 		if (!$this->isGridAdd() && !$this->isAdd())
 			$this->id->CurrentValue = $this->id->FormValue;
-		$this->name->CurrentValue = $this->name->FormValue;
-		$this->_userid->CurrentValue = $this->_userid->FormValue;
 		$this->description->CurrentValue = $this->description->FormValue;
+		$this->uuid->CurrentValue = $this->uuid->FormValue;
+		$this->user_id->CurrentValue = $this->user_id->FormValue;
+		$this->confirmed->CurrentValue = $this->confirmed->FormValue;
+		$this->createdAt->CurrentValue = $this->createdAt->FormValue;
+		$this->createdAt->CurrentValue = UnFormatDateTime($this->createdAt->CurrentValue, 0);
+		$this->updatedAt->CurrentValue = $this->updatedAt->FormValue;
+		$this->updatedAt->CurrentValue = UnFormatDateTime($this->updatedAt->CurrentValue, 0);
 	}
 
 	// Load recordset
@@ -2781,11 +2867,14 @@ class image_list extends image
 		if (!$rs || $rs->EOF)
 			return;
 		$this->id->setDbValue($row['id']);
-		$this->name->setDbValue($row['name']);
-		$this->_userid->setDbValue($row['userid']);
 		$this->path->Upload->DbValue = $row['path'];
 		$this->path->setDbValue($this->path->Upload->DbValue);
 		$this->description->setDbValue($row['description']);
+		$this->uuid->setDbValue($row['uuid']);
+		$this->user_id->setDbValue($row['user_id']);
+		$this->confirmed->setDbValue($row['confirmed']);
+		$this->createdAt->setDbValue($row['createdAt']);
+		$this->updatedAt->setDbValue($row['updatedAt']);
 		if (!isset($GLOBALS["parcel_info_grid"]))
 			$GLOBALS["parcel_info_grid"] = new parcel_info_grid();
 		$detailFilter = $GLOBALS["parcel_info"]->sqlDetailFilter_image();
@@ -2801,10 +2890,13 @@ class image_list extends image
 		$this->loadDefaultValues();
 		$row = [];
 		$row['id'] = $this->id->CurrentValue;
-		$row['name'] = $this->name->CurrentValue;
-		$row['userid'] = $this->_userid->CurrentValue;
 		$row['path'] = $this->path->Upload->DbValue;
 		$row['description'] = $this->description->CurrentValue;
+		$row['uuid'] = $this->uuid->CurrentValue;
+		$row['user_id'] = $this->user_id->CurrentValue;
+		$row['confirmed'] = $this->confirmed->CurrentValue;
+		$row['createdAt'] = $this->createdAt->CurrentValue;
+		$row['updatedAt'] = $this->updatedAt->CurrentValue;
 		return $row;
 	}
 
@@ -2849,44 +2941,19 @@ class image_list extends image
 
 		// Common render codes for all row types
 		// id
-		// name
-		// userid
 		// path
 		// description
+		// uuid
+		// user_id
+		// confirmed
+		// createdAt
+		// updatedAt
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
 			// id
 			$this->id->ViewValue = $this->id->CurrentValue;
 			$this->id->ViewCustomAttributes = "";
-
-			// name
-			$this->name->ViewValue = $this->name->CurrentValue;
-			$this->name->ViewCustomAttributes = "";
-
-			// userid
-			$this->_userid->ViewValue = $this->_userid->CurrentValue;
-			$curVal = strval($this->_userid->CurrentValue);
-			if ($curVal <> "") {
-				$this->_userid->ViewValue = $this->_userid->lookupCacheOption($curVal);
-				if ($this->_userid->ViewValue === NULL) { // Lookup from database
-					$filterWrk = "`id`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
-					$sqlWrk = $this->_userid->Lookup->getSql(FALSE, $filterWrk, '', $this);
-					$rswrk = Conn()->execute($sqlWrk);
-					if ($rswrk && !$rswrk->EOF) { // Lookup values found
-						$arwrk = array();
-						$arwrk[1] = $rswrk->fields('df');
-						$arwrk[2] = $rswrk->fields('df2');
-						$this->_userid->ViewValue = $this->_userid->displayValue($arwrk);
-						$rswrk->Close();
-					} else {
-						$this->_userid->ViewValue = $this->_userid->CurrentValue;
-					}
-				}
-			} else {
-				$this->_userid->ViewValue = NULL;
-			}
-			$this->_userid->ViewCustomAttributes = "";
 
 			// path
 			if (!EmptyValue($this->path->Upload->DbValue)) {
@@ -2901,19 +2968,29 @@ class image_list extends image
 			$this->description->ViewValue = $this->description->CurrentValue;
 			$this->description->ViewCustomAttributes = "";
 
-			// name
-			$this->name->LinkCustomAttributes = "";
-			$this->name->HrefValue = "";
-			$this->name->TooltipValue = "";
-			if (!$this->isExport())
-				$this->name->ViewValue = $this->highlightValue($this->name);
+			// uuid
+			$this->uuid->ViewValue = $this->uuid->CurrentValue;
+			$this->uuid->ViewCustomAttributes = "";
 
-			// userid
-			$this->_userid->LinkCustomAttributes = "";
-			$this->_userid->HrefValue = "";
-			$this->_userid->TooltipValue = "";
-			if (!$this->isExport())
-				$this->_userid->ViewValue = $this->highlightValue($this->_userid);
+			// user_id
+			$this->user_id->ViewValue = $this->user_id->CurrentValue;
+			$this->user_id->ViewValue = FormatNumber($this->user_id->ViewValue, 0, -2, -2, -2);
+			$this->user_id->ViewCustomAttributes = "";
+
+			// confirmed
+			$this->confirmed->ViewValue = $this->confirmed->CurrentValue;
+			$this->confirmed->ViewValue = FormatNumber($this->confirmed->ViewValue, 0, -2, -2, -2);
+			$this->confirmed->ViewCustomAttributes = "";
+
+			// createdAt
+			$this->createdAt->ViewValue = $this->createdAt->CurrentValue;
+			$this->createdAt->ViewValue = FormatDateTime($this->createdAt->ViewValue, 0);
+			$this->createdAt->ViewCustomAttributes = "";
+
+			// updatedAt
+			$this->updatedAt->ViewValue = $this->updatedAt->CurrentValue;
+			$this->updatedAt->ViewValue = FormatDateTime($this->updatedAt->ViewValue, 0);
+			$this->updatedAt->ViewCustomAttributes = "";
 
 			// path
 			$this->path->LinkCustomAttributes = "";
@@ -2939,67 +3016,35 @@ class image_list extends image
 			$this->description->TooltipValue = "";
 			if (!$this->isExport())
 				$this->description->ViewValue = $this->highlightValue($this->description);
+
+			// uuid
+			$this->uuid->LinkCustomAttributes = "";
+			$this->uuid->HrefValue = "";
+			$this->uuid->TooltipValue = "";
+			if (!$this->isExport())
+				$this->uuid->ViewValue = $this->highlightValue($this->uuid);
+
+			// user_id
+			$this->user_id->LinkCustomAttributes = "";
+			$this->user_id->HrefValue = "";
+			$this->user_id->TooltipValue = "";
+
+			// confirmed
+			$this->confirmed->LinkCustomAttributes = "";
+			$this->confirmed->HrefValue = "";
+			$this->confirmed->TooltipValue = "";
+
+			// createdAt
+			$this->createdAt->LinkCustomAttributes = "";
+			$this->createdAt->HrefValue = "";
+			$this->createdAt->TooltipValue = "";
+
+			// updatedAt
+			$this->updatedAt->LinkCustomAttributes = "";
+			$this->updatedAt->HrefValue = "";
+			$this->updatedAt->TooltipValue = "";
 		} elseif ($this->RowType == ROWTYPE_ADD) { // Add row
 
-			// name
-			$this->name->EditAttrs["class"] = "form-control";
-			$this->name->EditCustomAttributes = "";
-			$this->name->EditValue = HtmlEncode($this->name->CurrentValue);
-			$this->name->PlaceHolder = RemoveHtml($this->name->caption());
-
-			// userid
-			$this->_userid->EditAttrs["class"] = "form-control";
-			$this->_userid->EditCustomAttributes = "";
-			if ($this->_userid->getSessionValue() <> "") {
-				$this->_userid->CurrentValue = $this->_userid->getSessionValue();
-				$this->_userid->OldValue = $this->_userid->CurrentValue;
-			$this->_userid->ViewValue = $this->_userid->CurrentValue;
-			$curVal = strval($this->_userid->CurrentValue);
-			if ($curVal <> "") {
-				$this->_userid->ViewValue = $this->_userid->lookupCacheOption($curVal);
-				if ($this->_userid->ViewValue === NULL) { // Lookup from database
-					$filterWrk = "`id`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
-					$sqlWrk = $this->_userid->Lookup->getSql(FALSE, $filterWrk, '', $this);
-					$rswrk = Conn()->execute($sqlWrk);
-					if ($rswrk && !$rswrk->EOF) { // Lookup values found
-						$arwrk = array();
-						$arwrk[1] = $rswrk->fields('df');
-						$arwrk[2] = $rswrk->fields('df2');
-						$this->_userid->ViewValue = $this->_userid->displayValue($arwrk);
-						$rswrk->Close();
-					} else {
-						$this->_userid->ViewValue = $this->_userid->CurrentValue;
-					}
-				}
-			} else {
-				$this->_userid->ViewValue = NULL;
-			}
-			$this->_userid->ViewCustomAttributes = "";
-			} else {
-			$this->_userid->EditValue = HtmlEncode($this->_userid->CurrentValue);
-			$curVal = strval($this->_userid->CurrentValue);
-			if ($curVal <> "") {
-				$this->_userid->EditValue = $this->_userid->lookupCacheOption($curVal);
-				if ($this->_userid->EditValue === NULL) { // Lookup from database
-					$filterWrk = "`id`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
-					$sqlWrk = $this->_userid->Lookup->getSql(FALSE, $filterWrk, '', $this);
-					$rswrk = Conn()->execute($sqlWrk);
-					if ($rswrk && !$rswrk->EOF) { // Lookup values found
-						$arwrk = array();
-						$arwrk[1] = HtmlEncode($rswrk->fields('df'));
-						$arwrk[2] = HtmlEncode($rswrk->fields('df2'));
-						$this->_userid->EditValue = $this->_userid->displayValue($arwrk);
-						$rswrk->Close();
-					} else {
-						$this->_userid->EditValue = HtmlEncode($this->_userid->CurrentValue);
-					}
-				}
-			} else {
-				$this->_userid->EditValue = NULL;
-			}
-			$this->_userid->PlaceHolder = RemoveHtml($this->_userid->caption());
-			}
-
 			// path
 			$this->path->EditAttrs["class"] = "form-control";
 			$this->path->EditCustomAttributes = "";
@@ -3022,18 +3067,40 @@ class image_list extends image
 			$this->description->EditCustomAttributes = "";
 			$this->description->EditValue = HtmlEncode($this->description->CurrentValue);
 			$this->description->PlaceHolder = RemoveHtml($this->description->caption());
+
+			// uuid
+			$this->uuid->EditAttrs["class"] = "form-control";
+			$this->uuid->EditCustomAttributes = "";
+			$this->uuid->EditValue = HtmlEncode($this->uuid->CurrentValue);
+			$this->uuid->PlaceHolder = RemoveHtml($this->uuid->caption());
+
+			// user_id
+			$this->user_id->EditAttrs["class"] = "form-control";
+			$this->user_id->EditCustomAttributes = "";
+			$this->user_id->EditValue = HtmlEncode($this->user_id->CurrentValue);
+			$this->user_id->PlaceHolder = RemoveHtml($this->user_id->caption());
+
+			// confirmed
+			$this->confirmed->EditAttrs["class"] = "form-control";
+			$this->confirmed->EditCustomAttributes = "";
+			$this->confirmed->EditValue = HtmlEncode($this->confirmed->CurrentValue);
+			$this->confirmed->PlaceHolder = RemoveHtml($this->confirmed->caption());
+
+			// createdAt
+			$this->createdAt->EditAttrs["class"] = "form-control";
+			$this->createdAt->EditCustomAttributes = "";
+			$this->createdAt->EditValue = HtmlEncode(FormatDateTime($this->createdAt->CurrentValue, 8));
+			$this->createdAt->PlaceHolder = RemoveHtml($this->createdAt->caption());
+
+			// updatedAt
+			$this->updatedAt->EditAttrs["class"] = "form-control";
+			$this->updatedAt->EditCustomAttributes = "";
+			$this->updatedAt->EditValue = HtmlEncode(FormatDateTime($this->updatedAt->CurrentValue, 8));
+			$this->updatedAt->PlaceHolder = RemoveHtml($this->updatedAt->caption());
 
 			// Add refer script
-			// name
-
-			$this->name->LinkCustomAttributes = "";
-			$this->name->HrefValue = "";
-
-			// userid
-			$this->_userid->LinkCustomAttributes = "";
-			$this->_userid->HrefValue = "";
-
 			// path
+
 			$this->path->LinkCustomAttributes = "";
 			if (!EmptyValue($this->path->Upload->DbValue)) {
 				$this->path->HrefValue = GetFileUploadUrl($this->path, $this->path->Upload->DbValue); // Add prefix/suffix
@@ -3047,66 +3114,27 @@ class image_list extends image
 			// description
 			$this->description->LinkCustomAttributes = "";
 			$this->description->HrefValue = "";
+
+			// uuid
+			$this->uuid->LinkCustomAttributes = "";
+			$this->uuid->HrefValue = "";
+
+			// user_id
+			$this->user_id->LinkCustomAttributes = "";
+			$this->user_id->HrefValue = "";
+
+			// confirmed
+			$this->confirmed->LinkCustomAttributes = "";
+			$this->confirmed->HrefValue = "";
+
+			// createdAt
+			$this->createdAt->LinkCustomAttributes = "";
+			$this->createdAt->HrefValue = "";
+
+			// updatedAt
+			$this->updatedAt->LinkCustomAttributes = "";
+			$this->updatedAt->HrefValue = "";
 		} elseif ($this->RowType == ROWTYPE_EDIT) { // Edit row
-
-			// name
-			$this->name->EditAttrs["class"] = "form-control";
-			$this->name->EditCustomAttributes = "";
-			$this->name->EditValue = HtmlEncode($this->name->CurrentValue);
-			$this->name->PlaceHolder = RemoveHtml($this->name->caption());
-
-			// userid
-			$this->_userid->EditAttrs["class"] = "form-control";
-			$this->_userid->EditCustomAttributes = "";
-			if ($this->_userid->getSessionValue() <> "") {
-				$this->_userid->CurrentValue = $this->_userid->getSessionValue();
-				$this->_userid->OldValue = $this->_userid->CurrentValue;
-			$this->_userid->ViewValue = $this->_userid->CurrentValue;
-			$curVal = strval($this->_userid->CurrentValue);
-			if ($curVal <> "") {
-				$this->_userid->ViewValue = $this->_userid->lookupCacheOption($curVal);
-				if ($this->_userid->ViewValue === NULL) { // Lookup from database
-					$filterWrk = "`id`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
-					$sqlWrk = $this->_userid->Lookup->getSql(FALSE, $filterWrk, '', $this);
-					$rswrk = Conn()->execute($sqlWrk);
-					if ($rswrk && !$rswrk->EOF) { // Lookup values found
-						$arwrk = array();
-						$arwrk[1] = $rswrk->fields('df');
-						$arwrk[2] = $rswrk->fields('df2');
-						$this->_userid->ViewValue = $this->_userid->displayValue($arwrk);
-						$rswrk->Close();
-					} else {
-						$this->_userid->ViewValue = $this->_userid->CurrentValue;
-					}
-				}
-			} else {
-				$this->_userid->ViewValue = NULL;
-			}
-			$this->_userid->ViewCustomAttributes = "";
-			} else {
-			$this->_userid->EditValue = HtmlEncode($this->_userid->CurrentValue);
-			$curVal = strval($this->_userid->CurrentValue);
-			if ($curVal <> "") {
-				$this->_userid->EditValue = $this->_userid->lookupCacheOption($curVal);
-				if ($this->_userid->EditValue === NULL) { // Lookup from database
-					$filterWrk = "`id`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
-					$sqlWrk = $this->_userid->Lookup->getSql(FALSE, $filterWrk, '', $this);
-					$rswrk = Conn()->execute($sqlWrk);
-					if ($rswrk && !$rswrk->EOF) { // Lookup values found
-						$arwrk = array();
-						$arwrk[1] = HtmlEncode($rswrk->fields('df'));
-						$arwrk[2] = HtmlEncode($rswrk->fields('df2'));
-						$this->_userid->EditValue = $this->_userid->displayValue($arwrk);
-						$rswrk->Close();
-					} else {
-						$this->_userid->EditValue = HtmlEncode($this->_userid->CurrentValue);
-					}
-				}
-			} else {
-				$this->_userid->EditValue = NULL;
-			}
-			$this->_userid->PlaceHolder = RemoveHtml($this->_userid->caption());
-			}
 
 			// path
 			$this->path->EditAttrs["class"] = "form-control";
@@ -3131,17 +3159,39 @@ class image_list extends image
 			$this->description->EditValue = HtmlEncode($this->description->CurrentValue);
 			$this->description->PlaceHolder = RemoveHtml($this->description->caption());
 
+			// uuid
+			$this->uuid->EditAttrs["class"] = "form-control";
+			$this->uuid->EditCustomAttributes = "";
+			$this->uuid->EditValue = HtmlEncode($this->uuid->CurrentValue);
+			$this->uuid->PlaceHolder = RemoveHtml($this->uuid->caption());
+
+			// user_id
+			$this->user_id->EditAttrs["class"] = "form-control";
+			$this->user_id->EditCustomAttributes = "";
+			$this->user_id->EditValue = HtmlEncode($this->user_id->CurrentValue);
+			$this->user_id->PlaceHolder = RemoveHtml($this->user_id->caption());
+
+			// confirmed
+			$this->confirmed->EditAttrs["class"] = "form-control";
+			$this->confirmed->EditCustomAttributes = "";
+			$this->confirmed->EditValue = HtmlEncode($this->confirmed->CurrentValue);
+			$this->confirmed->PlaceHolder = RemoveHtml($this->confirmed->caption());
+
+			// createdAt
+			$this->createdAt->EditAttrs["class"] = "form-control";
+			$this->createdAt->EditCustomAttributes = "";
+			$this->createdAt->EditValue = HtmlEncode(FormatDateTime($this->createdAt->CurrentValue, 8));
+			$this->createdAt->PlaceHolder = RemoveHtml($this->createdAt->caption());
+
+			// updatedAt
+			$this->updatedAt->EditAttrs["class"] = "form-control";
+			$this->updatedAt->EditCustomAttributes = "";
+			$this->updatedAt->EditValue = HtmlEncode(FormatDateTime($this->updatedAt->CurrentValue, 8));
+			$this->updatedAt->PlaceHolder = RemoveHtml($this->updatedAt->caption());
+
 			// Edit refer script
-			// name
-
-			$this->name->LinkCustomAttributes = "";
-			$this->name->HrefValue = "";
-
-			// userid
-			$this->_userid->LinkCustomAttributes = "";
-			$this->_userid->HrefValue = "";
-
 			// path
+
 			$this->path->LinkCustomAttributes = "";
 			if (!EmptyValue($this->path->Upload->DbValue)) {
 				$this->path->HrefValue = GetFileUploadUrl($this->path, $this->path->Upload->DbValue); // Add prefix/suffix
@@ -3155,6 +3205,26 @@ class image_list extends image
 			// description
 			$this->description->LinkCustomAttributes = "";
 			$this->description->HrefValue = "";
+
+			// uuid
+			$this->uuid->LinkCustomAttributes = "";
+			$this->uuid->HrefValue = "";
+
+			// user_id
+			$this->user_id->LinkCustomAttributes = "";
+			$this->user_id->HrefValue = "";
+
+			// confirmed
+			$this->confirmed->LinkCustomAttributes = "";
+			$this->confirmed->HrefValue = "";
+
+			// createdAt
+			$this->createdAt->LinkCustomAttributes = "";
+			$this->createdAt->HrefValue = "";
+
+			// updatedAt
+			$this->updatedAt->LinkCustomAttributes = "";
+			$this->updatedAt->HrefValue = "";
 		}
 		if ($this->RowType == ROWTYPE_ADD || $this->RowType == ROWTYPE_EDIT || $this->RowType == ROWTYPE_SEARCH) // Add/Edit/Search row
 			$this->setupFieldTitles();
@@ -3204,19 +3274,6 @@ class image_list extends image
 				AddMessage($FormError, str_replace("%s", $this->id->caption(), $this->id->RequiredErrorMessage));
 			}
 		}
-		if ($this->name->Required) {
-			if (!$this->name->IsDetailKey && $this->name->FormValue != NULL && $this->name->FormValue == "") {
-				AddMessage($FormError, str_replace("%s", $this->name->caption(), $this->name->RequiredErrorMessage));
-			}
-		}
-		if ($this->_userid->Required) {
-			if (!$this->_userid->IsDetailKey && $this->_userid->FormValue != NULL && $this->_userid->FormValue == "") {
-				AddMessage($FormError, str_replace("%s", $this->_userid->caption(), $this->_userid->RequiredErrorMessage));
-			}
-		}
-		if (!CheckInteger($this->_userid->FormValue)) {
-			AddMessage($FormError, $this->_userid->errorMessage());
-		}
 		if ($this->path->Required) {
 			if ($this->path->Upload->FileName == "" && !$this->path->Upload->KeepFile) {
 				AddMessage($FormError, str_replace("%s", $this->path->caption(), $this->path->RequiredErrorMessage));
@@ -3226,6 +3283,43 @@ class image_list extends image
 			if (!$this->description->IsDetailKey && $this->description->FormValue != NULL && $this->description->FormValue == "") {
 				AddMessage($FormError, str_replace("%s", $this->description->caption(), $this->description->RequiredErrorMessage));
 			}
+		}
+		if ($this->uuid->Required) {
+			if (!$this->uuid->IsDetailKey && $this->uuid->FormValue != NULL && $this->uuid->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->uuid->caption(), $this->uuid->RequiredErrorMessage));
+			}
+		}
+		if ($this->user_id->Required) {
+			if (!$this->user_id->IsDetailKey && $this->user_id->FormValue != NULL && $this->user_id->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->user_id->caption(), $this->user_id->RequiredErrorMessage));
+			}
+		}
+		if (!CheckInteger($this->user_id->FormValue)) {
+			AddMessage($FormError, $this->user_id->errorMessage());
+		}
+		if ($this->confirmed->Required) {
+			if (!$this->confirmed->IsDetailKey && $this->confirmed->FormValue != NULL && $this->confirmed->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->confirmed->caption(), $this->confirmed->RequiredErrorMessage));
+			}
+		}
+		if (!CheckInteger($this->confirmed->FormValue)) {
+			AddMessage($FormError, $this->confirmed->errorMessage());
+		}
+		if ($this->createdAt->Required) {
+			if (!$this->createdAt->IsDetailKey && $this->createdAt->FormValue != NULL && $this->createdAt->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->createdAt->caption(), $this->createdAt->RequiredErrorMessage));
+			}
+		}
+		if (!CheckDate($this->createdAt->FormValue)) {
+			AddMessage($FormError, $this->createdAt->errorMessage());
+		}
+		if ($this->updatedAt->Required) {
+			if (!$this->updatedAt->IsDetailKey && $this->updatedAt->FormValue != NULL && $this->updatedAt->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->updatedAt->caption(), $this->updatedAt->RequiredErrorMessage));
+			}
+		}
+		if (!CheckDate($this->updatedAt->FormValue)) {
+			AddMessage($FormError, $this->updatedAt->errorMessage());
 		}
 
 		// Return validate result
@@ -3337,6 +3431,25 @@ class image_list extends image
 		$filter = $this->getRecordFilter();
 		$filter = $this->applyUserIDFilters($filter);
 		$conn = &$this->getConnection();
+		if ($this->uuid->CurrentValue <> "") { // Check field with unique index
+			$filterChk = "(`uuid` = '" . AdjustSql($this->uuid->CurrentValue, $this->Dbid) . "')";
+			$filterChk .= " AND NOT (" . $filter . ")";
+			$this->CurrentFilter = $filterChk;
+			$sqlChk = $this->getCurrentSql();
+			$conn->raiseErrorFn = $GLOBALS["ERROR_FUNC"];
+			$rsChk = $conn->Execute($sqlChk);
+			$conn->raiseErrorFn = '';
+			if ($rsChk === FALSE) {
+				return FALSE;
+			} elseif (!$rsChk->EOF) {
+				$idxErrMsg = str_replace("%f", $this->uuid->caption(), $Language->Phrase("DupIndex"));
+				$idxErrMsg = str_replace("%v", $this->uuid->CurrentValue, $idxErrMsg);
+				$this->setFailureMessage($idxErrMsg);
+				$rsChk->close();
+				return FALSE;
+			}
+			$rsChk->close();
+		}
 		$this->CurrentFilter = $filter;
 		$sql = $this->getCurrentSql();
 		$conn->raiseErrorFn = $GLOBALS["ERROR_FUNC"];
@@ -3354,12 +3467,6 @@ class image_list extends image
 			$this->loadDbValues($rsold);
 			$rsnew = [];
 
-			// name
-			$this->name->setDbValueDef($rsnew, $this->name->CurrentValue, "", $this->name->ReadOnly);
-
-			// userid
-			$this->_userid->setDbValueDef($rsnew, $this->_userid->CurrentValue, 0, $this->_userid->ReadOnly);
-
 			// path
 			if ($this->path->Visible && !$this->path->ReadOnly && !$this->path->Upload->KeepFile) {
 				$this->path->Upload->DbValue = $rsold['path']; // Get original value
@@ -3371,7 +3478,22 @@ class image_list extends image
 			}
 
 			// description
-			$this->description->setDbValueDef($rsnew, $this->description->CurrentValue, "", $this->description->ReadOnly);
+			$this->description->setDbValueDef($rsnew, $this->description->CurrentValue, NULL, $this->description->ReadOnly);
+
+			// uuid
+			$this->uuid->setDbValueDef($rsnew, $this->uuid->CurrentValue, "", $this->uuid->ReadOnly);
+
+			// user_id
+			$this->user_id->setDbValueDef($rsnew, $this->user_id->CurrentValue, 0, $this->user_id->ReadOnly);
+
+			// confirmed
+			$this->confirmed->setDbValueDef($rsnew, $this->confirmed->CurrentValue, 0, $this->confirmed->ReadOnly);
+
+			// createdAt
+			$this->createdAt->setDbValueDef($rsnew, UnFormatDateTime($this->createdAt->CurrentValue, 0), CurrentDate(), $this->createdAt->ReadOnly);
+
+			// updatedAt
+			$this->updatedAt->setDbValueDef($rsnew, UnFormatDateTime($this->updatedAt->CurrentValue, 0), CurrentDate(), $this->updatedAt->ReadOnly);
 			if ($this->path->Visible && !$this->path->Upload->KeepFile) {
 				$oldFiles = EmptyValue($this->path->Upload->DbValue) ? array() : array($this->path->Upload->DbValue);
 				if (!EmptyValue($this->path->Upload->FileName)) {
@@ -3504,10 +3626,13 @@ class image_list extends image
 		if (!$rs)
 			return "";
 		$hash = "";
-		$hash .= GetFieldHash($rs->fields('name')); // name
-		$hash .= GetFieldHash($rs->fields('userid')); // userid
 		$hash .= GetFieldHash($rs->fields('path')); // path
 		$hash .= GetFieldHash($rs->fields('description')); // description
+		$hash .= GetFieldHash($rs->fields('uuid')); // uuid
+		$hash .= GetFieldHash($rs->fields('user_id')); // user_id
+		$hash .= GetFieldHash($rs->fields('confirmed')); // confirmed
+		$hash .= GetFieldHash($rs->fields('createdAt')); // createdAt
+		$hash .= GetFieldHash($rs->fields('updatedAt')); // updatedAt
 		return md5($hash);
 	}
 
@@ -3515,6 +3640,17 @@ class image_list extends image
 	protected function addRow($rsold = NULL)
 	{
 		global $Language, $Security;
+		if ($this->uuid->CurrentValue <> "") { // Check field with unique index
+			$filter = "(uuid = '" . AdjustSql($this->uuid->CurrentValue, $this->Dbid) . "')";
+			$rsChk = $this->loadRs($filter);
+			if ($rsChk && !$rsChk->EOF) {
+				$idxErrMsg = str_replace("%f", $this->uuid->caption(), $Language->Phrase("DupIndex"));
+				$idxErrMsg = str_replace("%v", $this->uuid->CurrentValue, $idxErrMsg);
+				$this->setFailureMessage($idxErrMsg);
+				$rsChk->close();
+				return FALSE;
+			}
+		}
 		$conn = &$this->getConnection();
 
 		// Load db values from rsold
@@ -3522,12 +3658,6 @@ class image_list extends image
 		if ($rsold) {
 		}
 		$rsnew = [];
-
-		// name
-		$this->name->setDbValueDef($rsnew, $this->name->CurrentValue, "", FALSE);
-
-		// userid
-		$this->_userid->setDbValueDef($rsnew, $this->_userid->CurrentValue, 0, FALSE);
 
 		// path
 		if ($this->path->Visible && !$this->path->Upload->KeepFile) {
@@ -3540,7 +3670,22 @@ class image_list extends image
 		}
 
 		// description
-		$this->description->setDbValueDef($rsnew, $this->description->CurrentValue, "", FALSE);
+		$this->description->setDbValueDef($rsnew, $this->description->CurrentValue, NULL, FALSE);
+
+		// uuid
+		$this->uuid->setDbValueDef($rsnew, $this->uuid->CurrentValue, "", FALSE);
+
+		// user_id
+		$this->user_id->setDbValueDef($rsnew, $this->user_id->CurrentValue, 0, FALSE);
+
+		// confirmed
+		$this->confirmed->setDbValueDef($rsnew, $this->confirmed->CurrentValue, 0, strval($this->confirmed->CurrentValue) == "");
+
+		// createdAt
+		$this->createdAt->setDbValueDef($rsnew, UnFormatDateTime($this->createdAt->CurrentValue, 0), CurrentDate(), FALSE);
+
+		// updatedAt
+		$this->updatedAt->setDbValueDef($rsnew, UnFormatDateTime($this->updatedAt->CurrentValue, 0), CurrentDate(), FALSE);
 		if ($this->path->Visible && !$this->path->Upload->KeepFile) {
 			$oldFiles = EmptyValue($this->path->Upload->DbValue) ? array() : array($this->path->Upload->DbValue);
 			if (!EmptyValue($this->path->Upload->FileName)) {
@@ -3655,9 +3800,12 @@ class image_list extends image
 	public function loadAdvancedSearch()
 	{
 		$this->id->AdvancedSearch->load();
-		$this->name->AdvancedSearch->load();
-		$this->_userid->AdvancedSearch->load();
 		$this->description->AdvancedSearch->load();
+		$this->uuid->AdvancedSearch->load();
+		$this->user_id->AdvancedSearch->load();
+		$this->confirmed->AdvancedSearch->load();
+		$this->createdAt->AdvancedSearch->load();
+		$this->updatedAt->AdvancedSearch->load();
 	}
 
 	// Set up export options
@@ -3769,26 +3917,6 @@ class image_list extends image
 
 		// Call Page Exporting server event
 		$this->ExportDoc->ExportCustom = !$this->Page_Exporting();
-
-		// Export master record
-		if (EXPORT_MASTER_RECORD && $this->getMasterFilter() <> "" && $this->getCurrentMasterTable() == "user") {
-			global $user;
-			if (!isset($user))
-				$user = new user();
-			$rsmaster = $user->loadRs($this->DbMasterFilter); // Load master record
-			if ($rsmaster && !$rsmaster->EOF) {
-				$exportStyle = $doc->Style;
-				$doc->setStyle("v"); // Change to vertical
-				if (!$this->isExport("csv") || EXPORT_MASTER_RECORD_FOR_CSV) {
-					$doc->Table = &$user;
-					$user->exportDocument($doc, $rsmaster);
-					$doc->exportEmptyRow();
-					$doc->Table = &$this;
-				}
-				$doc->setStyle($exportStyle); // Restore
-				$rsmaster->close();
-			}
-		}
 		$header = $this->PageHeader;
 		$this->Page_DataRendering($header);
 		$doc->Text .= $header;
@@ -3909,78 +4037,6 @@ class image_list extends image
 		}
 	}
 
-	// Set up master/detail based on QueryString
-	protected function setupMasterParms()
-	{
-		$validMaster = FALSE;
-
-		// Get the keys for master table
-		if (Get(TABLE_SHOW_MASTER) !== NULL) {
-			$masterTblVar = Get(TABLE_SHOW_MASTER);
-			if ($masterTblVar == "") {
-				$validMaster = TRUE;
-				$this->DbMasterFilter = "";
-				$this->DbDetailFilter = "";
-			}
-			if ($masterTblVar == "user") {
-				$validMaster = TRUE;
-				if (Get("fk_id") !== NULL) {
-					$GLOBALS["user"]->id->setQueryStringValue(Get("fk_id"));
-					$this->_userid->setQueryStringValue($GLOBALS["user"]->id->QueryStringValue);
-					$this->_userid->setSessionValue($this->_userid->QueryStringValue);
-					if (!is_numeric($GLOBALS["user"]->id->QueryStringValue))
-						$validMaster = FALSE;
-				} else {
-					$validMaster = FALSE;
-				}
-			}
-		} elseif (Post(TABLE_SHOW_MASTER) !== NULL) {
-			$masterTblVar = Post(TABLE_SHOW_MASTER);
-			if ($masterTblVar == "") {
-				$validMaster = TRUE;
-				$this->DbMasterFilter = "";
-				$this->DbDetailFilter = "";
-			}
-			if ($masterTblVar == "user") {
-				$validMaster = TRUE;
-				if (Post("fk_id") !== NULL) {
-					$GLOBALS["user"]->id->setFormValue(Post("fk_id"));
-					$this->_userid->setFormValue($GLOBALS["user"]->id->FormValue);
-					$this->_userid->setSessionValue($this->_userid->FormValue);
-					if (!is_numeric($GLOBALS["user"]->id->FormValue))
-						$validMaster = FALSE;
-				} else {
-					$validMaster = FALSE;
-				}
-			}
-		}
-		if ($validMaster) {
-
-			// Update URL
-			$this->AddUrl = $this->addMasterUrl($this->AddUrl);
-			$this->InlineAddUrl = $this->addMasterUrl($this->InlineAddUrl);
-			$this->GridAddUrl = $this->addMasterUrl($this->GridAddUrl);
-			$this->GridEditUrl = $this->addMasterUrl($this->GridEditUrl);
-
-			// Save current master table
-			$this->setCurrentMasterTable($masterTblVar);
-
-			// Reset start record counter (new master key)
-			if (!$this->isAddOrEdit()) {
-				$this->StartRec = 1;
-				$this->setStartRecordNumber($this->StartRec);
-			}
-
-			// Clear previous master key from Session
-			if ($masterTblVar <> "user") {
-				if ($this->_userid->CurrentValue == "")
-					$this->_userid->setSessionValue("");
-			}
-		}
-		$this->DbMasterFilter = $this->getMasterFilter(); // Get master filter
-		$this->DbDetailFilter = $this->getDetailFilter(); // Get detail filter
-	}
-
 	// Set up Breadcrumb
 	protected function setupBreadcrumb()
 	{
@@ -4022,8 +4078,6 @@ class image_list extends image
 
 					// Format the field values
 					switch ($fld->FieldVar) {
-						case "x__userid":
-							break;
 					}
 					$ar[strval($row[0])] = $row;
 					$rs->moveNext();

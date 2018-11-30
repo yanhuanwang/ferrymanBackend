@@ -132,58 +132,6 @@ $category_add->showMessage();
 	</div>
 <?php } ?>
 </div><!-- /page* -->
-<?php if ($category->getCurrentDetailTable() <> "") { ?>
-<?php
-	$category_add->DetailPages->ValidKeys = explode(",", $category->getCurrentDetailTable());
-	$firstActiveDetailTable = $category_add->DetailPages->activePageIndex();
-?>
-<div class="ew-detail-pages"><!-- detail-pages -->
-<div class="ew-nav-tabs" id="category_add_details"><!-- tabs -->
-	<ul class="<?php echo $category_add->DetailPages->navStyle() ?>"><!-- .nav -->
-<?php
-	if (in_array("parcel_info", explode(",", $category->getCurrentDetailTable())) && $parcel_info->DetailAdd) {
-		if ($firstActiveDetailTable == "" || $firstActiveDetailTable == "parcel_info") {
-			$firstActiveDetailTable = "parcel_info";
-		}
-?>
-		<li class="nav-item"><a class="nav-link<?php echo $category_add->DetailPages->pageStyle("parcel_info") ?>" href="#tab_parcel_info" data-toggle="tab"><?php echo $Language->TablePhrase("parcel_info", "TblCaption") ?></a></li>
-<?php
-	}
-?>
-<?php
-	if (in_array("request_trip", explode(",", $category->getCurrentDetailTable())) && $request_trip->DetailAdd) {
-		if ($firstActiveDetailTable == "" || $firstActiveDetailTable == "request_trip") {
-			$firstActiveDetailTable = "request_trip";
-		}
-?>
-		<li class="nav-item"><a class="nav-link<?php echo $category_add->DetailPages->pageStyle("request_trip") ?>" href="#tab_request_trip" data-toggle="tab"><?php echo $Language->TablePhrase("request_trip", "TblCaption") ?></a></li>
-<?php
-	}
-?>
-	</ul><!-- /.nav -->
-	<div class="tab-content"><!-- .tab-content -->
-<?php
-	if (in_array("parcel_info", explode(",", $category->getCurrentDetailTable())) && $parcel_info->DetailAdd) {
-		if ($firstActiveDetailTable == "" || $firstActiveDetailTable == "parcel_info")
-			$firstActiveDetailTable = "parcel_info";
-?>
-		<div class="tab-pane<?php echo $category_add->DetailPages->pageStyle("parcel_info") ?>" id="tab_parcel_info"><!-- page* -->
-<?php include_once "parcel_infogrid.php" ?>
-		</div><!-- /page* -->
-<?php } ?>
-<?php
-	if (in_array("request_trip", explode(",", $category->getCurrentDetailTable())) && $request_trip->DetailAdd) {
-		if ($firstActiveDetailTable == "" || $firstActiveDetailTable == "request_trip")
-			$firstActiveDetailTable = "request_trip";
-?>
-		<div class="tab-pane<?php echo $category_add->DetailPages->pageStyle("request_trip") ?>" id="tab_request_trip"><!-- page* -->
-<?php include_once "request_tripgrid.php" ?>
-		</div><!-- /page* -->
-<?php } ?>
-	</div><!-- /.tab-content -->
-</div><!-- /tabs -->
-</div><!-- /detail-pages -->
-<?php } ?>
 <?php if (!$category_add->IsModal) { ?>
 <div class="form-group row"><!-- buttons .form-group -->
 	<div class="<?php echo $category_add->OffsetColumnClass ?>"><!-- buttons offset -->

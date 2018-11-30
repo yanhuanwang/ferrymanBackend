@@ -562,6 +562,8 @@ class trip_info_search extends trip_info
 		$this->user_id->setVisibility();
 		$this->flight_number->setVisibility();
 		$this->date->setVisibility();
+		$this->createdAt->setVisibility();
+		$this->updatedAt->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Global Page Loading event (in userfn*.php)
@@ -632,6 +634,8 @@ class trip_info_search extends trip_info
 		$this->buildSearchUrl($srchUrl, $this->user_id); // user_id
 		$this->buildSearchUrl($srchUrl, $this->flight_number); // flight_number
 		$this->buildSearchUrl($srchUrl, $this->date); // date
+		$this->buildSearchUrl($srchUrl, $this->createdAt); // createdAt
+		$this->buildSearchUrl($srchUrl, $this->updatedAt); // updatedAt
 		if ($srchUrl <> "")
 			$srchUrl .= "&";
 		$srchUrl .= "cmd=search";
@@ -732,6 +736,14 @@ class trip_info_search extends trip_info
 		// date
 		$this->date->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_date"));
 		$this->date->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_date"));
+
+		// createdAt
+		$this->createdAt->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_createdAt"));
+		$this->createdAt->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_createdAt"));
+
+		// updatedAt
+		$this->updatedAt->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_updatedAt"));
+		$this->updatedAt->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_updatedAt"));
 	}
 
 	// Render row values based on field settings
@@ -752,6 +764,8 @@ class trip_info_search extends trip_info
 		// user_id
 		// flight_number
 		// date
+		// createdAt
+		// updatedAt
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
@@ -804,6 +818,16 @@ class trip_info_search extends trip_info
 			$this->date->ViewValue = FormatDateTime($this->date->ViewValue, 0);
 			$this->date->ViewCustomAttributes = "";
 
+			// createdAt
+			$this->createdAt->ViewValue = $this->createdAt->CurrentValue;
+			$this->createdAt->ViewValue = FormatDateTime($this->createdAt->ViewValue, 0);
+			$this->createdAt->ViewCustomAttributes = "";
+
+			// updatedAt
+			$this->updatedAt->ViewValue = $this->updatedAt->CurrentValue;
+			$this->updatedAt->ViewValue = FormatDateTime($this->updatedAt->ViewValue, 0);
+			$this->updatedAt->ViewCustomAttributes = "";
+
 			// id
 			$this->id->LinkCustomAttributes = "";
 			$this->id->HrefValue = "";
@@ -838,6 +862,16 @@ class trip_info_search extends trip_info
 			$this->date->LinkCustomAttributes = "";
 			$this->date->HrefValue = "";
 			$this->date->TooltipValue = "";
+
+			// createdAt
+			$this->createdAt->LinkCustomAttributes = "";
+			$this->createdAt->HrefValue = "";
+			$this->createdAt->TooltipValue = "";
+
+			// updatedAt
+			$this->updatedAt->LinkCustomAttributes = "";
+			$this->updatedAt->HrefValue = "";
+			$this->updatedAt->TooltipValue = "";
 		} elseif ($this->RowType == ROWTYPE_SEARCH) { // Search row
 
 			// id
@@ -901,6 +935,18 @@ class trip_info_search extends trip_info
 			$this->date->EditCustomAttributes = "";
 			$this->date->EditValue = HtmlEncode(FormatDateTime(UnFormatDateTime($this->date->AdvancedSearch->SearchValue, 0), 8));
 			$this->date->PlaceHolder = RemoveHtml($this->date->caption());
+
+			// createdAt
+			$this->createdAt->EditAttrs["class"] = "form-control";
+			$this->createdAt->EditCustomAttributes = "";
+			$this->createdAt->EditValue = HtmlEncode(FormatDateTime(UnFormatDateTime($this->createdAt->AdvancedSearch->SearchValue, 0), 8));
+			$this->createdAt->PlaceHolder = RemoveHtml($this->createdAt->caption());
+
+			// updatedAt
+			$this->updatedAt->EditAttrs["class"] = "form-control";
+			$this->updatedAt->EditCustomAttributes = "";
+			$this->updatedAt->EditValue = HtmlEncode(FormatDateTime(UnFormatDateTime($this->updatedAt->AdvancedSearch->SearchValue, 0), 8));
+			$this->updatedAt->PlaceHolder = RemoveHtml($this->updatedAt->caption());
 		}
 		if ($this->RowType == ROWTYPE_ADD || $this->RowType == ROWTYPE_EDIT || $this->RowType == ROWTYPE_SEARCH) // Add/Edit/Search row
 			$this->setupFieldTitles();
@@ -930,6 +976,12 @@ class trip_info_search extends trip_info
 		if (!CheckDate($this->date->AdvancedSearch->SearchValue)) {
 			AddMessage($SearchError, $this->date->errorMessage());
 		}
+		if (!CheckDate($this->createdAt->AdvancedSearch->SearchValue)) {
+			AddMessage($SearchError, $this->createdAt->errorMessage());
+		}
+		if (!CheckDate($this->updatedAt->AdvancedSearch->SearchValue)) {
+			AddMessage($SearchError, $this->updatedAt->errorMessage());
+		}
 
 		// Return validate result
 		$validateSearch = ($SearchError == "");
@@ -953,6 +1005,8 @@ class trip_info_search extends trip_info
 		$this->user_id->AdvancedSearch->load();
 		$this->flight_number->AdvancedSearch->load();
 		$this->date->AdvancedSearch->load();
+		$this->createdAt->AdvancedSearch->load();
+		$this->updatedAt->AdvancedSearch->load();
 	}
 
 	// Set up Breadcrumb

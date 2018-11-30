@@ -139,17 +139,6 @@ $user_view->showMessage();
 </td>
 	</tr>
 <?php } ?>
-<?php if ($user->_email->Visible) { // email ?>
-	<tr id="r__email">
-		<td class="<?php echo $user_view->TableLeftColumnClass ?>"><span id="elh_user__email"><?php echo $user->_email->caption() ?></span></td>
-		<td data-name="_email"<?php echo $user->_email->cellAttributes() ?>>
-<span id="el_user__email">
-<span<?php echo $user->_email->viewAttributes() ?>>
-<?php echo $user->_email->getViewValue() ?></span>
-</span>
-</td>
-	</tr>
-<?php } ?>
 <?php if ($user->gender->Visible) { // gender ?>
 	<tr id="r_gender">
 		<td class="<?php echo $user_view->TableLeftColumnClass ?>"><span id="elh_user_gender"><?php echo $user->gender->caption() ?></span></td>
@@ -157,17 +146,6 @@ $user_view->showMessage();
 <span id="el_user_gender">
 <span<?php echo $user->gender->viewAttributes() ?>>
 <?php echo $user->gender->getViewValue() ?></span>
-</span>
-</td>
-	</tr>
-<?php } ?>
-<?php if ($user->phone->Visible) { // phone ?>
-	<tr id="r_phone">
-		<td class="<?php echo $user_view->TableLeftColumnClass ?>"><span id="elh_user_phone"><?php echo $user->phone->caption() ?></span></td>
-		<td data-name="phone"<?php echo $user->phone->cellAttributes() ?>>
-<span id="el_user_phone">
-<span<?php echo $user->phone->viewAttributes() ?>>
-<?php echo $user->phone->getViewValue() ?></span>
 </span>
 </td>
 	</tr>
@@ -272,35 +250,57 @@ $user_view->showMessage();
 </td>
 	</tr>
 <?php } ?>
-<?php if ($user->addDate->Visible) { // addDate ?>
-	<tr id="r_addDate">
-		<td class="<?php echo $user_view->TableLeftColumnClass ?>"><span id="elh_user_addDate"><?php echo $user->addDate->caption() ?></span></td>
-		<td data-name="addDate"<?php echo $user->addDate->cellAttributes() ?>>
-<span id="el_user_addDate">
-<span<?php echo $user->addDate->viewAttributes() ?>>
-<?php echo $user->addDate->getViewValue() ?></span>
+<?php if ($user->mobile_phone->Visible) { // mobile_phone ?>
+	<tr id="r_mobile_phone">
+		<td class="<?php echo $user_view->TableLeftColumnClass ?>"><span id="elh_user_mobile_phone"><?php echo $user->mobile_phone->caption() ?></span></td>
+		<td data-name="mobile_phone"<?php echo $user->mobile_phone->cellAttributes() ?>>
+<span id="el_user_mobile_phone">
+<span<?php echo $user->mobile_phone->viewAttributes() ?>>
+<?php echo $user->mobile_phone->getViewValue() ?></span>
 </span>
 </td>
 	</tr>
 <?php } ?>
-<?php if ($user->updateDate->Visible) { // updateDate ?>
-	<tr id="r_updateDate">
-		<td class="<?php echo $user_view->TableLeftColumnClass ?>"><span id="elh_user_updateDate"><?php echo $user->updateDate->caption() ?></span></td>
-		<td data-name="updateDate"<?php echo $user->updateDate->cellAttributes() ?>>
-<span id="el_user_updateDate">
-<span<?php echo $user->updateDate->viewAttributes() ?>>
-<?php echo $user->updateDate->getViewValue() ?></span>
+<?php if ($user->status->Visible) { // status ?>
+	<tr id="r_status">
+		<td class="<?php echo $user_view->TableLeftColumnClass ?>"><span id="elh_user_status"><?php echo $user->status->caption() ?></span></td>
+		<td data-name="status"<?php echo $user->status->cellAttributes() ?>>
+<span id="el_user_status">
+<span<?php echo $user->status->viewAttributes() ?>>
+<?php echo $user->status->getViewValue() ?></span>
 </span>
 </td>
 	</tr>
 <?php } ?>
-<?php if ($user->activated->Visible) { // activated ?>
-	<tr id="r_activated">
-		<td class="<?php echo $user_view->TableLeftColumnClass ?>"><span id="elh_user_activated"><?php echo $user->activated->caption() ?></span></td>
-		<td data-name="activated"<?php echo $user->activated->cellAttributes() ?>>
-<span id="el_user_activated">
-<span<?php echo $user->activated->viewAttributes() ?>>
-<?php echo $user->activated->getViewValue() ?></span>
+<?php if ($user->session_token->Visible) { // session_token ?>
+	<tr id="r_session_token">
+		<td class="<?php echo $user_view->TableLeftColumnClass ?>"><span id="elh_user_session_token"><?php echo $user->session_token->caption() ?></span></td>
+		<td data-name="session_token"<?php echo $user->session_token->cellAttributes() ?>>
+<span id="el_user_session_token">
+<span<?php echo $user->session_token->viewAttributes() ?>>
+<?php echo $user->session_token->getViewValue() ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($user->createdAt->Visible) { // createdAt ?>
+	<tr id="r_createdAt">
+		<td class="<?php echo $user_view->TableLeftColumnClass ?>"><span id="elh_user_createdAt"><?php echo $user->createdAt->caption() ?></span></td>
+		<td data-name="createdAt"<?php echo $user->createdAt->cellAttributes() ?>>
+<span id="el_user_createdAt">
+<span<?php echo $user->createdAt->viewAttributes() ?>>
+<?php echo $user->createdAt->getViewValue() ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($user->updatedAt->Visible) { // updatedAt ?>
+	<tr id="r_updatedAt">
+		<td class="<?php echo $user_view->TableLeftColumnClass ?>"><span id="elh_user_updatedAt"><?php echo $user->updatedAt->caption() ?></span></td>
+		<td data-name="updatedAt"<?php echo $user->updatedAt->cellAttributes() ?>>
+<span id="el_user_updatedAt">
+<span<?php echo $user->updatedAt->viewAttributes() ?>>
+<?php echo $user->updatedAt->getViewValue() ?></span>
 </span>
 </td>
 	</tr>
@@ -342,16 +342,6 @@ $user_view->showMessage();
 <div class="ew-nav-tabs" id="user_view_details"><!-- tabs -->
 	<ul class="<?php echo $user_view->DetailPages->navStyle() ?>"><!-- .nav -->
 <?php
-	if (in_array("image", explode(",", $user->getCurrentDetailTable())) && $image->DetailView) {
-		if ($firstActiveDetailTable == "" || $firstActiveDetailTable == "image") {
-			$firstActiveDetailTable = "image";
-		}
-?>
-		<li class="nav-item"><a class="nav-link<?php echo $user_view->DetailPages->pageStyle("image") ?>" href="#tab_image" data-toggle="tab"><?php echo $Language->TablePhrase("image", "TblCaption") ?>&nbsp;<?php echo str_replace("%c", $user_view->image_Count, $Language->Phrase("DetailCount")) ?></a></li>
-<?php
-	}
-?>
-<?php
 	if (in_array("trip_info", explode(",", $user->getCurrentDetailTable())) && $trip_info->DetailView) {
 		if ($firstActiveDetailTable == "" || $firstActiveDetailTable == "trip_info") {
 			$firstActiveDetailTable = "trip_info";
@@ -372,26 +362,17 @@ $user_view->showMessage();
 	}
 ?>
 <?php
-	if (in_array("orders", explode(",", $user->getCurrentDetailTable())) && $orders->DetailView) {
-		if ($firstActiveDetailTable == "" || $firstActiveDetailTable == "orders") {
-			$firstActiveDetailTable = "orders";
+	if (in_array("order", explode(",", $user->getCurrentDetailTable())) && $order->DetailView) {
+		if ($firstActiveDetailTable == "" || $firstActiveDetailTable == "order") {
+			$firstActiveDetailTable = "order";
 		}
 ?>
-		<li class="nav-item"><a class="nav-link<?php echo $user_view->DetailPages->pageStyle("orders") ?>" href="#tab_orders" data-toggle="tab"><?php echo $Language->TablePhrase("orders", "TblCaption") ?>&nbsp;<?php echo str_replace("%c", $user_view->orders_Count, $Language->Phrase("DetailCount")) ?></a></li>
+		<li class="nav-item"><a class="nav-link<?php echo $user_view->DetailPages->pageStyle("order") ?>" href="#tab_order" data-toggle="tab"><?php echo $Language->TablePhrase("order", "TblCaption") ?>&nbsp;<?php echo str_replace("%c", $user_view->order_Count, $Language->Phrase("DetailCount")) ?></a></li>
 <?php
 	}
 ?>
 	</ul><!-- /.nav -->
 	<div class="tab-content"><!-- .tab-content -->
-<?php
-	if (in_array("image", explode(",", $user->getCurrentDetailTable())) && $image->DetailView) {
-		if ($firstActiveDetailTable == "" || $firstActiveDetailTable == "image")
-			$firstActiveDetailTable = "image";
-?>
-		<div class="tab-pane<?php echo $user_view->DetailPages->pageStyle("image") ?>" id="tab_image"><!-- page* -->
-<?php include_once "imagegrid.php" ?>
-		</div><!-- /page* -->
-<?php } ?>
 <?php
 	if (in_array("trip_info", explode(",", $user->getCurrentDetailTable())) && $trip_info->DetailView) {
 		if ($firstActiveDetailTable == "" || $firstActiveDetailTable == "trip_info")
@@ -411,12 +392,12 @@ $user_view->showMessage();
 		</div><!-- /page* -->
 <?php } ?>
 <?php
-	if (in_array("orders", explode(",", $user->getCurrentDetailTable())) && $orders->DetailView) {
-		if ($firstActiveDetailTable == "" || $firstActiveDetailTable == "orders")
-			$firstActiveDetailTable = "orders";
+	if (in_array("order", explode(",", $user->getCurrentDetailTable())) && $order->DetailView) {
+		if ($firstActiveDetailTable == "" || $firstActiveDetailTable == "order")
+			$firstActiveDetailTable = "order";
 ?>
-		<div class="tab-pane<?php echo $user_view->DetailPages->pageStyle("orders") ?>" id="tab_orders"><!-- page* -->
-<?php include_once "ordersgrid.php" ?>
+		<div class="tab-pane<?php echo $user_view->DetailPages->pageStyle("order") ?>" id="tab_order"><!-- page* -->
+<?php include_once "ordergrid.php" ?>
 		</div><!-- /page* -->
 <?php } ?>
 	</div><!-- /.tab-content -->

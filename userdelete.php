@@ -87,14 +87,8 @@ $user_delete->showMessage();
 <?php if ($user->username->Visible) { // username ?>
 		<th class="<?php echo $user->username->headerCellClass() ?>"><span id="elh_user_username" class="user_username"><?php echo $user->username->caption() ?></span></th>
 <?php } ?>
-<?php if ($user->_email->Visible) { // email ?>
-		<th class="<?php echo $user->_email->headerCellClass() ?>"><span id="elh_user__email" class="user__email"><?php echo $user->_email->caption() ?></span></th>
-<?php } ?>
 <?php if ($user->gender->Visible) { // gender ?>
 		<th class="<?php echo $user->gender->headerCellClass() ?>"><span id="elh_user_gender" class="user_gender"><?php echo $user->gender->caption() ?></span></th>
-<?php } ?>
-<?php if ($user->phone->Visible) { // phone ?>
-		<th class="<?php echo $user->phone->headerCellClass() ?>"><span id="elh_user_phone" class="user_phone"><?php echo $user->phone->caption() ?></span></th>
 <?php } ?>
 <?php if ($user->address->Visible) { // address ?>
 		<th class="<?php echo $user->address->headerCellClass() ?>"><span id="elh_user_address" class="user_address"><?php echo $user->address->caption() ?></span></th>
@@ -123,14 +117,20 @@ $user_delete->showMessage();
 <?php if ($user->birthday->Visible) { // birthday ?>
 		<th class="<?php echo $user->birthday->headerCellClass() ?>"><span id="elh_user_birthday" class="user_birthday"><?php echo $user->birthday->caption() ?></span></th>
 <?php } ?>
-<?php if ($user->addDate->Visible) { // addDate ?>
-		<th class="<?php echo $user->addDate->headerCellClass() ?>"><span id="elh_user_addDate" class="user_addDate"><?php echo $user->addDate->caption() ?></span></th>
+<?php if ($user->mobile_phone->Visible) { // mobile_phone ?>
+		<th class="<?php echo $user->mobile_phone->headerCellClass() ?>"><span id="elh_user_mobile_phone" class="user_mobile_phone"><?php echo $user->mobile_phone->caption() ?></span></th>
 <?php } ?>
-<?php if ($user->updateDate->Visible) { // updateDate ?>
-		<th class="<?php echo $user->updateDate->headerCellClass() ?>"><span id="elh_user_updateDate" class="user_updateDate"><?php echo $user->updateDate->caption() ?></span></th>
+<?php if ($user->status->Visible) { // status ?>
+		<th class="<?php echo $user->status->headerCellClass() ?>"><span id="elh_user_status" class="user_status"><?php echo $user->status->caption() ?></span></th>
 <?php } ?>
-<?php if ($user->activated->Visible) { // activated ?>
-		<th class="<?php echo $user->activated->headerCellClass() ?>"><span id="elh_user_activated" class="user_activated"><?php echo $user->activated->caption() ?></span></th>
+<?php if ($user->session_token->Visible) { // session_token ?>
+		<th class="<?php echo $user->session_token->headerCellClass() ?>"><span id="elh_user_session_token" class="user_session_token"><?php echo $user->session_token->caption() ?></span></th>
+<?php } ?>
+<?php if ($user->createdAt->Visible) { // createdAt ?>
+		<th class="<?php echo $user->createdAt->headerCellClass() ?>"><span id="elh_user_createdAt" class="user_createdAt"><?php echo $user->createdAt->caption() ?></span></th>
+<?php } ?>
+<?php if ($user->updatedAt->Visible) { // updatedAt ?>
+		<th class="<?php echo $user->updatedAt->headerCellClass() ?>"><span id="elh_user_updatedAt" class="user_updatedAt"><?php echo $user->updatedAt->caption() ?></span></th>
 <?php } ?>
 	</tr>
 	</thead>
@@ -161,27 +161,11 @@ while (!$user_delete->Recordset->EOF) {
 </span>
 </td>
 <?php } ?>
-<?php if ($user->_email->Visible) { // email ?>
-		<td<?php echo $user->_email->cellAttributes() ?>>
-<span id="el<?php echo $user_delete->RowCnt ?>_user__email" class="user__email">
-<span<?php echo $user->_email->viewAttributes() ?>>
-<?php echo $user->_email->getViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
 <?php if ($user->gender->Visible) { // gender ?>
 		<td<?php echo $user->gender->cellAttributes() ?>>
 <span id="el<?php echo $user_delete->RowCnt ?>_user_gender" class="user_gender">
 <span<?php echo $user->gender->viewAttributes() ?>>
 <?php echo $user->gender->getViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
-<?php if ($user->phone->Visible) { // phone ?>
-		<td<?php echo $user->phone->cellAttributes() ?>>
-<span id="el<?php echo $user_delete->RowCnt ?>_user_phone" class="user_phone">
-<span<?php echo $user->phone->viewAttributes() ?>>
-<?php echo $user->phone->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>
@@ -258,27 +242,43 @@ while (!$user_delete->Recordset->EOF) {
 </span>
 </td>
 <?php } ?>
-<?php if ($user->addDate->Visible) { // addDate ?>
-		<td<?php echo $user->addDate->cellAttributes() ?>>
-<span id="el<?php echo $user_delete->RowCnt ?>_user_addDate" class="user_addDate">
-<span<?php echo $user->addDate->viewAttributes() ?>>
-<?php echo $user->addDate->getViewValue() ?></span>
+<?php if ($user->mobile_phone->Visible) { // mobile_phone ?>
+		<td<?php echo $user->mobile_phone->cellAttributes() ?>>
+<span id="el<?php echo $user_delete->RowCnt ?>_user_mobile_phone" class="user_mobile_phone">
+<span<?php echo $user->mobile_phone->viewAttributes() ?>>
+<?php echo $user->mobile_phone->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>
-<?php if ($user->updateDate->Visible) { // updateDate ?>
-		<td<?php echo $user->updateDate->cellAttributes() ?>>
-<span id="el<?php echo $user_delete->RowCnt ?>_user_updateDate" class="user_updateDate">
-<span<?php echo $user->updateDate->viewAttributes() ?>>
-<?php echo $user->updateDate->getViewValue() ?></span>
+<?php if ($user->status->Visible) { // status ?>
+		<td<?php echo $user->status->cellAttributes() ?>>
+<span id="el<?php echo $user_delete->RowCnt ?>_user_status" class="user_status">
+<span<?php echo $user->status->viewAttributes() ?>>
+<?php echo $user->status->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>
-<?php if ($user->activated->Visible) { // activated ?>
-		<td<?php echo $user->activated->cellAttributes() ?>>
-<span id="el<?php echo $user_delete->RowCnt ?>_user_activated" class="user_activated">
-<span<?php echo $user->activated->viewAttributes() ?>>
-<?php echo $user->activated->getViewValue() ?></span>
+<?php if ($user->session_token->Visible) { // session_token ?>
+		<td<?php echo $user->session_token->cellAttributes() ?>>
+<span id="el<?php echo $user_delete->RowCnt ?>_user_session_token" class="user_session_token">
+<span<?php echo $user->session_token->viewAttributes() ?>>
+<?php echo $user->session_token->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($user->createdAt->Visible) { // createdAt ?>
+		<td<?php echo $user->createdAt->cellAttributes() ?>>
+<span id="el<?php echo $user_delete->RowCnt ?>_user_createdAt" class="user_createdAt">
+<span<?php echo $user->createdAt->viewAttributes() ?>>
+<?php echo $user->createdAt->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($user->updatedAt->Visible) { // updatedAt ?>
+		<td<?php echo $user->updatedAt->cellAttributes() ?>>
+<span id="el<?php echo $user_delete->RowCnt ?>_user_updatedAt" class="user_updatedAt">
+<span<?php echo $user->updatedAt->viewAttributes() ?>>
+<?php echo $user->updatedAt->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

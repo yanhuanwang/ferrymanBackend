@@ -374,9 +374,6 @@ class parcel_info_view extends parcel_info
 		// Table object (admin)
 		if (!isset($GLOBALS['admin'])) $GLOBALS['admin'] = new admin();
 
-		// Table object (category)
-		if (!isset($GLOBALS['category'])) $GLOBALS['category'] = new category();
-
 		// Table object (image)
 		if (!isset($GLOBALS['image'])) $GLOBALS['image'] = new image();
 
@@ -574,7 +571,6 @@ class parcel_info_view extends parcel_info
 	public $RecCnt;
 	public $RecKey = array();
 	public $IsModal = FALSE;
-	public $orders_Count;
 
 	//
 	// Page run
@@ -676,9 +672,12 @@ class parcel_info_view extends parcel_info
 		$this->to_place->setVisibility();
 		$this->description->setVisibility();
 		$this->user_id->setVisibility();
-		$this->category->setVisibility();
 		$this->image_id->setVisibility();
 		$this->name->setVisibility();
+		$this->categoty->setVisibility();
+		$this->status->setVisibility();
+		$this->createdAt->setVisibility();
+		$this->updatedAt->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Global Page Loading event (in userfn*.php)
@@ -698,7 +697,6 @@ class parcel_info_view extends parcel_info
 
 		// Set up lookup cache
 		$this->setupLookupOptions($this->user_id);
-		$this->setupLookupOptions($this->category);
 		$this->setupLookupOptions($this->image_id);
 
 		// Check modal
@@ -789,9 +787,6 @@ class parcel_info_view extends parcel_info
 		$this->resetAttributes();
 		$this->renderRow();
 
-		// Set up detail parameters
-		$this->setupDetailParms();
-
 		// Normal return
 		if (IsApi()) {
 			$rows = $this->getRecordsFromRecordset($this->Recordset, TRUE); // Get current record only
@@ -842,87 +837,6 @@ class parcel_info_view extends parcel_info
 		else
 			$item->Body = "<a class=\"ew-action ew-delete\" title=\"" . HtmlTitle($Language->Phrase("ViewPageDeleteLink")) . "\" data-caption=\"" . HtmlTitle($Language->Phrase("ViewPageDeleteLink")) . "\" href=\"" . HtmlEncode($this->DeleteUrl) . "\">" . $Language->Phrase("ViewPageDeleteLink") . "</a>";
 		$item->Visible = ($this->DeleteUrl <> "" && $Security->canDelete());
-		$option = &$options["detail"];
-		$detailTableLink = "";
-		$detailViewTblVar = "";
-		$detailCopyTblVar = "";
-		$detailEditTblVar = "";
-
-		// "detail_orders"
-		$item = &$option->add("detail_orders");
-		$body = $Language->Phrase("ViewPageDetailLink") . $Language->TablePhrase("orders", "TblCaption");
-		$body .= str_replace("%c", $this->orders_Count, $Language->Phrase("DetailCount"));
-		$body = "<a class=\"btn btn-default ew-row-link ew-detail\" data-action=\"list\" href=\"" . HtmlEncode("orderslist.php?" . TABLE_SHOW_MASTER . "=parcel_info&fk_id=" . urlencode(strval($this->id->CurrentValue)) . "") . "\">" . $body . "</a>";
-		$links = "";
-		if (!isset($GLOBALS["orders_grid"]))
-			$GLOBALS["orders_grid"] = new orders_grid();
-		if ($GLOBALS["orders_grid"]->DetailView && $Security->canView() && $Security->allowView(CurrentProjectID() . 'orders')) {
-			$links .= "<li><a class=\"ew-row-link ew-detail-view\" data-action=\"view\" data-caption=\"" . HtmlTitle($Language->Phrase("MasterDetailViewLink")) . "\" href=\"" . HtmlEncode($this->getViewUrl(TABLE_SHOW_DETAIL . "=orders")) . "\">" . HtmlImageAndText($Language->Phrase("MasterDetailViewLink")) . "</a></li>";
-			if ($detailViewTblVar <> "")
-				$detailViewTblVar .= ",";
-			$detailViewTblVar .= "orders";
-		}
-		if ($GLOBALS["orders_grid"]->DetailEdit && $Security->canEdit() && $Security->allowEdit(CurrentProjectID() . 'orders')) {
-			$links .= "<li><a class=\"ew-row-link ew-detail-edit\" data-action=\"edit\" data-caption=\"" . HtmlTitle($Language->Phrase("MasterDetailEditLink")) . "\" href=\"" . HtmlEncode($this->getEditUrl(TABLE_SHOW_DETAIL . "=orders")) . "\">" . HtmlImageAndText($Language->Phrase("MasterDetailEditLink")) . "</a></li>";
-			if ($detailEditTblVar <> "")
-				$detailEditTblVar .= ",";
-			$detailEditTblVar .= "orders";
-		}
-		if ($GLOBALS["orders_grid"]->DetailAdd && $Security->canAdd() && $Security->allowAdd(CurrentProjectID() . 'orders')) {
-			$links .= "<li><a class=\"ew-row-link ew-detail-copy\" data-action=\"add\" data-caption=\"" . HtmlTitle($Language->Phrase("MasterDetailCopyLink")) . "\" href=\"" . HtmlEncode($this->getCopyUrl(TABLE_SHOW_DETAIL . "=orders")) . "\">" . HtmlImageAndText($Language->Phrase("MasterDetailCopyLink")) . "</a></li>";
-			if ($detailCopyTblVar <> "")
-				$detailCopyTblVar .= ",";
-			$detailCopyTblVar .= "orders";
-		}
-		if ($links <> "") {
-			$body .= "<button class=\"dropdown-toggle btn btn-default ew-detail\" data-toggle=\"dropdown\"></button>";
-			$body .= "<ul class=\"dropdown-menu\">". $links . "</ul>";
-		}
-		$body = "<div class=\"btn-group btn-group-sm ew-btn-group\">" . $body . "</div>";
-		$item->Body = $body;
-		$item->Visible = $Security->allowList(CurrentProjectID() . 'orders');
-		if ($item->Visible) {
-			if ($detailTableLink <> "")
-				$detailTableLink .= ",";
-			$detailTableLink .= "orders";
-		}
-		if ($this->ShowMultipleDetails)
-			$item->Visible = FALSE;
-
-		// Multiple details
-		if ($this->ShowMultipleDetails) {
-			$body = "<div class=\"btn-group btn-group-sm ew-btn-group\">";
-			$links = "";
-			if ($detailViewTblVar <> "") {
-				$links .= "<li><a class=\"ew-row-link ew-detail-view\" data-action=\"view\" data-caption=\"" . HtmlTitle($Language->Phrase("MasterDetailViewLink")) . "\" href=\"" . HtmlEncode($this->getViewUrl(TABLE_SHOW_DETAIL . "=" . $detailViewTblVar)) . "\">" . HtmlImageAndText($Language->Phrase("MasterDetailViewLink")) . "</a></li>";
-			}
-			if ($detailEditTblVar <> "") {
-				$links .= "<li><a class=\"ew-row-link ew-detail-edit\" data-action=\"edit\" data-caption=\"" . HtmlTitle($Language->Phrase("MasterDetailEditLink")) . "\" href=\"" . HtmlEncode($this->getEditUrl(TABLE_SHOW_DETAIL . "=" . $detailEditTblVar)) . "\">" . HtmlImageAndText($Language->Phrase("MasterDetailEditLink")) . "</a></li>";
-			}
-			if ($detailCopyTblVar <> "") {
-				$links .= "<li><a class=\"ew-row-link ew-detail-copy\" data-action=\"add\" data-caption=\"" . HtmlTitle($Language->Phrase("MasterDetailCopyLink")) . "\" href=\"" . HtmlEncode($this->getCopyUrl(TABLE_SHOW_DETAIL . "=" . $detailCopyTblVar)) . "\">" . HtmlImageAndText($Language->Phrase("MasterDetailCopyLink")) . "</a></li>";
-			}
-			if ($links <> "") {
-				$body .= "<button class=\"dropdown-toggle btn btn-default ew-master-detail\" title=\"" . HtmlTitle($Language->Phrase("MultipleMasterDetails")) . "\" data-toggle=\"dropdown\">" . $Language->Phrase("MultipleMasterDetails") . "</button>";
-				$body .= "<ul class=\"dropdown-menu ew-menu\">". $links . "</ul>";
-			}
-			$body .= "</div>";
-
-			// Multiple details
-			$opt = &$option->add("details");
-			$opt->Body = $body;
-		}
-
-		// Set up detail default
-		$option = &$options["detail"];
-		$options["detail"]->DropDownButtonPhrase = $Language->Phrase("ButtonDetails");
-		$ar = explode(",", $detailTableLink);
-		$cnt = count($ar);
-		$option->UseDropDownButton = ($cnt > 1);
-		$option->UseButtonGroup = TRUE;
-		$item = &$option->add($option->GroupOptionName);
-		$item->Body = "";
-		$item->Visible = FALSE;
 
 		// Set up action default
 		$option = &$options["action"];
@@ -1038,16 +952,12 @@ class parcel_info_view extends parcel_info
 		$this->to_place->setDbValue($row['to_place']);
 		$this->description->setDbValue($row['description']);
 		$this->user_id->setDbValue($row['user_id']);
-		$this->category->setDbValue($row['category']);
 		$this->image_id->setDbValue($row['image_id']);
 		$this->name->setDbValue($row['name']);
-		if (!isset($GLOBALS["orders_grid"]))
-			$GLOBALS["orders_grid"] = new orders_grid();
-		$detailFilter = $GLOBALS["orders"]->sqlDetailFilter_parcel_info();
-		$detailFilter = str_replace("@parcel_id@", AdjustSql($this->id->DbValue, "DB"), $detailFilter);
-		$GLOBALS["orders"]->setCurrentMasterTable("parcel_info");
-		$detailFilter = $GLOBALS["orders"]->applyUserIDFilters($detailFilter);
-		$this->orders_Count = $GLOBALS["orders"]->loadRecordCount($detailFilter);
+		$this->categoty->setDbValue($row['categoty']);
+		$this->status->setDbValue($row['status']);
+		$this->createdAt->setDbValue($row['createdAt']);
+		$this->updatedAt->setDbValue($row['updatedAt']);
 	}
 
 	// Return a row with default values
@@ -1059,9 +969,12 @@ class parcel_info_view extends parcel_info
 		$row['to_place'] = NULL;
 		$row['description'] = NULL;
 		$row['user_id'] = NULL;
-		$row['category'] = NULL;
 		$row['image_id'] = NULL;
 		$row['name'] = NULL;
+		$row['categoty'] = NULL;
+		$row['status'] = NULL;
+		$row['createdAt'] = NULL;
+		$row['updatedAt'] = NULL;
 		return $row;
 	}
 
@@ -1087,9 +1000,12 @@ class parcel_info_view extends parcel_info
 		// to_place
 		// description
 		// user_id
-		// category
 		// image_id
 		// name
+		// categoty
+		// status
+		// createdAt
+		// updatedAt
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
@@ -1133,29 +1049,6 @@ class parcel_info_view extends parcel_info
 			}
 			$this->user_id->ViewCustomAttributes = "";
 
-			// category
-			$curVal = strval($this->category->CurrentValue);
-			if ($curVal <> "") {
-				$this->category->ViewValue = $this->category->lookupCacheOption($curVal);
-				if ($this->category->ViewValue === NULL) { // Lookup from database
-					$filterWrk = "`id`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
-					$sqlWrk = $this->category->Lookup->getSql(FALSE, $filterWrk, '', $this);
-					$rswrk = Conn()->execute($sqlWrk);
-					if ($rswrk && !$rswrk->EOF) { // Lookup values found
-						$arwrk = array();
-						$arwrk[1] = $rswrk->fields('df');
-						$arwrk[2] = $rswrk->fields('df2');
-						$this->category->ViewValue = $this->category->displayValue($arwrk);
-						$rswrk->Close();
-					} else {
-						$this->category->ViewValue = $this->category->CurrentValue;
-					}
-				}
-			} else {
-				$this->category->ViewValue = NULL;
-			}
-			$this->category->ViewCustomAttributes = "";
-
 			// image_id
 			$this->image_id->ViewValue = $this->image_id->CurrentValue;
 			$curVal = strval($this->image_id->CurrentValue);
@@ -1183,6 +1076,26 @@ class parcel_info_view extends parcel_info
 			$this->name->ViewValue = $this->name->CurrentValue;
 			$this->name->ViewCustomAttributes = "";
 
+			// categoty
+			$this->categoty->ViewValue = $this->categoty->CurrentValue;
+			$this->categoty->ViewValue = FormatNumber($this->categoty->ViewValue, 0, -2, -2, -2);
+			$this->categoty->ViewCustomAttributes = "";
+
+			// status
+			$this->status->ViewValue = $this->status->CurrentValue;
+			$this->status->ViewValue = FormatNumber($this->status->ViewValue, 0, -2, -2, -2);
+			$this->status->ViewCustomAttributes = "";
+
+			// createdAt
+			$this->createdAt->ViewValue = $this->createdAt->CurrentValue;
+			$this->createdAt->ViewValue = FormatDateTime($this->createdAt->ViewValue, 0);
+			$this->createdAt->ViewCustomAttributes = "";
+
+			// updatedAt
+			$this->updatedAt->ViewValue = $this->updatedAt->CurrentValue;
+			$this->updatedAt->ViewValue = FormatDateTime($this->updatedAt->ViewValue, 0);
+			$this->updatedAt->ViewCustomAttributes = "";
+
 			// id
 			$this->id->LinkCustomAttributes = "";
 			$this->id->HrefValue = "";
@@ -1208,11 +1121,6 @@ class parcel_info_view extends parcel_info
 			$this->user_id->HrefValue = "";
 			$this->user_id->TooltipValue = "";
 
-			// category
-			$this->category->LinkCustomAttributes = "";
-			$this->category->HrefValue = "";
-			$this->category->TooltipValue = "";
-
 			// image_id
 			$this->image_id->LinkCustomAttributes = "";
 			if (!EmptyValue($this->image_id->CurrentValue)) {
@@ -1228,6 +1136,26 @@ class parcel_info_view extends parcel_info
 			$this->name->LinkCustomAttributes = "";
 			$this->name->HrefValue = "";
 			$this->name->TooltipValue = "";
+
+			// categoty
+			$this->categoty->LinkCustomAttributes = "";
+			$this->categoty->HrefValue = "";
+			$this->categoty->TooltipValue = "";
+
+			// status
+			$this->status->LinkCustomAttributes = "";
+			$this->status->HrefValue = "";
+			$this->status->TooltipValue = "";
+
+			// createdAt
+			$this->createdAt->LinkCustomAttributes = "";
+			$this->createdAt->HrefValue = "";
+			$this->createdAt->TooltipValue = "";
+
+			// updatedAt
+			$this->updatedAt->LinkCustomAttributes = "";
+			$this->updatedAt->HrefValue = "";
+			$this->updatedAt->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -1342,28 +1270,6 @@ class parcel_info_view extends parcel_info
 		$this->Page_DataRendering($header);
 		$doc->Text .= $header;
 		$this->exportDocument($doc, $rs, $this->StartRec, $this->StopRec, "view");
-
-		// Export detail records (orders)
-		if (EXPORT_DETAIL_RECORDS && in_array("orders", explode(",", $this->getCurrentDetailTable()))) {
-			global $orders;
-			if (!isset($orders))
-				$orders = new orders();
-			$rsdetail = $orders->loadRs($orders->getDetailFilter()); // Load detail records
-			if ($rsdetail && !$rsdetail->EOF) {
-				$exportStyle = $doc->Style;
-				$doc->setStyle("h"); // Change to horizontal
-				if (!$this->isExport("csv") || EXPORT_DETAIL_RECORDS_FOR_CSV) {
-					$doc->exportEmptyRow();
-					$detailcnt = $rsdetail->RecordCount();
-					$oldtbl = $doc->Table;
-					$doc->Table = $orders;
-					$orders->exportDocument($doc, $rsdetail, 1, $detailcnt);
-					$doc->Table = $oldtbl;
-				}
-				$doc->setStyle($exportStyle); // Restore
-				$rsdetail->close();
-			}
-		}
 		$footer = $this->PageFooter;
 		$this->Page_DataRendered($footer);
 		$doc->Text .= $footer;
@@ -1517,18 +1423,6 @@ class parcel_info_view extends parcel_info
 					$validMaster = FALSE;
 				}
 			}
-			if ($masterTblVar == "category") {
-				$validMaster = TRUE;
-				if (Get("fk_id") !== NULL) {
-					$GLOBALS["category"]->id->setQueryStringValue(Get("fk_id"));
-					$this->category->setQueryStringValue($GLOBALS["category"]->id->QueryStringValue);
-					$this->category->setSessionValue($this->category->QueryStringValue);
-					if (!is_numeric($GLOBALS["category"]->id->QueryStringValue))
-						$validMaster = FALSE;
-				} else {
-					$validMaster = FALSE;
-				}
-			}
 		} elseif (Post(TABLE_SHOW_MASTER) !== NULL) {
 			$masterTblVar = Post(TABLE_SHOW_MASTER);
 			if ($masterTblVar == "") {
@@ -1560,18 +1454,6 @@ class parcel_info_view extends parcel_info
 					$validMaster = FALSE;
 				}
 			}
-			if ($masterTblVar == "category") {
-				$validMaster = TRUE;
-				if (Post("fk_id") !== NULL) {
-					$GLOBALS["category"]->id->setFormValue(Post("fk_id"));
-					$this->category->setFormValue($GLOBALS["category"]->id->FormValue);
-					$this->category->setSessionValue($this->category->FormValue);
-					if (!is_numeric($GLOBALS["category"]->id->FormValue))
-						$validMaster = FALSE;
-				} else {
-					$validMaster = FALSE;
-				}
-			}
 		}
 		if ($validMaster) {
 
@@ -1594,43 +1476,9 @@ class parcel_info_view extends parcel_info
 				if ($this->user_id->CurrentValue == "")
 					$this->user_id->setSessionValue("");
 			}
-			if ($masterTblVar <> "category") {
-				if ($this->category->CurrentValue == "")
-					$this->category->setSessionValue("");
-			}
 		}
 		$this->DbMasterFilter = $this->getMasterFilter(); // Get master filter
 		$this->DbDetailFilter = $this->getDetailFilter(); // Get detail filter
-	}
-
-	// Set up detail parms based on QueryString
-	protected function setupDetailParms()
-	{
-
-		// Get the keys for master table
-		if (Get(TABLE_SHOW_DETAIL) !== NULL) {
-			$detailTblVar = Get(TABLE_SHOW_DETAIL);
-			$this->setCurrentDetailTable($detailTblVar);
-		} else {
-			$detailTblVar = $this->getCurrentDetailTable();
-		}
-		if ($detailTblVar <> "") {
-			$detailTblVar = explode(",", $detailTblVar);
-			if (in_array("orders", $detailTblVar)) {
-				if (!isset($GLOBALS["orders_grid"]))
-					$GLOBALS["orders_grid"] = new orders_grid();
-				if ($GLOBALS["orders_grid"]->DetailView) {
-					$GLOBALS["orders_grid"]->CurrentMode = "view";
-
-					// Save current master table to detail table
-					$GLOBALS["orders_grid"]->setCurrentMasterTable($this->TableVar);
-					$GLOBALS["orders_grid"]->setStartRecordNumber(1);
-					$GLOBALS["orders_grid"]->parcel_id->IsDetailKey = TRUE;
-					$GLOBALS["orders_grid"]->parcel_id->CurrentValue = $this->id->CurrentValue;
-					$GLOBALS["orders_grid"]->parcel_id->setSessionValue($GLOBALS["orders_grid"]->parcel_id->CurrentValue);
-				}
-			}
-		}
 	}
 
 	// Set up Breadcrumb
@@ -1676,8 +1524,6 @@ class parcel_info_view extends parcel_info
 					// Format the field values
 					switch ($fld->FieldVar) {
 						case "x_user_id":
-							break;
-						case "x_category":
 							break;
 						case "x_image_id":
 							break;

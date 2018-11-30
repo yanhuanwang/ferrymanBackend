@@ -26,10 +26,13 @@ class image extends DbTable
 
 	// Fields
 	public $id;
-	public $name;
-	public $_userid;
 	public $path;
 	public $description;
+	public $uuid;
+	public $user_id;
+	public $confirmed;
+	public $createdAt;
+	public $updatedAt;
 
 	// Constructor
 	public function __construct()
@@ -72,32 +75,8 @@ class image extends DbTable
 		$this->id->DefaultErrorMessage = $Language->Phrase("IncorrectInteger");
 		$this->fields['id'] = &$this->id;
 
-		// name
-		$this->name = new DbField('image', 'image', 'x_name', 'name', '`name`', '`name`', 200, -1, FALSE, '`name`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->name->Nullable = FALSE; // NOT NULL field
-		$this->name->Required = TRUE; // Required field
-		$this->name->Sortable = TRUE; // Allow sort
-		$this->fields['name'] = &$this->name;
-
-		// userid
-		$this->_userid = new DbField('image', 'image', 'x__userid', 'userid', '`userid`', '`userid`', 3, -1, FALSE, '`userid`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->_userid->IsForeignKey = TRUE; // Foreign key field
-		$this->_userid->Nullable = FALSE; // NOT NULL field
-		$this->_userid->Required = TRUE; // Required field
-		$this->_userid->Sortable = TRUE; // Allow sort
-		switch ($CurrentLanguage) {
-			case "en":
-				$this->_userid->Lookup = new Lookup('userid', 'user', FALSE, 'id', ["id","username","",""], [], ["x_id"], [], [], [], '', '');
-				break;
-			default:
-				$this->_userid->Lookup = new Lookup('userid', 'user', FALSE, 'id', ["id","username","",""], [], ["x_id"], [], [], [], '', '');
-				break;
-		}
-		$this->_userid->DefaultErrorMessage = $Language->Phrase("IncorrectInteger");
-		$this->fields['userid'] = &$this->_userid;
-
 		// path
-		$this->path = new DbField('image', 'image', 'x_path', 'path', '`path`', '`path`', 200, -1, TRUE, '`path`', FALSE, FALSE, FALSE, 'IMAGE', 'FILE');
+		$this->path = new DbField('image', 'image', 'x_path', 'path', '`path`', '`path`', 201, -1, TRUE, '`path`', FALSE, FALSE, FALSE, 'IMAGE', 'FILE');
 		$this->path->Nullable = FALSE; // NOT NULL field
 		$this->path->Required = TRUE; // Required field
 		$this->path->Sortable = TRUE; // Allow sort
@@ -105,10 +84,46 @@ class image extends DbTable
 
 		// description
 		$this->description = new DbField('image', 'image', 'x_description', 'description', '`description`', '`description`', 200, -1, FALSE, '`description`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->description->Nullable = FALSE; // NOT NULL field
-		$this->description->Required = TRUE; // Required field
 		$this->description->Sortable = TRUE; // Allow sort
 		$this->fields['description'] = &$this->description;
+
+		// uuid
+		$this->uuid = new DbField('image', 'image', 'x_uuid', 'uuid', '`uuid`', '`uuid`', 200, -1, FALSE, '`uuid`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->uuid->Nullable = FALSE; // NOT NULL field
+		$this->uuid->Required = TRUE; // Required field
+		$this->uuid->Sortable = TRUE; // Allow sort
+		$this->fields['uuid'] = &$this->uuid;
+
+		// user_id
+		$this->user_id = new DbField('image', 'image', 'x_user_id', 'user_id', '`user_id`', '`user_id`', 3, -1, FALSE, '`user_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->user_id->Nullable = FALSE; // NOT NULL field
+		$this->user_id->Required = TRUE; // Required field
+		$this->user_id->Sortable = TRUE; // Allow sort
+		$this->user_id->DefaultErrorMessage = $Language->Phrase("IncorrectInteger");
+		$this->fields['user_id'] = &$this->user_id;
+
+		// confirmed
+		$this->confirmed = new DbField('image', 'image', 'x_confirmed', 'confirmed', '`confirmed`', '`confirmed`', 3, -1, FALSE, '`confirmed`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->confirmed->Nullable = FALSE; // NOT NULL field
+		$this->confirmed->Sortable = TRUE; // Allow sort
+		$this->confirmed->DefaultErrorMessage = $Language->Phrase("IncorrectInteger");
+		$this->fields['confirmed'] = &$this->confirmed;
+
+		// createdAt
+		$this->createdAt = new DbField('image', 'image', 'x_createdAt', 'createdAt', '`createdAt`', CastDateFieldForLike('`createdAt`', 0, "DB"), 135, 0, FALSE, '`createdAt`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->createdAt->Nullable = FALSE; // NOT NULL field
+		$this->createdAt->Required = TRUE; // Required field
+		$this->createdAt->Sortable = TRUE; // Allow sort
+		$this->createdAt->DefaultErrorMessage = str_replace("%s", $GLOBALS["DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
+		$this->fields['createdAt'] = &$this->createdAt;
+
+		// updatedAt
+		$this->updatedAt = new DbField('image', 'image', 'x_updatedAt', 'updatedAt', '`updatedAt`', CastDateFieldForLike('`updatedAt`', 0, "DB"), 135, 0, FALSE, '`updatedAt`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->updatedAt->Nullable = FALSE; // NOT NULL field
+		$this->updatedAt->Required = TRUE; // Required field
+		$this->updatedAt->Sortable = TRUE; // Allow sort
+		$this->updatedAt->DefaultErrorMessage = str_replace("%s", $GLOBALS["DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
+		$this->fields['updatedAt'] = &$this->updatedAt;
 	}
 
 	// Field Visibility
@@ -145,58 +160,6 @@ class image extends DbTable
 		} else {
 			$fld->setSort("");
 		}
-	}
-
-	// Current master table name
-	public function getCurrentMasterTable()
-	{
-		return @$_SESSION[PROJECT_NAME . "_" . $this->TableVar . "_" . TABLE_MASTER_TABLE];
-	}
-	public function setCurrentMasterTable($v)
-	{
-		$_SESSION[PROJECT_NAME . "_" . $this->TableVar . "_" . TABLE_MASTER_TABLE] = $v;
-	}
-
-	// Session master WHERE clause
-	public function getMasterFilter()
-	{
-
-		// Master filter
-		$masterFilter = "";
-		if ($this->getCurrentMasterTable() == "user") {
-			if ($this->_userid->getSessionValue() <> "")
-				$masterFilter .= "`id`=" . QuotedValue($this->_userid->getSessionValue(), DATATYPE_NUMBER, "DB");
-			else
-				return "";
-		}
-		return $masterFilter;
-	}
-
-	// Session detail WHERE clause
-	public function getDetailFilter()
-	{
-
-		// Detail filter
-		$detailFilter = "";
-		if ($this->getCurrentMasterTable() == "user") {
-			if ($this->_userid->getSessionValue() <> "")
-				$detailFilter .= "`userid`=" . QuotedValue($this->_userid->getSessionValue(), DATATYPE_NUMBER, "DB");
-			else
-				return "";
-		}
-		return $detailFilter;
-	}
-
-	// Master filter
-	public function sqlMasterFilter_user()
-	{
-		return "`id`=@id@";
-	}
-
-	// Detail filter
-	public function sqlDetailFilter_user()
-	{
-		return "`userid`=@_userid@";
 	}
 
 	// Current detail table name
@@ -583,10 +546,13 @@ class image extends DbTable
 			return;
 		$row = is_array($rs) ? $rs : $rs->fields;
 		$this->id->DbValue = $row['id'];
-		$this->name->DbValue = $row['name'];
-		$this->_userid->DbValue = $row['userid'];
 		$this->path->Upload->DbValue = $row['path'];
 		$this->description->DbValue = $row['description'];
+		$this->uuid->DbValue = $row['uuid'];
+		$this->user_id->DbValue = $row['user_id'];
+		$this->confirmed->DbValue = $row['confirmed'];
+		$this->createdAt->DbValue = $row['createdAt'];
+		$this->updatedAt->DbValue = $row['updatedAt'];
 	}
 
 	// Delete uploaded files
@@ -722,10 +688,6 @@ class image extends DbTable
 	// Add master url
 	public function addMasterUrl($url)
 	{
-		if ($this->getCurrentMasterTable() == "user" && !ContainsString($url, TABLE_SHOW_MASTER . "=")) {
-			$url .= (ContainsString($url, "?") ? "&" : "?") . TABLE_SHOW_MASTER . "=" . $this->getCurrentMasterTable();
-			$url .= "&fk_id=" . urlencode($this->_userid->CurrentValue);
-		}
 		return $url;
 	}
 	public function keyToJson($htmlEncode = FALSE)
@@ -828,10 +790,13 @@ class image extends DbTable
 	public function loadListRowValues(&$rs)
 	{
 		$this->id->setDbValue($rs->fields('id'));
-		$this->name->setDbValue($rs->fields('name'));
-		$this->_userid->setDbValue($rs->fields('userid'));
 		$this->path->Upload->DbValue = $rs->fields('path');
 		$this->description->setDbValue($rs->fields('description'));
+		$this->uuid->setDbValue($rs->fields('uuid'));
+		$this->user_id->setDbValue($rs->fields('user_id'));
+		$this->confirmed->setDbValue($rs->fields('confirmed'));
+		$this->createdAt->setDbValue($rs->fields('createdAt'));
+		$this->updatedAt->setDbValue($rs->fields('updatedAt'));
 	}
 
 	// Render list row values
@@ -844,42 +809,17 @@ class image extends DbTable
 
 	// Common render codes
 		// id
-		// name
-		// userid
 		// path
 		// description
+		// uuid
+		// user_id
+		// confirmed
+		// createdAt
+		// updatedAt
 		// id
 
 		$this->id->ViewValue = $this->id->CurrentValue;
 		$this->id->ViewCustomAttributes = "";
-
-		// name
-		$this->name->ViewValue = $this->name->CurrentValue;
-		$this->name->ViewCustomAttributes = "";
-
-		// userid
-		$this->_userid->ViewValue = $this->_userid->CurrentValue;
-		$curVal = strval($this->_userid->CurrentValue);
-		if ($curVal <> "") {
-			$this->_userid->ViewValue = $this->_userid->lookupCacheOption($curVal);
-			if ($this->_userid->ViewValue === NULL) { // Lookup from database
-				$filterWrk = "`id`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
-				$sqlWrk = $this->_userid->Lookup->getSql(FALSE, $filterWrk, '', $this);
-				$rswrk = Conn()->execute($sqlWrk);
-				if ($rswrk && !$rswrk->EOF) { // Lookup values found
-					$arwrk = array();
-					$arwrk[1] = $rswrk->fields('df');
-					$arwrk[2] = $rswrk->fields('df2');
-					$this->_userid->ViewValue = $this->_userid->displayValue($arwrk);
-					$rswrk->Close();
-				} else {
-					$this->_userid->ViewValue = $this->_userid->CurrentValue;
-				}
-			}
-		} else {
-			$this->_userid->ViewValue = NULL;
-		}
-		$this->_userid->ViewCustomAttributes = "";
 
 		// path
 		if (!EmptyValue($this->path->Upload->DbValue)) {
@@ -894,20 +834,34 @@ class image extends DbTable
 		$this->description->ViewValue = $this->description->CurrentValue;
 		$this->description->ViewCustomAttributes = "";
 
+		// uuid
+		$this->uuid->ViewValue = $this->uuid->CurrentValue;
+		$this->uuid->ViewCustomAttributes = "";
+
+		// user_id
+		$this->user_id->ViewValue = $this->user_id->CurrentValue;
+		$this->user_id->ViewValue = FormatNumber($this->user_id->ViewValue, 0, -2, -2, -2);
+		$this->user_id->ViewCustomAttributes = "";
+
+		// confirmed
+		$this->confirmed->ViewValue = $this->confirmed->CurrentValue;
+		$this->confirmed->ViewValue = FormatNumber($this->confirmed->ViewValue, 0, -2, -2, -2);
+		$this->confirmed->ViewCustomAttributes = "";
+
+		// createdAt
+		$this->createdAt->ViewValue = $this->createdAt->CurrentValue;
+		$this->createdAt->ViewValue = FormatDateTime($this->createdAt->ViewValue, 0);
+		$this->createdAt->ViewCustomAttributes = "";
+
+		// updatedAt
+		$this->updatedAt->ViewValue = $this->updatedAt->CurrentValue;
+		$this->updatedAt->ViewValue = FormatDateTime($this->updatedAt->ViewValue, 0);
+		$this->updatedAt->ViewCustomAttributes = "";
+
 		// id
 		$this->id->LinkCustomAttributes = "";
 		$this->id->HrefValue = "";
 		$this->id->TooltipValue = "";
-
-		// name
-		$this->name->LinkCustomAttributes = "";
-		$this->name->HrefValue = "";
-		$this->name->TooltipValue = "";
-
-		// userid
-		$this->_userid->LinkCustomAttributes = "";
-		$this->_userid->HrefValue = "";
-		$this->_userid->TooltipValue = "";
 
 		// path
 		$this->path->LinkCustomAttributes = "";
@@ -932,6 +886,31 @@ class image extends DbTable
 		$this->description->HrefValue = "";
 		$this->description->TooltipValue = "";
 
+		// uuid
+		$this->uuid->LinkCustomAttributes = "";
+		$this->uuid->HrefValue = "";
+		$this->uuid->TooltipValue = "";
+
+		// user_id
+		$this->user_id->LinkCustomAttributes = "";
+		$this->user_id->HrefValue = "";
+		$this->user_id->TooltipValue = "";
+
+		// confirmed
+		$this->confirmed->LinkCustomAttributes = "";
+		$this->confirmed->HrefValue = "";
+		$this->confirmed->TooltipValue = "";
+
+		// createdAt
+		$this->createdAt->LinkCustomAttributes = "";
+		$this->createdAt->HrefValue = "";
+		$this->createdAt->TooltipValue = "";
+
+		// updatedAt
+		$this->updatedAt->LinkCustomAttributes = "";
+		$this->updatedAt->HrefValue = "";
+		$this->updatedAt->TooltipValue = "";
+
 		// Call Row Rendered event
 		$this->Row_Rendered();
 
@@ -953,44 +932,6 @@ class image extends DbTable
 		$this->id->EditValue = $this->id->CurrentValue;
 		$this->id->ViewCustomAttributes = "";
 
-		// name
-		$this->name->EditAttrs["class"] = "form-control";
-		$this->name->EditCustomAttributes = "";
-		$this->name->EditValue = $this->name->CurrentValue;
-		$this->name->PlaceHolder = RemoveHtml($this->name->caption());
-
-		// userid
-		$this->_userid->EditAttrs["class"] = "form-control";
-		$this->_userid->EditCustomAttributes = "";
-		if ($this->_userid->getSessionValue() <> "") {
-			$this->_userid->CurrentValue = $this->_userid->getSessionValue();
-		$this->_userid->ViewValue = $this->_userid->CurrentValue;
-		$curVal = strval($this->_userid->CurrentValue);
-		if ($curVal <> "") {
-			$this->_userid->ViewValue = $this->_userid->lookupCacheOption($curVal);
-			if ($this->_userid->ViewValue === NULL) { // Lookup from database
-				$filterWrk = "`id`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
-				$sqlWrk = $this->_userid->Lookup->getSql(FALSE, $filterWrk, '', $this);
-				$rswrk = Conn()->execute($sqlWrk);
-				if ($rswrk && !$rswrk->EOF) { // Lookup values found
-					$arwrk = array();
-					$arwrk[1] = $rswrk->fields('df');
-					$arwrk[2] = $rswrk->fields('df2');
-					$this->_userid->ViewValue = $this->_userid->displayValue($arwrk);
-					$rswrk->Close();
-				} else {
-					$this->_userid->ViewValue = $this->_userid->CurrentValue;
-				}
-			}
-		} else {
-			$this->_userid->ViewValue = NULL;
-		}
-		$this->_userid->ViewCustomAttributes = "";
-		} else {
-		$this->_userid->EditValue = $this->_userid->CurrentValue;
-		$this->_userid->PlaceHolder = RemoveHtml($this->_userid->caption());
-		}
-
 		// path
 		$this->path->EditAttrs["class"] = "form-control";
 		$this->path->EditCustomAttributes = "";
@@ -1008,6 +949,36 @@ class image extends DbTable
 		$this->description->EditCustomAttributes = "";
 		$this->description->EditValue = $this->description->CurrentValue;
 		$this->description->PlaceHolder = RemoveHtml($this->description->caption());
+
+		// uuid
+		$this->uuid->EditAttrs["class"] = "form-control";
+		$this->uuid->EditCustomAttributes = "";
+		$this->uuid->EditValue = $this->uuid->CurrentValue;
+		$this->uuid->PlaceHolder = RemoveHtml($this->uuid->caption());
+
+		// user_id
+		$this->user_id->EditAttrs["class"] = "form-control";
+		$this->user_id->EditCustomAttributes = "";
+		$this->user_id->EditValue = $this->user_id->CurrentValue;
+		$this->user_id->PlaceHolder = RemoveHtml($this->user_id->caption());
+
+		// confirmed
+		$this->confirmed->EditAttrs["class"] = "form-control";
+		$this->confirmed->EditCustomAttributes = "";
+		$this->confirmed->EditValue = $this->confirmed->CurrentValue;
+		$this->confirmed->PlaceHolder = RemoveHtml($this->confirmed->caption());
+
+		// createdAt
+		$this->createdAt->EditAttrs["class"] = "form-control";
+		$this->createdAt->EditCustomAttributes = "";
+		$this->createdAt->EditValue = FormatDateTime($this->createdAt->CurrentValue, 8);
+		$this->createdAt->PlaceHolder = RemoveHtml($this->createdAt->caption());
+
+		// updatedAt
+		$this->updatedAt->EditAttrs["class"] = "form-control";
+		$this->updatedAt->EditCustomAttributes = "";
+		$this->updatedAt->EditValue = FormatDateTime($this->updatedAt->CurrentValue, 8);
+		$this->updatedAt->PlaceHolder = RemoveHtml($this->updatedAt->caption());
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -1040,25 +1011,37 @@ class image extends DbTable
 				if ($exportPageType == "view") {
 					if ($this->id->Exportable)
 						$doc->exportCaption($this->id);
-					if ($this->name->Exportable)
-						$doc->exportCaption($this->name);
-					if ($this->_userid->Exportable)
-						$doc->exportCaption($this->_userid);
 					if ($this->path->Exportable)
 						$doc->exportCaption($this->path);
 					if ($this->description->Exportable)
 						$doc->exportCaption($this->description);
+					if ($this->uuid->Exportable)
+						$doc->exportCaption($this->uuid);
+					if ($this->user_id->Exportable)
+						$doc->exportCaption($this->user_id);
+					if ($this->confirmed->Exportable)
+						$doc->exportCaption($this->confirmed);
+					if ($this->createdAt->Exportable)
+						$doc->exportCaption($this->createdAt);
+					if ($this->updatedAt->Exportable)
+						$doc->exportCaption($this->updatedAt);
 				} else {
 					if ($this->id->Exportable)
 						$doc->exportCaption($this->id);
-					if ($this->name->Exportable)
-						$doc->exportCaption($this->name);
-					if ($this->_userid->Exportable)
-						$doc->exportCaption($this->_userid);
 					if ($this->path->Exportable)
 						$doc->exportCaption($this->path);
 					if ($this->description->Exportable)
 						$doc->exportCaption($this->description);
+					if ($this->uuid->Exportable)
+						$doc->exportCaption($this->uuid);
+					if ($this->user_id->Exportable)
+						$doc->exportCaption($this->user_id);
+					if ($this->confirmed->Exportable)
+						$doc->exportCaption($this->confirmed);
+					if ($this->createdAt->Exportable)
+						$doc->exportCaption($this->createdAt);
+					if ($this->updatedAt->Exportable)
+						$doc->exportCaption($this->updatedAt);
 				}
 				$doc->endExportRow();
 			}
@@ -1092,25 +1075,37 @@ class image extends DbTable
 					if ($exportPageType == "view") {
 						if ($this->id->Exportable)
 							$doc->exportField($this->id);
-						if ($this->name->Exportable)
-							$doc->exportField($this->name);
-						if ($this->_userid->Exportable)
-							$doc->exportField($this->_userid);
 						if ($this->path->Exportable)
 							$doc->exportField($this->path);
 						if ($this->description->Exportable)
 							$doc->exportField($this->description);
+						if ($this->uuid->Exportable)
+							$doc->exportField($this->uuid);
+						if ($this->user_id->Exportable)
+							$doc->exportField($this->user_id);
+						if ($this->confirmed->Exportable)
+							$doc->exportField($this->confirmed);
+						if ($this->createdAt->Exportable)
+							$doc->exportField($this->createdAt);
+						if ($this->updatedAt->Exportable)
+							$doc->exportField($this->updatedAt);
 					} else {
 						if ($this->id->Exportable)
 							$doc->exportField($this->id);
-						if ($this->name->Exportable)
-							$doc->exportField($this->name);
-						if ($this->_userid->Exportable)
-							$doc->exportField($this->_userid);
 						if ($this->path->Exportable)
 							$doc->exportField($this->path);
 						if ($this->description->Exportable)
 							$doc->exportField($this->description);
+						if ($this->uuid->Exportable)
+							$doc->exportField($this->uuid);
+						if ($this->user_id->Exportable)
+							$doc->exportField($this->user_id);
+						if ($this->confirmed->Exportable)
+							$doc->exportField($this->confirmed);
+						if ($this->createdAt->Exportable)
+							$doc->exportField($this->createdAt);
+						if ($this->updatedAt->Exportable)
+							$doc->exportField($this->updatedAt);
 					}
 					$doc->endExportRow($rowCnt);
 				}

@@ -371,9 +371,6 @@ class request_trip_view extends request_trip
 		// Table object (admin)
 		if (!isset($GLOBALS['admin'])) $GLOBALS['admin'] = new admin();
 
-		// Table object (category)
-		if (!isset($GLOBALS['category'])) $GLOBALS['category'] = new category();
-
 		// Page ID
 		if (!defined(PROJECT_NAMESPACE . "PAGE_ID"))
 			define(PROJECT_NAMESPACE . "PAGE_ID", 'view');
@@ -667,8 +664,12 @@ class request_trip_view extends request_trip
 		$this->id->setVisibility();
 		$this->from_place->setVisibility();
 		$this->to_place->setVisibility();
-		$this->date->setVisibility();
 		$this->description->setVisibility();
+		$this->user_id->setVisibility();
+		$this->from_date->setVisibility();
+		$this->to_date->setVisibility();
+		$this->createdAt->setVisibility();
+		$this->updatedAt->setVisibility();
 		$this->category->setVisibility();
 		$this->hideFieldsForAddEdit();
 
@@ -688,9 +689,8 @@ class request_trip_view extends request_trip
 		$this->createToken();
 
 		// Set up lookup cache
-		$this->setupLookupOptions($this->category);
-
 		// Check modal
+
 		if ($this->IsModal)
 			$SkipHeaderFooter = TRUE;
 
@@ -698,9 +698,6 @@ class request_trip_view extends request_trip
 		$loadCurrentRecord = FALSE;
 		$returnUrl = "";
 		$matchRecord = FALSE;
-
-		// Set up master/detail parameters
-		$this->setupMasterParms();
 		if ($this->isPageRequest()) { // Validate request
 			if (Get("id") !== NULL) {
 				$this->id->setQueryStringValue(Get("id"));
@@ -941,8 +938,12 @@ class request_trip_view extends request_trip
 		$this->id->setDbValue($row['id']);
 		$this->from_place->setDbValue($row['from_place']);
 		$this->to_place->setDbValue($row['to_place']);
-		$this->date->setDbValue($row['date']);
 		$this->description->setDbValue($row['description']);
+		$this->user_id->setDbValue($row['user_id']);
+		$this->from_date->setDbValue($row['from_date']);
+		$this->to_date->setDbValue($row['to_date']);
+		$this->createdAt->setDbValue($row['createdAt']);
+		$this->updatedAt->setDbValue($row['updatedAt']);
 		$this->category->setDbValue($row['category']);
 	}
 
@@ -953,8 +954,12 @@ class request_trip_view extends request_trip
 		$row['id'] = NULL;
 		$row['from_place'] = NULL;
 		$row['to_place'] = NULL;
-		$row['date'] = NULL;
 		$row['description'] = NULL;
+		$row['user_id'] = NULL;
+		$row['from_date'] = NULL;
+		$row['to_date'] = NULL;
+		$row['createdAt'] = NULL;
+		$row['updatedAt'] = NULL;
 		$row['category'] = NULL;
 		return $row;
 	}
@@ -979,8 +984,12 @@ class request_trip_view extends request_trip
 		// id
 		// from_place
 		// to_place
-		// date
 		// description
+		// user_id
+		// from_date
+		// to_date
+		// createdAt
+		// updatedAt
 		// category
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
@@ -997,35 +1006,38 @@ class request_trip_view extends request_trip
 			$this->to_place->ViewValue = $this->to_place->CurrentValue;
 			$this->to_place->ViewCustomAttributes = "";
 
-			// date
-			$this->date->ViewValue = $this->date->CurrentValue;
-			$this->date->ViewValue = FormatDateTime($this->date->ViewValue, 0);
-			$this->date->ViewCustomAttributes = "";
-
 			// description
 			$this->description->ViewValue = $this->description->CurrentValue;
 			$this->description->ViewCustomAttributes = "";
 
+			// user_id
+			$this->user_id->ViewValue = $this->user_id->CurrentValue;
+			$this->user_id->ViewValue = FormatNumber($this->user_id->ViewValue, 0, -2, -2, -2);
+			$this->user_id->ViewCustomAttributes = "";
+
+			// from_date
+			$this->from_date->ViewValue = $this->from_date->CurrentValue;
+			$this->from_date->ViewValue = FormatDateTime($this->from_date->ViewValue, 0);
+			$this->from_date->ViewCustomAttributes = "";
+
+			// to_date
+			$this->to_date->ViewValue = $this->to_date->CurrentValue;
+			$this->to_date->ViewValue = FormatDateTime($this->to_date->ViewValue, 0);
+			$this->to_date->ViewCustomAttributes = "";
+
+			// createdAt
+			$this->createdAt->ViewValue = $this->createdAt->CurrentValue;
+			$this->createdAt->ViewValue = FormatDateTime($this->createdAt->ViewValue, 0);
+			$this->createdAt->ViewCustomAttributes = "";
+
+			// updatedAt
+			$this->updatedAt->ViewValue = $this->updatedAt->CurrentValue;
+			$this->updatedAt->ViewValue = FormatDateTime($this->updatedAt->ViewValue, 0);
+			$this->updatedAt->ViewCustomAttributes = "";
+
 			// category
-			$curVal = strval($this->category->CurrentValue);
-			if ($curVal <> "") {
-				$this->category->ViewValue = $this->category->lookupCacheOption($curVal);
-				if ($this->category->ViewValue === NULL) { // Lookup from database
-					$filterWrk = "`id`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
-					$sqlWrk = $this->category->Lookup->getSql(FALSE, $filterWrk, '', $this);
-					$rswrk = Conn()->execute($sqlWrk);
-					if ($rswrk && !$rswrk->EOF) { // Lookup values found
-						$arwrk = array();
-						$arwrk[1] = $rswrk->fields('df');
-						$this->category->ViewValue = $this->category->displayValue($arwrk);
-						$rswrk->Close();
-					} else {
-						$this->category->ViewValue = $this->category->CurrentValue;
-					}
-				}
-			} else {
-				$this->category->ViewValue = NULL;
-			}
+			$this->category->ViewValue = $this->category->CurrentValue;
+			$this->category->ViewValue = FormatNumber($this->category->ViewValue, 0, -2, -2, -2);
 			$this->category->ViewCustomAttributes = "";
 
 			// id
@@ -1043,15 +1055,35 @@ class request_trip_view extends request_trip
 			$this->to_place->HrefValue = "";
 			$this->to_place->TooltipValue = "";
 
-			// date
-			$this->date->LinkCustomAttributes = "";
-			$this->date->HrefValue = "";
-			$this->date->TooltipValue = "";
-
 			// description
 			$this->description->LinkCustomAttributes = "";
 			$this->description->HrefValue = "";
 			$this->description->TooltipValue = "";
+
+			// user_id
+			$this->user_id->LinkCustomAttributes = "";
+			$this->user_id->HrefValue = "";
+			$this->user_id->TooltipValue = "";
+
+			// from_date
+			$this->from_date->LinkCustomAttributes = "";
+			$this->from_date->HrefValue = "";
+			$this->from_date->TooltipValue = "";
+
+			// to_date
+			$this->to_date->LinkCustomAttributes = "";
+			$this->to_date->HrefValue = "";
+			$this->to_date->TooltipValue = "";
+
+			// createdAt
+			$this->createdAt->LinkCustomAttributes = "";
+			$this->createdAt->HrefValue = "";
+			$this->createdAt->TooltipValue = "";
+
+			// updatedAt
+			$this->updatedAt->LinkCustomAttributes = "";
+			$this->updatedAt->HrefValue = "";
+			$this->updatedAt->TooltipValue = "";
 
 			// category
 			$this->category->LinkCustomAttributes = "";
@@ -1287,73 +1319,6 @@ class request_trip_view extends request_trip
 		}
 	}
 
-	// Set up master/detail based on QueryString
-	protected function setupMasterParms()
-	{
-		$validMaster = FALSE;
-
-		// Get the keys for master table
-		if (Get(TABLE_SHOW_MASTER) !== NULL) {
-			$masterTblVar = Get(TABLE_SHOW_MASTER);
-			if ($masterTblVar == "") {
-				$validMaster = TRUE;
-				$this->DbMasterFilter = "";
-				$this->DbDetailFilter = "";
-			}
-			if ($masterTblVar == "category") {
-				$validMaster = TRUE;
-				if (Get("fk_id") !== NULL) {
-					$GLOBALS["category"]->id->setQueryStringValue(Get("fk_id"));
-					$this->category->setQueryStringValue($GLOBALS["category"]->id->QueryStringValue);
-					$this->category->setSessionValue($this->category->QueryStringValue);
-					if (!is_numeric($GLOBALS["category"]->id->QueryStringValue))
-						$validMaster = FALSE;
-				} else {
-					$validMaster = FALSE;
-				}
-			}
-		} elseif (Post(TABLE_SHOW_MASTER) !== NULL) {
-			$masterTblVar = Post(TABLE_SHOW_MASTER);
-			if ($masterTblVar == "") {
-				$validMaster = TRUE;
-				$this->DbMasterFilter = "";
-				$this->DbDetailFilter = "";
-			}
-			if ($masterTblVar == "category") {
-				$validMaster = TRUE;
-				if (Post("fk_id") !== NULL) {
-					$GLOBALS["category"]->id->setFormValue(Post("fk_id"));
-					$this->category->setFormValue($GLOBALS["category"]->id->FormValue);
-					$this->category->setSessionValue($this->category->FormValue);
-					if (!is_numeric($GLOBALS["category"]->id->FormValue))
-						$validMaster = FALSE;
-				} else {
-					$validMaster = FALSE;
-				}
-			}
-		}
-		if ($validMaster) {
-
-			// Save current master table
-			$this->setCurrentMasterTable($masterTblVar);
-			$this->setSessionWhere($this->getDetailFilter());
-
-			// Reset start record counter (new master key)
-			if (!$this->isAddOrEdit()) {
-				$this->StartRec = 1;
-				$this->setStartRecordNumber($this->StartRec);
-			}
-
-			// Clear previous master key from Session
-			if ($masterTblVar <> "category") {
-				if ($this->category->CurrentValue == "")
-					$this->category->setSessionValue("");
-			}
-		}
-		$this->DbMasterFilter = $this->getMasterFilter(); // Get master filter
-		$this->DbDetailFilter = $this->getDetailFilter(); // Get detail filter
-	}
-
 	// Set up Breadcrumb
 	protected function setupBreadcrumb()
 	{
@@ -1396,8 +1361,6 @@ class request_trip_view extends request_trip
 
 					// Format the field values
 					switch ($fld->FieldVar) {
-						case "x_category":
-							break;
 					}
 					$ar[strval($row[0])] = $row;
 					$rs->moveNext();

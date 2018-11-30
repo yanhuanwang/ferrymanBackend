@@ -77,15 +77,15 @@ fusersearch.validate = function(fobj) {
 	elm = this.getElements("x" + infix + "_birthday");
 	if (elm && !ew.checkDateDef(elm.value))
 		return this.onError(elm, "<?php echo JsEncode($user->birthday->errorMessage()) ?>");
-	elm = this.getElements("x" + infix + "_addDate");
-	if (elm && !ew.checkDateDef(elm.value))
-		return this.onError(elm, "<?php echo JsEncode($user->addDate->errorMessage()) ?>");
-	elm = this.getElements("x" + infix + "_updateDate");
-	if (elm && !ew.checkDateDef(elm.value))
-		return this.onError(elm, "<?php echo JsEncode($user->updateDate->errorMessage()) ?>");
-	elm = this.getElements("x" + infix + "_activated");
+	elm = this.getElements("x" + infix + "_status");
 	if (elm && !ew.checkInteger(elm.value))
-		return this.onError(elm, "<?php echo JsEncode($user->activated->errorMessage()) ?>");
+		return this.onError(elm, "<?php echo JsEncode($user->status->errorMessage()) ?>");
+	elm = this.getElements("x" + infix + "_createdAt");
+	if (elm && !ew.checkDateDef(elm.value))
+		return this.onError(elm, "<?php echo JsEncode($user->createdAt->errorMessage()) ?>");
+	elm = this.getElements("x" + infix + "_updatedAt");
+	if (elm && !ew.checkDateDef(elm.value))
+		return this.onError(elm, "<?php echo JsEncode($user->updatedAt->errorMessage()) ?>");
 
 	// Fire Form_CustomValidate event
 	if (!this.Form_CustomValidate(fobj))
@@ -133,18 +133,6 @@ $user_search->showMessage();
 		</div></div>
 	</div>
 <?php } ?>
-<?php if ($user->_email->Visible) { // email ?>
-	<div id="r__email" class="form-group row">
-		<label for="x__email" class="<?php echo $user_search->LeftColumnClass ?>"><span id="elh_user__email"><?php echo $user->_email->caption() ?></span>
-		<span class="ew-search-operator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z__email" id="z__email" value="LIKE"></span>
-		</label>
-		<div class="<?php echo $user_search->RightColumnClass ?>"><div<?php echo $user->_email->cellAttributes() ?>>
-			<span id="el_user__email">
-<input type="text" data-table="user" data-field="x__email" name="x__email" id="x__email" size="30" maxlength="100" placeholder="<?php echo HtmlEncode($user->_email->getPlaceHolder()) ?>" value="<?php echo $user->_email->EditValue ?>"<?php echo $user->_email->editAttributes() ?>>
-</span>
-		</div></div>
-	</div>
-<?php } ?>
 <?php if ($user->gender->Visible) { // gender ?>
 	<div id="r_gender" class="form-group row">
 		<label for="x_gender" class="<?php echo $user_search->LeftColumnClass ?>"><span id="elh_user_gender"><?php echo $user->gender->caption() ?></span>
@@ -157,18 +145,6 @@ $user_search->showMessage();
 		<?php echo $user->gender->selectOptionListHtml("x_gender") ?>
 	</select>
 </div>
-</span>
-		</div></div>
-	</div>
-<?php } ?>
-<?php if ($user->phone->Visible) { // phone ?>
-	<div id="r_phone" class="form-group row">
-		<label for="x_phone" class="<?php echo $user_search->LeftColumnClass ?>"><span id="elh_user_phone"><?php echo $user->phone->caption() ?></span>
-		<span class="ew-search-operator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_phone" id="z_phone" value="LIKE"></span>
-		</label>
-		<div class="<?php echo $user_search->RightColumnClass ?>"><div<?php echo $user->phone->cellAttributes() ?>>
-			<span id="el_user_phone">
-<input type="text" data-table="user" data-field="x_phone" name="x_phone" id="x_phone" size="30" maxlength="100" placeholder="<?php echo HtmlEncode($user->phone->getPlaceHolder()) ?>" value="<?php echo $user->phone->EditValue ?>"<?php echo $user->phone->editAttributes() ?>>
 </span>
 		</div></div>
 	</div>
@@ -298,43 +274,72 @@ ew.createDateTimePicker("fusersearch", "x_birthday", {"ignoreReadonly":true,"use
 		</div></div>
 	</div>
 <?php } ?>
-<?php if ($user->addDate->Visible) { // addDate ?>
-	<div id="r_addDate" class="form-group row">
-		<label for="x_addDate" class="<?php echo $user_search->LeftColumnClass ?>"><span id="elh_user_addDate"><?php echo $user->addDate->caption() ?></span>
-		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_addDate" id="z_addDate" value="="></span>
+<?php if ($user->mobile_phone->Visible) { // mobile_phone ?>
+	<div id="r_mobile_phone" class="form-group row">
+		<label for="x_mobile_phone" class="<?php echo $user_search->LeftColumnClass ?>"><span id="elh_user_mobile_phone"><?php echo $user->mobile_phone->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_mobile_phone" id="z_mobile_phone" value="LIKE"></span>
 		</label>
-		<div class="<?php echo $user_search->RightColumnClass ?>"><div<?php echo $user->addDate->cellAttributes() ?>>
-			<span id="el_user_addDate">
-<input type="text" data-table="user" data-field="x_addDate" name="x_addDate" id="x_addDate" placeholder="<?php echo HtmlEncode($user->addDate->getPlaceHolder()) ?>" value="<?php echo $user->addDate->EditValue ?>"<?php echo $user->addDate->editAttributes() ?>>
-<?php if (!$user->addDate->ReadOnly && !$user->addDate->Disabled && !isset($user->addDate->EditAttrs["readonly"]) && !isset($user->addDate->EditAttrs["disabled"])) { ?>
+		<div class="<?php echo $user_search->RightColumnClass ?>"><div<?php echo $user->mobile_phone->cellAttributes() ?>>
+			<span id="el_user_mobile_phone">
+<input type="text" data-table="user" data-field="x_mobile_phone" name="x_mobile_phone" id="x_mobile_phone" size="30" maxlength="100" placeholder="<?php echo HtmlEncode($user->mobile_phone->getPlaceHolder()) ?>" value="<?php echo $user->mobile_phone->EditValue ?>"<?php echo $user->mobile_phone->editAttributes() ?>>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($user->status->Visible) { // status ?>
+	<div id="r_status" class="form-group row">
+		<label for="x_status" class="<?php echo $user_search->LeftColumnClass ?>"><span id="elh_user_status"><?php echo $user->status->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_status" id="z_status" value="="></span>
+		</label>
+		<div class="<?php echo $user_search->RightColumnClass ?>"><div<?php echo $user->status->cellAttributes() ?>>
+			<span id="el_user_status">
+<input type="text" data-table="user" data-field="x_status" name="x_status" id="x_status" size="30" placeholder="<?php echo HtmlEncode($user->status->getPlaceHolder()) ?>" value="<?php echo $user->status->EditValue ?>"<?php echo $user->status->editAttributes() ?>>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($user->session_token->Visible) { // session_token ?>
+	<div id="r_session_token" class="form-group row">
+		<label for="x_session_token" class="<?php echo $user_search->LeftColumnClass ?>"><span id="elh_user_session_token"><?php echo $user->session_token->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_session_token" id="z_session_token" value="LIKE"></span>
+		</label>
+		<div class="<?php echo $user_search->RightColumnClass ?>"><div<?php echo $user->session_token->cellAttributes() ?>>
+			<span id="el_user_session_token">
+<input type="text" data-table="user" data-field="x_session_token" name="x_session_token" id="x_session_token" size="30" maxlength="255" placeholder="<?php echo HtmlEncode($user->session_token->getPlaceHolder()) ?>" value="<?php echo $user->session_token->EditValue ?>"<?php echo $user->session_token->editAttributes() ?>>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($user->createdAt->Visible) { // createdAt ?>
+	<div id="r_createdAt" class="form-group row">
+		<label for="x_createdAt" class="<?php echo $user_search->LeftColumnClass ?>"><span id="elh_user_createdAt"><?php echo $user->createdAt->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_createdAt" id="z_createdAt" value="="></span>
+		</label>
+		<div class="<?php echo $user_search->RightColumnClass ?>"><div<?php echo $user->createdAt->cellAttributes() ?>>
+			<span id="el_user_createdAt">
+<input type="text" data-table="user" data-field="x_createdAt" name="x_createdAt" id="x_createdAt" placeholder="<?php echo HtmlEncode($user->createdAt->getPlaceHolder()) ?>" value="<?php echo $user->createdAt->EditValue ?>"<?php echo $user->createdAt->editAttributes() ?>>
+<?php if (!$user->createdAt->ReadOnly && !$user->createdAt->Disabled && !isset($user->createdAt->EditAttrs["readonly"]) && !isset($user->createdAt->EditAttrs["disabled"])) { ?>
 <script>
-ew.createDateTimePicker("fusersearch", "x_addDate", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+ew.createDateTimePicker("fusersearch", "x_createdAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
 </script>
 <?php } ?>
 </span>
 		</div></div>
 	</div>
 <?php } ?>
-<?php if ($user->updateDate->Visible) { // updateDate ?>
-	<div id="r_updateDate" class="form-group row">
-		<label for="x_updateDate" class="<?php echo $user_search->LeftColumnClass ?>"><span id="elh_user_updateDate"><?php echo $user->updateDate->caption() ?></span>
-		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_updateDate" id="z_updateDate" value="="></span>
+<?php if ($user->updatedAt->Visible) { // updatedAt ?>
+	<div id="r_updatedAt" class="form-group row">
+		<label for="x_updatedAt" class="<?php echo $user_search->LeftColumnClass ?>"><span id="elh_user_updatedAt"><?php echo $user->updatedAt->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_updatedAt" id="z_updatedAt" value="="></span>
 		</label>
-		<div class="<?php echo $user_search->RightColumnClass ?>"><div<?php echo $user->updateDate->cellAttributes() ?>>
-			<span id="el_user_updateDate">
-<input type="text" data-table="user" data-field="x_updateDate" name="x_updateDate" id="x_updateDate" placeholder="<?php echo HtmlEncode($user->updateDate->getPlaceHolder()) ?>" value="<?php echo $user->updateDate->EditValue ?>"<?php echo $user->updateDate->editAttributes() ?>>
-</span>
-		</div></div>
-	</div>
+		<div class="<?php echo $user_search->RightColumnClass ?>"><div<?php echo $user->updatedAt->cellAttributes() ?>>
+			<span id="el_user_updatedAt">
+<input type="text" data-table="user" data-field="x_updatedAt" name="x_updatedAt" id="x_updatedAt" placeholder="<?php echo HtmlEncode($user->updatedAt->getPlaceHolder()) ?>" value="<?php echo $user->updatedAt->EditValue ?>"<?php echo $user->updatedAt->editAttributes() ?>>
+<?php if (!$user->updatedAt->ReadOnly && !$user->updatedAt->Disabled && !isset($user->updatedAt->EditAttrs["readonly"]) && !isset($user->updatedAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("fusersearch", "x_updatedAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
 <?php } ?>
-<?php if ($user->activated->Visible) { // activated ?>
-	<div id="r_activated" class="form-group row">
-		<label for="x_activated" class="<?php echo $user_search->LeftColumnClass ?>"><span id="elh_user_activated"><?php echo $user->activated->caption() ?></span>
-		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_activated" id="z_activated" value="="></span>
-		</label>
-		<div class="<?php echo $user_search->RightColumnClass ?>"><div<?php echo $user->activated->cellAttributes() ?>>
-			<span id="el_user_activated">
-<input type="text" data-table="user" data-field="x_activated" name="x_activated" id="x_activated" size="30" placeholder="<?php echo HtmlEncode($user->activated->getPlaceHolder()) ?>" value="<?php echo $user->activated->EditValue ?>"<?php echo $user->activated->editAttributes() ?>>
 </span>
 		</div></div>
 	</div>

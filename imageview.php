@@ -51,11 +51,8 @@ fimageview.Form_CustomValidate = function(fobj) { // DO NOT CHANGE THIS LINE!
 fimageview.validateRequired = <?php echo json_encode(CLIENT_VALIDATE) ?>;
 
 // Dynamic selection lists
-fimageview.lists["x__userid"] = <?php echo $image_view->_userid->Lookup->toClientList() ?>;
-fimageview.lists["x__userid"].options = <?php echo JsonEncode($image_view->_userid->lookupOptions()) ?>;
-fimageview.autoSuggests["x__userid"] = <?php echo json_encode(["data" => "ajax=autosuggest"]) ?>;
-
 // Form object for search
+
 </script>
 <script>
 
@@ -123,28 +120,6 @@ $image_view->showMessage();
 </td>
 	</tr>
 <?php } ?>
-<?php if ($image->name->Visible) { // name ?>
-	<tr id="r_name">
-		<td class="<?php echo $image_view->TableLeftColumnClass ?>"><span id="elh_image_name"><?php echo $image->name->caption() ?></span></td>
-		<td data-name="name"<?php echo $image->name->cellAttributes() ?>>
-<span id="el_image_name">
-<span<?php echo $image->name->viewAttributes() ?>>
-<?php echo $image->name->getViewValue() ?></span>
-</span>
-</td>
-	</tr>
-<?php } ?>
-<?php if ($image->_userid->Visible) { // userid ?>
-	<tr id="r__userid">
-		<td class="<?php echo $image_view->TableLeftColumnClass ?>"><span id="elh_image__userid"><?php echo $image->_userid->caption() ?></span></td>
-		<td data-name="_userid"<?php echo $image->_userid->cellAttributes() ?>>
-<span id="el_image__userid">
-<span<?php echo $image->_userid->viewAttributes() ?>>
-<?php echo $image->_userid->getViewValue() ?></span>
-</span>
-</td>
-	</tr>
-<?php } ?>
 <?php if ($image->path->Visible) { // path ?>
 	<tr id="r_path">
 		<td class="<?php echo $image_view->TableLeftColumnClass ?>"><span id="elh_image_path"><?php echo $image->path->caption() ?></span></td>
@@ -164,6 +139,61 @@ $image_view->showMessage();
 <span id="el_image_description">
 <span<?php echo $image->description->viewAttributes() ?>>
 <?php echo $image->description->getViewValue() ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($image->uuid->Visible) { // uuid ?>
+	<tr id="r_uuid">
+		<td class="<?php echo $image_view->TableLeftColumnClass ?>"><span id="elh_image_uuid"><?php echo $image->uuid->caption() ?></span></td>
+		<td data-name="uuid"<?php echo $image->uuid->cellAttributes() ?>>
+<span id="el_image_uuid">
+<span<?php echo $image->uuid->viewAttributes() ?>>
+<?php echo $image->uuid->getViewValue() ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($image->user_id->Visible) { // user_id ?>
+	<tr id="r_user_id">
+		<td class="<?php echo $image_view->TableLeftColumnClass ?>"><span id="elh_image_user_id"><?php echo $image->user_id->caption() ?></span></td>
+		<td data-name="user_id"<?php echo $image->user_id->cellAttributes() ?>>
+<span id="el_image_user_id">
+<span<?php echo $image->user_id->viewAttributes() ?>>
+<?php echo $image->user_id->getViewValue() ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($image->confirmed->Visible) { // confirmed ?>
+	<tr id="r_confirmed">
+		<td class="<?php echo $image_view->TableLeftColumnClass ?>"><span id="elh_image_confirmed"><?php echo $image->confirmed->caption() ?></span></td>
+		<td data-name="confirmed"<?php echo $image->confirmed->cellAttributes() ?>>
+<span id="el_image_confirmed">
+<span<?php echo $image->confirmed->viewAttributes() ?>>
+<?php echo $image->confirmed->getViewValue() ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($image->createdAt->Visible) { // createdAt ?>
+	<tr id="r_createdAt">
+		<td class="<?php echo $image_view->TableLeftColumnClass ?>"><span id="elh_image_createdAt"><?php echo $image->createdAt->caption() ?></span></td>
+		<td data-name="createdAt"<?php echo $image->createdAt->cellAttributes() ?>>
+<span id="el_image_createdAt">
+<span<?php echo $image->createdAt->viewAttributes() ?>>
+<?php echo $image->createdAt->getViewValue() ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($image->updatedAt->Visible) { // updatedAt ?>
+	<tr id="r_updatedAt">
+		<td class="<?php echo $image_view->TableLeftColumnClass ?>"><span id="elh_image_updatedAt"><?php echo $image->updatedAt->caption() ?></span></td>
+		<td data-name="updatedAt"<?php echo $image->updatedAt->cellAttributes() ?>>
+<span id="el_image_updatedAt">
+<span<?php echo $image->updatedAt->viewAttributes() ?>>
+<?php echo $image->updatedAt->getViewValue() ?></span>
 </span>
 </td>
 	</tr>

@@ -565,10 +565,9 @@ class user_view extends user
 	public $RecCnt;
 	public $RecKey = array();
 	public $IsModal = FALSE;
-	public $image_Count;
 	public $trip_info_Count;
 	public $parcel_info_Count;
-	public $orders_Count;
+	public $order_Count;
 	public $DetailPages; // Detail pages object
 
 	//
@@ -669,9 +668,7 @@ class user_view extends user
 		$this->id->setVisibility();
 		$this->username->setVisibility();
 		$this->password->Visible = FALSE;
-		$this->_email->setVisibility();
 		$this->gender->setVisibility();
-		$this->phone->setVisibility();
 		$this->address->setVisibility();
 		$this->country->setVisibility();
 		$this->photo->setVisibility();
@@ -681,9 +678,11 @@ class user_view extends user
 		$this->send_role->setVisibility();
 		$this->carrier_role->setVisibility();
 		$this->birthday->setVisibility();
-		$this->addDate->setVisibility();
-		$this->updateDate->setVisibility();
-		$this->activated->setVisibility();
+		$this->mobile_phone->setVisibility();
+		$this->status->setVisibility();
+		$this->session_token->setVisibility();
+		$this->createdAt->setVisibility();
+		$this->updatedAt->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Set up detail page object
@@ -850,47 +849,6 @@ class user_view extends user
 		$detailCopyTblVar = "";
 		$detailEditTblVar = "";
 
-		// "detail_image"
-		$item = &$option->add("detail_image");
-		$body = $Language->Phrase("ViewPageDetailLink") . $Language->TablePhrase("image", "TblCaption");
-		$body .= str_replace("%c", $this->image_Count, $Language->Phrase("DetailCount"));
-		$body = "<a class=\"btn btn-default ew-row-link ew-detail\" data-action=\"list\" href=\"" . HtmlEncode("imagelist.php?" . TABLE_SHOW_MASTER . "=user&fk_id=" . urlencode(strval($this->id->CurrentValue)) . "") . "\">" . $body . "</a>";
-		$links = "";
-		if (!isset($GLOBALS["image_grid"]))
-			$GLOBALS["image_grid"] = new image_grid();
-		if ($GLOBALS["image_grid"]->DetailView && $Security->canView() && $Security->allowView(CurrentProjectID() . 'image')) {
-			$links .= "<li><a class=\"ew-row-link ew-detail-view\" data-action=\"view\" data-caption=\"" . HtmlTitle($Language->Phrase("MasterDetailViewLink")) . "\" href=\"" . HtmlEncode($this->getViewUrl(TABLE_SHOW_DETAIL . "=image")) . "\">" . HtmlImageAndText($Language->Phrase("MasterDetailViewLink")) . "</a></li>";
-			if ($detailViewTblVar <> "")
-				$detailViewTblVar .= ",";
-			$detailViewTblVar .= "image";
-		}
-		if ($GLOBALS["image_grid"]->DetailEdit && $Security->canEdit() && $Security->allowEdit(CurrentProjectID() . 'image')) {
-			$links .= "<li><a class=\"ew-row-link ew-detail-edit\" data-action=\"edit\" data-caption=\"" . HtmlTitle($Language->Phrase("MasterDetailEditLink")) . "\" href=\"" . HtmlEncode($this->getEditUrl(TABLE_SHOW_DETAIL . "=image")) . "\">" . HtmlImageAndText($Language->Phrase("MasterDetailEditLink")) . "</a></li>";
-			if ($detailEditTblVar <> "")
-				$detailEditTblVar .= ",";
-			$detailEditTblVar .= "image";
-		}
-		if ($GLOBALS["image_grid"]->DetailAdd && $Security->canAdd() && $Security->allowAdd(CurrentProjectID() . 'image')) {
-			$links .= "<li><a class=\"ew-row-link ew-detail-copy\" data-action=\"add\" data-caption=\"" . HtmlTitle($Language->Phrase("MasterDetailCopyLink")) . "\" href=\"" . HtmlEncode($this->getCopyUrl(TABLE_SHOW_DETAIL . "=image")) . "\">" . HtmlImageAndText($Language->Phrase("MasterDetailCopyLink")) . "</a></li>";
-			if ($detailCopyTblVar <> "")
-				$detailCopyTblVar .= ",";
-			$detailCopyTblVar .= "image";
-		}
-		if ($links <> "") {
-			$body .= "<button class=\"dropdown-toggle btn btn-default ew-detail\" data-toggle=\"dropdown\"></button>";
-			$body .= "<ul class=\"dropdown-menu\">". $links . "</ul>";
-		}
-		$body = "<div class=\"btn-group btn-group-sm ew-btn-group\">" . $body . "</div>";
-		$item->Body = $body;
-		$item->Visible = $Security->allowList(CurrentProjectID() . 'image');
-		if ($item->Visible) {
-			if ($detailTableLink <> "")
-				$detailTableLink .= ",";
-			$detailTableLink .= "image";
-		}
-		if ($this->ShowMultipleDetails)
-			$item->Visible = FALSE;
-
 		// "detail_trip_info"
 		$item = &$option->add("detail_trip_info");
 		$body = $Language->Phrase("ViewPageDetailLink") . $Language->TablePhrase("trip_info", "TblCaption");
@@ -973,31 +931,31 @@ class user_view extends user
 		if ($this->ShowMultipleDetails)
 			$item->Visible = FALSE;
 
-		// "detail_orders"
-		$item = &$option->add("detail_orders");
-		$body = $Language->Phrase("ViewPageDetailLink") . $Language->TablePhrase("orders", "TblCaption");
-		$body .= str_replace("%c", $this->orders_Count, $Language->Phrase("DetailCount"));
-		$body = "<a class=\"btn btn-default ew-row-link ew-detail\" data-action=\"list\" href=\"" . HtmlEncode("orderslist.php?" . TABLE_SHOW_MASTER . "=user&fk_id=" . urlencode(strval($this->id->CurrentValue)) . "&fk_id=" . urlencode(strval($this->id->CurrentValue)) . "") . "\">" . $body . "</a>";
+		// "detail_order"
+		$item = &$option->add("detail_order");
+		$body = $Language->Phrase("ViewPageDetailLink") . $Language->TablePhrase("order", "TblCaption");
+		$body .= str_replace("%c", $this->order_Count, $Language->Phrase("DetailCount"));
+		$body = "<a class=\"btn btn-default ew-row-link ew-detail\" data-action=\"list\" href=\"" . HtmlEncode("orderlist.php?" . TABLE_SHOW_MASTER . "=user&fk_id=" . urlencode(strval($this->id->CurrentValue)) . "") . "\">" . $body . "</a>";
 		$links = "";
-		if (!isset($GLOBALS["orders_grid"]))
-			$GLOBALS["orders_grid"] = new orders_grid();
-		if ($GLOBALS["orders_grid"]->DetailView && $Security->canView() && $Security->allowView(CurrentProjectID() . 'orders')) {
-			$links .= "<li><a class=\"ew-row-link ew-detail-view\" data-action=\"view\" data-caption=\"" . HtmlTitle($Language->Phrase("MasterDetailViewLink")) . "\" href=\"" . HtmlEncode($this->getViewUrl(TABLE_SHOW_DETAIL . "=orders")) . "\">" . HtmlImageAndText($Language->Phrase("MasterDetailViewLink")) . "</a></li>";
+		if (!isset($GLOBALS["order_grid"]))
+			$GLOBALS["order_grid"] = new order_grid();
+		if ($GLOBALS["order_grid"]->DetailView && $Security->canView() && $Security->allowView(CurrentProjectID() . 'order')) {
+			$links .= "<li><a class=\"ew-row-link ew-detail-view\" data-action=\"view\" data-caption=\"" . HtmlTitle($Language->Phrase("MasterDetailViewLink")) . "\" href=\"" . HtmlEncode($this->getViewUrl(TABLE_SHOW_DETAIL . "=order")) . "\">" . HtmlImageAndText($Language->Phrase("MasterDetailViewLink")) . "</a></li>";
 			if ($detailViewTblVar <> "")
 				$detailViewTblVar .= ",";
-			$detailViewTblVar .= "orders";
+			$detailViewTblVar .= "order";
 		}
-		if ($GLOBALS["orders_grid"]->DetailEdit && $Security->canEdit() && $Security->allowEdit(CurrentProjectID() . 'orders')) {
-			$links .= "<li><a class=\"ew-row-link ew-detail-edit\" data-action=\"edit\" data-caption=\"" . HtmlTitle($Language->Phrase("MasterDetailEditLink")) . "\" href=\"" . HtmlEncode($this->getEditUrl(TABLE_SHOW_DETAIL . "=orders")) . "\">" . HtmlImageAndText($Language->Phrase("MasterDetailEditLink")) . "</a></li>";
+		if ($GLOBALS["order_grid"]->DetailEdit && $Security->canEdit() && $Security->allowEdit(CurrentProjectID() . 'order')) {
+			$links .= "<li><a class=\"ew-row-link ew-detail-edit\" data-action=\"edit\" data-caption=\"" . HtmlTitle($Language->Phrase("MasterDetailEditLink")) . "\" href=\"" . HtmlEncode($this->getEditUrl(TABLE_SHOW_DETAIL . "=order")) . "\">" . HtmlImageAndText($Language->Phrase("MasterDetailEditLink")) . "</a></li>";
 			if ($detailEditTblVar <> "")
 				$detailEditTblVar .= ",";
-			$detailEditTblVar .= "orders";
+			$detailEditTblVar .= "order";
 		}
-		if ($GLOBALS["orders_grid"]->DetailAdd && $Security->canAdd() && $Security->allowAdd(CurrentProjectID() . 'orders')) {
-			$links .= "<li><a class=\"ew-row-link ew-detail-copy\" data-action=\"add\" data-caption=\"" . HtmlTitle($Language->Phrase("MasterDetailCopyLink")) . "\" href=\"" . HtmlEncode($this->getCopyUrl(TABLE_SHOW_DETAIL . "=orders")) . "\">" . HtmlImageAndText($Language->Phrase("MasterDetailCopyLink")) . "</a></li>";
+		if ($GLOBALS["order_grid"]->DetailAdd && $Security->canAdd() && $Security->allowAdd(CurrentProjectID() . 'order')) {
+			$links .= "<li><a class=\"ew-row-link ew-detail-copy\" data-action=\"add\" data-caption=\"" . HtmlTitle($Language->Phrase("MasterDetailCopyLink")) . "\" href=\"" . HtmlEncode($this->getCopyUrl(TABLE_SHOW_DETAIL . "=order")) . "\">" . HtmlImageAndText($Language->Phrase("MasterDetailCopyLink")) . "</a></li>";
 			if ($detailCopyTblVar <> "")
 				$detailCopyTblVar .= ",";
-			$detailCopyTblVar .= "orders";
+			$detailCopyTblVar .= "order";
 		}
 		if ($links <> "") {
 			$body .= "<button class=\"dropdown-toggle btn btn-default ew-detail\" data-toggle=\"dropdown\"></button>";
@@ -1005,11 +963,11 @@ class user_view extends user
 		}
 		$body = "<div class=\"btn-group btn-group-sm ew-btn-group\">" . $body . "</div>";
 		$item->Body = $body;
-		$item->Visible = $Security->allowList(CurrentProjectID() . 'orders');
+		$item->Visible = $Security->allowList(CurrentProjectID() . 'order');
 		if ($item->Visible) {
 			if ($detailTableLink <> "")
 				$detailTableLink .= ",";
-			$detailTableLink .= "orders";
+			$detailTableLink .= "order";
 		}
 		if ($this->ShowMultipleDetails)
 			$item->Visible = FALSE;
@@ -1161,9 +1119,7 @@ class user_view extends user
 		$this->id->setDbValue($row['id']);
 		$this->username->setDbValue($row['username']);
 		$this->password->setDbValue($row['password']);
-		$this->_email->setDbValue($row['email']);
 		$this->gender->setDbValue($row['gender']);
-		$this->phone->setDbValue($row['phone']);
 		$this->address->setDbValue($row['address']);
 		$this->country->setDbValue($row['country']);
 		$this->photo->Upload->DbValue = $row['photo'];
@@ -1174,16 +1130,11 @@ class user_view extends user
 		$this->send_role->setDbValue($row['send_role']);
 		$this->carrier_role->setDbValue($row['carrier_role']);
 		$this->birthday->setDbValue($row['birthday']);
-		$this->addDate->setDbValue($row['addDate']);
-		$this->updateDate->setDbValue($row['updateDate']);
-		$this->activated->setDbValue($row['activated']);
-		if (!isset($GLOBALS["image_grid"]))
-			$GLOBALS["image_grid"] = new image_grid();
-		$detailFilter = $GLOBALS["image"]->sqlDetailFilter_user();
-		$detailFilter = str_replace("@_userid@", AdjustSql($this->id->DbValue, "DB"), $detailFilter);
-		$GLOBALS["image"]->setCurrentMasterTable("user");
-		$detailFilter = $GLOBALS["image"]->applyUserIDFilters($detailFilter);
-		$this->image_Count = $GLOBALS["image"]->loadRecordCount($detailFilter);
+		$this->mobile_phone->setDbValue($row['mobile_phone']);
+		$this->status->setDbValue($row['status']);
+		$this->session_token->setDbValue($row['session_token']);
+		$this->createdAt->setDbValue($row['createdAt']);
+		$this->updatedAt->setDbValue($row['updatedAt']);
 		if (!isset($GLOBALS["trip_info_grid"]))
 			$GLOBALS["trip_info_grid"] = new trip_info_grid();
 		$detailFilter = $GLOBALS["trip_info"]->sqlDetailFilter_user();
@@ -1198,14 +1149,13 @@ class user_view extends user
 		$GLOBALS["parcel_info"]->setCurrentMasterTable("user");
 		$detailFilter = $GLOBALS["parcel_info"]->applyUserIDFilters($detailFilter);
 		$this->parcel_info_Count = $GLOBALS["parcel_info"]->loadRecordCount($detailFilter);
-		if (!isset($GLOBALS["orders_grid"]))
-			$GLOBALS["orders_grid"] = new orders_grid();
-		$detailFilter = $GLOBALS["orders"]->sqlDetailFilter_user();
-		$detailFilter = str_replace("@_userid@", AdjustSql($this->id->DbValue, "DB"), $detailFilter);
-		$detailFilter = str_replace("@carrier_id@", AdjustSql($this->id->DbValue, "DB"), $detailFilter);
-		$GLOBALS["orders"]->setCurrentMasterTable("user");
-		$detailFilter = $GLOBALS["orders"]->applyUserIDFilters($detailFilter);
-		$this->orders_Count = $GLOBALS["orders"]->loadRecordCount($detailFilter);
+		if (!isset($GLOBALS["order_grid"]))
+			$GLOBALS["order_grid"] = new order_grid();
+		$detailFilter = $GLOBALS["order"]->sqlDetailFilter_user();
+		$detailFilter = str_replace("@user_id@", AdjustSql($this->id->DbValue, "DB"), $detailFilter);
+		$GLOBALS["order"]->setCurrentMasterTable("user");
+		$detailFilter = $GLOBALS["order"]->applyUserIDFilters($detailFilter);
+		$this->order_Count = $GLOBALS["order"]->loadRecordCount($detailFilter);
 	}
 
 	// Return a row with default values
@@ -1215,9 +1165,7 @@ class user_view extends user
 		$row['id'] = NULL;
 		$row['username'] = NULL;
 		$row['password'] = NULL;
-		$row['email'] = NULL;
 		$row['gender'] = NULL;
-		$row['phone'] = NULL;
 		$row['address'] = NULL;
 		$row['country'] = NULL;
 		$row['photo'] = NULL;
@@ -1227,9 +1175,11 @@ class user_view extends user
 		$row['send_role'] = NULL;
 		$row['carrier_role'] = NULL;
 		$row['birthday'] = NULL;
-		$row['addDate'] = NULL;
-		$row['updateDate'] = NULL;
-		$row['activated'] = NULL;
+		$row['mobile_phone'] = NULL;
+		$row['status'] = NULL;
+		$row['session_token'] = NULL;
+		$row['createdAt'] = NULL;
+		$row['updatedAt'] = NULL;
 		return $row;
 	}
 
@@ -1253,9 +1203,7 @@ class user_view extends user
 		// id
 		// username
 		// password
-		// email
 		// gender
-		// phone
 		// address
 		// country
 		// photo
@@ -1265,9 +1213,11 @@ class user_view extends user
 		// send_role
 		// carrier_role
 		// birthday
-		// addDate
-		// updateDate
-		// activated
+		// mobile_phone
+		// status
+		// session_token
+		// createdAt
+		// updatedAt
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
@@ -1279,10 +1229,6 @@ class user_view extends user
 			$this->username->ViewValue = $this->username->CurrentValue;
 			$this->username->ViewCustomAttributes = "";
 
-			// email
-			$this->_email->ViewValue = $this->_email->CurrentValue;
-			$this->_email->ViewCustomAttributes = "";
-
 			// gender
 			if (strval($this->gender->CurrentValue) <> "") {
 				$this->gender->ViewValue = $this->gender->optionCaption($this->gender->CurrentValue);
@@ -1290,10 +1236,6 @@ class user_view extends user
 				$this->gender->ViewValue = NULL;
 			}
 			$this->gender->ViewCustomAttributes = "";
-
-			// phone
-			$this->phone->ViewValue = $this->phone->CurrentValue;
-			$this->phone->ViewCustomAttributes = "";
 
 			// address
 			$this->address->ViewValue = $this->address->CurrentValue;
@@ -1349,20 +1291,28 @@ class user_view extends user
 			$this->birthday->ViewValue = FormatDateTime($this->birthday->ViewValue, 0);
 			$this->birthday->ViewCustomAttributes = "";
 
-			// addDate
-			$this->addDate->ViewValue = $this->addDate->CurrentValue;
-			$this->addDate->ViewValue = FormatDateTime($this->addDate->ViewValue, 0);
-			$this->addDate->ViewCustomAttributes = "";
+			// mobile_phone
+			$this->mobile_phone->ViewValue = $this->mobile_phone->CurrentValue;
+			$this->mobile_phone->ViewCustomAttributes = "";
 
-			// updateDate
-			$this->updateDate->ViewValue = $this->updateDate->CurrentValue;
-			$this->updateDate->ViewValue = FormatDateTime($this->updateDate->ViewValue, 0);
-			$this->updateDate->ViewCustomAttributes = "";
+			// status
+			$this->status->ViewValue = $this->status->CurrentValue;
+			$this->status->ViewValue = FormatNumber($this->status->ViewValue, 0, -2, -2, -2);
+			$this->status->ViewCustomAttributes = "";
 
-			// activated
-			$this->activated->ViewValue = $this->activated->CurrentValue;
-			$this->activated->ViewValue = FormatNumber($this->activated->ViewValue, 0, -2, -2, -2);
-			$this->activated->ViewCustomAttributes = "";
+			// session_token
+			$this->session_token->ViewValue = $this->session_token->CurrentValue;
+			$this->session_token->ViewCustomAttributes = "";
+
+			// createdAt
+			$this->createdAt->ViewValue = $this->createdAt->CurrentValue;
+			$this->createdAt->ViewValue = FormatDateTime($this->createdAt->ViewValue, 0);
+			$this->createdAt->ViewCustomAttributes = "";
+
+			// updatedAt
+			$this->updatedAt->ViewValue = $this->updatedAt->CurrentValue;
+			$this->updatedAt->ViewValue = FormatDateTime($this->updatedAt->ViewValue, 0);
+			$this->updatedAt->ViewCustomAttributes = "";
 
 			// id
 			$this->id->LinkCustomAttributes = "";
@@ -1374,20 +1324,10 @@ class user_view extends user
 			$this->username->HrefValue = "";
 			$this->username->TooltipValue = "";
 
-			// email
-			$this->_email->LinkCustomAttributes = "";
-			$this->_email->HrefValue = "";
-			$this->_email->TooltipValue = "";
-
 			// gender
 			$this->gender->LinkCustomAttributes = "";
 			$this->gender->HrefValue = "";
 			$this->gender->TooltipValue = "";
-
-			// phone
-			$this->phone->LinkCustomAttributes = "";
-			$this->phone->HrefValue = "";
-			$this->phone->TooltipValue = "";
 
 			// address
 			$this->address->LinkCustomAttributes = "";
@@ -1447,20 +1387,30 @@ class user_view extends user
 			$this->birthday->HrefValue = "";
 			$this->birthday->TooltipValue = "";
 
-			// addDate
-			$this->addDate->LinkCustomAttributes = "";
-			$this->addDate->HrefValue = "";
-			$this->addDate->TooltipValue = "";
+			// mobile_phone
+			$this->mobile_phone->LinkCustomAttributes = "";
+			$this->mobile_phone->HrefValue = "";
+			$this->mobile_phone->TooltipValue = "";
 
-			// updateDate
-			$this->updateDate->LinkCustomAttributes = "";
-			$this->updateDate->HrefValue = "";
-			$this->updateDate->TooltipValue = "";
+			// status
+			$this->status->LinkCustomAttributes = "";
+			$this->status->HrefValue = "";
+			$this->status->TooltipValue = "";
 
-			// activated
-			$this->activated->LinkCustomAttributes = "";
-			$this->activated->HrefValue = "";
-			$this->activated->TooltipValue = "";
+			// session_token
+			$this->session_token->LinkCustomAttributes = "";
+			$this->session_token->HrefValue = "";
+			$this->session_token->TooltipValue = "";
+
+			// createdAt
+			$this->createdAt->LinkCustomAttributes = "";
+			$this->createdAt->HrefValue = "";
+			$this->createdAt->TooltipValue = "";
+
+			// updatedAt
+			$this->updatedAt->LinkCustomAttributes = "";
+			$this->updatedAt->HrefValue = "";
+			$this->updatedAt->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -1576,28 +1526,6 @@ class user_view extends user
 		$doc->Text .= $header;
 		$this->exportDocument($doc, $rs, $this->StartRec, $this->StopRec, "view");
 
-		// Export detail records (image)
-		if (EXPORT_DETAIL_RECORDS && in_array("image", explode(",", $this->getCurrentDetailTable()))) {
-			global $image;
-			if (!isset($image))
-				$image = new image();
-			$rsdetail = $image->loadRs($image->getDetailFilter()); // Load detail records
-			if ($rsdetail && !$rsdetail->EOF) {
-				$exportStyle = $doc->Style;
-				$doc->setStyle("h"); // Change to horizontal
-				if (!$this->isExport("csv") || EXPORT_DETAIL_RECORDS_FOR_CSV) {
-					$doc->exportEmptyRow();
-					$detailcnt = $rsdetail->RecordCount();
-					$oldtbl = $doc->Table;
-					$doc->Table = $image;
-					$image->exportDocument($doc, $rsdetail, 1, $detailcnt);
-					$doc->Table = $oldtbl;
-				}
-				$doc->setStyle($exportStyle); // Restore
-				$rsdetail->close();
-			}
-		}
-
 		// Export detail records (trip_info)
 		if (EXPORT_DETAIL_RECORDS && in_array("trip_info", explode(",", $this->getCurrentDetailTable()))) {
 			global $trip_info;
@@ -1642,12 +1570,12 @@ class user_view extends user
 			}
 		}
 
-		// Export detail records (orders)
-		if (EXPORT_DETAIL_RECORDS && in_array("orders", explode(",", $this->getCurrentDetailTable()))) {
-			global $orders;
-			if (!isset($orders))
-				$orders = new orders();
-			$rsdetail = $orders->loadRs($orders->getDetailFilter()); // Load detail records
+		// Export detail records (order)
+		if (EXPORT_DETAIL_RECORDS && in_array("order", explode(",", $this->getCurrentDetailTable()))) {
+			global $order;
+			if (!isset($order))
+				$order = new order();
+			$rsdetail = $order->loadRs($order->getDetailFilter()); // Load detail records
 			if ($rsdetail && !$rsdetail->EOF) {
 				$exportStyle = $doc->Style;
 				$doc->setStyle("h"); // Change to horizontal
@@ -1655,8 +1583,8 @@ class user_view extends user
 					$doc->exportEmptyRow();
 					$detailcnt = $rsdetail->RecordCount();
 					$oldtbl = $doc->Table;
-					$doc->Table = $orders;
-					$orders->exportDocument($doc, $rsdetail, 1, $detailcnt);
+					$doc->Table = $order;
+					$order->exportDocument($doc, $rsdetail, 1, $detailcnt);
 					$doc->Table = $oldtbl;
 				}
 				$doc->setStyle($exportStyle); // Restore
@@ -1792,20 +1720,6 @@ class user_view extends user
 		}
 		if ($detailTblVar <> "") {
 			$detailTblVar = explode(",", $detailTblVar);
-			if (in_array("image", $detailTblVar)) {
-				if (!isset($GLOBALS["image_grid"]))
-					$GLOBALS["image_grid"] = new image_grid();
-				if ($GLOBALS["image_grid"]->DetailView) {
-					$GLOBALS["image_grid"]->CurrentMode = "view";
-
-					// Save current master table to detail table
-					$GLOBALS["image_grid"]->setCurrentMasterTable($this->TableVar);
-					$GLOBALS["image_grid"]->setStartRecordNumber(1);
-					$GLOBALS["image_grid"]->_userid->IsDetailKey = TRUE;
-					$GLOBALS["image_grid"]->_userid->CurrentValue = $this->id->CurrentValue;
-					$GLOBALS["image_grid"]->_userid->setSessionValue($GLOBALS["image_grid"]->_userid->CurrentValue);
-				}
-			}
 			if (in_array("trip_info", $detailTblVar)) {
 				if (!isset($GLOBALS["trip_info_grid"]))
 					$GLOBALS["trip_info_grid"] = new trip_info_grid();
@@ -1834,21 +1748,18 @@ class user_view extends user
 					$GLOBALS["parcel_info_grid"]->user_id->setSessionValue($GLOBALS["parcel_info_grid"]->user_id->CurrentValue);
 				}
 			}
-			if (in_array("orders", $detailTblVar)) {
-				if (!isset($GLOBALS["orders_grid"]))
-					$GLOBALS["orders_grid"] = new orders_grid();
-				if ($GLOBALS["orders_grid"]->DetailView) {
-					$GLOBALS["orders_grid"]->CurrentMode = "view";
+			if (in_array("order", $detailTblVar)) {
+				if (!isset($GLOBALS["order_grid"]))
+					$GLOBALS["order_grid"] = new order_grid();
+				if ($GLOBALS["order_grid"]->DetailView) {
+					$GLOBALS["order_grid"]->CurrentMode = "view";
 
 					// Save current master table to detail table
-					$GLOBALS["orders_grid"]->setCurrentMasterTable($this->TableVar);
-					$GLOBALS["orders_grid"]->setStartRecordNumber(1);
-					$GLOBALS["orders_grid"]->_userid->IsDetailKey = TRUE;
-					$GLOBALS["orders_grid"]->_userid->CurrentValue = $this->id->CurrentValue;
-					$GLOBALS["orders_grid"]->_userid->setSessionValue($GLOBALS["orders_grid"]->_userid->CurrentValue);
-					$GLOBALS["orders_grid"]->carrier_id->IsDetailKey = TRUE;
-					$GLOBALS["orders_grid"]->carrier_id->CurrentValue = $this->id->CurrentValue;
-					$GLOBALS["orders_grid"]->carrier_id->setSessionValue($GLOBALS["orders_grid"]->carrier_id->CurrentValue);
+					$GLOBALS["order_grid"]->setCurrentMasterTable($this->TableVar);
+					$GLOBALS["order_grid"]->setStartRecordNumber(1);
+					$GLOBALS["order_grid"]->user_id->IsDetailKey = TRUE;
+					$GLOBALS["order_grid"]->user_id->CurrentValue = $this->id->CurrentValue;
+					$GLOBALS["order_grid"]->user_id->setSessionValue($GLOBALS["order_grid"]->user_id->CurrentValue);
 				}
 			}
 		}
@@ -1870,10 +1781,9 @@ class user_view extends user
 	{
 		$pages = new SubPages();
 		$pages->Style = "pills";
-		$pages->add('image');
 		$pages->add('trip_info');
 		$pages->add('parcel_info');
-		$pages->add('orders');
+		$pages->add('order');
 		$this->DetailPages = $pages;
 	}
 

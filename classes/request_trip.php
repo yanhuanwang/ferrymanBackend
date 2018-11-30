@@ -28,8 +28,12 @@ class request_trip extends DbTable
 	public $id;
 	public $from_place;
 	public $to_place;
-	public $date;
 	public $description;
+	public $user_id;
+	public $from_date;
+	public $to_date;
+	public $createdAt;
+	public $updatedAt;
 	public $category;
 
 	// Constructor
@@ -86,37 +90,53 @@ class request_trip extends DbTable
 		$this->to_place->Sortable = TRUE; // Allow sort
 		$this->fields['to_place'] = &$this->to_place;
 
-		// date
-		$this->date = new DbField('request_trip', 'request_trip', 'x_date', 'date', '`date`', CastDateFieldForLike('`date`', 0, "DB"), 133, 0, FALSE, '`date`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->date->Nullable = FALSE; // NOT NULL field
-		$this->date->Required = TRUE; // Required field
-		$this->date->Sortable = TRUE; // Allow sort
-		$this->date->DefaultErrorMessage = str_replace("%s", $GLOBALS["DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
-		$this->fields['date'] = &$this->date;
-
 		// description
 		$this->description = new DbField('request_trip', 'request_trip', 'x_description', 'description', '`description`', '`description`', 200, -1, FALSE, '`description`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->description->Nullable = FALSE; // NOT NULL field
 		$this->description->Required = TRUE; // Required field
 		$this->description->Sortable = TRUE; // Allow sort
 		$this->fields['description'] = &$this->description;
 
+		// user_id
+		$this->user_id = new DbField('request_trip', 'request_trip', 'x_user_id', 'user_id', '`user_id`', '`user_id`', 3, -1, FALSE, '`user_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->user_id->Nullable = FALSE; // NOT NULL field
+		$this->user_id->Required = TRUE; // Required field
+		$this->user_id->Sortable = TRUE; // Allow sort
+		$this->user_id->DefaultErrorMessage = $Language->Phrase("IncorrectInteger");
+		$this->fields['user_id'] = &$this->user_id;
+
+		// from_date
+		$this->from_date = new DbField('request_trip', 'request_trip', 'x_from_date', 'from_date', '`from_date`', CastDateFieldForLike('`from_date`', 0, "DB"), 135, 0, FALSE, '`from_date`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->from_date->Sortable = TRUE; // Allow sort
+		$this->from_date->DefaultErrorMessage = str_replace("%s", $GLOBALS["DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
+		$this->fields['from_date'] = &$this->from_date;
+
+		// to_date
+		$this->to_date = new DbField('request_trip', 'request_trip', 'x_to_date', 'to_date', '`to_date`', CastDateFieldForLike('`to_date`', 0, "DB"), 135, 0, FALSE, '`to_date`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->to_date->Sortable = TRUE; // Allow sort
+		$this->to_date->DefaultErrorMessage = str_replace("%s", $GLOBALS["DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
+		$this->fields['to_date'] = &$this->to_date;
+
+		// createdAt
+		$this->createdAt = new DbField('request_trip', 'request_trip', 'x_createdAt', 'createdAt', '`createdAt`', CastDateFieldForLike('`createdAt`', 0, "DB"), 135, 0, FALSE, '`createdAt`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->createdAt->Nullable = FALSE; // NOT NULL field
+		$this->createdAt->Required = TRUE; // Required field
+		$this->createdAt->Sortable = TRUE; // Allow sort
+		$this->createdAt->DefaultErrorMessage = str_replace("%s", $GLOBALS["DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
+		$this->fields['createdAt'] = &$this->createdAt;
+
+		// updatedAt
+		$this->updatedAt = new DbField('request_trip', 'request_trip', 'x_updatedAt', 'updatedAt', '`updatedAt`', CastDateFieldForLike('`updatedAt`', 0, "DB"), 135, 0, FALSE, '`updatedAt`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->updatedAt->Nullable = FALSE; // NOT NULL field
+		$this->updatedAt->Required = TRUE; // Required field
+		$this->updatedAt->Sortable = TRUE; // Allow sort
+		$this->updatedAt->DefaultErrorMessage = str_replace("%s", $GLOBALS["DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
+		$this->fields['updatedAt'] = &$this->updatedAt;
+
 		// category
-		$this->category = new DbField('request_trip', 'request_trip', 'x_category', 'category', '`category`', '`category`', 3, -1, FALSE, '`category`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'SELECT');
-		$this->category->IsForeignKey = TRUE; // Foreign key field
+		$this->category = new DbField('request_trip', 'request_trip', 'x_category', 'category', '`category`', '`category`', 3, -1, FALSE, '`category`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->category->Nullable = FALSE; // NOT NULL field
 		$this->category->Required = TRUE; // Required field
 		$this->category->Sortable = TRUE; // Allow sort
-		$this->category->UsePleaseSelect = TRUE; // Use PleaseSelect by default
-		$this->category->PleaseSelectText = $Language->Phrase("PleaseSelect"); // PleaseSelect text
-		switch ($CurrentLanguage) {
-			case "en":
-				$this->category->Lookup = new Lookup('category', 'category', FALSE, 'id', ["name","","",""], [], [], [], [], [], '', '');
-				break;
-			default:
-				$this->category->Lookup = new Lookup('category', 'category', FALSE, 'id', ["name","","",""], [], [], [], [], [], '', '');
-				break;
-		}
 		$this->category->DefaultErrorMessage = $Language->Phrase("IncorrectInteger");
 		$this->fields['category'] = &$this->category;
 	}
@@ -155,58 +175,6 @@ class request_trip extends DbTable
 		} else {
 			$fld->setSort("");
 		}
-	}
-
-	// Current master table name
-	public function getCurrentMasterTable()
-	{
-		return @$_SESSION[PROJECT_NAME . "_" . $this->TableVar . "_" . TABLE_MASTER_TABLE];
-	}
-	public function setCurrentMasterTable($v)
-	{
-		$_SESSION[PROJECT_NAME . "_" . $this->TableVar . "_" . TABLE_MASTER_TABLE] = $v;
-	}
-
-	// Session master WHERE clause
-	public function getMasterFilter()
-	{
-
-		// Master filter
-		$masterFilter = "";
-		if ($this->getCurrentMasterTable() == "category") {
-			if ($this->category->getSessionValue() <> "")
-				$masterFilter .= "`id`=" . QuotedValue($this->category->getSessionValue(), DATATYPE_NUMBER, "DB");
-			else
-				return "";
-		}
-		return $masterFilter;
-	}
-
-	// Session detail WHERE clause
-	public function getDetailFilter()
-	{
-
-		// Detail filter
-		$detailFilter = "";
-		if ($this->getCurrentMasterTable() == "category") {
-			if ($this->category->getSessionValue() <> "")
-				$detailFilter .= "`category`=" . QuotedValue($this->category->getSessionValue(), DATATYPE_NUMBER, "DB");
-			else
-				return "";
-		}
-		return $detailFilter;
-	}
-
-	// Master filter
-	public function sqlMasterFilter_category()
-	{
-		return "`id`=@id@";
-	}
-
-	// Detail filter
-	public function sqlDetailFilter_category()
-	{
-		return "`category`=@category@";
 	}
 
 	// Table level SQL
@@ -516,8 +484,12 @@ class request_trip extends DbTable
 		$this->id->DbValue = $row['id'];
 		$this->from_place->DbValue = $row['from_place'];
 		$this->to_place->DbValue = $row['to_place'];
-		$this->date->DbValue = $row['date'];
 		$this->description->DbValue = $row['description'];
+		$this->user_id->DbValue = $row['user_id'];
+		$this->from_date->DbValue = $row['from_date'];
+		$this->to_date->DbValue = $row['to_date'];
+		$this->createdAt->DbValue = $row['createdAt'];
+		$this->updatedAt->DbValue = $row['updatedAt'];
 		$this->category->DbValue = $row['category'];
 	}
 
@@ -643,10 +615,6 @@ class request_trip extends DbTable
 	// Add master url
 	public function addMasterUrl($url)
 	{
-		if ($this->getCurrentMasterTable() == "category" && !ContainsString($url, TABLE_SHOW_MASTER . "=")) {
-			$url .= (ContainsString($url, "?") ? "&" : "?") . TABLE_SHOW_MASTER . "=" . $this->getCurrentMasterTable();
-			$url .= "&fk_id=" . urlencode($this->category->CurrentValue);
-		}
 		return $url;
 	}
 	public function keyToJson($htmlEncode = FALSE)
@@ -751,8 +719,12 @@ class request_trip extends DbTable
 		$this->id->setDbValue($rs->fields('id'));
 		$this->from_place->setDbValue($rs->fields('from_place'));
 		$this->to_place->setDbValue($rs->fields('to_place'));
-		$this->date->setDbValue($rs->fields('date'));
 		$this->description->setDbValue($rs->fields('description'));
+		$this->user_id->setDbValue($rs->fields('user_id'));
+		$this->from_date->setDbValue($rs->fields('from_date'));
+		$this->to_date->setDbValue($rs->fields('to_date'));
+		$this->createdAt->setDbValue($rs->fields('createdAt'));
+		$this->updatedAt->setDbValue($rs->fields('updatedAt'));
 		$this->category->setDbValue($rs->fields('category'));
 	}
 
@@ -768,8 +740,12 @@ class request_trip extends DbTable
 		// id
 		// from_place
 		// to_place
-		// date
 		// description
+		// user_id
+		// from_date
+		// to_date
+		// createdAt
+		// updatedAt
 		// category
 		// id
 
@@ -784,35 +760,38 @@ class request_trip extends DbTable
 		$this->to_place->ViewValue = $this->to_place->CurrentValue;
 		$this->to_place->ViewCustomAttributes = "";
 
-		// date
-		$this->date->ViewValue = $this->date->CurrentValue;
-		$this->date->ViewValue = FormatDateTime($this->date->ViewValue, 0);
-		$this->date->ViewCustomAttributes = "";
-
 		// description
 		$this->description->ViewValue = $this->description->CurrentValue;
 		$this->description->ViewCustomAttributes = "";
 
+		// user_id
+		$this->user_id->ViewValue = $this->user_id->CurrentValue;
+		$this->user_id->ViewValue = FormatNumber($this->user_id->ViewValue, 0, -2, -2, -2);
+		$this->user_id->ViewCustomAttributes = "";
+
+		// from_date
+		$this->from_date->ViewValue = $this->from_date->CurrentValue;
+		$this->from_date->ViewValue = FormatDateTime($this->from_date->ViewValue, 0);
+		$this->from_date->ViewCustomAttributes = "";
+
+		// to_date
+		$this->to_date->ViewValue = $this->to_date->CurrentValue;
+		$this->to_date->ViewValue = FormatDateTime($this->to_date->ViewValue, 0);
+		$this->to_date->ViewCustomAttributes = "";
+
+		// createdAt
+		$this->createdAt->ViewValue = $this->createdAt->CurrentValue;
+		$this->createdAt->ViewValue = FormatDateTime($this->createdAt->ViewValue, 0);
+		$this->createdAt->ViewCustomAttributes = "";
+
+		// updatedAt
+		$this->updatedAt->ViewValue = $this->updatedAt->CurrentValue;
+		$this->updatedAt->ViewValue = FormatDateTime($this->updatedAt->ViewValue, 0);
+		$this->updatedAt->ViewCustomAttributes = "";
+
 		// category
-		$curVal = strval($this->category->CurrentValue);
-		if ($curVal <> "") {
-			$this->category->ViewValue = $this->category->lookupCacheOption($curVal);
-			if ($this->category->ViewValue === NULL) { // Lookup from database
-				$filterWrk = "`id`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
-				$sqlWrk = $this->category->Lookup->getSql(FALSE, $filterWrk, '', $this);
-				$rswrk = Conn()->execute($sqlWrk);
-				if ($rswrk && !$rswrk->EOF) { // Lookup values found
-					$arwrk = array();
-					$arwrk[1] = $rswrk->fields('df');
-					$this->category->ViewValue = $this->category->displayValue($arwrk);
-					$rswrk->Close();
-				} else {
-					$this->category->ViewValue = $this->category->CurrentValue;
-				}
-			}
-		} else {
-			$this->category->ViewValue = NULL;
-		}
+		$this->category->ViewValue = $this->category->CurrentValue;
+		$this->category->ViewValue = FormatNumber($this->category->ViewValue, 0, -2, -2, -2);
 		$this->category->ViewCustomAttributes = "";
 
 		// id
@@ -830,15 +809,35 @@ class request_trip extends DbTable
 		$this->to_place->HrefValue = "";
 		$this->to_place->TooltipValue = "";
 
-		// date
-		$this->date->LinkCustomAttributes = "";
-		$this->date->HrefValue = "";
-		$this->date->TooltipValue = "";
-
 		// description
 		$this->description->LinkCustomAttributes = "";
 		$this->description->HrefValue = "";
 		$this->description->TooltipValue = "";
+
+		// user_id
+		$this->user_id->LinkCustomAttributes = "";
+		$this->user_id->HrefValue = "";
+		$this->user_id->TooltipValue = "";
+
+		// from_date
+		$this->from_date->LinkCustomAttributes = "";
+		$this->from_date->HrefValue = "";
+		$this->from_date->TooltipValue = "";
+
+		// to_date
+		$this->to_date->LinkCustomAttributes = "";
+		$this->to_date->HrefValue = "";
+		$this->to_date->TooltipValue = "";
+
+		// createdAt
+		$this->createdAt->LinkCustomAttributes = "";
+		$this->createdAt->HrefValue = "";
+		$this->createdAt->TooltipValue = "";
+
+		// updatedAt
+		$this->updatedAt->LinkCustomAttributes = "";
+		$this->updatedAt->HrefValue = "";
+		$this->updatedAt->TooltipValue = "";
 
 		// category
 		$this->category->LinkCustomAttributes = "";
@@ -878,45 +877,47 @@ class request_trip extends DbTable
 		$this->to_place->EditValue = $this->to_place->CurrentValue;
 		$this->to_place->PlaceHolder = RemoveHtml($this->to_place->caption());
 
-		// date
-		$this->date->EditAttrs["class"] = "form-control";
-		$this->date->EditCustomAttributes = "";
-		$this->date->EditValue = FormatDateTime($this->date->CurrentValue, 8);
-		$this->date->PlaceHolder = RemoveHtml($this->date->caption());
-
 		// description
 		$this->description->EditAttrs["class"] = "form-control";
 		$this->description->EditCustomAttributes = "";
 		$this->description->EditValue = $this->description->CurrentValue;
 		$this->description->PlaceHolder = RemoveHtml($this->description->caption());
 
+		// user_id
+		$this->user_id->EditAttrs["class"] = "form-control";
+		$this->user_id->EditCustomAttributes = "";
+		$this->user_id->EditValue = $this->user_id->CurrentValue;
+		$this->user_id->PlaceHolder = RemoveHtml($this->user_id->caption());
+
+		// from_date
+		$this->from_date->EditAttrs["class"] = "form-control";
+		$this->from_date->EditCustomAttributes = "";
+		$this->from_date->EditValue = FormatDateTime($this->from_date->CurrentValue, 8);
+		$this->from_date->PlaceHolder = RemoveHtml($this->from_date->caption());
+
+		// to_date
+		$this->to_date->EditAttrs["class"] = "form-control";
+		$this->to_date->EditCustomAttributes = "";
+		$this->to_date->EditValue = FormatDateTime($this->to_date->CurrentValue, 8);
+		$this->to_date->PlaceHolder = RemoveHtml($this->to_date->caption());
+
+		// createdAt
+		$this->createdAt->EditAttrs["class"] = "form-control";
+		$this->createdAt->EditCustomAttributes = "";
+		$this->createdAt->EditValue = FormatDateTime($this->createdAt->CurrentValue, 8);
+		$this->createdAt->PlaceHolder = RemoveHtml($this->createdAt->caption());
+
+		// updatedAt
+		$this->updatedAt->EditAttrs["class"] = "form-control";
+		$this->updatedAt->EditCustomAttributes = "";
+		$this->updatedAt->EditValue = FormatDateTime($this->updatedAt->CurrentValue, 8);
+		$this->updatedAt->PlaceHolder = RemoveHtml($this->updatedAt->caption());
+
 		// category
 		$this->category->EditAttrs["class"] = "form-control";
 		$this->category->EditCustomAttributes = "";
-		if ($this->category->getSessionValue() <> "") {
-			$this->category->CurrentValue = $this->category->getSessionValue();
-		$curVal = strval($this->category->CurrentValue);
-		if ($curVal <> "") {
-			$this->category->ViewValue = $this->category->lookupCacheOption($curVal);
-			if ($this->category->ViewValue === NULL) { // Lookup from database
-				$filterWrk = "`id`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
-				$sqlWrk = $this->category->Lookup->getSql(FALSE, $filterWrk, '', $this);
-				$rswrk = Conn()->execute($sqlWrk);
-				if ($rswrk && !$rswrk->EOF) { // Lookup values found
-					$arwrk = array();
-					$arwrk[1] = $rswrk->fields('df');
-					$this->category->ViewValue = $this->category->displayValue($arwrk);
-					$rswrk->Close();
-				} else {
-					$this->category->ViewValue = $this->category->CurrentValue;
-				}
-			}
-		} else {
-			$this->category->ViewValue = NULL;
-		}
-		$this->category->ViewCustomAttributes = "";
-		} else {
-		}
+		$this->category->EditValue = $this->category->CurrentValue;
+		$this->category->PlaceHolder = RemoveHtml($this->category->caption());
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -953,10 +954,18 @@ class request_trip extends DbTable
 						$doc->exportCaption($this->from_place);
 					if ($this->to_place->Exportable)
 						$doc->exportCaption($this->to_place);
-					if ($this->date->Exportable)
-						$doc->exportCaption($this->date);
 					if ($this->description->Exportable)
 						$doc->exportCaption($this->description);
+					if ($this->user_id->Exportable)
+						$doc->exportCaption($this->user_id);
+					if ($this->from_date->Exportable)
+						$doc->exportCaption($this->from_date);
+					if ($this->to_date->Exportable)
+						$doc->exportCaption($this->to_date);
+					if ($this->createdAt->Exportable)
+						$doc->exportCaption($this->createdAt);
+					if ($this->updatedAt->Exportable)
+						$doc->exportCaption($this->updatedAt);
 					if ($this->category->Exportable)
 						$doc->exportCaption($this->category);
 				} else {
@@ -966,10 +975,18 @@ class request_trip extends DbTable
 						$doc->exportCaption($this->from_place);
 					if ($this->to_place->Exportable)
 						$doc->exportCaption($this->to_place);
-					if ($this->date->Exportable)
-						$doc->exportCaption($this->date);
 					if ($this->description->Exportable)
 						$doc->exportCaption($this->description);
+					if ($this->user_id->Exportable)
+						$doc->exportCaption($this->user_id);
+					if ($this->from_date->Exportable)
+						$doc->exportCaption($this->from_date);
+					if ($this->to_date->Exportable)
+						$doc->exportCaption($this->to_date);
+					if ($this->createdAt->Exportable)
+						$doc->exportCaption($this->createdAt);
+					if ($this->updatedAt->Exportable)
+						$doc->exportCaption($this->updatedAt);
 					if ($this->category->Exportable)
 						$doc->exportCaption($this->category);
 				}
@@ -1009,10 +1026,18 @@ class request_trip extends DbTable
 							$doc->exportField($this->from_place);
 						if ($this->to_place->Exportable)
 							$doc->exportField($this->to_place);
-						if ($this->date->Exportable)
-							$doc->exportField($this->date);
 						if ($this->description->Exportable)
 							$doc->exportField($this->description);
+						if ($this->user_id->Exportable)
+							$doc->exportField($this->user_id);
+						if ($this->from_date->Exportable)
+							$doc->exportField($this->from_date);
+						if ($this->to_date->Exportable)
+							$doc->exportField($this->to_date);
+						if ($this->createdAt->Exportable)
+							$doc->exportField($this->createdAt);
+						if ($this->updatedAt->Exportable)
+							$doc->exportField($this->updatedAt);
 						if ($this->category->Exportable)
 							$doc->exportField($this->category);
 					} else {
@@ -1022,10 +1047,18 @@ class request_trip extends DbTable
 							$doc->exportField($this->from_place);
 						if ($this->to_place->Exportable)
 							$doc->exportField($this->to_place);
-						if ($this->date->Exportable)
-							$doc->exportField($this->date);
 						if ($this->description->Exportable)
 							$doc->exportField($this->description);
+						if ($this->user_id->Exportable)
+							$doc->exportField($this->user_id);
+						if ($this->from_date->Exportable)
+							$doc->exportField($this->from_date);
+						if ($this->to_date->Exportable)
+							$doc->exportField($this->to_date);
+						if ($this->createdAt->Exportable)
+							$doc->exportField($this->createdAt);
+						if ($this->updatedAt->Exportable)
+							$doc->exportField($this->updatedAt);
 						if ($this->category->Exportable)
 							$doc->exportField($this->category);
 					}

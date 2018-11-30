@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<ew-language date="2018/11/2" version="15.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
+<ew-language date="2018/11/30" version="15.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
   <!-- 
 	*** Important Notes:
 	1. Language ID should follow: https://developers.google.com/recaptcha/docs/language,
@@ -694,6 +694,15 @@
   </global>
   <project>
     <phrase id="footertext" value="&amp;copy;2018 e.World Technology Ltd. All rights reserved." />
+    <menu id="9">
+      <phrase id="menutext" value="日志" />
+    </menu>
+    <menu id="10">
+      <phrase id="menutext" value="mobile confirm code" />
+    </menu>
+    <menu id="11">
+      <phrase id="menutext" value="订单" />
+    </menu>
     <menu id="1">
       <phrase id="menutext" value="用户" />
     </menu>
@@ -705,9 +714,6 @@
     </menu>
     <menu id="4">
       <phrase id="menutext" value="图片" />
-    </menu>
-    <menu id="5">
-      <phrase id="menutext" value="订单" />
     </menu>
     <menu id="6">
       <phrase id="menutext" value="包裹信息" />
@@ -729,18 +735,12 @@
       <field id="password">
         <phrase id="fldcaption" value="password" />
       </field>
-      <field id="_email">
-        <phrase id="fldcaption" value="email" />
-      </field>
       <field id="gender">
         <phrase id="fldcaption" value="gender" />
         <phrase id="fldtagvalue1" value="1" />
         <phrase id="fldtagcaption1" value="男" />
         <phrase id="fldtagvalue2" value="2" />
         <phrase id="fldtagcaption2" value="女" />
-      </field>
-      <field id="phone">
-        <phrase id="fldcaption" value="phone" />
       </field>
       <field id="address">
         <phrase id="fldcaption" value="address" />
@@ -781,14 +781,20 @@
       <field id="birthday">
         <phrase id="fldcaption" value="birthday" />
       </field>
-      <field id="adddate">
-        <phrase id="fldcaption" value="add Date" />
+      <field id="mobile_phone">
+        <phrase id="fldcaption" value="mobile phone" />
       </field>
-      <field id="updatedate">
-        <phrase id="fldcaption" value="update Date" />
+      <field id="status">
+        <phrase id="fldcaption" value="status" />
       </field>
-      <field id="activated">
-        <phrase id="fldcaption" value="activated" />
+      <field id="session_token">
+        <phrase id="fldcaption" value="session token" />
+      </field>
+      <field id="createdat">
+        <phrase id="fldcaption" value="created At" />
+      </field>
+      <field id="updatedat">
+        <phrase id="fldcaption" value="updated At" />
       </field>
     </table>
     <table id="admin">
@@ -832,48 +838,26 @@
       <field id="id">
         <phrase id="fldcaption" value="id" />
       </field>
-      <field id="name">
-        <phrase id="fldcaption" value="name" />
-      </field>
-      <field id="_userid">
-        <phrase id="fldcaption" value="userid" />
-      </field>
       <field id="path">
         <phrase id="fldcaption" value="path" />
       </field>
       <field id="description">
         <phrase id="fldcaption" value="description" />
       </field>
-    </table>
-    <table id="orders">
-      <phrase id="tblcaption" value="订单" />
-      <field id="id">
-        <phrase id="fldcaption" value="id" />
+      <field id="uuid">
+        <phrase id="fldcaption" value="uuid" />
       </field>
-      <field id="_userid">
-        <phrase id="fldcaption" value="userid" />
+      <field id="user_id">
+        <phrase id="fldcaption" value="user id" />
       </field>
-      <field id="parcel_id">
-        <phrase id="fldcaption" value="parcel id" />
+      <field id="confirmed">
+        <phrase id="fldcaption" value="confirmed" />
       </field>
-      <field id="carrier_id">
-        <phrase id="fldcaption" value="carrier id" />
+      <field id="createdat">
+        <phrase id="fldcaption" value="created At" />
       </field>
-      <field id="description">
-        <phrase id="fldcaption" value="description" />
-      </field>
-      <field id="status">
-        <phrase id="fldcaption" value="status" />
-        <phrase id="fldtagvalue1" value="0" />
-        <phrase id="fldtagcaption1" value="已下单，待付款" />
-        <phrase id="fldtagvalue2" value="1" />
-        <phrase id="fldtagcaption2" value="已付款，待接单" />
-        <phrase id="fldtagvalue3" value="2" />
-        <phrase id="fldtagcaption3" value="已接单，待确认" />
-        <phrase id="fldtagvalue4" value="3" />
-        <phrase id="fldtagcaption4" value="已确认，待评价" />
-        <phrase id="fldtagvalue5" value="4" />
-        <phrase id="fldtagcaption5" value="已评价，订单完成" />
+      <field id="updatedat">
+        <phrase id="fldcaption" value="updated At" />
       </field>
     </table>
     <table id="parcel_info">
@@ -893,14 +877,23 @@
       <field id="user_id">
         <phrase id="fldcaption" value="user id" />
       </field>
-      <field id="category">
-        <phrase id="fldcaption" value="category" />
-      </field>
       <field id="image_id">
         <phrase id="fldcaption" value="image id" />
       </field>
       <field id="name">
         <phrase id="fldcaption" value="name" />
+      </field>
+      <field id="categoty">
+        <phrase id="fldcaption" value="categoty" />
+      </field>
+      <field id="status">
+        <phrase id="fldcaption" value="status" />
+      </field>
+      <field id="createdat">
+        <phrase id="fldcaption" value="created At" />
+      </field>
+      <field id="updatedat">
+        <phrase id="fldcaption" value="updated At" />
       </field>
     </table>
     <table id="trip_info">
@@ -926,6 +919,12 @@
       <field id="date">
         <phrase id="fldcaption" value="date" />
       </field>
+      <field id="createdat">
+        <phrase id="fldcaption" value="created At" />
+      </field>
+      <field id="updatedat">
+        <phrase id="fldcaption" value="updated At" />
+      </field>
     </table>
     <table id="request_trip">
       <phrase id="tblcaption" value="request trip" />
@@ -938,14 +937,98 @@
       <field id="to_place">
         <phrase id="fldcaption" value="to place" />
       </field>
+      <field id="description">
+        <phrase id="fldcaption" value="description" />
+      </field>
+      <field id="user_id">
+        <phrase id="fldcaption" value="user id" />
+      </field>
+      <field id="from_date">
+        <phrase id="fldcaption" value="from date" />
+      </field>
+      <field id="to_date">
+        <phrase id="fldcaption" value="to date" />
+      </field>
+      <field id="createdat">
+        <phrase id="fldcaption" value="created At" />
+      </field>
+      <field id="updatedat">
+        <phrase id="fldcaption" value="updated At" />
+      </field>
+      <field id="category">
+        <phrase id="fldcaption" value="category" />
+      </field>
+    </table>
+    <table id="log">
+      <phrase id="tblcaption" value="日志" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="ip_addr">
+        <phrase id="fldcaption" value="ip addr" />
+      </field>
+      <field id="mobile_phone">
+        <phrase id="fldcaption" value="mobile phone" />
+      </field>
+      <field id="event">
+        <phrase id="fldcaption" value="event" />
+      </field>
+      <field id="detail">
+        <phrase id="fldcaption" value="detail" />
+      </field>
+      <field id="createdat">
+        <phrase id="fldcaption" value="created At" />
+      </field>
+      <field id="updatedat">
+        <phrase id="fldcaption" value="updated At" />
+      </field>
+    </table>
+    <table id="mobile_confirm_code">
+      <phrase id="tblcaption" value="mobile confirm code" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="mobile_phone">
+        <phrase id="fldcaption" value="mobile phone" />
+      </field>
+      <field id="code">
+        <phrase id="fldcaption" value="code" />
+      </field>
+      <field id="createdat">
+        <phrase id="fldcaption" value="created At" />
+      </field>
+      <field id="updatedat">
+        <phrase id="fldcaption" value="updated At" />
+      </field>
+    </table>
+    <table id="order">
+      <phrase id="tblcaption" value="订单" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="user_id">
+        <phrase id="fldcaption" value="user id" />
+      </field>
+      <field id="from_place">
+        <phrase id="fldcaption" value="from place" />
+      </field>
+      <field id="to_place">
+        <phrase id="fldcaption" value="to place" />
+      </field>
       <field id="date">
         <phrase id="fldcaption" value="date" />
+      </field>
+      <field id="flight_number">
+        <phrase id="fldcaption" value="flight number" />
       </field>
       <field id="description">
         <phrase id="fldcaption" value="description" />
       </field>
-      <field id="category">
-        <phrase id="fldcaption" value="category" />
+      <field id="createdat">
+        <phrase id="fldcaption" value="created At" />
+      </field>
+      <field id="updatedat">
+        <phrase id="fldcaption" value="updated At" />
       </field>
     </table>
   </project>

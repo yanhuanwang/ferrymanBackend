@@ -54,9 +54,6 @@ frequest_tripsearch.Form_CustomValidate = function(fobj) { // DO NOT CHANGE THIS
 frequest_tripsearch.validateRequired = <?php echo json_encode(CLIENT_VALIDATE) ?>;
 
 // Dynamic selection lists
-frequest_tripsearch.lists["x_category"] = <?php echo $request_trip_search->category->Lookup->toClientList() ?>;
-frequest_tripsearch.lists["x_category"].options = <?php echo JsonEncode($request_trip_search->category->lookupOptions()) ?>;
-
 // Form object for search
 // Validate function for search
 
@@ -68,9 +65,24 @@ frequest_tripsearch.validate = function(fobj) {
 	elm = this.getElements("x" + infix + "_id");
 	if (elm && !ew.checkInteger(elm.value))
 		return this.onError(elm, "<?php echo JsEncode($request_trip->id->errorMessage()) ?>");
-	elm = this.getElements("x" + infix + "_date");
+	elm = this.getElements("x" + infix + "_user_id");
+	if (elm && !ew.checkInteger(elm.value))
+		return this.onError(elm, "<?php echo JsEncode($request_trip->user_id->errorMessage()) ?>");
+	elm = this.getElements("x" + infix + "_from_date");
 	if (elm && !ew.checkDateDef(elm.value))
-		return this.onError(elm, "<?php echo JsEncode($request_trip->date->errorMessage()) ?>");
+		return this.onError(elm, "<?php echo JsEncode($request_trip->from_date->errorMessage()) ?>");
+	elm = this.getElements("x" + infix + "_to_date");
+	if (elm && !ew.checkDateDef(elm.value))
+		return this.onError(elm, "<?php echo JsEncode($request_trip->to_date->errorMessage()) ?>");
+	elm = this.getElements("x" + infix + "_createdAt");
+	if (elm && !ew.checkDateDef(elm.value))
+		return this.onError(elm, "<?php echo JsEncode($request_trip->createdAt->errorMessage()) ?>");
+	elm = this.getElements("x" + infix + "_updatedAt");
+	if (elm && !ew.checkDateDef(elm.value))
+		return this.onError(elm, "<?php echo JsEncode($request_trip->updatedAt->errorMessage()) ?>");
+	elm = this.getElements("x" + infix + "_category");
+	if (elm && !ew.checkInteger(elm.value))
+		return this.onError(elm, "<?php echo JsEncode($request_trip->category->errorMessage()) ?>");
 
 	// Fire Form_CustomValidate event
 	if (!this.Form_CustomValidate(fobj))
@@ -130,23 +142,6 @@ $request_trip_search->showMessage();
 		</div></div>
 	</div>
 <?php } ?>
-<?php if ($request_trip->date->Visible) { // date ?>
-	<div id="r_date" class="form-group row">
-		<label for="x_date" class="<?php echo $request_trip_search->LeftColumnClass ?>"><span id="elh_request_trip_date"><?php echo $request_trip->date->caption() ?></span>
-		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_date" id="z_date" value="="></span>
-		</label>
-		<div class="<?php echo $request_trip_search->RightColumnClass ?>"><div<?php echo $request_trip->date->cellAttributes() ?>>
-			<span id="el_request_trip_date">
-<input type="text" data-table="request_trip" data-field="x_date" name="x_date" id="x_date" placeholder="<?php echo HtmlEncode($request_trip->date->getPlaceHolder()) ?>" value="<?php echo $request_trip->date->EditValue ?>"<?php echo $request_trip->date->editAttributes() ?>>
-<?php if (!$request_trip->date->ReadOnly && !$request_trip->date->Disabled && !isset($request_trip->date->EditAttrs["readonly"]) && !isset($request_trip->date->EditAttrs["disabled"])) { ?>
-<script>
-ew.createDateTimePicker("frequest_tripsearch", "x_date", {"ignoreReadonly":true,"useCurrent":false,"format":0});
-</script>
-<?php } ?>
-</span>
-		</div></div>
-	</div>
-<?php } ?>
 <?php if ($request_trip->description->Visible) { // description ?>
 	<div id="r_description" class="form-group row">
 		<label for="x_description" class="<?php echo $request_trip_search->LeftColumnClass ?>"><span id="elh_request_trip_description"><?php echo $request_trip->description->caption() ?></span>
@@ -159,6 +154,86 @@ ew.createDateTimePicker("frequest_tripsearch", "x_date", {"ignoreReadonly":true,
 		</div></div>
 	</div>
 <?php } ?>
+<?php if ($request_trip->user_id->Visible) { // user_id ?>
+	<div id="r_user_id" class="form-group row">
+		<label for="x_user_id" class="<?php echo $request_trip_search->LeftColumnClass ?>"><span id="elh_request_trip_user_id"><?php echo $request_trip->user_id->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_user_id" id="z_user_id" value="="></span>
+		</label>
+		<div class="<?php echo $request_trip_search->RightColumnClass ?>"><div<?php echo $request_trip->user_id->cellAttributes() ?>>
+			<span id="el_request_trip_user_id">
+<input type="text" data-table="request_trip" data-field="x_user_id" name="x_user_id" id="x_user_id" size="30" placeholder="<?php echo HtmlEncode($request_trip->user_id->getPlaceHolder()) ?>" value="<?php echo $request_trip->user_id->EditValue ?>"<?php echo $request_trip->user_id->editAttributes() ?>>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($request_trip->from_date->Visible) { // from_date ?>
+	<div id="r_from_date" class="form-group row">
+		<label for="x_from_date" class="<?php echo $request_trip_search->LeftColumnClass ?>"><span id="elh_request_trip_from_date"><?php echo $request_trip->from_date->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_from_date" id="z_from_date" value="="></span>
+		</label>
+		<div class="<?php echo $request_trip_search->RightColumnClass ?>"><div<?php echo $request_trip->from_date->cellAttributes() ?>>
+			<span id="el_request_trip_from_date">
+<input type="text" data-table="request_trip" data-field="x_from_date" name="x_from_date" id="x_from_date" placeholder="<?php echo HtmlEncode($request_trip->from_date->getPlaceHolder()) ?>" value="<?php echo $request_trip->from_date->EditValue ?>"<?php echo $request_trip->from_date->editAttributes() ?>>
+<?php if (!$request_trip->from_date->ReadOnly && !$request_trip->from_date->Disabled && !isset($request_trip->from_date->EditAttrs["readonly"]) && !isset($request_trip->from_date->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("frequest_tripsearch", "x_from_date", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($request_trip->to_date->Visible) { // to_date ?>
+	<div id="r_to_date" class="form-group row">
+		<label for="x_to_date" class="<?php echo $request_trip_search->LeftColumnClass ?>"><span id="elh_request_trip_to_date"><?php echo $request_trip->to_date->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_to_date" id="z_to_date" value="="></span>
+		</label>
+		<div class="<?php echo $request_trip_search->RightColumnClass ?>"><div<?php echo $request_trip->to_date->cellAttributes() ?>>
+			<span id="el_request_trip_to_date">
+<input type="text" data-table="request_trip" data-field="x_to_date" name="x_to_date" id="x_to_date" placeholder="<?php echo HtmlEncode($request_trip->to_date->getPlaceHolder()) ?>" value="<?php echo $request_trip->to_date->EditValue ?>"<?php echo $request_trip->to_date->editAttributes() ?>>
+<?php if (!$request_trip->to_date->ReadOnly && !$request_trip->to_date->Disabled && !isset($request_trip->to_date->EditAttrs["readonly"]) && !isset($request_trip->to_date->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("frequest_tripsearch", "x_to_date", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($request_trip->createdAt->Visible) { // createdAt ?>
+	<div id="r_createdAt" class="form-group row">
+		<label for="x_createdAt" class="<?php echo $request_trip_search->LeftColumnClass ?>"><span id="elh_request_trip_createdAt"><?php echo $request_trip->createdAt->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_createdAt" id="z_createdAt" value="="></span>
+		</label>
+		<div class="<?php echo $request_trip_search->RightColumnClass ?>"><div<?php echo $request_trip->createdAt->cellAttributes() ?>>
+			<span id="el_request_trip_createdAt">
+<input type="text" data-table="request_trip" data-field="x_createdAt" name="x_createdAt" id="x_createdAt" placeholder="<?php echo HtmlEncode($request_trip->createdAt->getPlaceHolder()) ?>" value="<?php echo $request_trip->createdAt->EditValue ?>"<?php echo $request_trip->createdAt->editAttributes() ?>>
+<?php if (!$request_trip->createdAt->ReadOnly && !$request_trip->createdAt->Disabled && !isset($request_trip->createdAt->EditAttrs["readonly"]) && !isset($request_trip->createdAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("frequest_tripsearch", "x_createdAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($request_trip->updatedAt->Visible) { // updatedAt ?>
+	<div id="r_updatedAt" class="form-group row">
+		<label for="x_updatedAt" class="<?php echo $request_trip_search->LeftColumnClass ?>"><span id="elh_request_trip_updatedAt"><?php echo $request_trip->updatedAt->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_updatedAt" id="z_updatedAt" value="="></span>
+		</label>
+		<div class="<?php echo $request_trip_search->RightColumnClass ?>"><div<?php echo $request_trip->updatedAt->cellAttributes() ?>>
+			<span id="el_request_trip_updatedAt">
+<input type="text" data-table="request_trip" data-field="x_updatedAt" name="x_updatedAt" id="x_updatedAt" placeholder="<?php echo HtmlEncode($request_trip->updatedAt->getPlaceHolder()) ?>" value="<?php echo $request_trip->updatedAt->EditValue ?>"<?php echo $request_trip->updatedAt->editAttributes() ?>>
+<?php if (!$request_trip->updatedAt->ReadOnly && !$request_trip->updatedAt->Disabled && !isset($request_trip->updatedAt->EditAttrs["readonly"]) && !isset($request_trip->updatedAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("frequest_tripsearch", "x_updatedAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
 <?php if ($request_trip->category->Visible) { // category ?>
 	<div id="r_category" class="form-group row">
 		<label for="x_category" class="<?php echo $request_trip_search->LeftColumnClass ?>"><span id="elh_request_trip_category"><?php echo $request_trip->category->caption() ?></span>
@@ -166,12 +241,7 @@ ew.createDateTimePicker("frequest_tripsearch", "x_date", {"ignoreReadonly":true,
 		</label>
 		<div class="<?php echo $request_trip_search->RightColumnClass ?>"><div<?php echo $request_trip->category->cellAttributes() ?>>
 			<span id="el_request_trip_category">
-<div class="input-group">
-	<select class="custom-select ew-custom-select" data-table="request_trip" data-field="x_category" data-value-separator="<?php echo $request_trip->category->displayValueSeparatorAttribute() ?>" id="x_category" name="x_category"<?php echo $request_trip->category->editAttributes() ?>>
-		<?php echo $request_trip->category->selectOptionListHtml("x_category") ?>
-	</select>
-<?php echo $request_trip->category->Lookup->getParamTag("p_x_category") ?>
-</div>
+<input type="text" data-table="request_trip" data-field="x_category" name="x_category" id="x_category" size="30" placeholder="<?php echo HtmlEncode($request_trip->category->getPlaceHolder()) ?>" value="<?php echo $request_trip->category->EditValue ?>"<?php echo $request_trip->category->editAttributes() ?>>
 </span>
 		</div></div>
 	</div>

@@ -55,7 +55,7 @@ class category extends DbTable
 		$this->DetailAdd = TRUE; // Allow detail add
 		$this->DetailEdit = TRUE; // Allow detail edit
 		$this->DetailView = TRUE; // Allow detail view
-		$this->ShowMultipleDetails = TRUE; // Show multiple details
+		$this->ShowMultipleDetails = FALSE; // Show multiple details
 		$this->GridAddRowCount = 5;
 		$this->AllowAddDeleteRow = TRUE; // Allow add/delete row
 		$this->UserIDAllowSecurity = 0; // User ID Allow
@@ -65,7 +65,6 @@ class category extends DbTable
 		$this->id = new DbField('category', 'category', 'x_id', 'id', '`id`', '`id`', 3, -1, FALSE, '`id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'NO');
 		$this->id->IsAutoIncrement = TRUE; // Autoincrement field
 		$this->id->IsPrimaryKey = TRUE; // Primary key field
-		$this->id->IsForeignKey = TRUE; // Foreign key field
 		$this->id->Sortable = TRUE; // Allow sort
 		$this->id->DefaultErrorMessage = $Language->Phrase("IncorrectInteger");
 		$this->fields['id'] = &$this->id;
@@ -119,35 +118,6 @@ class category extends DbTable
 		} else {
 			$fld->setSort("");
 		}
-	}
-
-	// Current detail table name
-	public function getCurrentDetailTable()
-	{
-		return @$_SESSION[PROJECT_NAME . "_" . $this->TableVar . "_" . TABLE_DETAIL_TABLE];
-	}
-	public function setCurrentDetailTable($v)
-	{
-		$_SESSION[PROJECT_NAME . "_" . $this->TableVar . "_" . TABLE_DETAIL_TABLE] = $v;
-	}
-
-	// Get detail url
-	public function getDetailUrl()
-	{
-
-		// Detail url
-		$detailUrl = "";
-		if ($this->getCurrentDetailTable() == "parcel_info") {
-			$detailUrl = $GLOBALS["parcel_info"]->getListUrl() . "?" . TABLE_SHOW_MASTER . "=" . $this->TableVar;
-			$detailUrl .= "&fk_id=" . urlencode($this->id->CurrentValue);
-		}
-		if ($this->getCurrentDetailTable() == "request_trip") {
-			$detailUrl = $GLOBALS["request_trip"]->getListUrl() . "?" . TABLE_SHOW_MASTER . "=" . $this->TableVar;
-			$detailUrl .= "&fk_id=" . urlencode($this->id->CurrentValue);
-		}
-		if ($detailUrl == "")
-			$detailUrl = "categorylist.php";
-		return $detailUrl;
 	}
 
 	// Table level SQL
@@ -547,10 +517,7 @@ class category extends DbTable
 	// Edit URL
 	public function getEditUrl($parm = "")
 	{
-		if ($parm <> "")
-			$url = $this->keyUrl("categoryedit.php", $this->getUrlParm($parm));
-		else
-			$url = $this->keyUrl("categoryedit.php", $this->getUrlParm(TABLE_SHOW_DETAIL . "="));
+		$url = $this->keyUrl("categoryedit.php", $this->getUrlParm($parm));
 		return $this->addMasterUrl($url);
 	}
 
@@ -564,10 +531,7 @@ class category extends DbTable
 	// Copy URL
 	public function getCopyUrl($parm = "")
 	{
-		if ($parm <> "")
-			$url = $this->keyUrl("categoryadd.php", $this->getUrlParm($parm));
-		else
-			$url = $this->keyUrl("categoryadd.php", $this->getUrlParm(TABLE_SHOW_DETAIL . "="));
+		$url = $this->keyUrl("categoryadd.php", $this->getUrlParm($parm));
 		return $this->addMasterUrl($url);
 	}
 

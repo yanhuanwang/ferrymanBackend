@@ -547,7 +547,6 @@ class parcel_info_grid extends parcel_info
 	public $MultiSelectKey;
 	public $Command;
 	public $RestoreSearch = FALSE;
-	public $orders_Count;
 	public $DetailPages;
 	public $OldRecordset;
 
@@ -608,9 +607,12 @@ class parcel_info_grid extends parcel_info
 		$this->to_place->setVisibility();
 		$this->description->setVisibility();
 		$this->user_id->setVisibility();
-		$this->category->setVisibility();
 		$this->image_id->setVisibility();
 		$this->name->setVisibility();
+		$this->categoty->setVisibility();
+		$this->status->setVisibility();
+		$this->createdAt->setVisibility();
+		$this->updatedAt->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Global Page Loading event (in userfn*.php)
@@ -636,7 +638,6 @@ class parcel_info_grid extends parcel_info
 
 		// Set up lookup cache
 		$this->setupLookupOptions($this->user_id);
-		$this->setupLookupOptions($this->category);
 		$this->setupLookupOptions($this->image_id);
 
 		// Search filters
@@ -728,22 +729,6 @@ class parcel_info_grid extends parcel_info
 				$user->loadListRowValues($rsmaster);
 				$user->RowType = ROWTYPE_MASTER; // Master row
 				$user->renderListRow();
-				$rsmaster->close();
-			}
-		}
-
-		// Load master record
-		if ($this->CurrentMode <> "add" && $this->getMasterFilter() <> "" && $this->getCurrentMasterTable() == "category") {
-			global $category;
-			$rsmaster = $category->loadRs($this->DbMasterFilter);
-			$this->MasterRecordExists = ($rsmaster && !$rsmaster->EOF);
-			if (!$this->MasterRecordExists) {
-				$this->setFailureMessage($Language->Phrase("NoRecord")); // Set no record found
-				$this->terminate("categorylist.php"); // Return to master page
-			} else {
-				$category->loadListRowValues($rsmaster);
-				$category->RowType = ROWTYPE_MASTER; // Master row
-				$category->renderListRow();
 				$rsmaster->close();
 			}
 		}
@@ -1093,11 +1078,17 @@ class parcel_info_grid extends parcel_info
 			return FALSE;
 		if ($CurrentForm->hasValue("x_user_id") && $CurrentForm->hasValue("o_user_id") && $this->user_id->CurrentValue <> $this->user_id->OldValue)
 			return FALSE;
-		if ($CurrentForm->hasValue("x_category") && $CurrentForm->hasValue("o_category") && $this->category->CurrentValue <> $this->category->OldValue)
-			return FALSE;
 		if ($CurrentForm->hasValue("x_image_id") && $CurrentForm->hasValue("o_image_id") && $this->image_id->CurrentValue <> $this->image_id->OldValue)
 			return FALSE;
 		if ($CurrentForm->hasValue("x_name") && $CurrentForm->hasValue("o_name") && $this->name->CurrentValue <> $this->name->OldValue)
+			return FALSE;
+		if ($CurrentForm->hasValue("x_categoty") && $CurrentForm->hasValue("o_categoty") && $this->categoty->CurrentValue <> $this->categoty->OldValue)
+			return FALSE;
+		if ($CurrentForm->hasValue("x_status") && $CurrentForm->hasValue("o_status") && $this->status->CurrentValue <> $this->status->OldValue)
+			return FALSE;
+		if ($CurrentForm->hasValue("x_createdAt") && $CurrentForm->hasValue("o_createdAt") && $this->createdAt->CurrentValue <> $this->createdAt->OldValue)
+			return FALSE;
+		if ($CurrentForm->hasValue("x_updatedAt") && $CurrentForm->hasValue("o_updatedAt") && $this->updatedAt->CurrentValue <> $this->updatedAt->OldValue)
 			return FALSE;
 		return TRUE;
 	}
@@ -1215,7 +1206,6 @@ class parcel_info_grid extends parcel_info
 				$this->DbDetailFilter = "";
 				$this->image_id->setSessionValue("");
 				$this->user_id->setSessionValue("");
-				$this->category->setSessionValue("");
 			}
 
 			// Reset sorting order
@@ -1501,12 +1491,18 @@ class parcel_info_grid extends parcel_info
 		$this->description->OldValue = $this->description->CurrentValue;
 		$this->user_id->CurrentValue = NULL;
 		$this->user_id->OldValue = $this->user_id->CurrentValue;
-		$this->category->CurrentValue = NULL;
-		$this->category->OldValue = $this->category->CurrentValue;
 		$this->image_id->CurrentValue = NULL;
 		$this->image_id->OldValue = $this->image_id->CurrentValue;
 		$this->name->CurrentValue = NULL;
 		$this->name->OldValue = $this->name->CurrentValue;
+		$this->categoty->CurrentValue = NULL;
+		$this->categoty->OldValue = $this->categoty->CurrentValue;
+		$this->status->CurrentValue = NULL;
+		$this->status->OldValue = $this->status->CurrentValue;
+		$this->createdAt->CurrentValue = NULL;
+		$this->createdAt->OldValue = $this->createdAt->CurrentValue;
+		$this->updatedAt->CurrentValue = NULL;
+		$this->updatedAt->OldValue = $this->updatedAt->CurrentValue;
 	}
 
 	// Load form values
@@ -1557,16 +1553,6 @@ class parcel_info_grid extends parcel_info
 		}
 		$this->user_id->setOldValue($CurrentForm->getValue("o_user_id"));
 
-		// Check field name 'category' first before field var 'x_category'
-		$val = $CurrentForm->hasValue("category") ? $CurrentForm->getValue("category") : $CurrentForm->getValue("x_category");
-		if (!$this->category->IsDetailKey) {
-			if (IsApi() && $val == NULL)
-				$this->category->Visible = FALSE; // Disable update for API request
-			else
-				$this->category->setFormValue($val);
-		}
-		$this->category->setOldValue($CurrentForm->getValue("o_category"));
-
 		// Check field name 'image_id' first before field var 'x_image_id'
 		$val = $CurrentForm->hasValue("image_id") ? $CurrentForm->getValue("image_id") : $CurrentForm->getValue("x_image_id");
 		if (!$this->image_id->IsDetailKey) {
@@ -1587,6 +1573,48 @@ class parcel_info_grid extends parcel_info
 		}
 		$this->name->setOldValue($CurrentForm->getValue("o_name"));
 
+		// Check field name 'categoty' first before field var 'x_categoty'
+		$val = $CurrentForm->hasValue("categoty") ? $CurrentForm->getValue("categoty") : $CurrentForm->getValue("x_categoty");
+		if (!$this->categoty->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->categoty->Visible = FALSE; // Disable update for API request
+			else
+				$this->categoty->setFormValue($val);
+		}
+		$this->categoty->setOldValue($CurrentForm->getValue("o_categoty"));
+
+		// Check field name 'status' first before field var 'x_status'
+		$val = $CurrentForm->hasValue("status") ? $CurrentForm->getValue("status") : $CurrentForm->getValue("x_status");
+		if (!$this->status->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->status->Visible = FALSE; // Disable update for API request
+			else
+				$this->status->setFormValue($val);
+		}
+		$this->status->setOldValue($CurrentForm->getValue("o_status"));
+
+		// Check field name 'createdAt' first before field var 'x_createdAt'
+		$val = $CurrentForm->hasValue("createdAt") ? $CurrentForm->getValue("createdAt") : $CurrentForm->getValue("x_createdAt");
+		if (!$this->createdAt->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->createdAt->Visible = FALSE; // Disable update for API request
+			else
+				$this->createdAt->setFormValue($val);
+			$this->createdAt->CurrentValue = UnFormatDateTime($this->createdAt->CurrentValue, 0);
+		}
+		$this->createdAt->setOldValue($CurrentForm->getValue("o_createdAt"));
+
+		// Check field name 'updatedAt' first before field var 'x_updatedAt'
+		$val = $CurrentForm->hasValue("updatedAt") ? $CurrentForm->getValue("updatedAt") : $CurrentForm->getValue("x_updatedAt");
+		if (!$this->updatedAt->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->updatedAt->Visible = FALSE; // Disable update for API request
+			else
+				$this->updatedAt->setFormValue($val);
+			$this->updatedAt->CurrentValue = UnFormatDateTime($this->updatedAt->CurrentValue, 0);
+		}
+		$this->updatedAt->setOldValue($CurrentForm->getValue("o_updatedAt"));
+
 		// Check field name 'id' first before field var 'x_id'
 		$val = $CurrentForm->hasValue("id") ? $CurrentForm->getValue("id") : $CurrentForm->getValue("x_id");
 		if (!$this->id->IsDetailKey && !$this->isGridAdd() && !$this->isAdd())
@@ -1603,9 +1631,14 @@ class parcel_info_grid extends parcel_info
 		$this->to_place->CurrentValue = $this->to_place->FormValue;
 		$this->description->CurrentValue = $this->description->FormValue;
 		$this->user_id->CurrentValue = $this->user_id->FormValue;
-		$this->category->CurrentValue = $this->category->FormValue;
 		$this->image_id->CurrentValue = $this->image_id->FormValue;
 		$this->name->CurrentValue = $this->name->FormValue;
+		$this->categoty->CurrentValue = $this->categoty->FormValue;
+		$this->status->CurrentValue = $this->status->FormValue;
+		$this->createdAt->CurrentValue = $this->createdAt->FormValue;
+		$this->createdAt->CurrentValue = UnFormatDateTime($this->createdAt->CurrentValue, 0);
+		$this->updatedAt->CurrentValue = $this->updatedAt->FormValue;
+		$this->updatedAt->CurrentValue = UnFormatDateTime($this->updatedAt->CurrentValue, 0);
 	}
 
 	// Load recordset
@@ -1675,9 +1708,12 @@ class parcel_info_grid extends parcel_info
 		$this->to_place->setDbValue($row['to_place']);
 		$this->description->setDbValue($row['description']);
 		$this->user_id->setDbValue($row['user_id']);
-		$this->category->setDbValue($row['category']);
 		$this->image_id->setDbValue($row['image_id']);
 		$this->name->setDbValue($row['name']);
+		$this->categoty->setDbValue($row['categoty']);
+		$this->status->setDbValue($row['status']);
+		$this->createdAt->setDbValue($row['createdAt']);
+		$this->updatedAt->setDbValue($row['updatedAt']);
 	}
 
 	// Return a row with default values
@@ -1690,9 +1726,12 @@ class parcel_info_grid extends parcel_info
 		$row['to_place'] = $this->to_place->CurrentValue;
 		$row['description'] = $this->description->CurrentValue;
 		$row['user_id'] = $this->user_id->CurrentValue;
-		$row['category'] = $this->category->CurrentValue;
 		$row['image_id'] = $this->image_id->CurrentValue;
 		$row['name'] = $this->name->CurrentValue;
+		$row['categoty'] = $this->categoty->CurrentValue;
+		$row['status'] = $this->status->CurrentValue;
+		$row['createdAt'] = $this->createdAt->CurrentValue;
+		$row['updatedAt'] = $this->updatedAt->CurrentValue;
 		return $row;
 	}
 
@@ -1745,9 +1784,12 @@ class parcel_info_grid extends parcel_info
 		// to_place
 		// description
 		// user_id
-		// category
 		// image_id
 		// name
+		// categoty
+		// status
+		// createdAt
+		// updatedAt
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
@@ -1791,29 +1833,6 @@ class parcel_info_grid extends parcel_info
 			}
 			$this->user_id->ViewCustomAttributes = "";
 
-			// category
-			$curVal = strval($this->category->CurrentValue);
-			if ($curVal <> "") {
-				$this->category->ViewValue = $this->category->lookupCacheOption($curVal);
-				if ($this->category->ViewValue === NULL) { // Lookup from database
-					$filterWrk = "`id`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
-					$sqlWrk = $this->category->Lookup->getSql(FALSE, $filterWrk, '', $this);
-					$rswrk = Conn()->execute($sqlWrk);
-					if ($rswrk && !$rswrk->EOF) { // Lookup values found
-						$arwrk = array();
-						$arwrk[1] = $rswrk->fields('df');
-						$arwrk[2] = $rswrk->fields('df2');
-						$this->category->ViewValue = $this->category->displayValue($arwrk);
-						$rswrk->Close();
-					} else {
-						$this->category->ViewValue = $this->category->CurrentValue;
-					}
-				}
-			} else {
-				$this->category->ViewValue = NULL;
-			}
-			$this->category->ViewCustomAttributes = "";
-
 			// image_id
 			$this->image_id->ViewValue = $this->image_id->CurrentValue;
 			$curVal = strval($this->image_id->CurrentValue);
@@ -1841,6 +1860,26 @@ class parcel_info_grid extends parcel_info
 			$this->name->ViewValue = $this->name->CurrentValue;
 			$this->name->ViewCustomAttributes = "";
 
+			// categoty
+			$this->categoty->ViewValue = $this->categoty->CurrentValue;
+			$this->categoty->ViewValue = FormatNumber($this->categoty->ViewValue, 0, -2, -2, -2);
+			$this->categoty->ViewCustomAttributes = "";
+
+			// status
+			$this->status->ViewValue = $this->status->CurrentValue;
+			$this->status->ViewValue = FormatNumber($this->status->ViewValue, 0, -2, -2, -2);
+			$this->status->ViewCustomAttributes = "";
+
+			// createdAt
+			$this->createdAt->ViewValue = $this->createdAt->CurrentValue;
+			$this->createdAt->ViewValue = FormatDateTime($this->createdAt->ViewValue, 0);
+			$this->createdAt->ViewCustomAttributes = "";
+
+			// updatedAt
+			$this->updatedAt->ViewValue = $this->updatedAt->CurrentValue;
+			$this->updatedAt->ViewValue = FormatDateTime($this->updatedAt->ViewValue, 0);
+			$this->updatedAt->ViewCustomAttributes = "";
+
 			// from_place
 			$this->from_place->LinkCustomAttributes = "";
 			$this->from_place->HrefValue = "";
@@ -1861,11 +1900,6 @@ class parcel_info_grid extends parcel_info
 			$this->user_id->HrefValue = "";
 			$this->user_id->TooltipValue = "";
 
-			// category
-			$this->category->LinkCustomAttributes = "";
-			$this->category->HrefValue = "";
-			$this->category->TooltipValue = "";
-
 			// image_id
 			$this->image_id->LinkCustomAttributes = "";
 			if (!EmptyValue($this->image_id->CurrentValue)) {
@@ -1881,6 +1915,26 @@ class parcel_info_grid extends parcel_info
 			$this->name->LinkCustomAttributes = "";
 			$this->name->HrefValue = "";
 			$this->name->TooltipValue = "";
+
+			// categoty
+			$this->categoty->LinkCustomAttributes = "";
+			$this->categoty->HrefValue = "";
+			$this->categoty->TooltipValue = "";
+
+			// status
+			$this->status->LinkCustomAttributes = "";
+			$this->status->HrefValue = "";
+			$this->status->TooltipValue = "";
+
+			// createdAt
+			$this->createdAt->LinkCustomAttributes = "";
+			$this->createdAt->HrefValue = "";
+			$this->createdAt->TooltipValue = "";
+
+			// updatedAt
+			$this->updatedAt->LinkCustomAttributes = "";
+			$this->updatedAt->HrefValue = "";
+			$this->updatedAt->TooltipValue = "";
 		} elseif ($this->RowType == ROWTYPE_ADD) { // Add row
 
 			// from_place
@@ -1954,55 +2008,6 @@ class parcel_info_grid extends parcel_info
 			$this->user_id->PlaceHolder = RemoveHtml($this->user_id->caption());
 			}
 
-			// category
-			$this->category->EditAttrs["class"] = "form-control";
-			$this->category->EditCustomAttributes = "";
-			if ($this->category->getSessionValue() <> "") {
-				$this->category->CurrentValue = $this->category->getSessionValue();
-				$this->category->OldValue = $this->category->CurrentValue;
-			$curVal = strval($this->category->CurrentValue);
-			if ($curVal <> "") {
-				$this->category->ViewValue = $this->category->lookupCacheOption($curVal);
-				if ($this->category->ViewValue === NULL) { // Lookup from database
-					$filterWrk = "`id`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
-					$sqlWrk = $this->category->Lookup->getSql(FALSE, $filterWrk, '', $this);
-					$rswrk = Conn()->execute($sqlWrk);
-					if ($rswrk && !$rswrk->EOF) { // Lookup values found
-						$arwrk = array();
-						$arwrk[1] = $rswrk->fields('df');
-						$arwrk[2] = $rswrk->fields('df2');
-						$this->category->ViewValue = $this->category->displayValue($arwrk);
-						$rswrk->Close();
-					} else {
-						$this->category->ViewValue = $this->category->CurrentValue;
-					}
-				}
-			} else {
-				$this->category->ViewValue = NULL;
-			}
-			$this->category->ViewCustomAttributes = "";
-			} else {
-			$curVal = trim(strval($this->category->CurrentValue));
-			if ($curVal <> "")
-				$this->category->ViewValue = $this->category->lookupCacheOption($curVal);
-			else
-				$this->category->ViewValue = $this->category->Lookup !== NULL && is_array($this->category->Lookup->Options) ? $curVal : NULL;
-			if ($this->category->ViewValue !== NULL) { // Load from cache
-				$this->category->EditValue = array_values($this->category->Lookup->Options);
-			} else { // Lookup from database
-				if ($curVal == "") {
-					$filterWrk = "0=1";
-				} else {
-					$filterWrk = "`id`" . SearchString("=", $this->category->CurrentValue, DATATYPE_NUMBER, "");
-				}
-				$sqlWrk = $this->category->Lookup->getSql(TRUE, $filterWrk, '', $this);
-				$rswrk = Conn()->execute($sqlWrk);
-				$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
-				if ($rswrk) $rswrk->Close();
-				$this->category->EditValue = $arwrk;
-			}
-			}
-
 			// image_id
 			$this->image_id->EditAttrs["class"] = "form-control";
 			$this->image_id->EditCustomAttributes = "";
@@ -2060,6 +2065,30 @@ class parcel_info_grid extends parcel_info
 			$this->name->EditValue = HtmlEncode($this->name->CurrentValue);
 			$this->name->PlaceHolder = RemoveHtml($this->name->caption());
 
+			// categoty
+			$this->categoty->EditAttrs["class"] = "form-control";
+			$this->categoty->EditCustomAttributes = "";
+			$this->categoty->EditValue = HtmlEncode($this->categoty->CurrentValue);
+			$this->categoty->PlaceHolder = RemoveHtml($this->categoty->caption());
+
+			// status
+			$this->status->EditAttrs["class"] = "form-control";
+			$this->status->EditCustomAttributes = "";
+			$this->status->EditValue = HtmlEncode($this->status->CurrentValue);
+			$this->status->PlaceHolder = RemoveHtml($this->status->caption());
+
+			// createdAt
+			$this->createdAt->EditAttrs["class"] = "form-control";
+			$this->createdAt->EditCustomAttributes = "";
+			$this->createdAt->EditValue = HtmlEncode(FormatDateTime($this->createdAt->CurrentValue, 8));
+			$this->createdAt->PlaceHolder = RemoveHtml($this->createdAt->caption());
+
+			// updatedAt
+			$this->updatedAt->EditAttrs["class"] = "form-control";
+			$this->updatedAt->EditCustomAttributes = "";
+			$this->updatedAt->EditValue = HtmlEncode(FormatDateTime($this->updatedAt->CurrentValue, 8));
+			$this->updatedAt->PlaceHolder = RemoveHtml($this->updatedAt->caption());
+
 			// Add refer script
 			// from_place
 
@@ -2078,10 +2107,6 @@ class parcel_info_grid extends parcel_info
 			$this->user_id->LinkCustomAttributes = "";
 			$this->user_id->HrefValue = "";
 
-			// category
-			$this->category->LinkCustomAttributes = "";
-			$this->category->HrefValue = "";
-
 			// image_id
 			$this->image_id->LinkCustomAttributes = "";
 			if (!EmptyValue($this->image_id->CurrentValue)) {
@@ -2095,6 +2120,22 @@ class parcel_info_grid extends parcel_info
 			// name
 			$this->name->LinkCustomAttributes = "";
 			$this->name->HrefValue = "";
+
+			// categoty
+			$this->categoty->LinkCustomAttributes = "";
+			$this->categoty->HrefValue = "";
+
+			// status
+			$this->status->LinkCustomAttributes = "";
+			$this->status->HrefValue = "";
+
+			// createdAt
+			$this->createdAt->LinkCustomAttributes = "";
+			$this->createdAt->HrefValue = "";
+
+			// updatedAt
+			$this->updatedAt->LinkCustomAttributes = "";
+			$this->updatedAt->HrefValue = "";
 		} elseif ($this->RowType == ROWTYPE_EDIT) { // Edit row
 
 			// from_place
@@ -2168,55 +2209,6 @@ class parcel_info_grid extends parcel_info
 			$this->user_id->PlaceHolder = RemoveHtml($this->user_id->caption());
 			}
 
-			// category
-			$this->category->EditAttrs["class"] = "form-control";
-			$this->category->EditCustomAttributes = "";
-			if ($this->category->getSessionValue() <> "") {
-				$this->category->CurrentValue = $this->category->getSessionValue();
-				$this->category->OldValue = $this->category->CurrentValue;
-			$curVal = strval($this->category->CurrentValue);
-			if ($curVal <> "") {
-				$this->category->ViewValue = $this->category->lookupCacheOption($curVal);
-				if ($this->category->ViewValue === NULL) { // Lookup from database
-					$filterWrk = "`id`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
-					$sqlWrk = $this->category->Lookup->getSql(FALSE, $filterWrk, '', $this);
-					$rswrk = Conn()->execute($sqlWrk);
-					if ($rswrk && !$rswrk->EOF) { // Lookup values found
-						$arwrk = array();
-						$arwrk[1] = $rswrk->fields('df');
-						$arwrk[2] = $rswrk->fields('df2');
-						$this->category->ViewValue = $this->category->displayValue($arwrk);
-						$rswrk->Close();
-					} else {
-						$this->category->ViewValue = $this->category->CurrentValue;
-					}
-				}
-			} else {
-				$this->category->ViewValue = NULL;
-			}
-			$this->category->ViewCustomAttributes = "";
-			} else {
-			$curVal = trim(strval($this->category->CurrentValue));
-			if ($curVal <> "")
-				$this->category->ViewValue = $this->category->lookupCacheOption($curVal);
-			else
-				$this->category->ViewValue = $this->category->Lookup !== NULL && is_array($this->category->Lookup->Options) ? $curVal : NULL;
-			if ($this->category->ViewValue !== NULL) { // Load from cache
-				$this->category->EditValue = array_values($this->category->Lookup->Options);
-			} else { // Lookup from database
-				if ($curVal == "") {
-					$filterWrk = "0=1";
-				} else {
-					$filterWrk = "`id`" . SearchString("=", $this->category->CurrentValue, DATATYPE_NUMBER, "");
-				}
-				$sqlWrk = $this->category->Lookup->getSql(TRUE, $filterWrk, '', $this);
-				$rswrk = Conn()->execute($sqlWrk);
-				$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
-				if ($rswrk) $rswrk->Close();
-				$this->category->EditValue = $arwrk;
-			}
-			}
-
 			// image_id
 			$this->image_id->EditAttrs["class"] = "form-control";
 			$this->image_id->EditCustomAttributes = "";
@@ -2274,6 +2266,30 @@ class parcel_info_grid extends parcel_info
 			$this->name->EditValue = HtmlEncode($this->name->CurrentValue);
 			$this->name->PlaceHolder = RemoveHtml($this->name->caption());
 
+			// categoty
+			$this->categoty->EditAttrs["class"] = "form-control";
+			$this->categoty->EditCustomAttributes = "";
+			$this->categoty->EditValue = HtmlEncode($this->categoty->CurrentValue);
+			$this->categoty->PlaceHolder = RemoveHtml($this->categoty->caption());
+
+			// status
+			$this->status->EditAttrs["class"] = "form-control";
+			$this->status->EditCustomAttributes = "";
+			$this->status->EditValue = HtmlEncode($this->status->CurrentValue);
+			$this->status->PlaceHolder = RemoveHtml($this->status->caption());
+
+			// createdAt
+			$this->createdAt->EditAttrs["class"] = "form-control";
+			$this->createdAt->EditCustomAttributes = "";
+			$this->createdAt->EditValue = HtmlEncode(FormatDateTime($this->createdAt->CurrentValue, 8));
+			$this->createdAt->PlaceHolder = RemoveHtml($this->createdAt->caption());
+
+			// updatedAt
+			$this->updatedAt->EditAttrs["class"] = "form-control";
+			$this->updatedAt->EditCustomAttributes = "";
+			$this->updatedAt->EditValue = HtmlEncode(FormatDateTime($this->updatedAt->CurrentValue, 8));
+			$this->updatedAt->PlaceHolder = RemoveHtml($this->updatedAt->caption());
+
 			// Edit refer script
 			// from_place
 
@@ -2292,10 +2308,6 @@ class parcel_info_grid extends parcel_info
 			$this->user_id->LinkCustomAttributes = "";
 			$this->user_id->HrefValue = "";
 
-			// category
-			$this->category->LinkCustomAttributes = "";
-			$this->category->HrefValue = "";
-
 			// image_id
 			$this->image_id->LinkCustomAttributes = "";
 			if (!EmptyValue($this->image_id->CurrentValue)) {
@@ -2309,6 +2321,22 @@ class parcel_info_grid extends parcel_info
 			// name
 			$this->name->LinkCustomAttributes = "";
 			$this->name->HrefValue = "";
+
+			// categoty
+			$this->categoty->LinkCustomAttributes = "";
+			$this->categoty->HrefValue = "";
+
+			// status
+			$this->status->LinkCustomAttributes = "";
+			$this->status->HrefValue = "";
+
+			// createdAt
+			$this->createdAt->LinkCustomAttributes = "";
+			$this->createdAt->HrefValue = "";
+
+			// updatedAt
+			$this->updatedAt->LinkCustomAttributes = "";
+			$this->updatedAt->HrefValue = "";
 		}
 		if ($this->RowType == ROWTYPE_ADD || $this->RowType == ROWTYPE_EDIT || $this->RowType == ROWTYPE_SEARCH) // Add/Edit/Search row
 			$this->setupFieldTitles();
@@ -2354,11 +2382,6 @@ class parcel_info_grid extends parcel_info
 		if (!CheckInteger($this->user_id->FormValue)) {
 			AddMessage($FormError, $this->user_id->errorMessage());
 		}
-		if ($this->category->Required) {
-			if (!$this->category->IsDetailKey && $this->category->FormValue != NULL && $this->category->FormValue == "") {
-				AddMessage($FormError, str_replace("%s", $this->category->caption(), $this->category->RequiredErrorMessage));
-			}
-		}
 		if ($this->image_id->Required) {
 			if (!$this->image_id->IsDetailKey && $this->image_id->FormValue != NULL && $this->image_id->FormValue == "") {
 				AddMessage($FormError, str_replace("%s", $this->image_id->caption(), $this->image_id->RequiredErrorMessage));
@@ -2371,6 +2394,38 @@ class parcel_info_grid extends parcel_info
 			if (!$this->name->IsDetailKey && $this->name->FormValue != NULL && $this->name->FormValue == "") {
 				AddMessage($FormError, str_replace("%s", $this->name->caption(), $this->name->RequiredErrorMessage));
 			}
+		}
+		if ($this->categoty->Required) {
+			if (!$this->categoty->IsDetailKey && $this->categoty->FormValue != NULL && $this->categoty->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->categoty->caption(), $this->categoty->RequiredErrorMessage));
+			}
+		}
+		if (!CheckInteger($this->categoty->FormValue)) {
+			AddMessage($FormError, $this->categoty->errorMessage());
+		}
+		if ($this->status->Required) {
+			if (!$this->status->IsDetailKey && $this->status->FormValue != NULL && $this->status->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->status->caption(), $this->status->RequiredErrorMessage));
+			}
+		}
+		if (!CheckInteger($this->status->FormValue)) {
+			AddMessage($FormError, $this->status->errorMessage());
+		}
+		if ($this->createdAt->Required) {
+			if (!$this->createdAt->IsDetailKey && $this->createdAt->FormValue != NULL && $this->createdAt->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->createdAt->caption(), $this->createdAt->RequiredErrorMessage));
+			}
+		}
+		if (!CheckDate($this->createdAt->FormValue)) {
+			AddMessage($FormError, $this->createdAt->errorMessage());
+		}
+		if ($this->updatedAt->Required) {
+			if (!$this->updatedAt->IsDetailKey && $this->updatedAt->FormValue != NULL && $this->updatedAt->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->updatedAt->caption(), $this->updatedAt->RequiredErrorMessage));
+			}
+		}
+		if (!CheckDate($this->updatedAt->FormValue)) {
+			AddMessage($FormError, $this->updatedAt->errorMessage());
 		}
 
 		// Return validate result
@@ -2506,19 +2561,28 @@ class parcel_info_grid extends parcel_info
 			$this->to_place->setDbValueDef($rsnew, $this->to_place->CurrentValue, "", $this->to_place->ReadOnly);
 
 			// description
-			$this->description->setDbValueDef($rsnew, $this->description->CurrentValue, "", $this->description->ReadOnly);
+			$this->description->setDbValueDef($rsnew, $this->description->CurrentValue, NULL, $this->description->ReadOnly);
 
 			// user_id
 			$this->user_id->setDbValueDef($rsnew, $this->user_id->CurrentValue, 0, $this->user_id->ReadOnly);
-
-			// category
-			$this->category->setDbValueDef($rsnew, $this->category->CurrentValue, 0, $this->category->ReadOnly);
 
 			// image_id
 			$this->image_id->setDbValueDef($rsnew, $this->image_id->CurrentValue, 0, $this->image_id->ReadOnly);
 
 			// name
 			$this->name->setDbValueDef($rsnew, $this->name->CurrentValue, "", $this->name->ReadOnly);
+
+			// categoty
+			$this->categoty->setDbValueDef($rsnew, $this->categoty->CurrentValue, 0, $this->categoty->ReadOnly);
+
+			// status
+			$this->status->setDbValueDef($rsnew, $this->status->CurrentValue, 0, $this->status->ReadOnly);
+
+			// createdAt
+			$this->createdAt->setDbValueDef($rsnew, UnFormatDateTime($this->createdAt->CurrentValue, 0), CurrentDate(), $this->createdAt->ReadOnly);
+
+			// updatedAt
+			$this->updatedAt->setDbValueDef($rsnew, UnFormatDateTime($this->updatedAt->CurrentValue, 0), CurrentDate(), $this->updatedAt->ReadOnly);
 
 			// Check referential integrity for master table 'image'
 			$validMasterRecord = TRUE;
@@ -2593,9 +2657,6 @@ class parcel_info_grid extends parcel_info
 			if ($this->getCurrentMasterTable() == "user") {
 				$this->user_id->CurrentValue = $this->user_id->getSessionValue();
 			}
-			if ($this->getCurrentMasterTable() == "category") {
-				$this->category->CurrentValue = $this->category->getSessionValue();
-			}
 
 		// Check referential integrity for master table 'image'
 		$validMasterRecord = TRUE;
@@ -2632,19 +2693,28 @@ class parcel_info_grid extends parcel_info
 		$this->to_place->setDbValueDef($rsnew, $this->to_place->CurrentValue, "", FALSE);
 
 		// description
-		$this->description->setDbValueDef($rsnew, $this->description->CurrentValue, "", FALSE);
+		$this->description->setDbValueDef($rsnew, $this->description->CurrentValue, NULL, FALSE);
 
 		// user_id
 		$this->user_id->setDbValueDef($rsnew, $this->user_id->CurrentValue, 0, FALSE);
-
-		// category
-		$this->category->setDbValueDef($rsnew, $this->category->CurrentValue, 0, FALSE);
 
 		// image_id
 		$this->image_id->setDbValueDef($rsnew, $this->image_id->CurrentValue, 0, FALSE);
 
 		// name
 		$this->name->setDbValueDef($rsnew, $this->name->CurrentValue, "", FALSE);
+
+		// categoty
+		$this->categoty->setDbValueDef($rsnew, $this->categoty->CurrentValue, 0, FALSE);
+
+		// status
+		$this->status->setDbValueDef($rsnew, $this->status->CurrentValue, 0, FALSE);
+
+		// createdAt
+		$this->createdAt->setDbValueDef($rsnew, UnFormatDateTime($this->createdAt->CurrentValue, 0), CurrentDate(), FALSE);
+
+		// updatedAt
+		$this->updatedAt->setDbValueDef($rsnew, UnFormatDateTime($this->updatedAt->CurrentValue, 0), CurrentDate(), FALSE);
 
 		// Call Row Inserting event
 		$rs = ($rsold) ? $rsold->fields : NULL;
@@ -2698,11 +2768,6 @@ class parcel_info_grid extends parcel_info
 			if ($GLOBALS["user"]->EventCancelled)
 				$this->EventCancelled = TRUE;
 		}
-		if ($masterTblVar == "category") {
-			$this->category->Visible = FALSE;
-			if ($GLOBALS["category"]->EventCancelled)
-				$this->EventCancelled = TRUE;
-		}
 		$this->DbMasterFilter = $this->getMasterFilter(); // Get master filter
 		$this->DbDetailFilter = $this->getDetailFilter(); // Get detail filter
 	}
@@ -2739,8 +2804,6 @@ class parcel_info_grid extends parcel_info
 					// Format the field values
 					switch ($fld->FieldVar) {
 						case "x_user_id":
-							break;
-						case "x_category":
 							break;
 						case "x_image_id":
 							break;

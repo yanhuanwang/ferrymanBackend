@@ -562,9 +562,7 @@ class user_add extends user
 		$this->id->Visible = FALSE;
 		$this->username->setVisibility();
 		$this->password->setVisibility();
-		$this->_email->setVisibility();
 		$this->gender->setVisibility();
-		$this->phone->setVisibility();
 		$this->address->setVisibility();
 		$this->country->setVisibility();
 		$this->photo->setVisibility();
@@ -574,9 +572,11 @@ class user_add extends user
 		$this->send_role->setVisibility();
 		$this->carrier_role->setVisibility();
 		$this->birthday->setVisibility();
-		$this->addDate->Visible = FALSE;
-		$this->updateDate->Visible = FALSE;
-		$this->activated->setVisibility();
+		$this->mobile_phone->setVisibility();
+		$this->status->setVisibility();
+		$this->session_token->setVisibility();
+		$this->createdAt->setVisibility();
+		$this->updatedAt->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Set up detail page object
@@ -728,12 +728,8 @@ class user_add extends user
 		$this->username->OldValue = $this->username->CurrentValue;
 		$this->password->CurrentValue = NULL;
 		$this->password->OldValue = $this->password->CurrentValue;
-		$this->_email->CurrentValue = NULL;
-		$this->_email->OldValue = $this->_email->CurrentValue;
 		$this->gender->CurrentValue = NULL;
 		$this->gender->OldValue = $this->gender->CurrentValue;
-		$this->phone->CurrentValue = NULL;
-		$this->phone->OldValue = $this->phone->CurrentValue;
 		$this->address->CurrentValue = NULL;
 		$this->address->OldValue = $this->address->CurrentValue;
 		$this->country->CurrentValue = NULL;
@@ -753,12 +749,15 @@ class user_add extends user
 		$this->carrier_role->OldValue = $this->carrier_role->CurrentValue;
 		$this->birthday->CurrentValue = NULL;
 		$this->birthday->OldValue = $this->birthday->CurrentValue;
-		$this->addDate->CurrentValue = NULL;
-		$this->addDate->OldValue = $this->addDate->CurrentValue;
-		$this->updateDate->CurrentValue = NULL;
-		$this->updateDate->OldValue = $this->updateDate->CurrentValue;
-		$this->activated->CurrentValue = NULL;
-		$this->activated->OldValue = $this->activated->CurrentValue;
+		$this->mobile_phone->CurrentValue = NULL;
+		$this->mobile_phone->OldValue = $this->mobile_phone->CurrentValue;
+		$this->status->CurrentValue = 0;
+		$this->session_token->CurrentValue = NULL;
+		$this->session_token->OldValue = $this->session_token->CurrentValue;
+		$this->createdAt->CurrentValue = NULL;
+		$this->createdAt->OldValue = $this->createdAt->CurrentValue;
+		$this->updatedAt->CurrentValue = NULL;
+		$this->updatedAt->OldValue = $this->updatedAt->CurrentValue;
 	}
 
 	// Load form values
@@ -787,15 +786,6 @@ class user_add extends user
 				$this->password->setFormValue($val);
 		}
 
-		// Check field name 'email' first before field var 'x__email'
-		$val = $CurrentForm->hasValue("email") ? $CurrentForm->getValue("email") : $CurrentForm->getValue("x__email");
-		if (!$this->_email->IsDetailKey) {
-			if (IsApi() && $val == NULL)
-				$this->_email->Visible = FALSE; // Disable update for API request
-			else
-				$this->_email->setFormValue($val);
-		}
-
 		// Check field name 'gender' first before field var 'x_gender'
 		$val = $CurrentForm->hasValue("gender") ? $CurrentForm->getValue("gender") : $CurrentForm->getValue("x_gender");
 		if (!$this->gender->IsDetailKey) {
@@ -803,15 +793,6 @@ class user_add extends user
 				$this->gender->Visible = FALSE; // Disable update for API request
 			else
 				$this->gender->setFormValue($val);
-		}
-
-		// Check field name 'phone' first before field var 'x_phone'
-		$val = $CurrentForm->hasValue("phone") ? $CurrentForm->getValue("phone") : $CurrentForm->getValue("x_phone");
-		if (!$this->phone->IsDetailKey) {
-			if (IsApi() && $val == NULL)
-				$this->phone->Visible = FALSE; // Disable update for API request
-			else
-				$this->phone->setFormValue($val);
 		}
 
 		// Check field name 'address' first before field var 'x_address'
@@ -887,13 +868,51 @@ class user_add extends user
 			$this->birthday->CurrentValue = UnFormatDateTime($this->birthday->CurrentValue, 0);
 		}
 
-		// Check field name 'activated' first before field var 'x_activated'
-		$val = $CurrentForm->hasValue("activated") ? $CurrentForm->getValue("activated") : $CurrentForm->getValue("x_activated");
-		if (!$this->activated->IsDetailKey) {
+		// Check field name 'mobile_phone' first before field var 'x_mobile_phone'
+		$val = $CurrentForm->hasValue("mobile_phone") ? $CurrentForm->getValue("mobile_phone") : $CurrentForm->getValue("x_mobile_phone");
+		if (!$this->mobile_phone->IsDetailKey) {
 			if (IsApi() && $val == NULL)
-				$this->activated->Visible = FALSE; // Disable update for API request
+				$this->mobile_phone->Visible = FALSE; // Disable update for API request
 			else
-				$this->activated->setFormValue($val);
+				$this->mobile_phone->setFormValue($val);
+		}
+
+		// Check field name 'status' first before field var 'x_status'
+		$val = $CurrentForm->hasValue("status") ? $CurrentForm->getValue("status") : $CurrentForm->getValue("x_status");
+		if (!$this->status->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->status->Visible = FALSE; // Disable update for API request
+			else
+				$this->status->setFormValue($val);
+		}
+
+		// Check field name 'session_token' first before field var 'x_session_token'
+		$val = $CurrentForm->hasValue("session_token") ? $CurrentForm->getValue("session_token") : $CurrentForm->getValue("x_session_token");
+		if (!$this->session_token->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->session_token->Visible = FALSE; // Disable update for API request
+			else
+				$this->session_token->setFormValue($val);
+		}
+
+		// Check field name 'createdAt' first before field var 'x_createdAt'
+		$val = $CurrentForm->hasValue("createdAt") ? $CurrentForm->getValue("createdAt") : $CurrentForm->getValue("x_createdAt");
+		if (!$this->createdAt->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->createdAt->Visible = FALSE; // Disable update for API request
+			else
+				$this->createdAt->setFormValue($val);
+			$this->createdAt->CurrentValue = UnFormatDateTime($this->createdAt->CurrentValue, 0);
+		}
+
+		// Check field name 'updatedAt' first before field var 'x_updatedAt'
+		$val = $CurrentForm->hasValue("updatedAt") ? $CurrentForm->getValue("updatedAt") : $CurrentForm->getValue("x_updatedAt");
+		if (!$this->updatedAt->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->updatedAt->Visible = FALSE; // Disable update for API request
+			else
+				$this->updatedAt->setFormValue($val);
+			$this->updatedAt->CurrentValue = UnFormatDateTime($this->updatedAt->CurrentValue, 0);
 		}
 
 		// Check field name 'id' first before field var 'x_id'
@@ -906,9 +925,7 @@ class user_add extends user
 		global $CurrentForm;
 		$this->username->CurrentValue = $this->username->FormValue;
 		$this->password->CurrentValue = $this->password->FormValue;
-		$this->_email->CurrentValue = $this->_email->FormValue;
 		$this->gender->CurrentValue = $this->gender->FormValue;
-		$this->phone->CurrentValue = $this->phone->FormValue;
 		$this->address->CurrentValue = $this->address->FormValue;
 		$this->country->CurrentValue = $this->country->FormValue;
 		$this->nickname->CurrentValue = $this->nickname->FormValue;
@@ -918,7 +935,13 @@ class user_add extends user
 		$this->carrier_role->CurrentValue = $this->carrier_role->FormValue;
 		$this->birthday->CurrentValue = $this->birthday->FormValue;
 		$this->birthday->CurrentValue = UnFormatDateTime($this->birthday->CurrentValue, 0);
-		$this->activated->CurrentValue = $this->activated->FormValue;
+		$this->mobile_phone->CurrentValue = $this->mobile_phone->FormValue;
+		$this->status->CurrentValue = $this->status->FormValue;
+		$this->session_token->CurrentValue = $this->session_token->FormValue;
+		$this->createdAt->CurrentValue = $this->createdAt->FormValue;
+		$this->createdAt->CurrentValue = UnFormatDateTime($this->createdAt->CurrentValue, 0);
+		$this->updatedAt->CurrentValue = $this->updatedAt->FormValue;
+		$this->updatedAt->CurrentValue = UnFormatDateTime($this->updatedAt->CurrentValue, 0);
 		$this->resetDetailParms();
 	}
 
@@ -960,9 +983,7 @@ class user_add extends user
 		$this->id->setDbValue($row['id']);
 		$this->username->setDbValue($row['username']);
 		$this->password->setDbValue($row['password']);
-		$this->_email->setDbValue($row['email']);
 		$this->gender->setDbValue($row['gender']);
-		$this->phone->setDbValue($row['phone']);
 		$this->address->setDbValue($row['address']);
 		$this->country->setDbValue($row['country']);
 		$this->photo->Upload->DbValue = $row['photo'];
@@ -973,9 +994,11 @@ class user_add extends user
 		$this->send_role->setDbValue($row['send_role']);
 		$this->carrier_role->setDbValue($row['carrier_role']);
 		$this->birthday->setDbValue($row['birthday']);
-		$this->addDate->setDbValue($row['addDate']);
-		$this->updateDate->setDbValue($row['updateDate']);
-		$this->activated->setDbValue($row['activated']);
+		$this->mobile_phone->setDbValue($row['mobile_phone']);
+		$this->status->setDbValue($row['status']);
+		$this->session_token->setDbValue($row['session_token']);
+		$this->createdAt->setDbValue($row['createdAt']);
+		$this->updatedAt->setDbValue($row['updatedAt']);
 	}
 
 	// Return a row with default values
@@ -986,9 +1009,7 @@ class user_add extends user
 		$row['id'] = $this->id->CurrentValue;
 		$row['username'] = $this->username->CurrentValue;
 		$row['password'] = $this->password->CurrentValue;
-		$row['email'] = $this->_email->CurrentValue;
 		$row['gender'] = $this->gender->CurrentValue;
-		$row['phone'] = $this->phone->CurrentValue;
 		$row['address'] = $this->address->CurrentValue;
 		$row['country'] = $this->country->CurrentValue;
 		$row['photo'] = $this->photo->Upload->DbValue;
@@ -998,9 +1019,11 @@ class user_add extends user
 		$row['send_role'] = $this->send_role->CurrentValue;
 		$row['carrier_role'] = $this->carrier_role->CurrentValue;
 		$row['birthday'] = $this->birthday->CurrentValue;
-		$row['addDate'] = $this->addDate->CurrentValue;
-		$row['updateDate'] = $this->updateDate->CurrentValue;
-		$row['activated'] = $this->activated->CurrentValue;
+		$row['mobile_phone'] = $this->mobile_phone->CurrentValue;
+		$row['status'] = $this->status->CurrentValue;
+		$row['session_token'] = $this->session_token->CurrentValue;
+		$row['createdAt'] = $this->createdAt->CurrentValue;
+		$row['updatedAt'] = $this->updatedAt->CurrentValue;
 		return $row;
 	}
 
@@ -1041,9 +1064,7 @@ class user_add extends user
 		// id
 		// username
 		// password
-		// email
 		// gender
-		// phone
 		// address
 		// country
 		// photo
@@ -1053,9 +1074,11 @@ class user_add extends user
 		// send_role
 		// carrier_role
 		// birthday
-		// addDate
-		// updateDate
-		// activated
+		// mobile_phone
+		// status
+		// session_token
+		// createdAt
+		// updatedAt
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
@@ -1071,10 +1094,6 @@ class user_add extends user
 			$this->password->ViewValue = $this->password->CurrentValue;
 			$this->password->ViewCustomAttributes = "";
 
-			// email
-			$this->_email->ViewValue = $this->_email->CurrentValue;
-			$this->_email->ViewCustomAttributes = "";
-
 			// gender
 			if (strval($this->gender->CurrentValue) <> "") {
 				$this->gender->ViewValue = $this->gender->optionCaption($this->gender->CurrentValue);
@@ -1082,10 +1101,6 @@ class user_add extends user
 				$this->gender->ViewValue = NULL;
 			}
 			$this->gender->ViewCustomAttributes = "";
-
-			// phone
-			$this->phone->ViewValue = $this->phone->CurrentValue;
-			$this->phone->ViewCustomAttributes = "";
 
 			// address
 			$this->address->ViewValue = $this->address->CurrentValue;
@@ -1141,20 +1156,28 @@ class user_add extends user
 			$this->birthday->ViewValue = FormatDateTime($this->birthday->ViewValue, 0);
 			$this->birthday->ViewCustomAttributes = "";
 
-			// addDate
-			$this->addDate->ViewValue = $this->addDate->CurrentValue;
-			$this->addDate->ViewValue = FormatDateTime($this->addDate->ViewValue, 0);
-			$this->addDate->ViewCustomAttributes = "";
+			// mobile_phone
+			$this->mobile_phone->ViewValue = $this->mobile_phone->CurrentValue;
+			$this->mobile_phone->ViewCustomAttributes = "";
 
-			// updateDate
-			$this->updateDate->ViewValue = $this->updateDate->CurrentValue;
-			$this->updateDate->ViewValue = FormatDateTime($this->updateDate->ViewValue, 0);
-			$this->updateDate->ViewCustomAttributes = "";
+			// status
+			$this->status->ViewValue = $this->status->CurrentValue;
+			$this->status->ViewValue = FormatNumber($this->status->ViewValue, 0, -2, -2, -2);
+			$this->status->ViewCustomAttributes = "";
 
-			// activated
-			$this->activated->ViewValue = $this->activated->CurrentValue;
-			$this->activated->ViewValue = FormatNumber($this->activated->ViewValue, 0, -2, -2, -2);
-			$this->activated->ViewCustomAttributes = "";
+			// session_token
+			$this->session_token->ViewValue = $this->session_token->CurrentValue;
+			$this->session_token->ViewCustomAttributes = "";
+
+			// createdAt
+			$this->createdAt->ViewValue = $this->createdAt->CurrentValue;
+			$this->createdAt->ViewValue = FormatDateTime($this->createdAt->ViewValue, 0);
+			$this->createdAt->ViewCustomAttributes = "";
+
+			// updatedAt
+			$this->updatedAt->ViewValue = $this->updatedAt->CurrentValue;
+			$this->updatedAt->ViewValue = FormatDateTime($this->updatedAt->ViewValue, 0);
+			$this->updatedAt->ViewCustomAttributes = "";
 
 			// username
 			$this->username->LinkCustomAttributes = "";
@@ -1166,20 +1189,10 @@ class user_add extends user
 			$this->password->HrefValue = "";
 			$this->password->TooltipValue = "";
 
-			// email
-			$this->_email->LinkCustomAttributes = "";
-			$this->_email->HrefValue = "";
-			$this->_email->TooltipValue = "";
-
 			// gender
 			$this->gender->LinkCustomAttributes = "";
 			$this->gender->HrefValue = "";
 			$this->gender->TooltipValue = "";
-
-			// phone
-			$this->phone->LinkCustomAttributes = "";
-			$this->phone->HrefValue = "";
-			$this->phone->TooltipValue = "";
 
 			// address
 			$this->address->LinkCustomAttributes = "";
@@ -1239,10 +1252,30 @@ class user_add extends user
 			$this->birthday->HrefValue = "";
 			$this->birthday->TooltipValue = "";
 
-			// activated
-			$this->activated->LinkCustomAttributes = "";
-			$this->activated->HrefValue = "";
-			$this->activated->TooltipValue = "";
+			// mobile_phone
+			$this->mobile_phone->LinkCustomAttributes = "";
+			$this->mobile_phone->HrefValue = "";
+			$this->mobile_phone->TooltipValue = "";
+
+			// status
+			$this->status->LinkCustomAttributes = "";
+			$this->status->HrefValue = "";
+			$this->status->TooltipValue = "";
+
+			// session_token
+			$this->session_token->LinkCustomAttributes = "";
+			$this->session_token->HrefValue = "";
+			$this->session_token->TooltipValue = "";
+
+			// createdAt
+			$this->createdAt->LinkCustomAttributes = "";
+			$this->createdAt->HrefValue = "";
+			$this->createdAt->TooltipValue = "";
+
+			// updatedAt
+			$this->updatedAt->LinkCustomAttributes = "";
+			$this->updatedAt->HrefValue = "";
+			$this->updatedAt->TooltipValue = "";
 		} elseif ($this->RowType == ROWTYPE_ADD) { // Add row
 
 			// username
@@ -1257,22 +1290,10 @@ class user_add extends user
 			$this->password->EditValue = HtmlEncode($this->password->CurrentValue);
 			$this->password->PlaceHolder = RemoveHtml($this->password->caption());
 
-			// email
-			$this->_email->EditAttrs["class"] = "form-control";
-			$this->_email->EditCustomAttributes = "";
-			$this->_email->EditValue = HtmlEncode($this->_email->CurrentValue);
-			$this->_email->PlaceHolder = RemoveHtml($this->_email->caption());
-
 			// gender
 			$this->gender->EditAttrs["class"] = "form-control";
 			$this->gender->EditCustomAttributes = "";
 			$this->gender->EditValue = $this->gender->options(TRUE);
-
-			// phone
-			$this->phone->EditAttrs["class"] = "form-control";
-			$this->phone->EditCustomAttributes = "";
-			$this->phone->EditValue = HtmlEncode($this->phone->CurrentValue);
-			$this->phone->PlaceHolder = RemoveHtml($this->phone->caption());
 
 			// address
 			$this->address->EditAttrs["class"] = "form-control";
@@ -1333,11 +1354,35 @@ class user_add extends user
 			$this->birthday->EditValue = HtmlEncode(FormatDateTime($this->birthday->CurrentValue, 8));
 			$this->birthday->PlaceHolder = RemoveHtml($this->birthday->caption());
 
-			// activated
-			$this->activated->EditAttrs["class"] = "form-control";
-			$this->activated->EditCustomAttributes = "";
-			$this->activated->EditValue = HtmlEncode($this->activated->CurrentValue);
-			$this->activated->PlaceHolder = RemoveHtml($this->activated->caption());
+			// mobile_phone
+			$this->mobile_phone->EditAttrs["class"] = "form-control";
+			$this->mobile_phone->EditCustomAttributes = "";
+			$this->mobile_phone->EditValue = HtmlEncode($this->mobile_phone->CurrentValue);
+			$this->mobile_phone->PlaceHolder = RemoveHtml($this->mobile_phone->caption());
+
+			// status
+			$this->status->EditAttrs["class"] = "form-control";
+			$this->status->EditCustomAttributes = "";
+			$this->status->EditValue = HtmlEncode($this->status->CurrentValue);
+			$this->status->PlaceHolder = RemoveHtml($this->status->caption());
+
+			// session_token
+			$this->session_token->EditAttrs["class"] = "form-control";
+			$this->session_token->EditCustomAttributes = "";
+			$this->session_token->EditValue = HtmlEncode($this->session_token->CurrentValue);
+			$this->session_token->PlaceHolder = RemoveHtml($this->session_token->caption());
+
+			// createdAt
+			$this->createdAt->EditAttrs["class"] = "form-control";
+			$this->createdAt->EditCustomAttributes = "";
+			$this->createdAt->EditValue = HtmlEncode(FormatDateTime($this->createdAt->CurrentValue, 8));
+			$this->createdAt->PlaceHolder = RemoveHtml($this->createdAt->caption());
+
+			// updatedAt
+			$this->updatedAt->EditAttrs["class"] = "form-control";
+			$this->updatedAt->EditCustomAttributes = "";
+			$this->updatedAt->EditValue = HtmlEncode(FormatDateTime($this->updatedAt->CurrentValue, 8));
+			$this->updatedAt->PlaceHolder = RemoveHtml($this->updatedAt->caption());
 
 			// Add refer script
 			// username
@@ -1349,17 +1394,9 @@ class user_add extends user
 			$this->password->LinkCustomAttributes = "";
 			$this->password->HrefValue = "";
 
-			// email
-			$this->_email->LinkCustomAttributes = "";
-			$this->_email->HrefValue = "";
-
 			// gender
 			$this->gender->LinkCustomAttributes = "";
 			$this->gender->HrefValue = "";
-
-			// phone
-			$this->phone->LinkCustomAttributes = "";
-			$this->phone->HrefValue = "";
 
 			// address
 			$this->address->LinkCustomAttributes = "";
@@ -1404,9 +1441,25 @@ class user_add extends user
 			$this->birthday->LinkCustomAttributes = "";
 			$this->birthday->HrefValue = "";
 
-			// activated
-			$this->activated->LinkCustomAttributes = "";
-			$this->activated->HrefValue = "";
+			// mobile_phone
+			$this->mobile_phone->LinkCustomAttributes = "";
+			$this->mobile_phone->HrefValue = "";
+
+			// status
+			$this->status->LinkCustomAttributes = "";
+			$this->status->HrefValue = "";
+
+			// session_token
+			$this->session_token->LinkCustomAttributes = "";
+			$this->session_token->HrefValue = "";
+
+			// createdAt
+			$this->createdAt->LinkCustomAttributes = "";
+			$this->createdAt->HrefValue = "";
+
+			// updatedAt
+			$this->updatedAt->LinkCustomAttributes = "";
+			$this->updatedAt->HrefValue = "";
 		}
 		if ($this->RowType == ROWTYPE_ADD || $this->RowType == ROWTYPE_EDIT || $this->RowType == ROWTYPE_SEARCH) // Add/Edit/Search row
 			$this->setupFieldTitles();
@@ -1442,22 +1495,9 @@ class user_add extends user
 				AddMessage($FormError, str_replace("%s", $this->password->caption(), $this->password->RequiredErrorMessage));
 			}
 		}
-		if ($this->_email->Required) {
-			if (!$this->_email->IsDetailKey && $this->_email->FormValue != NULL && $this->_email->FormValue == "") {
-				AddMessage($FormError, str_replace("%s", $this->_email->caption(), $this->_email->RequiredErrorMessage));
-			}
-		}
-		if (!CheckEmail($this->_email->FormValue)) {
-			AddMessage($FormError, $this->_email->errorMessage());
-		}
 		if ($this->gender->Required) {
 			if (!$this->gender->IsDetailKey && $this->gender->FormValue != NULL && $this->gender->FormValue == "") {
 				AddMessage($FormError, str_replace("%s", $this->gender->caption(), $this->gender->RequiredErrorMessage));
-			}
-		}
-		if ($this->phone->Required) {
-			if (!$this->phone->IsDetailKey && $this->phone->FormValue != NULL && $this->phone->FormValue == "") {
-				AddMessage($FormError, str_replace("%s", $this->phone->caption(), $this->phone->RequiredErrorMessage));
 			}
 		}
 		if ($this->address->Required) {
@@ -1508,32 +1548,43 @@ class user_add extends user
 		if (!CheckDate($this->birthday->FormValue)) {
 			AddMessage($FormError, $this->birthday->errorMessage());
 		}
-		if ($this->addDate->Required) {
-			if (!$this->addDate->IsDetailKey && $this->addDate->FormValue != NULL && $this->addDate->FormValue == "") {
-				AddMessage($FormError, str_replace("%s", $this->addDate->caption(), $this->addDate->RequiredErrorMessage));
+		if ($this->mobile_phone->Required) {
+			if (!$this->mobile_phone->IsDetailKey && $this->mobile_phone->FormValue != NULL && $this->mobile_phone->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->mobile_phone->caption(), $this->mobile_phone->RequiredErrorMessage));
 			}
 		}
-		if ($this->updateDate->Required) {
-			if (!$this->updateDate->IsDetailKey && $this->updateDate->FormValue != NULL && $this->updateDate->FormValue == "") {
-				AddMessage($FormError, str_replace("%s", $this->updateDate->caption(), $this->updateDate->RequiredErrorMessage));
+		if ($this->status->Required) {
+			if (!$this->status->IsDetailKey && $this->status->FormValue != NULL && $this->status->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->status->caption(), $this->status->RequiredErrorMessage));
 			}
 		}
-		if ($this->activated->Required) {
-			if (!$this->activated->IsDetailKey && $this->activated->FormValue != NULL && $this->activated->FormValue == "") {
-				AddMessage($FormError, str_replace("%s", $this->activated->caption(), $this->activated->RequiredErrorMessage));
+		if (!CheckInteger($this->status->FormValue)) {
+			AddMessage($FormError, $this->status->errorMessage());
+		}
+		if ($this->session_token->Required) {
+			if (!$this->session_token->IsDetailKey && $this->session_token->FormValue != NULL && $this->session_token->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->session_token->caption(), $this->session_token->RequiredErrorMessage));
 			}
 		}
-		if (!CheckInteger($this->activated->FormValue)) {
-			AddMessage($FormError, $this->activated->errorMessage());
+		if ($this->createdAt->Required) {
+			if (!$this->createdAt->IsDetailKey && $this->createdAt->FormValue != NULL && $this->createdAt->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->createdAt->caption(), $this->createdAt->RequiredErrorMessage));
+			}
+		}
+		if (!CheckDate($this->createdAt->FormValue)) {
+			AddMessage($FormError, $this->createdAt->errorMessage());
+		}
+		if ($this->updatedAt->Required) {
+			if (!$this->updatedAt->IsDetailKey && $this->updatedAt->FormValue != NULL && $this->updatedAt->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->updatedAt->caption(), $this->updatedAt->RequiredErrorMessage));
+			}
+		}
+		if (!CheckDate($this->updatedAt->FormValue)) {
+			AddMessage($FormError, $this->updatedAt->errorMessage());
 		}
 
 		// Validate detail grid
 		$detailTblVar = explode(",", $this->getCurrentDetailTable());
-		if (in_array("image", $detailTblVar) && $GLOBALS["image"]->DetailAdd) {
-			if (!isset($GLOBALS["image_grid"]))
-				$GLOBALS["image_grid"] = new image_grid(); // Get detail page object
-			$GLOBALS["image_grid"]->validateGridForm();
-		}
 		if (in_array("trip_info", $detailTblVar) && $GLOBALS["trip_info"]->DetailAdd) {
 			if (!isset($GLOBALS["trip_info_grid"]))
 				$GLOBALS["trip_info_grid"] = new trip_info_grid(); // Get detail page object
@@ -1544,10 +1595,10 @@ class user_add extends user
 				$GLOBALS["parcel_info_grid"] = new parcel_info_grid(); // Get detail page object
 			$GLOBALS["parcel_info_grid"]->validateGridForm();
 		}
-		if (in_array("orders", $detailTblVar) && $GLOBALS["orders"]->DetailAdd) {
-			if (!isset($GLOBALS["orders_grid"]))
-				$GLOBALS["orders_grid"] = new orders_grid(); // Get detail page object
-			$GLOBALS["orders_grid"]->validateGridForm();
+		if (in_array("order", $detailTblVar) && $GLOBALS["order"]->DetailAdd) {
+			if (!isset($GLOBALS["order_grid"]))
+				$GLOBALS["order_grid"] = new order_grid(); // Get detail page object
+			$GLOBALS["order_grid"]->validateGridForm();
 		}
 
 		// Return validate result
@@ -1577,23 +1628,34 @@ class user_add extends user
 				return FALSE;
 			}
 		}
-		if ($this->_email->CurrentValue <> "") { // Check field with unique index
-			$filter = "(email = '" . AdjustSql($this->_email->CurrentValue, $this->Dbid) . "')";
-			$rsChk = $this->loadRs($filter);
-			if ($rsChk && !$rsChk->EOF) {
-				$idxErrMsg = str_replace("%f", $this->_email->caption(), $Language->Phrase("DupIndex"));
-				$idxErrMsg = str_replace("%v", $this->_email->CurrentValue, $idxErrMsg);
-				$this->setFailureMessage($idxErrMsg);
-				$rsChk->close();
-				return FALSE;
-			}
-		}
 		if ($this->nickname->CurrentValue <> "") { // Check field with unique index
 			$filter = "(nickname = '" . AdjustSql($this->nickname->CurrentValue, $this->Dbid) . "')";
 			$rsChk = $this->loadRs($filter);
 			if ($rsChk && !$rsChk->EOF) {
 				$idxErrMsg = str_replace("%f", $this->nickname->caption(), $Language->Phrase("DupIndex"));
 				$idxErrMsg = str_replace("%v", $this->nickname->CurrentValue, $idxErrMsg);
+				$this->setFailureMessage($idxErrMsg);
+				$rsChk->close();
+				return FALSE;
+			}
+		}
+		if ($this->mobile_phone->CurrentValue <> "") { // Check field with unique index
+			$filter = "(mobile_phone = '" . AdjustSql($this->mobile_phone->CurrentValue, $this->Dbid) . "')";
+			$rsChk = $this->loadRs($filter);
+			if ($rsChk && !$rsChk->EOF) {
+				$idxErrMsg = str_replace("%f", $this->mobile_phone->caption(), $Language->Phrase("DupIndex"));
+				$idxErrMsg = str_replace("%v", $this->mobile_phone->CurrentValue, $idxErrMsg);
+				$this->setFailureMessage($idxErrMsg);
+				$rsChk->close();
+				return FALSE;
+			}
+		}
+		if ($this->session_token->CurrentValue <> "") { // Check field with unique index
+			$filter = "(session_token = '" . AdjustSql($this->session_token->CurrentValue, $this->Dbid) . "')";
+			$rsChk = $this->loadRs($filter);
+			if ($rsChk && !$rsChk->EOF) {
+				$idxErrMsg = str_replace("%f", $this->session_token->caption(), $Language->Phrase("DupIndex"));
+				$idxErrMsg = str_replace("%v", $this->session_token->CurrentValue, $idxErrMsg);
 				$this->setFailureMessage($idxErrMsg);
 				$rsChk->close();
 				return FALSE;
@@ -1612,25 +1674,19 @@ class user_add extends user
 		$rsnew = [];
 
 		// username
-		$this->username->setDbValueDef($rsnew, $this->username->CurrentValue, "", FALSE);
+		$this->username->setDbValueDef($rsnew, $this->username->CurrentValue, NULL, FALSE);
 
 		// password
-		$this->password->setDbValueDef($rsnew, $this->password->CurrentValue, "", FALSE);
-
-		// email
-		$this->_email->setDbValueDef($rsnew, $this->_email->CurrentValue, "", FALSE);
+		$this->password->setDbValueDef($rsnew, $this->password->CurrentValue, NULL, FALSE);
 
 		// gender
-		$this->gender->setDbValueDef($rsnew, $this->gender->CurrentValue, 0, FALSE);
-
-		// phone
-		$this->phone->setDbValueDef($rsnew, $this->phone->CurrentValue, "", FALSE);
+		$this->gender->setDbValueDef($rsnew, $this->gender->CurrentValue, NULL, FALSE);
 
 		// address
-		$this->address->setDbValueDef($rsnew, $this->address->CurrentValue, "", FALSE);
+		$this->address->setDbValueDef($rsnew, $this->address->CurrentValue, NULL, FALSE);
 
 		// country
-		$this->country->setDbValueDef($rsnew, $this->country->CurrentValue, "", FALSE);
+		$this->country->setDbValueDef($rsnew, $this->country->CurrentValue, NULL, FALSE);
 
 		// photo
 		if ($this->photo->Visible && !$this->photo->Upload->KeepFile) {
@@ -1643,25 +1699,37 @@ class user_add extends user
 		}
 
 		// nickname
-		$this->nickname->setDbValueDef($rsnew, $this->nickname->CurrentValue, "", FALSE);
+		$this->nickname->setDbValueDef($rsnew, $this->nickname->CurrentValue, NULL, FALSE);
 
 		// region
-		$this->region->setDbValueDef($rsnew, $this->region->CurrentValue, "", FALSE);
+		$this->region->setDbValueDef($rsnew, $this->region->CurrentValue, NULL, FALSE);
 
 		// locked
-		$this->locked->setDbValueDef($rsnew, $this->locked->CurrentValue, 0, FALSE);
+		$this->locked->setDbValueDef($rsnew, $this->locked->CurrentValue, NULL, FALSE);
 
 		// send_role
-		$this->send_role->setDbValueDef($rsnew, $this->send_role->CurrentValue, 0, FALSE);
+		$this->send_role->setDbValueDef($rsnew, $this->send_role->CurrentValue, NULL, FALSE);
 
 		// carrier_role
-		$this->carrier_role->setDbValueDef($rsnew, $this->carrier_role->CurrentValue, 0, FALSE);
+		$this->carrier_role->setDbValueDef($rsnew, $this->carrier_role->CurrentValue, NULL, FALSE);
 
 		// birthday
-		$this->birthday->setDbValueDef($rsnew, UnFormatDateTime($this->birthday->CurrentValue, 0), CurrentDate(), FALSE);
+		$this->birthday->setDbValueDef($rsnew, UnFormatDateTime($this->birthday->CurrentValue, 0), NULL, FALSE);
 
-		// activated
-		$this->activated->setDbValueDef($rsnew, $this->activated->CurrentValue, 0, FALSE);
+		// mobile_phone
+		$this->mobile_phone->setDbValueDef($rsnew, $this->mobile_phone->CurrentValue, NULL, FALSE);
+
+		// status
+		$this->status->setDbValueDef($rsnew, $this->status->CurrentValue, 0, strval($this->status->CurrentValue) == "");
+
+		// session_token
+		$this->session_token->setDbValueDef($rsnew, $this->session_token->CurrentValue, NULL, FALSE);
+
+		// createdAt
+		$this->createdAt->setDbValueDef($rsnew, UnFormatDateTime($this->createdAt->CurrentValue, 0), CurrentDate(), FALSE);
+
+		// updatedAt
+		$this->updatedAt->setDbValueDef($rsnew, UnFormatDateTime($this->updatedAt->CurrentValue, 0), CurrentDate(), FALSE);
 		if ($this->photo->Visible && !$this->photo->Upload->KeepFile) {
 			$oldFiles = EmptyValue($this->photo->Upload->DbValue) ? array() : array($this->photo->Upload->DbValue);
 			if (!EmptyValue($this->photo->Upload->FileName)) {
@@ -1697,7 +1765,7 @@ class user_add extends user
 				}
 				$this->photo->Upload->DbValue = empty($oldFiles) ? "" : implode(MULTIPLE_UPLOAD_SEPARATOR, $oldFiles);
 				$this->photo->Upload->FileName = implode(MULTIPLE_UPLOAD_SEPARATOR, $newFiles);
-				$this->photo->setDbValueDef($rsnew, $this->photo->Upload->FileName, "", FALSE);
+				$this->photo->setDbValueDef($rsnew, $this->photo->Upload->FileName, NULL, FALSE);
 			}
 		}
 
@@ -1755,16 +1823,6 @@ class user_add extends user
 		// Add detail records
 		if ($addRow) {
 			$detailTblVar = explode(",", $this->getCurrentDetailTable());
-			if (in_array("image", $detailTblVar) && $GLOBALS["image"]->DetailAdd) {
-				$GLOBALS["image"]->_userid->setSessionValue($this->id->CurrentValue); // Set master key
-				if (!isset($GLOBALS["image_grid"]))
-					$GLOBALS["image_grid"] = new image_grid(); // Get detail page object
-				$Security->loadCurrentUserLevel($this->ProjectID . "image"); // Load user level of detail table
-				$addRow = $GLOBALS["image_grid"]->gridInsert();
-				$Security->loadCurrentUserLevel($this->ProjectID . $this->TableName); // Restore user level of master table
-				if (!$addRow)
-					$GLOBALS["image"]->_userid->setSessionValue(""); // Clear master key if insert failed
-			}
 			if (in_array("trip_info", $detailTblVar) && $GLOBALS["trip_info"]->DetailAdd) {
 				$GLOBALS["trip_info"]->user_id->setSessionValue($this->id->CurrentValue); // Set master key
 				if (!isset($GLOBALS["trip_info_grid"]))
@@ -1785,16 +1843,15 @@ class user_add extends user
 				if (!$addRow)
 					$GLOBALS["parcel_info"]->user_id->setSessionValue(""); // Clear master key if insert failed
 			}
-			if (in_array("orders", $detailTblVar) && $GLOBALS["orders"]->DetailAdd) {
-				$GLOBALS["orders"]->_userid->setSessionValue($this->id->CurrentValue); // Set master key
-				$GLOBALS["orders"]->carrier_id->setSessionValue($this->id->CurrentValue); // Set master key
-				if (!isset($GLOBALS["orders_grid"]))
-					$GLOBALS["orders_grid"] = new orders_grid(); // Get detail page object
-				$Security->loadCurrentUserLevel($this->ProjectID . "orders"); // Load user level of detail table
-				$addRow = $GLOBALS["orders_grid"]->gridInsert();
+			if (in_array("order", $detailTblVar) && $GLOBALS["order"]->DetailAdd) {
+				$GLOBALS["order"]->user_id->setSessionValue($this->id->CurrentValue); // Set master key
+				if (!isset($GLOBALS["order_grid"]))
+					$GLOBALS["order_grid"] = new order_grid(); // Get detail page object
+				$Security->loadCurrentUserLevel($this->ProjectID . "order"); // Load user level of detail table
+				$addRow = $GLOBALS["order_grid"]->gridInsert();
 				$Security->loadCurrentUserLevel($this->ProjectID . $this->TableName); // Restore user level of master table
 				if (!$addRow)
-					$GLOBALS["orders"]->carrier_id->setSessionValue(""); // Clear master key if insert failed
+					$GLOBALS["order"]->user_id->setSessionValue(""); // Clear master key if insert failed
 			}
 		}
 
@@ -1840,29 +1897,6 @@ class user_add extends user
 		}
 		if ($detailTblVar <> "") {
 			$detailTblVar = explode(",", $detailTblVar);
-			if (in_array("image", $detailTblVar)) {
-				if (!isset($GLOBALS["image_grid"]))
-					$GLOBALS["image_grid"] = new image_grid();
-				if ($GLOBALS["image_grid"]->DetailAdd) {
-					if ($this->CopyRecord)
-						$GLOBALS["image_grid"]->CurrentMode = "copy";
-					else
-						$GLOBALS["image_grid"]->CurrentMode = "add";
-					if ($this->isConfirm())
-						$GLOBALS["image_grid"]->CurrentAction = "confirm";
-					else
-						$GLOBALS["image_grid"]->CurrentAction = "gridadd";
-					if ($this->isCancel())
-						$GLOBALS["image_grid"]->EventCancelled = TRUE;
-
-					// Save current master table to detail table
-					$GLOBALS["image_grid"]->setCurrentMasterTable($this->TableVar);
-					$GLOBALS["image_grid"]->setStartRecordNumber(1);
-					$GLOBALS["image_grid"]->_userid->IsDetailKey = TRUE;
-					$GLOBALS["image_grid"]->_userid->CurrentValue = $this->id->CurrentValue;
-					$GLOBALS["image_grid"]->_userid->setSessionValue($GLOBALS["image_grid"]->_userid->CurrentValue);
-				}
-			}
 			if (in_array("trip_info", $detailTblVar)) {
 				if (!isset($GLOBALS["trip_info_grid"]))
 					$GLOBALS["trip_info_grid"] = new trip_info_grid();
@@ -1909,30 +1943,27 @@ class user_add extends user
 					$GLOBALS["parcel_info_grid"]->user_id->setSessionValue($GLOBALS["parcel_info_grid"]->user_id->CurrentValue);
 				}
 			}
-			if (in_array("orders", $detailTblVar)) {
-				if (!isset($GLOBALS["orders_grid"]))
-					$GLOBALS["orders_grid"] = new orders_grid();
-				if ($GLOBALS["orders_grid"]->DetailAdd) {
+			if (in_array("order", $detailTblVar)) {
+				if (!isset($GLOBALS["order_grid"]))
+					$GLOBALS["order_grid"] = new order_grid();
+				if ($GLOBALS["order_grid"]->DetailAdd) {
 					if ($this->CopyRecord)
-						$GLOBALS["orders_grid"]->CurrentMode = "copy";
+						$GLOBALS["order_grid"]->CurrentMode = "copy";
 					else
-						$GLOBALS["orders_grid"]->CurrentMode = "add";
+						$GLOBALS["order_grid"]->CurrentMode = "add";
 					if ($this->isConfirm())
-						$GLOBALS["orders_grid"]->CurrentAction = "confirm";
+						$GLOBALS["order_grid"]->CurrentAction = "confirm";
 					else
-						$GLOBALS["orders_grid"]->CurrentAction = "gridadd";
+						$GLOBALS["order_grid"]->CurrentAction = "gridadd";
 					if ($this->isCancel())
-						$GLOBALS["orders_grid"]->EventCancelled = TRUE;
+						$GLOBALS["order_grid"]->EventCancelled = TRUE;
 
 					// Save current master table to detail table
-					$GLOBALS["orders_grid"]->setCurrentMasterTable($this->TableVar);
-					$GLOBALS["orders_grid"]->setStartRecordNumber(1);
-					$GLOBALS["orders_grid"]->_userid->IsDetailKey = TRUE;
-					$GLOBALS["orders_grid"]->_userid->CurrentValue = $this->id->CurrentValue;
-					$GLOBALS["orders_grid"]->_userid->setSessionValue($GLOBALS["orders_grid"]->_userid->CurrentValue);
-					$GLOBALS["orders_grid"]->carrier_id->IsDetailKey = TRUE;
-					$GLOBALS["orders_grid"]->carrier_id->CurrentValue = $this->id->CurrentValue;
-					$GLOBALS["orders_grid"]->carrier_id->setSessionValue($GLOBALS["orders_grid"]->carrier_id->CurrentValue);
+					$GLOBALS["order_grid"]->setCurrentMasterTable($this->TableVar);
+					$GLOBALS["order_grid"]->setStartRecordNumber(1);
+					$GLOBALS["order_grid"]->user_id->IsDetailKey = TRUE;
+					$GLOBALS["order_grid"]->user_id->CurrentValue = $this->id->CurrentValue;
+					$GLOBALS["order_grid"]->user_id->setSessionValue($GLOBALS["order_grid"]->user_id->CurrentValue);
 				}
 			}
 		}
@@ -1951,13 +1982,6 @@ class user_add extends user
 		}
 		if ($detailTblVar <> "") {
 			$detailTblVar = explode(",", $detailTblVar);
-			if (in_array("image", $detailTblVar)) {
-				if (!isset($GLOBALS["image_grid"]))
-					$GLOBALS["image_grid"] = new image_grid();
-				if ($GLOBALS["image_grid"]->DetailAdd) {
-					$GLOBALS["image_grid"]->CurrentAction = "gridadd";
-				}
-			}
 			if (in_array("trip_info", $detailTblVar)) {
 				if (!isset($GLOBALS["trip_info_grid"]))
 					$GLOBALS["trip_info_grid"] = new trip_info_grid();
@@ -1972,11 +1996,11 @@ class user_add extends user
 					$GLOBALS["parcel_info_grid"]->CurrentAction = "gridadd";
 				}
 			}
-			if (in_array("orders", $detailTblVar)) {
-				if (!isset($GLOBALS["orders_grid"]))
-					$GLOBALS["orders_grid"] = new orders_grid();
-				if ($GLOBALS["orders_grid"]->DetailAdd) {
-					$GLOBALS["orders_grid"]->CurrentAction = "gridadd";
+			if (in_array("order", $detailTblVar)) {
+				if (!isset($GLOBALS["order_grid"]))
+					$GLOBALS["order_grid"] = new order_grid();
+				if ($GLOBALS["order_grid"]->DetailAdd) {
+					$GLOBALS["order_grid"]->CurrentAction = "gridadd";
 				}
 			}
 		}
@@ -1998,10 +2022,9 @@ class user_add extends user
 	{
 		$pages = new SubPages();
 		$pages->Style = "pills";
-		$pages->add('image');
 		$pages->add('trip_info');
 		$pages->add('parcel_info');
-		$pages->add('orders');
+		$pages->add('order');
 		$this->DetailPages = $pages;
 	}
 

@@ -54,10 +54,6 @@ fimagesearch.Form_CustomValidate = function(fobj) { // DO NOT CHANGE THIS LINE!
 fimagesearch.validateRequired = <?php echo json_encode(CLIENT_VALIDATE) ?>;
 
 // Dynamic selection lists
-fimagesearch.lists["x__userid"] = <?php echo $image_search->_userid->Lookup->toClientList() ?>;
-fimagesearch.lists["x__userid"].options = <?php echo JsonEncode($image_search->_userid->lookupOptions()) ?>;
-fimagesearch.autoSuggests["x__userid"] = <?php echo json_encode(["data" => "ajax=autosuggest"]) ?>;
-
 // Form object for search
 // Validate function for search
 
@@ -69,9 +65,18 @@ fimagesearch.validate = function(fobj) {
 	elm = this.getElements("x" + infix + "_id");
 	if (elm && !ew.checkInteger(elm.value))
 		return this.onError(elm, "<?php echo JsEncode($image->id->errorMessage()) ?>");
-	elm = this.getElements("x" + infix + "__userid");
+	elm = this.getElements("x" + infix + "_user_id");
 	if (elm && !ew.checkInteger(elm.value))
-		return this.onError(elm, "<?php echo JsEncode($image->_userid->errorMessage()) ?>");
+		return this.onError(elm, "<?php echo JsEncode($image->user_id->errorMessage()) ?>");
+	elm = this.getElements("x" + infix + "_confirmed");
+	if (elm && !ew.checkInteger(elm.value))
+		return this.onError(elm, "<?php echo JsEncode($image->confirmed->errorMessage()) ?>");
+	elm = this.getElements("x" + infix + "_createdAt");
+	if (elm && !ew.checkDateDef(elm.value))
+		return this.onError(elm, "<?php echo JsEncode($image->createdAt->errorMessage()) ?>");
+	elm = this.getElements("x" + infix + "_updatedAt");
+	if (elm && !ew.checkDateDef(elm.value))
+		return this.onError(elm, "<?php echo JsEncode($image->updatedAt->errorMessage()) ?>");
 
 	// Fire Form_CustomValidate event
 	if (!this.Form_CustomValidate(fobj))
@@ -107,41 +112,6 @@ $image_search->showMessage();
 		</div></div>
 	</div>
 <?php } ?>
-<?php if ($image->name->Visible) { // name ?>
-	<div id="r_name" class="form-group row">
-		<label for="x_name" class="<?php echo $image_search->LeftColumnClass ?>"><span id="elh_image_name"><?php echo $image->name->caption() ?></span>
-		<span class="ew-search-operator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_name" id="z_name" value="LIKE"></span>
-		</label>
-		<div class="<?php echo $image_search->RightColumnClass ?>"><div<?php echo $image->name->cellAttributes() ?>>
-			<span id="el_image_name">
-<input type="text" data-table="image" data-field="x_name" name="x_name" id="x_name" size="30" maxlength="100" placeholder="<?php echo HtmlEncode($image->name->getPlaceHolder()) ?>" value="<?php echo $image->name->EditValue ?>"<?php echo $image->name->editAttributes() ?>>
-</span>
-		</div></div>
-	</div>
-<?php } ?>
-<?php if ($image->_userid->Visible) { // userid ?>
-	<div id="r__userid" class="form-group row">
-		<label class="<?php echo $image_search->LeftColumnClass ?>"><span id="elh_image__userid"><?php echo $image->_userid->caption() ?></span>
-		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z__userid" id="z__userid" value="="></span>
-		</label>
-		<div class="<?php echo $image_search->RightColumnClass ?>"><div<?php echo $image->_userid->cellAttributes() ?>>
-			<span id="el_image__userid">
-<?php
-$wrkonchange = "" . trim(@$image->_userid->EditAttrs["onchange"]);
-if (trim($wrkonchange) <> "") $wrkonchange = " onchange=\"" . JsEncode($wrkonchange) . "\"";
-$image->_userid->EditAttrs["onchange"] = "";
-?>
-<span id="as_x__userid" class="text-nowrap" style="z-index: 8970">
-	<input type="text" class="form-control" name="sv_x__userid" id="sv_x__userid" value="<?php echo RemoveHtml($image->_userid->EditValue) ?>" size="30" placeholder="<?php echo HtmlEncode($image->_userid->getPlaceHolder()) ?>" data-placeholder="<?php echo HtmlEncode($image->_userid->getPlaceHolder()) ?>"<?php echo $image->_userid->editAttributes() ?>>
-</span>
-<input type="hidden" data-table="image" data-field="x__userid" data-value-separator="<?php echo $image->_userid->displayValueSeparatorAttribute() ?>" name="x__userid" id="x__userid" value="<?php echo HtmlEncode($image->_userid->AdvancedSearch->SearchValue) ?>"<?php echo $wrkonchange ?>>
-<script>
-fimagesearch.createAutoSuggest({"id":"x__userid","forceSelect":false});
-</script>
-</span>
-		</div></div>
-	</div>
-<?php } ?>
 <?php if ($image->description->Visible) { // description ?>
 	<div id="r_description" class="form-group row">
 		<label for="x_description" class="<?php echo $image_search->LeftColumnClass ?>"><span id="elh_image_description"><?php echo $image->description->caption() ?></span>
@@ -150,6 +120,76 @@ fimagesearch.createAutoSuggest({"id":"x__userid","forceSelect":false});
 		<div class="<?php echo $image_search->RightColumnClass ?>"><div<?php echo $image->description->cellAttributes() ?>>
 			<span id="el_image_description">
 <input type="text" data-table="image" data-field="x_description" name="x_description" id="x_description" size="30" maxlength="100" placeholder="<?php echo HtmlEncode($image->description->getPlaceHolder()) ?>" value="<?php echo $image->description->EditValue ?>"<?php echo $image->description->editAttributes() ?>>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($image->uuid->Visible) { // uuid ?>
+	<div id="r_uuid" class="form-group row">
+		<label for="x_uuid" class="<?php echo $image_search->LeftColumnClass ?>"><span id="elh_image_uuid"><?php echo $image->uuid->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_uuid" id="z_uuid" value="LIKE"></span>
+		</label>
+		<div class="<?php echo $image_search->RightColumnClass ?>"><div<?php echo $image->uuid->cellAttributes() ?>>
+			<span id="el_image_uuid">
+<input type="text" data-table="image" data-field="x_uuid" name="x_uuid" id="x_uuid" size="30" maxlength="50" placeholder="<?php echo HtmlEncode($image->uuid->getPlaceHolder()) ?>" value="<?php echo $image->uuid->EditValue ?>"<?php echo $image->uuid->editAttributes() ?>>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($image->user_id->Visible) { // user_id ?>
+	<div id="r_user_id" class="form-group row">
+		<label for="x_user_id" class="<?php echo $image_search->LeftColumnClass ?>"><span id="elh_image_user_id"><?php echo $image->user_id->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_user_id" id="z_user_id" value="="></span>
+		</label>
+		<div class="<?php echo $image_search->RightColumnClass ?>"><div<?php echo $image->user_id->cellAttributes() ?>>
+			<span id="el_image_user_id">
+<input type="text" data-table="image" data-field="x_user_id" name="x_user_id" id="x_user_id" size="30" placeholder="<?php echo HtmlEncode($image->user_id->getPlaceHolder()) ?>" value="<?php echo $image->user_id->EditValue ?>"<?php echo $image->user_id->editAttributes() ?>>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($image->confirmed->Visible) { // confirmed ?>
+	<div id="r_confirmed" class="form-group row">
+		<label for="x_confirmed" class="<?php echo $image_search->LeftColumnClass ?>"><span id="elh_image_confirmed"><?php echo $image->confirmed->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_confirmed" id="z_confirmed" value="="></span>
+		</label>
+		<div class="<?php echo $image_search->RightColumnClass ?>"><div<?php echo $image->confirmed->cellAttributes() ?>>
+			<span id="el_image_confirmed">
+<input type="text" data-table="image" data-field="x_confirmed" name="x_confirmed" id="x_confirmed" size="30" placeholder="<?php echo HtmlEncode($image->confirmed->getPlaceHolder()) ?>" value="<?php echo $image->confirmed->EditValue ?>"<?php echo $image->confirmed->editAttributes() ?>>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($image->createdAt->Visible) { // createdAt ?>
+	<div id="r_createdAt" class="form-group row">
+		<label for="x_createdAt" class="<?php echo $image_search->LeftColumnClass ?>"><span id="elh_image_createdAt"><?php echo $image->createdAt->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_createdAt" id="z_createdAt" value="="></span>
+		</label>
+		<div class="<?php echo $image_search->RightColumnClass ?>"><div<?php echo $image->createdAt->cellAttributes() ?>>
+			<span id="el_image_createdAt">
+<input type="text" data-table="image" data-field="x_createdAt" name="x_createdAt" id="x_createdAt" placeholder="<?php echo HtmlEncode($image->createdAt->getPlaceHolder()) ?>" value="<?php echo $image->createdAt->EditValue ?>"<?php echo $image->createdAt->editAttributes() ?>>
+<?php if (!$image->createdAt->ReadOnly && !$image->createdAt->Disabled && !isset($image->createdAt->EditAttrs["readonly"]) && !isset($image->createdAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("fimagesearch", "x_createdAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($image->updatedAt->Visible) { // updatedAt ?>
+	<div id="r_updatedAt" class="form-group row">
+		<label for="x_updatedAt" class="<?php echo $image_search->LeftColumnClass ?>"><span id="elh_image_updatedAt"><?php echo $image->updatedAt->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_updatedAt" id="z_updatedAt" value="="></span>
+		</label>
+		<div class="<?php echo $image_search->RightColumnClass ?>"><div<?php echo $image->updatedAt->cellAttributes() ?>>
+			<span id="el_image_updatedAt">
+<input type="text" data-table="image" data-field="x_updatedAt" name="x_updatedAt" id="x_updatedAt" placeholder="<?php echo HtmlEncode($image->updatedAt->getPlaceHolder()) ?>" value="<?php echo $image->updatedAt->EditValue ?>"<?php echo $image->updatedAt->editAttributes() ?>>
+<?php if (!$image->updatedAt->ReadOnly && !$image->updatedAt->Disabled && !isset($image->updatedAt->EditAttrs["readonly"]) && !isset($image->updatedAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("fimagesearch", "x_updatedAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
 </span>
 		</div></div>
 	</div>

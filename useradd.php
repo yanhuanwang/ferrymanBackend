@@ -64,23 +64,10 @@ fuseradd.validate = function() {
 			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
 				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $user->password->caption(), $user->password->RequiredErrorMessage)) ?>");
 		<?php } ?>
-		<?php if ($user_add->_email->Required) { ?>
-			elm = this.getElements("x" + infix + "__email");
-			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
-				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $user->_email->caption(), $user->_email->RequiredErrorMessage)) ?>");
-		<?php } ?>
-			elm = this.getElements("x" + infix + "__email");
-			if (elm && !ew.checkEmail(elm.value))
-				return this.onError(elm, "<?php echo JsEncode($user->_email->errorMessage()) ?>");
 		<?php if ($user_add->gender->Required) { ?>
 			elm = this.getElements("x" + infix + "_gender");
 			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
 				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $user->gender->caption(), $user->gender->RequiredErrorMessage)) ?>");
-		<?php } ?>
-		<?php if ($user_add->phone->Required) { ?>
-			elm = this.getElements("x" + infix + "_phone");
-			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
-				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $user->phone->caption(), $user->phone->RequiredErrorMessage)) ?>");
 		<?php } ?>
 		<?php if ($user_add->address->Required) { ?>
 			elm = this.getElements("x" + infix + "_address");
@@ -131,14 +118,40 @@ fuseradd.validate = function() {
 			elm = this.getElements("x" + infix + "_birthday");
 			if (elm && !ew.checkDateDef(elm.value))
 				return this.onError(elm, "<?php echo JsEncode($user->birthday->errorMessage()) ?>");
-		<?php if ($user_add->activated->Required) { ?>
-			elm = this.getElements("x" + infix + "_activated");
+		<?php if ($user_add->mobile_phone->Required) { ?>
+			elm = this.getElements("x" + infix + "_mobile_phone");
 			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
-				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $user->activated->caption(), $user->activated->RequiredErrorMessage)) ?>");
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $user->mobile_phone->caption(), $user->mobile_phone->RequiredErrorMessage)) ?>");
 		<?php } ?>
-			elm = this.getElements("x" + infix + "_activated");
+		<?php if ($user_add->status->Required) { ?>
+			elm = this.getElements("x" + infix + "_status");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $user->status->caption(), $user->status->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_status");
 			if (elm && !ew.checkInteger(elm.value))
-				return this.onError(elm, "<?php echo JsEncode($user->activated->errorMessage()) ?>");
+				return this.onError(elm, "<?php echo JsEncode($user->status->errorMessage()) ?>");
+		<?php if ($user_add->session_token->Required) { ?>
+			elm = this.getElements("x" + infix + "_session_token");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $user->session_token->caption(), $user->session_token->RequiredErrorMessage)) ?>");
+		<?php } ?>
+		<?php if ($user_add->createdAt->Required) { ?>
+			elm = this.getElements("x" + infix + "_createdAt");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $user->createdAt->caption(), $user->createdAt->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_createdAt");
+			if (elm && !ew.checkDateDef(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($user->createdAt->errorMessage()) ?>");
+		<?php if ($user_add->updatedAt->Required) { ?>
+			elm = this.getElements("x" + infix + "_updatedAt");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $user->updatedAt->caption(), $user->updatedAt->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_updatedAt");
+			if (elm && !ew.checkDateDef(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($user->updatedAt->errorMessage()) ?>");
 
 			// Fire Form_CustomValidate event
 			if (!this.Form_CustomValidate(fobj))
@@ -235,24 +248,6 @@ $user_add->showMessage();
 <?php echo $user->password->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
-<?php if ($user->_email->Visible) { // email ?>
-	<div id="r__email" class="form-group row">
-		<label id="elh_user__email" for="x__email" class="<?php echo $user_add->LeftColumnClass ?>"><?php echo $user->_email->caption() ?><?php echo ($user->_email->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
-		<div class="<?php echo $user_add->RightColumnClass ?>"><div<?php echo $user->_email->cellAttributes() ?>>
-<?php if (!$user->isConfirm()) { ?>
-<span id="el_user__email">
-<input type="text" data-table="user" data-field="x__email" name="x__email" id="x__email" size="30" maxlength="100" placeholder="<?php echo HtmlEncode($user->_email->getPlaceHolder()) ?>" value="<?php echo $user->_email->EditValue ?>"<?php echo $user->_email->editAttributes() ?>>
-</span>
-<?php } else { ?>
-<span id="el_user__email">
-<span<?php echo $user->_email->viewAttributes() ?>>
-<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($user->_email->ViewValue) ?>"></span>
-</span>
-<input type="hidden" data-table="user" data-field="x__email" name="x__email" id="x__email" value="<?php echo HtmlEncode($user->_email->FormValue) ?>">
-<?php } ?>
-<?php echo $user->_email->CustomMsg ?></div></div>
-	</div>
-<?php } ?>
 <?php if ($user->gender->Visible) { // gender ?>
 	<div id="r_gender" class="form-group row">
 		<label id="elh_user_gender" for="x_gender" class="<?php echo $user_add->LeftColumnClass ?>"><?php echo $user->gender->caption() ?><?php echo ($user->gender->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
@@ -273,24 +268,6 @@ $user_add->showMessage();
 <input type="hidden" data-table="user" data-field="x_gender" name="x_gender" id="x_gender" value="<?php echo HtmlEncode($user->gender->FormValue) ?>">
 <?php } ?>
 <?php echo $user->gender->CustomMsg ?></div></div>
-	</div>
-<?php } ?>
-<?php if ($user->phone->Visible) { // phone ?>
-	<div id="r_phone" class="form-group row">
-		<label id="elh_user_phone" for="x_phone" class="<?php echo $user_add->LeftColumnClass ?>"><?php echo $user->phone->caption() ?><?php echo ($user->phone->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
-		<div class="<?php echo $user_add->RightColumnClass ?>"><div<?php echo $user->phone->cellAttributes() ?>>
-<?php if (!$user->isConfirm()) { ?>
-<span id="el_user_phone">
-<input type="text" data-table="user" data-field="x_phone" name="x_phone" id="x_phone" size="30" maxlength="100" placeholder="<?php echo HtmlEncode($user->phone->getPlaceHolder()) ?>" value="<?php echo $user->phone->EditValue ?>"<?php echo $user->phone->editAttributes() ?>>
-</span>
-<?php } else { ?>
-<span id="el_user_phone">
-<span<?php echo $user->phone->viewAttributes() ?>>
-<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($user->phone->ViewValue) ?>"></span>
-</span>
-<input type="hidden" data-table="user" data-field="x_phone" name="x_phone" id="x_phone" value="<?php echo HtmlEncode($user->phone->FormValue) ?>">
-<?php } ?>
-<?php echo $user->phone->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
 <?php if ($user->address->Visible) { // address ?>
@@ -475,22 +452,104 @@ ew.createDateTimePicker("fuseradd", "x_birthday", {"ignoreReadonly":true,"useCur
 <?php echo $user->birthday->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
-<?php if ($user->activated->Visible) { // activated ?>
-	<div id="r_activated" class="form-group row">
-		<label id="elh_user_activated" for="x_activated" class="<?php echo $user_add->LeftColumnClass ?>"><?php echo $user->activated->caption() ?><?php echo ($user->activated->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
-		<div class="<?php echo $user_add->RightColumnClass ?>"><div<?php echo $user->activated->cellAttributes() ?>>
+<?php if ($user->mobile_phone->Visible) { // mobile_phone ?>
+	<div id="r_mobile_phone" class="form-group row">
+		<label id="elh_user_mobile_phone" for="x_mobile_phone" class="<?php echo $user_add->LeftColumnClass ?>"><?php echo $user->mobile_phone->caption() ?><?php echo ($user->mobile_phone->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
+		<div class="<?php echo $user_add->RightColumnClass ?>"><div<?php echo $user->mobile_phone->cellAttributes() ?>>
 <?php if (!$user->isConfirm()) { ?>
-<span id="el_user_activated">
-<input type="text" data-table="user" data-field="x_activated" name="x_activated" id="x_activated" size="30" placeholder="<?php echo HtmlEncode($user->activated->getPlaceHolder()) ?>" value="<?php echo $user->activated->EditValue ?>"<?php echo $user->activated->editAttributes() ?>>
+<span id="el_user_mobile_phone">
+<input type="text" data-table="user" data-field="x_mobile_phone" name="x_mobile_phone" id="x_mobile_phone" size="30" maxlength="100" placeholder="<?php echo HtmlEncode($user->mobile_phone->getPlaceHolder()) ?>" value="<?php echo $user->mobile_phone->EditValue ?>"<?php echo $user->mobile_phone->editAttributes() ?>>
 </span>
 <?php } else { ?>
-<span id="el_user_activated">
-<span<?php echo $user->activated->viewAttributes() ?>>
-<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($user->activated->ViewValue) ?>"></span>
+<span id="el_user_mobile_phone">
+<span<?php echo $user->mobile_phone->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($user->mobile_phone->ViewValue) ?>"></span>
 </span>
-<input type="hidden" data-table="user" data-field="x_activated" name="x_activated" id="x_activated" value="<?php echo HtmlEncode($user->activated->FormValue) ?>">
+<input type="hidden" data-table="user" data-field="x_mobile_phone" name="x_mobile_phone" id="x_mobile_phone" value="<?php echo HtmlEncode($user->mobile_phone->FormValue) ?>">
 <?php } ?>
-<?php echo $user->activated->CustomMsg ?></div></div>
+<?php echo $user->mobile_phone->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($user->status->Visible) { // status ?>
+	<div id="r_status" class="form-group row">
+		<label id="elh_user_status" for="x_status" class="<?php echo $user_add->LeftColumnClass ?>"><?php echo $user->status->caption() ?><?php echo ($user->status->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
+		<div class="<?php echo $user_add->RightColumnClass ?>"><div<?php echo $user->status->cellAttributes() ?>>
+<?php if (!$user->isConfirm()) { ?>
+<span id="el_user_status">
+<input type="text" data-table="user" data-field="x_status" name="x_status" id="x_status" size="30" placeholder="<?php echo HtmlEncode($user->status->getPlaceHolder()) ?>" value="<?php echo $user->status->EditValue ?>"<?php echo $user->status->editAttributes() ?>>
+</span>
+<?php } else { ?>
+<span id="el_user_status">
+<span<?php echo $user->status->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($user->status->ViewValue) ?>"></span>
+</span>
+<input type="hidden" data-table="user" data-field="x_status" name="x_status" id="x_status" value="<?php echo HtmlEncode($user->status->FormValue) ?>">
+<?php } ?>
+<?php echo $user->status->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($user->session_token->Visible) { // session_token ?>
+	<div id="r_session_token" class="form-group row">
+		<label id="elh_user_session_token" for="x_session_token" class="<?php echo $user_add->LeftColumnClass ?>"><?php echo $user->session_token->caption() ?><?php echo ($user->session_token->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
+		<div class="<?php echo $user_add->RightColumnClass ?>"><div<?php echo $user->session_token->cellAttributes() ?>>
+<?php if (!$user->isConfirm()) { ?>
+<span id="el_user_session_token">
+<input type="text" data-table="user" data-field="x_session_token" name="x_session_token" id="x_session_token" size="30" maxlength="255" placeholder="<?php echo HtmlEncode($user->session_token->getPlaceHolder()) ?>" value="<?php echo $user->session_token->EditValue ?>"<?php echo $user->session_token->editAttributes() ?>>
+</span>
+<?php } else { ?>
+<span id="el_user_session_token">
+<span<?php echo $user->session_token->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($user->session_token->ViewValue) ?>"></span>
+</span>
+<input type="hidden" data-table="user" data-field="x_session_token" name="x_session_token" id="x_session_token" value="<?php echo HtmlEncode($user->session_token->FormValue) ?>">
+<?php } ?>
+<?php echo $user->session_token->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($user->createdAt->Visible) { // createdAt ?>
+	<div id="r_createdAt" class="form-group row">
+		<label id="elh_user_createdAt" for="x_createdAt" class="<?php echo $user_add->LeftColumnClass ?>"><?php echo $user->createdAt->caption() ?><?php echo ($user->createdAt->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
+		<div class="<?php echo $user_add->RightColumnClass ?>"><div<?php echo $user->createdAt->cellAttributes() ?>>
+<?php if (!$user->isConfirm()) { ?>
+<span id="el_user_createdAt">
+<input type="text" data-table="user" data-field="x_createdAt" name="x_createdAt" id="x_createdAt" placeholder="<?php echo HtmlEncode($user->createdAt->getPlaceHolder()) ?>" value="<?php echo $user->createdAt->EditValue ?>"<?php echo $user->createdAt->editAttributes() ?>>
+<?php if (!$user->createdAt->ReadOnly && !$user->createdAt->Disabled && !isset($user->createdAt->EditAttrs["readonly"]) && !isset($user->createdAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("fuseradd", "x_createdAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<?php } else { ?>
+<span id="el_user_createdAt">
+<span<?php echo $user->createdAt->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($user->createdAt->ViewValue) ?>"></span>
+</span>
+<input type="hidden" data-table="user" data-field="x_createdAt" name="x_createdAt" id="x_createdAt" value="<?php echo HtmlEncode($user->createdAt->FormValue) ?>">
+<?php } ?>
+<?php echo $user->createdAt->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($user->updatedAt->Visible) { // updatedAt ?>
+	<div id="r_updatedAt" class="form-group row">
+		<label id="elh_user_updatedAt" for="x_updatedAt" class="<?php echo $user_add->LeftColumnClass ?>"><?php echo $user->updatedAt->caption() ?><?php echo ($user->updatedAt->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
+		<div class="<?php echo $user_add->RightColumnClass ?>"><div<?php echo $user->updatedAt->cellAttributes() ?>>
+<?php if (!$user->isConfirm()) { ?>
+<span id="el_user_updatedAt">
+<input type="text" data-table="user" data-field="x_updatedAt" name="x_updatedAt" id="x_updatedAt" placeholder="<?php echo HtmlEncode($user->updatedAt->getPlaceHolder()) ?>" value="<?php echo $user->updatedAt->EditValue ?>"<?php echo $user->updatedAt->editAttributes() ?>>
+<?php if (!$user->updatedAt->ReadOnly && !$user->updatedAt->Disabled && !isset($user->updatedAt->EditAttrs["readonly"]) && !isset($user->updatedAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("fuseradd", "x_updatedAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<?php } else { ?>
+<span id="el_user_updatedAt">
+<span<?php echo $user->updatedAt->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($user->updatedAt->ViewValue) ?>"></span>
+</span>
+<input type="hidden" data-table="user" data-field="x_updatedAt" name="x_updatedAt" id="x_updatedAt" value="<?php echo HtmlEncode($user->updatedAt->FormValue) ?>">
+<?php } ?>
+<?php echo $user->updatedAt->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
 </div><!-- /page* -->
@@ -502,16 +561,6 @@ ew.createDateTimePicker("fuseradd", "x_birthday", {"ignoreReadonly":true,"useCur
 <div class="ew-detail-pages"><!-- detail-pages -->
 <div class="ew-nav-tabs" id="user_add_details"><!-- tabs -->
 	<ul class="<?php echo $user_add->DetailPages->navStyle() ?>"><!-- .nav -->
-<?php
-	if (in_array("image", explode(",", $user->getCurrentDetailTable())) && $image->DetailAdd) {
-		if ($firstActiveDetailTable == "" || $firstActiveDetailTable == "image") {
-			$firstActiveDetailTable = "image";
-		}
-?>
-		<li class="nav-item"><a class="nav-link<?php echo $user_add->DetailPages->pageStyle("image") ?>" href="#tab_image" data-toggle="tab"><?php echo $Language->TablePhrase("image", "TblCaption") ?></a></li>
-<?php
-	}
-?>
 <?php
 	if (in_array("trip_info", explode(",", $user->getCurrentDetailTable())) && $trip_info->DetailAdd) {
 		if ($firstActiveDetailTable == "" || $firstActiveDetailTable == "trip_info") {
@@ -533,26 +582,17 @@ ew.createDateTimePicker("fuseradd", "x_birthday", {"ignoreReadonly":true,"useCur
 	}
 ?>
 <?php
-	if (in_array("orders", explode(",", $user->getCurrentDetailTable())) && $orders->DetailAdd) {
-		if ($firstActiveDetailTable == "" || $firstActiveDetailTable == "orders") {
-			$firstActiveDetailTable = "orders";
+	if (in_array("order", explode(",", $user->getCurrentDetailTable())) && $order->DetailAdd) {
+		if ($firstActiveDetailTable == "" || $firstActiveDetailTable == "order") {
+			$firstActiveDetailTable = "order";
 		}
 ?>
-		<li class="nav-item"><a class="nav-link<?php echo $user_add->DetailPages->pageStyle("orders") ?>" href="#tab_orders" data-toggle="tab"><?php echo $Language->TablePhrase("orders", "TblCaption") ?></a></li>
+		<li class="nav-item"><a class="nav-link<?php echo $user_add->DetailPages->pageStyle("order") ?>" href="#tab_order" data-toggle="tab"><?php echo $Language->TablePhrase("order", "TblCaption") ?></a></li>
 <?php
 	}
 ?>
 	</ul><!-- /.nav -->
 	<div class="tab-content"><!-- .tab-content -->
-<?php
-	if (in_array("image", explode(",", $user->getCurrentDetailTable())) && $image->DetailAdd) {
-		if ($firstActiveDetailTable == "" || $firstActiveDetailTable == "image")
-			$firstActiveDetailTable = "image";
-?>
-		<div class="tab-pane<?php echo $user_add->DetailPages->pageStyle("image") ?>" id="tab_image"><!-- page* -->
-<?php include_once "imagegrid.php" ?>
-		</div><!-- /page* -->
-<?php } ?>
 <?php
 	if (in_array("trip_info", explode(",", $user->getCurrentDetailTable())) && $trip_info->DetailAdd) {
 		if ($firstActiveDetailTable == "" || $firstActiveDetailTable == "trip_info")
@@ -572,12 +612,12 @@ ew.createDateTimePicker("fuseradd", "x_birthday", {"ignoreReadonly":true,"useCur
 		</div><!-- /page* -->
 <?php } ?>
 <?php
-	if (in_array("orders", explode(",", $user->getCurrentDetailTable())) && $orders->DetailAdd) {
-		if ($firstActiveDetailTable == "" || $firstActiveDetailTable == "orders")
-			$firstActiveDetailTable = "orders";
+	if (in_array("order", explode(",", $user->getCurrentDetailTable())) && $order->DetailAdd) {
+		if ($firstActiveDetailTable == "" || $firstActiveDetailTable == "order")
+			$firstActiveDetailTable = "order";
 ?>
-		<div class="tab-pane<?php echo $user_add->DetailPages->pageStyle("orders") ?>" id="tab_orders"><!-- page* -->
-<?php include_once "ordersgrid.php" ?>
+		<div class="tab-pane<?php echo $user_add->DetailPages->pageStyle("order") ?>" id="tab_order"><!-- page* -->
+<?php include_once "ordergrid.php" ?>
 		</div><!-- /page* -->
 <?php } ?>
 	</div><!-- /.tab-content -->

@@ -572,6 +572,8 @@ class trip_info_edit extends trip_info
 		$this->user_id->setVisibility();
 		$this->flight_number->setVisibility();
 		$this->date->setVisibility();
+		$this->createdAt->setVisibility();
+		$this->updatedAt->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Global Page Loading event (in userfn*.php)
@@ -838,6 +840,26 @@ class trip_info_edit extends trip_info
 				$this->date->setFormValue($val);
 			$this->date->CurrentValue = UnFormatDateTime($this->date->CurrentValue, 0);
 		}
+
+		// Check field name 'createdAt' first before field var 'x_createdAt'
+		$val = $CurrentForm->hasValue("createdAt") ? $CurrentForm->getValue("createdAt") : $CurrentForm->getValue("x_createdAt");
+		if (!$this->createdAt->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->createdAt->Visible = FALSE; // Disable update for API request
+			else
+				$this->createdAt->setFormValue($val);
+			$this->createdAt->CurrentValue = UnFormatDateTime($this->createdAt->CurrentValue, 0);
+		}
+
+		// Check field name 'updatedAt' first before field var 'x_updatedAt'
+		$val = $CurrentForm->hasValue("updatedAt") ? $CurrentForm->getValue("updatedAt") : $CurrentForm->getValue("x_updatedAt");
+		if (!$this->updatedAt->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->updatedAt->Visible = FALSE; // Disable update for API request
+			else
+				$this->updatedAt->setFormValue($val);
+			$this->updatedAt->CurrentValue = UnFormatDateTime($this->updatedAt->CurrentValue, 0);
+		}
 	}
 
 	// Restore form values
@@ -852,6 +874,10 @@ class trip_info_edit extends trip_info
 		$this->flight_number->CurrentValue = $this->flight_number->FormValue;
 		$this->date->CurrentValue = $this->date->FormValue;
 		$this->date->CurrentValue = UnFormatDateTime($this->date->CurrentValue, 0);
+		$this->createdAt->CurrentValue = $this->createdAt->FormValue;
+		$this->createdAt->CurrentValue = UnFormatDateTime($this->createdAt->CurrentValue, 0);
+		$this->updatedAt->CurrentValue = $this->updatedAt->FormValue;
+		$this->updatedAt->CurrentValue = UnFormatDateTime($this->updatedAt->CurrentValue, 0);
 	}
 
 	// Load recordset
@@ -923,6 +949,8 @@ class trip_info_edit extends trip_info
 		$this->user_id->setDbValue($row['user_id']);
 		$this->flight_number->setDbValue($row['flight_number']);
 		$this->date->setDbValue($row['date']);
+		$this->createdAt->setDbValue($row['createdAt']);
+		$this->updatedAt->setDbValue($row['updatedAt']);
 	}
 
 	// Return a row with default values
@@ -936,6 +964,8 @@ class trip_info_edit extends trip_info
 		$row['user_id'] = NULL;
 		$row['flight_number'] = NULL;
 		$row['date'] = NULL;
+		$row['createdAt'] = NULL;
+		$row['updatedAt'] = NULL;
 		return $row;
 	}
 
@@ -980,6 +1010,8 @@ class trip_info_edit extends trip_info
 		// user_id
 		// flight_number
 		// date
+		// createdAt
+		// updatedAt
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
@@ -1032,6 +1064,16 @@ class trip_info_edit extends trip_info
 			$this->date->ViewValue = FormatDateTime($this->date->ViewValue, 0);
 			$this->date->ViewCustomAttributes = "";
 
+			// createdAt
+			$this->createdAt->ViewValue = $this->createdAt->CurrentValue;
+			$this->createdAt->ViewValue = FormatDateTime($this->createdAt->ViewValue, 0);
+			$this->createdAt->ViewCustomAttributes = "";
+
+			// updatedAt
+			$this->updatedAt->ViewValue = $this->updatedAt->CurrentValue;
+			$this->updatedAt->ViewValue = FormatDateTime($this->updatedAt->ViewValue, 0);
+			$this->updatedAt->ViewCustomAttributes = "";
+
 			// id
 			$this->id->LinkCustomAttributes = "";
 			$this->id->HrefValue = "";
@@ -1066,6 +1108,16 @@ class trip_info_edit extends trip_info
 			$this->date->LinkCustomAttributes = "";
 			$this->date->HrefValue = "";
 			$this->date->TooltipValue = "";
+
+			// createdAt
+			$this->createdAt->LinkCustomAttributes = "";
+			$this->createdAt->HrefValue = "";
+			$this->createdAt->TooltipValue = "";
+
+			// updatedAt
+			$this->updatedAt->LinkCustomAttributes = "";
+			$this->updatedAt->HrefValue = "";
+			$this->updatedAt->TooltipValue = "";
 		} elseif ($this->RowType == ROWTYPE_EDIT) { // Edit row
 
 			// id
@@ -1156,6 +1208,18 @@ class trip_info_edit extends trip_info
 			$this->date->EditValue = HtmlEncode(FormatDateTime($this->date->CurrentValue, 8));
 			$this->date->PlaceHolder = RemoveHtml($this->date->caption());
 
+			// createdAt
+			$this->createdAt->EditAttrs["class"] = "form-control";
+			$this->createdAt->EditCustomAttributes = "";
+			$this->createdAt->EditValue = HtmlEncode(FormatDateTime($this->createdAt->CurrentValue, 8));
+			$this->createdAt->PlaceHolder = RemoveHtml($this->createdAt->caption());
+
+			// updatedAt
+			$this->updatedAt->EditAttrs["class"] = "form-control";
+			$this->updatedAt->EditCustomAttributes = "";
+			$this->updatedAt->EditValue = HtmlEncode(FormatDateTime($this->updatedAt->CurrentValue, 8));
+			$this->updatedAt->PlaceHolder = RemoveHtml($this->updatedAt->caption());
+
 			// Edit refer script
 			// id
 
@@ -1185,6 +1249,14 @@ class trip_info_edit extends trip_info
 			// date
 			$this->date->LinkCustomAttributes = "";
 			$this->date->HrefValue = "";
+
+			// createdAt
+			$this->createdAt->LinkCustomAttributes = "";
+			$this->createdAt->HrefValue = "";
+
+			// updatedAt
+			$this->updatedAt->LinkCustomAttributes = "";
+			$this->updatedAt->HrefValue = "";
 		}
 		if ($this->RowType == ROWTYPE_ADD || $this->RowType == ROWTYPE_EDIT || $this->RowType == ROWTYPE_SEARCH) // Add/Edit/Search row
 			$this->setupFieldTitles();
@@ -1246,6 +1318,22 @@ class trip_info_edit extends trip_info
 		if (!CheckDate($this->date->FormValue)) {
 			AddMessage($FormError, $this->date->errorMessage());
 		}
+		if ($this->createdAt->Required) {
+			if (!$this->createdAt->IsDetailKey && $this->createdAt->FormValue != NULL && $this->createdAt->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->createdAt->caption(), $this->createdAt->RequiredErrorMessage));
+			}
+		}
+		if (!CheckDate($this->createdAt->FormValue)) {
+			AddMessage($FormError, $this->createdAt->errorMessage());
+		}
+		if ($this->updatedAt->Required) {
+			if (!$this->updatedAt->IsDetailKey && $this->updatedAt->FormValue != NULL && $this->updatedAt->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->updatedAt->caption(), $this->updatedAt->RequiredErrorMessage));
+			}
+		}
+		if (!CheckDate($this->updatedAt->FormValue)) {
+			AddMessage($FormError, $this->updatedAt->errorMessage());
+		}
 
 		// Return validate result
 		$validateForm = ($FormError == "");
@@ -1300,6 +1388,12 @@ class trip_info_edit extends trip_info
 
 			// date
 			$this->date->setDbValueDef($rsnew, UnFormatDateTime($this->date->CurrentValue, 0), CurrentDate(), $this->date->ReadOnly);
+
+			// createdAt
+			$this->createdAt->setDbValueDef($rsnew, UnFormatDateTime($this->createdAt->CurrentValue, 0), NULL, $this->createdAt->ReadOnly);
+
+			// updatedAt
+			$this->updatedAt->setDbValueDef($rsnew, UnFormatDateTime($this->updatedAt->CurrentValue, 0), NULL, $this->updatedAt->ReadOnly);
 
 			// Call Row Updating event
 			$updateRow = $this->Row_Updating($rsold, $rsnew);

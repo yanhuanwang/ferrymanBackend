@@ -533,7 +533,7 @@ class admin_delete extends admin
 		$this->CurrentAction = Param("action"); // Set up current action
 		$this->id->Visible = FALSE;
 		$this->username->setVisibility();
-		$this->password->Visible = FALSE;
+		$this->password->setVisibility();
 		$this->level->setVisibility();
 		$this->locked->setVisibility();
 		$this->_email->setVisibility();
@@ -704,9 +704,6 @@ class admin_delete extends admin
 		// id
 		// username
 		// password
-
-		$this->password->CellCssStyle = "white-space: nowrap;";
-
 		// level
 		// locked
 		// email
@@ -721,6 +718,10 @@ class admin_delete extends admin
 			// username
 			$this->username->ViewValue = $this->username->CurrentValue;
 			$this->username->ViewCustomAttributes = "";
+
+			// password
+			$this->password->ViewValue = $this->password->CurrentValue;
+			$this->password->ViewCustomAttributes = "";
 
 			// level
 			$this->level->ViewValue = $this->level->CurrentValue;
@@ -743,6 +744,11 @@ class admin_delete extends admin
 			$this->username->LinkCustomAttributes = "";
 			$this->username->HrefValue = "";
 			$this->username->TooltipValue = "";
+
+			// password
+			$this->password->LinkCustomAttributes = "";
+			$this->password->HrefValue = "";
+			$this->password->TooltipValue = "";
 
 			// level
 			$this->level->LinkCustomAttributes = "";

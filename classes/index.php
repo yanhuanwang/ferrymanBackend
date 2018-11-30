@@ -390,14 +390,18 @@ class index
 			$this->terminate("categorylist.php");
 		if ($Security->allowList(CurrentProjectID() . 'image'))
 			$this->terminate("imagelist.php");
-		if ($Security->allowList(CurrentProjectID() . 'orders'))
-			$this->terminate("orderslist.php");
 		if ($Security->allowList(CurrentProjectID() . 'parcel_info'))
 			$this->terminate("parcel_infolist.php");
 		if ($Security->allowList(CurrentProjectID() . 'trip_info'))
 			$this->terminate("trip_infolist.php");
 		if ($Security->allowList(CurrentProjectID() . 'request_trip'))
 			$this->terminate("request_triplist.php");
+		if ($Security->allowList(CurrentProjectID() . 'log'))
+			$this->terminate("loglist.php");
+		if ($Security->allowList(CurrentProjectID() . 'mobile_confirm_code'))
+			$this->terminate("mobile_confirm_codelist.php");
+		if ($Security->allowList(CurrentProjectID() . 'order'))
+			$this->terminate("orderlist.php");
 		if ($Security->isLoggedIn()) {
 			$this->setFailureMessage(DeniedMessage() . "<br><br><a href=\"logout.php\">" . $Language->Phrase("BackToLogin") . "</a>");
 		} else {

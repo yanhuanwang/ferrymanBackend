@@ -69,11 +69,6 @@ fparcel_infogrid.validate = function() {
 			elm = this.getElements("x" + infix + "_user_id");
 			if (elm && !ew.checkInteger(elm.value))
 				return this.onError(elm, "<?php echo JsEncode($parcel_info->user_id->errorMessage()) ?>");
-		<?php if ($parcel_info_grid->category->Required) { ?>
-			elm = this.getElements("x" + infix + "_category");
-			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
-				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $parcel_info->category->caption(), $parcel_info->category->RequiredErrorMessage)) ?>");
-		<?php } ?>
 		<?php if ($parcel_info_grid->image_id->Required) { ?>
 			elm = this.getElements("x" + infix + "_image_id");
 			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
@@ -87,6 +82,38 @@ fparcel_infogrid.validate = function() {
 			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
 				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $parcel_info->name->caption(), $parcel_info->name->RequiredErrorMessage)) ?>");
 		<?php } ?>
+		<?php if ($parcel_info_grid->categoty->Required) { ?>
+			elm = this.getElements("x" + infix + "_categoty");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $parcel_info->categoty->caption(), $parcel_info->categoty->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_categoty");
+			if (elm && !ew.checkInteger(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($parcel_info->categoty->errorMessage()) ?>");
+		<?php if ($parcel_info_grid->status->Required) { ?>
+			elm = this.getElements("x" + infix + "_status");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $parcel_info->status->caption(), $parcel_info->status->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_status");
+			if (elm && !ew.checkInteger(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($parcel_info->status->errorMessage()) ?>");
+		<?php if ($parcel_info_grid->createdAt->Required) { ?>
+			elm = this.getElements("x" + infix + "_createdAt");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $parcel_info->createdAt->caption(), $parcel_info->createdAt->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_createdAt");
+			if (elm && !ew.checkDateDef(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($parcel_info->createdAt->errorMessage()) ?>");
+		<?php if ($parcel_info_grid->updatedAt->Required) { ?>
+			elm = this.getElements("x" + infix + "_updatedAt");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $parcel_info->updatedAt->caption(), $parcel_info->updatedAt->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_updatedAt");
+			if (elm && !ew.checkDateDef(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($parcel_info->updatedAt->errorMessage()) ?>");
 
 			// Fire Form_CustomValidate event
 			if (!this.Form_CustomValidate(fobj))
@@ -103,9 +130,12 @@ fparcel_infogrid.emptyRow = function(infix) {
 	if (ew.valueChanged(fobj, infix, "to_place", false)) return false;
 	if (ew.valueChanged(fobj, infix, "description", false)) return false;
 	if (ew.valueChanged(fobj, infix, "user_id", false)) return false;
-	if (ew.valueChanged(fobj, infix, "category", false)) return false;
 	if (ew.valueChanged(fobj, infix, "image_id", false)) return false;
 	if (ew.valueChanged(fobj, infix, "name", false)) return false;
+	if (ew.valueChanged(fobj, infix, "categoty", false)) return false;
+	if (ew.valueChanged(fobj, infix, "status", false)) return false;
+	if (ew.valueChanged(fobj, infix, "createdAt", false)) return false;
+	if (ew.valueChanged(fobj, infix, "updatedAt", false)) return false;
 	return true;
 }
 
@@ -123,8 +153,6 @@ fparcel_infogrid.validateRequired = <?php echo json_encode(CLIENT_VALIDATE) ?>;
 fparcel_infogrid.lists["x_user_id"] = <?php echo $parcel_info_grid->user_id->Lookup->toClientList() ?>;
 fparcel_infogrid.lists["x_user_id"].options = <?php echo JsonEncode($parcel_info_grid->user_id->lookupOptions()) ?>;
 fparcel_infogrid.autoSuggests["x_user_id"] = <?php echo json_encode(["data" => "ajax=autosuggest"]) ?>;
-fparcel_infogrid.lists["x_category"] = <?php echo $parcel_info_grid->category->Lookup->toClientList() ?>;
-fparcel_infogrid.lists["x_category"].options = <?php echo JsonEncode($parcel_info_grid->category->lookupOptions()) ?>;
 fparcel_infogrid.lists["x_image_id"] = <?php echo $parcel_info_grid->image_id->Lookup->toClientList() ?>;
 fparcel_infogrid.lists["x_image_id"].options = <?php echo JsonEncode($parcel_info_grid->image_id->lookupOptions()) ?>;
 fparcel_infogrid.autoSuggests["x_image_id"] = <?php echo json_encode(["data" => "ajax=autosuggest"]) ?>;
@@ -202,15 +230,6 @@ $parcel_info_grid->ListOptions->render("header", "left");
 		</div></div></th>
 	<?php } ?>
 <?php } ?>
-<?php if ($parcel_info->category->Visible) { // category ?>
-	<?php if ($parcel_info->sortUrl($parcel_info->category) == "") { ?>
-		<th data-name="category" class="<?php echo $parcel_info->category->headerCellClass() ?>"><div id="elh_parcel_info_category" class="parcel_info_category"><div class="ew-table-header-caption"><?php echo $parcel_info->category->caption() ?></div></div></th>
-	<?php } else { ?>
-		<th data-name="category" class="<?php echo $parcel_info->category->headerCellClass() ?>"><div><div id="elh_parcel_info_category" class="parcel_info_category">
-			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $parcel_info->category->caption() ?></span><span class="ew-table-header-sort"><?php if ($parcel_info->category->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($parcel_info->category->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
-		</div></div></th>
-	<?php } ?>
-<?php } ?>
 <?php if ($parcel_info->image_id->Visible) { // image_id ?>
 	<?php if ($parcel_info->sortUrl($parcel_info->image_id) == "") { ?>
 		<th data-name="image_id" class="<?php echo $parcel_info->image_id->headerCellClass() ?>"><div id="elh_parcel_info_image_id" class="parcel_info_image_id"><div class="ew-table-header-caption"><?php echo $parcel_info->image_id->caption() ?></div></div></th>
@@ -226,6 +245,42 @@ $parcel_info_grid->ListOptions->render("header", "left");
 	<?php } else { ?>
 		<th data-name="name" class="<?php echo $parcel_info->name->headerCellClass() ?>"><div><div id="elh_parcel_info_name" class="parcel_info_name">
 			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $parcel_info->name->caption() ?></span><span class="ew-table-header-sort"><?php if ($parcel_info->name->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($parcel_info->name->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
+		</div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($parcel_info->categoty->Visible) { // categoty ?>
+	<?php if ($parcel_info->sortUrl($parcel_info->categoty) == "") { ?>
+		<th data-name="categoty" class="<?php echo $parcel_info->categoty->headerCellClass() ?>"><div id="elh_parcel_info_categoty" class="parcel_info_categoty"><div class="ew-table-header-caption"><?php echo $parcel_info->categoty->caption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="categoty" class="<?php echo $parcel_info->categoty->headerCellClass() ?>"><div><div id="elh_parcel_info_categoty" class="parcel_info_categoty">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $parcel_info->categoty->caption() ?></span><span class="ew-table-header-sort"><?php if ($parcel_info->categoty->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($parcel_info->categoty->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
+		</div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($parcel_info->status->Visible) { // status ?>
+	<?php if ($parcel_info->sortUrl($parcel_info->status) == "") { ?>
+		<th data-name="status" class="<?php echo $parcel_info->status->headerCellClass() ?>"><div id="elh_parcel_info_status" class="parcel_info_status"><div class="ew-table-header-caption"><?php echo $parcel_info->status->caption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="status" class="<?php echo $parcel_info->status->headerCellClass() ?>"><div><div id="elh_parcel_info_status" class="parcel_info_status">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $parcel_info->status->caption() ?></span><span class="ew-table-header-sort"><?php if ($parcel_info->status->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($parcel_info->status->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
+		</div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($parcel_info->createdAt->Visible) { // createdAt ?>
+	<?php if ($parcel_info->sortUrl($parcel_info->createdAt) == "") { ?>
+		<th data-name="createdAt" class="<?php echo $parcel_info->createdAt->headerCellClass() ?>"><div id="elh_parcel_info_createdAt" class="parcel_info_createdAt"><div class="ew-table-header-caption"><?php echo $parcel_info->createdAt->caption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="createdAt" class="<?php echo $parcel_info->createdAt->headerCellClass() ?>"><div><div id="elh_parcel_info_createdAt" class="parcel_info_createdAt">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $parcel_info->createdAt->caption() ?></span><span class="ew-table-header-sort"><?php if ($parcel_info->createdAt->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($parcel_info->createdAt->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
+		</div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($parcel_info->updatedAt->Visible) { // updatedAt ?>
+	<?php if ($parcel_info->sortUrl($parcel_info->updatedAt) == "") { ?>
+		<th data-name="updatedAt" class="<?php echo $parcel_info->updatedAt->headerCellClass() ?>"><div id="elh_parcel_info_updatedAt" class="parcel_info_updatedAt"><div class="ew-table-header-caption"><?php echo $parcel_info->updatedAt->caption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="updatedAt" class="<?php echo $parcel_info->updatedAt->headerCellClass() ?>"><div><div id="elh_parcel_info_updatedAt" class="parcel_info_updatedAt">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $parcel_info->updatedAt->caption() ?></span><span class="ew-table-header-sort"><?php if ($parcel_info->updatedAt->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($parcel_info->updatedAt->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
 		</div></div></th>
 	<?php } ?>
 <?php } ?>
@@ -494,60 +549,6 @@ fparcel_infogrid.createAutoSuggest({"id":"x<?php echo $parcel_info_grid->RowInde
 <?php } ?>
 </td>
 	<?php } ?>
-	<?php if ($parcel_info->category->Visible) { // category ?>
-		<td data-name="category"<?php echo $parcel_info->category->cellAttributes() ?>>
-<?php if ($parcel_info->RowType == ROWTYPE_ADD) { // Add record ?>
-<?php if ($parcel_info->category->getSessionValue() <> "") { ?>
-<span id="el<?php echo $parcel_info_grid->RowCnt ?>_parcel_info_category" class="form-group parcel_info_category">
-<span<?php echo $parcel_info->category->viewAttributes() ?>>
-<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($parcel_info->category->ViewValue) ?>"></span>
-</span>
-<input type="hidden" id="x<?php echo $parcel_info_grid->RowIndex ?>_category" name="x<?php echo $parcel_info_grid->RowIndex ?>_category" value="<?php echo HtmlEncode($parcel_info->category->CurrentValue) ?>">
-<?php } else { ?>
-<span id="el<?php echo $parcel_info_grid->RowCnt ?>_parcel_info_category" class="form-group parcel_info_category">
-<div class="input-group">
-	<select class="custom-select ew-custom-select" data-table="parcel_info" data-field="x_category" data-value-separator="<?php echo $parcel_info->category->displayValueSeparatorAttribute() ?>" id="x<?php echo $parcel_info_grid->RowIndex ?>_category" name="x<?php echo $parcel_info_grid->RowIndex ?>_category"<?php echo $parcel_info->category->editAttributes() ?>>
-		<?php echo $parcel_info->category->selectOptionListHtml("x<?php echo $parcel_info_grid->RowIndex ?>_category") ?>
-	</select>
-<?php echo $parcel_info->category->Lookup->getParamTag("p_x<?php echo $parcel_info_grid->RowIndex ?>_category") ?>
-</div>
-</span>
-<?php } ?>
-<input type="hidden" data-table="parcel_info" data-field="x_category" name="o<?php echo $parcel_info_grid->RowIndex ?>_category" id="o<?php echo $parcel_info_grid->RowIndex ?>_category" value="<?php echo HtmlEncode($parcel_info->category->OldValue) ?>">
-<?php } ?>
-<?php if ($parcel_info->RowType == ROWTYPE_EDIT) { // Edit record ?>
-<?php if ($parcel_info->category->getSessionValue() <> "") { ?>
-<span id="el<?php echo $parcel_info_grid->RowCnt ?>_parcel_info_category" class="form-group parcel_info_category">
-<span<?php echo $parcel_info->category->viewAttributes() ?>>
-<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($parcel_info->category->ViewValue) ?>"></span>
-</span>
-<input type="hidden" id="x<?php echo $parcel_info_grid->RowIndex ?>_category" name="x<?php echo $parcel_info_grid->RowIndex ?>_category" value="<?php echo HtmlEncode($parcel_info->category->CurrentValue) ?>">
-<?php } else { ?>
-<span id="el<?php echo $parcel_info_grid->RowCnt ?>_parcel_info_category" class="form-group parcel_info_category">
-<div class="input-group">
-	<select class="custom-select ew-custom-select" data-table="parcel_info" data-field="x_category" data-value-separator="<?php echo $parcel_info->category->displayValueSeparatorAttribute() ?>" id="x<?php echo $parcel_info_grid->RowIndex ?>_category" name="x<?php echo $parcel_info_grid->RowIndex ?>_category"<?php echo $parcel_info->category->editAttributes() ?>>
-		<?php echo $parcel_info->category->selectOptionListHtml("x<?php echo $parcel_info_grid->RowIndex ?>_category") ?>
-	</select>
-<?php echo $parcel_info->category->Lookup->getParamTag("p_x<?php echo $parcel_info_grid->RowIndex ?>_category") ?>
-</div>
-</span>
-<?php } ?>
-<?php } ?>
-<?php if ($parcel_info->RowType == ROWTYPE_VIEW) { // View record ?>
-<span id="el<?php echo $parcel_info_grid->RowCnt ?>_parcel_info_category" class="parcel_info_category">
-<span<?php echo $parcel_info->category->viewAttributes() ?>>
-<?php echo $parcel_info->category->getViewValue() ?></span>
-</span>
-<?php if (!$parcel_info->isConfirm()) { ?>
-<input type="hidden" data-table="parcel_info" data-field="x_category" name="x<?php echo $parcel_info_grid->RowIndex ?>_category" id="x<?php echo $parcel_info_grid->RowIndex ?>_category" value="<?php echo HtmlEncode($parcel_info->category->FormValue) ?>">
-<input type="hidden" data-table="parcel_info" data-field="x_category" name="o<?php echo $parcel_info_grid->RowIndex ?>_category" id="o<?php echo $parcel_info_grid->RowIndex ?>_category" value="<?php echo HtmlEncode($parcel_info->category->OldValue) ?>">
-<?php } else { ?>
-<input type="hidden" data-table="parcel_info" data-field="x_category" name="fparcel_infogrid$x<?php echo $parcel_info_grid->RowIndex ?>_category" id="fparcel_infogrid$x<?php echo $parcel_info_grid->RowIndex ?>_category" value="<?php echo HtmlEncode($parcel_info->category->FormValue) ?>">
-<input type="hidden" data-table="parcel_info" data-field="x_category" name="fparcel_infogrid$o<?php echo $parcel_info_grid->RowIndex ?>_category" id="fparcel_infogrid$o<?php echo $parcel_info_grid->RowIndex ?>_category" value="<?php echo HtmlEncode($parcel_info->category->OldValue) ?>">
-<?php } ?>
-<?php } ?>
-</td>
-	<?php } ?>
 	<?php if ($parcel_info->image_id->Visible) { // image_id ?>
 		<td data-name="image_id"<?php echo $parcel_info->image_id->cellAttributes() ?>>
 <?php if ($parcel_info->RowType == ROWTYPE_ADD) { // Add record ?>
@@ -653,6 +654,138 @@ fparcel_infogrid.createAutoSuggest({"id":"x<?php echo $parcel_info_grid->RowInde
 <?php } else { ?>
 <input type="hidden" data-table="parcel_info" data-field="x_name" name="fparcel_infogrid$x<?php echo $parcel_info_grid->RowIndex ?>_name" id="fparcel_infogrid$x<?php echo $parcel_info_grid->RowIndex ?>_name" value="<?php echo HtmlEncode($parcel_info->name->FormValue) ?>">
 <input type="hidden" data-table="parcel_info" data-field="x_name" name="fparcel_infogrid$o<?php echo $parcel_info_grid->RowIndex ?>_name" id="fparcel_infogrid$o<?php echo $parcel_info_grid->RowIndex ?>_name" value="<?php echo HtmlEncode($parcel_info->name->OldValue) ?>">
+<?php } ?>
+<?php } ?>
+</td>
+	<?php } ?>
+	<?php if ($parcel_info->categoty->Visible) { // categoty ?>
+		<td data-name="categoty"<?php echo $parcel_info->categoty->cellAttributes() ?>>
+<?php if ($parcel_info->RowType == ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $parcel_info_grid->RowCnt ?>_parcel_info_categoty" class="form-group parcel_info_categoty">
+<input type="text" data-table="parcel_info" data-field="x_categoty" name="x<?php echo $parcel_info_grid->RowIndex ?>_categoty" id="x<?php echo $parcel_info_grid->RowIndex ?>_categoty" size="30" placeholder="<?php echo HtmlEncode($parcel_info->categoty->getPlaceHolder()) ?>" value="<?php echo $parcel_info->categoty->EditValue ?>"<?php echo $parcel_info->categoty->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="parcel_info" data-field="x_categoty" name="o<?php echo $parcel_info_grid->RowIndex ?>_categoty" id="o<?php echo $parcel_info_grid->RowIndex ?>_categoty" value="<?php echo HtmlEncode($parcel_info->categoty->OldValue) ?>">
+<?php } ?>
+<?php if ($parcel_info->RowType == ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $parcel_info_grid->RowCnt ?>_parcel_info_categoty" class="form-group parcel_info_categoty">
+<input type="text" data-table="parcel_info" data-field="x_categoty" name="x<?php echo $parcel_info_grid->RowIndex ?>_categoty" id="x<?php echo $parcel_info_grid->RowIndex ?>_categoty" size="30" placeholder="<?php echo HtmlEncode($parcel_info->categoty->getPlaceHolder()) ?>" value="<?php echo $parcel_info->categoty->EditValue ?>"<?php echo $parcel_info->categoty->editAttributes() ?>>
+</span>
+<?php } ?>
+<?php if ($parcel_info->RowType == ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $parcel_info_grid->RowCnt ?>_parcel_info_categoty" class="parcel_info_categoty">
+<span<?php echo $parcel_info->categoty->viewAttributes() ?>>
+<?php echo $parcel_info->categoty->getViewValue() ?></span>
+</span>
+<?php if (!$parcel_info->isConfirm()) { ?>
+<input type="hidden" data-table="parcel_info" data-field="x_categoty" name="x<?php echo $parcel_info_grid->RowIndex ?>_categoty" id="x<?php echo $parcel_info_grid->RowIndex ?>_categoty" value="<?php echo HtmlEncode($parcel_info->categoty->FormValue) ?>">
+<input type="hidden" data-table="parcel_info" data-field="x_categoty" name="o<?php echo $parcel_info_grid->RowIndex ?>_categoty" id="o<?php echo $parcel_info_grid->RowIndex ?>_categoty" value="<?php echo HtmlEncode($parcel_info->categoty->OldValue) ?>">
+<?php } else { ?>
+<input type="hidden" data-table="parcel_info" data-field="x_categoty" name="fparcel_infogrid$x<?php echo $parcel_info_grid->RowIndex ?>_categoty" id="fparcel_infogrid$x<?php echo $parcel_info_grid->RowIndex ?>_categoty" value="<?php echo HtmlEncode($parcel_info->categoty->FormValue) ?>">
+<input type="hidden" data-table="parcel_info" data-field="x_categoty" name="fparcel_infogrid$o<?php echo $parcel_info_grid->RowIndex ?>_categoty" id="fparcel_infogrid$o<?php echo $parcel_info_grid->RowIndex ?>_categoty" value="<?php echo HtmlEncode($parcel_info->categoty->OldValue) ?>">
+<?php } ?>
+<?php } ?>
+</td>
+	<?php } ?>
+	<?php if ($parcel_info->status->Visible) { // status ?>
+		<td data-name="status"<?php echo $parcel_info->status->cellAttributes() ?>>
+<?php if ($parcel_info->RowType == ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $parcel_info_grid->RowCnt ?>_parcel_info_status" class="form-group parcel_info_status">
+<input type="text" data-table="parcel_info" data-field="x_status" name="x<?php echo $parcel_info_grid->RowIndex ?>_status" id="x<?php echo $parcel_info_grid->RowIndex ?>_status" size="30" placeholder="<?php echo HtmlEncode($parcel_info->status->getPlaceHolder()) ?>" value="<?php echo $parcel_info->status->EditValue ?>"<?php echo $parcel_info->status->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="parcel_info" data-field="x_status" name="o<?php echo $parcel_info_grid->RowIndex ?>_status" id="o<?php echo $parcel_info_grid->RowIndex ?>_status" value="<?php echo HtmlEncode($parcel_info->status->OldValue) ?>">
+<?php } ?>
+<?php if ($parcel_info->RowType == ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $parcel_info_grid->RowCnt ?>_parcel_info_status" class="form-group parcel_info_status">
+<input type="text" data-table="parcel_info" data-field="x_status" name="x<?php echo $parcel_info_grid->RowIndex ?>_status" id="x<?php echo $parcel_info_grid->RowIndex ?>_status" size="30" placeholder="<?php echo HtmlEncode($parcel_info->status->getPlaceHolder()) ?>" value="<?php echo $parcel_info->status->EditValue ?>"<?php echo $parcel_info->status->editAttributes() ?>>
+</span>
+<?php } ?>
+<?php if ($parcel_info->RowType == ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $parcel_info_grid->RowCnt ?>_parcel_info_status" class="parcel_info_status">
+<span<?php echo $parcel_info->status->viewAttributes() ?>>
+<?php echo $parcel_info->status->getViewValue() ?></span>
+</span>
+<?php if (!$parcel_info->isConfirm()) { ?>
+<input type="hidden" data-table="parcel_info" data-field="x_status" name="x<?php echo $parcel_info_grid->RowIndex ?>_status" id="x<?php echo $parcel_info_grid->RowIndex ?>_status" value="<?php echo HtmlEncode($parcel_info->status->FormValue) ?>">
+<input type="hidden" data-table="parcel_info" data-field="x_status" name="o<?php echo $parcel_info_grid->RowIndex ?>_status" id="o<?php echo $parcel_info_grid->RowIndex ?>_status" value="<?php echo HtmlEncode($parcel_info->status->OldValue) ?>">
+<?php } else { ?>
+<input type="hidden" data-table="parcel_info" data-field="x_status" name="fparcel_infogrid$x<?php echo $parcel_info_grid->RowIndex ?>_status" id="fparcel_infogrid$x<?php echo $parcel_info_grid->RowIndex ?>_status" value="<?php echo HtmlEncode($parcel_info->status->FormValue) ?>">
+<input type="hidden" data-table="parcel_info" data-field="x_status" name="fparcel_infogrid$o<?php echo $parcel_info_grid->RowIndex ?>_status" id="fparcel_infogrid$o<?php echo $parcel_info_grid->RowIndex ?>_status" value="<?php echo HtmlEncode($parcel_info->status->OldValue) ?>">
+<?php } ?>
+<?php } ?>
+</td>
+	<?php } ?>
+	<?php if ($parcel_info->createdAt->Visible) { // createdAt ?>
+		<td data-name="createdAt"<?php echo $parcel_info->createdAt->cellAttributes() ?>>
+<?php if ($parcel_info->RowType == ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $parcel_info_grid->RowCnt ?>_parcel_info_createdAt" class="form-group parcel_info_createdAt">
+<input type="text" data-table="parcel_info" data-field="x_createdAt" name="x<?php echo $parcel_info_grid->RowIndex ?>_createdAt" id="x<?php echo $parcel_info_grid->RowIndex ?>_createdAt" placeholder="<?php echo HtmlEncode($parcel_info->createdAt->getPlaceHolder()) ?>" value="<?php echo $parcel_info->createdAt->EditValue ?>"<?php echo $parcel_info->createdAt->editAttributes() ?>>
+<?php if (!$parcel_info->createdAt->ReadOnly && !$parcel_info->createdAt->Disabled && !isset($parcel_info->createdAt->EditAttrs["readonly"]) && !isset($parcel_info->createdAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("fparcel_infogrid", "x<?php echo $parcel_info_grid->RowIndex ?>_createdAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<input type="hidden" data-table="parcel_info" data-field="x_createdAt" name="o<?php echo $parcel_info_grid->RowIndex ?>_createdAt" id="o<?php echo $parcel_info_grid->RowIndex ?>_createdAt" value="<?php echo HtmlEncode($parcel_info->createdAt->OldValue) ?>">
+<?php } ?>
+<?php if ($parcel_info->RowType == ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $parcel_info_grid->RowCnt ?>_parcel_info_createdAt" class="form-group parcel_info_createdAt">
+<input type="text" data-table="parcel_info" data-field="x_createdAt" name="x<?php echo $parcel_info_grid->RowIndex ?>_createdAt" id="x<?php echo $parcel_info_grid->RowIndex ?>_createdAt" placeholder="<?php echo HtmlEncode($parcel_info->createdAt->getPlaceHolder()) ?>" value="<?php echo $parcel_info->createdAt->EditValue ?>"<?php echo $parcel_info->createdAt->editAttributes() ?>>
+<?php if (!$parcel_info->createdAt->ReadOnly && !$parcel_info->createdAt->Disabled && !isset($parcel_info->createdAt->EditAttrs["readonly"]) && !isset($parcel_info->createdAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("fparcel_infogrid", "x<?php echo $parcel_info_grid->RowIndex ?>_createdAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<?php } ?>
+<?php if ($parcel_info->RowType == ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $parcel_info_grid->RowCnt ?>_parcel_info_createdAt" class="parcel_info_createdAt">
+<span<?php echo $parcel_info->createdAt->viewAttributes() ?>>
+<?php echo $parcel_info->createdAt->getViewValue() ?></span>
+</span>
+<?php if (!$parcel_info->isConfirm()) { ?>
+<input type="hidden" data-table="parcel_info" data-field="x_createdAt" name="x<?php echo $parcel_info_grid->RowIndex ?>_createdAt" id="x<?php echo $parcel_info_grid->RowIndex ?>_createdAt" value="<?php echo HtmlEncode($parcel_info->createdAt->FormValue) ?>">
+<input type="hidden" data-table="parcel_info" data-field="x_createdAt" name="o<?php echo $parcel_info_grid->RowIndex ?>_createdAt" id="o<?php echo $parcel_info_grid->RowIndex ?>_createdAt" value="<?php echo HtmlEncode($parcel_info->createdAt->OldValue) ?>">
+<?php } else { ?>
+<input type="hidden" data-table="parcel_info" data-field="x_createdAt" name="fparcel_infogrid$x<?php echo $parcel_info_grid->RowIndex ?>_createdAt" id="fparcel_infogrid$x<?php echo $parcel_info_grid->RowIndex ?>_createdAt" value="<?php echo HtmlEncode($parcel_info->createdAt->FormValue) ?>">
+<input type="hidden" data-table="parcel_info" data-field="x_createdAt" name="fparcel_infogrid$o<?php echo $parcel_info_grid->RowIndex ?>_createdAt" id="fparcel_infogrid$o<?php echo $parcel_info_grid->RowIndex ?>_createdAt" value="<?php echo HtmlEncode($parcel_info->createdAt->OldValue) ?>">
+<?php } ?>
+<?php } ?>
+</td>
+	<?php } ?>
+	<?php if ($parcel_info->updatedAt->Visible) { // updatedAt ?>
+		<td data-name="updatedAt"<?php echo $parcel_info->updatedAt->cellAttributes() ?>>
+<?php if ($parcel_info->RowType == ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $parcel_info_grid->RowCnt ?>_parcel_info_updatedAt" class="form-group parcel_info_updatedAt">
+<input type="text" data-table="parcel_info" data-field="x_updatedAt" name="x<?php echo $parcel_info_grid->RowIndex ?>_updatedAt" id="x<?php echo $parcel_info_grid->RowIndex ?>_updatedAt" placeholder="<?php echo HtmlEncode($parcel_info->updatedAt->getPlaceHolder()) ?>" value="<?php echo $parcel_info->updatedAt->EditValue ?>"<?php echo $parcel_info->updatedAt->editAttributes() ?>>
+<?php if (!$parcel_info->updatedAt->ReadOnly && !$parcel_info->updatedAt->Disabled && !isset($parcel_info->updatedAt->EditAttrs["readonly"]) && !isset($parcel_info->updatedAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("fparcel_infogrid", "x<?php echo $parcel_info_grid->RowIndex ?>_updatedAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<input type="hidden" data-table="parcel_info" data-field="x_updatedAt" name="o<?php echo $parcel_info_grid->RowIndex ?>_updatedAt" id="o<?php echo $parcel_info_grid->RowIndex ?>_updatedAt" value="<?php echo HtmlEncode($parcel_info->updatedAt->OldValue) ?>">
+<?php } ?>
+<?php if ($parcel_info->RowType == ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $parcel_info_grid->RowCnt ?>_parcel_info_updatedAt" class="form-group parcel_info_updatedAt">
+<input type="text" data-table="parcel_info" data-field="x_updatedAt" name="x<?php echo $parcel_info_grid->RowIndex ?>_updatedAt" id="x<?php echo $parcel_info_grid->RowIndex ?>_updatedAt" placeholder="<?php echo HtmlEncode($parcel_info->updatedAt->getPlaceHolder()) ?>" value="<?php echo $parcel_info->updatedAt->EditValue ?>"<?php echo $parcel_info->updatedAt->editAttributes() ?>>
+<?php if (!$parcel_info->updatedAt->ReadOnly && !$parcel_info->updatedAt->Disabled && !isset($parcel_info->updatedAt->EditAttrs["readonly"]) && !isset($parcel_info->updatedAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("fparcel_infogrid", "x<?php echo $parcel_info_grid->RowIndex ?>_updatedAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<?php } ?>
+<?php if ($parcel_info->RowType == ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $parcel_info_grid->RowCnt ?>_parcel_info_updatedAt" class="parcel_info_updatedAt">
+<span<?php echo $parcel_info->updatedAt->viewAttributes() ?>>
+<?php echo $parcel_info->updatedAt->getViewValue() ?></span>
+</span>
+<?php if (!$parcel_info->isConfirm()) { ?>
+<input type="hidden" data-table="parcel_info" data-field="x_updatedAt" name="x<?php echo $parcel_info_grid->RowIndex ?>_updatedAt" id="x<?php echo $parcel_info_grid->RowIndex ?>_updatedAt" value="<?php echo HtmlEncode($parcel_info->updatedAt->FormValue) ?>">
+<input type="hidden" data-table="parcel_info" data-field="x_updatedAt" name="o<?php echo $parcel_info_grid->RowIndex ?>_updatedAt" id="o<?php echo $parcel_info_grid->RowIndex ?>_updatedAt" value="<?php echo HtmlEncode($parcel_info->updatedAt->OldValue) ?>">
+<?php } else { ?>
+<input type="hidden" data-table="parcel_info" data-field="x_updatedAt" name="fparcel_infogrid$x<?php echo $parcel_info_grid->RowIndex ?>_updatedAt" id="fparcel_infogrid$x<?php echo $parcel_info_grid->RowIndex ?>_updatedAt" value="<?php echo HtmlEncode($parcel_info->updatedAt->FormValue) ?>">
+<input type="hidden" data-table="parcel_info" data-field="x_updatedAt" name="fparcel_infogrid$o<?php echo $parcel_info_grid->RowIndex ?>_updatedAt" id="fparcel_infogrid$o<?php echo $parcel_info_grid->RowIndex ?>_updatedAt" value="<?php echo HtmlEncode($parcel_info->updatedAt->OldValue) ?>">
 <?php } ?>
 <?php } ?>
 </td>
@@ -783,35 +916,6 @@ fparcel_infogrid.createAutoSuggest({"id":"x<?php echo $parcel_info_grid->RowInde
 <input type="hidden" data-table="parcel_info" data-field="x_user_id" name="o<?php echo $parcel_info_grid->RowIndex ?>_user_id" id="o<?php echo $parcel_info_grid->RowIndex ?>_user_id" value="<?php echo HtmlEncode($parcel_info->user_id->OldValue) ?>">
 </td>
 	<?php } ?>
-	<?php if ($parcel_info->category->Visible) { // category ?>
-		<td data-name="category">
-<?php if (!$parcel_info->isConfirm()) { ?>
-<?php if ($parcel_info->category->getSessionValue() <> "") { ?>
-<span id="el$rowindex$_parcel_info_category" class="form-group parcel_info_category">
-<span<?php echo $parcel_info->category->viewAttributes() ?>>
-<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($parcel_info->category->ViewValue) ?>"></span>
-</span>
-<input type="hidden" id="x<?php echo $parcel_info_grid->RowIndex ?>_category" name="x<?php echo $parcel_info_grid->RowIndex ?>_category" value="<?php echo HtmlEncode($parcel_info->category->CurrentValue) ?>">
-<?php } else { ?>
-<span id="el$rowindex$_parcel_info_category" class="form-group parcel_info_category">
-<div class="input-group">
-	<select class="custom-select ew-custom-select" data-table="parcel_info" data-field="x_category" data-value-separator="<?php echo $parcel_info->category->displayValueSeparatorAttribute() ?>" id="x<?php echo $parcel_info_grid->RowIndex ?>_category" name="x<?php echo $parcel_info_grid->RowIndex ?>_category"<?php echo $parcel_info->category->editAttributes() ?>>
-		<?php echo $parcel_info->category->selectOptionListHtml("x<?php echo $parcel_info_grid->RowIndex ?>_category") ?>
-	</select>
-<?php echo $parcel_info->category->Lookup->getParamTag("p_x<?php echo $parcel_info_grid->RowIndex ?>_category") ?>
-</div>
-</span>
-<?php } ?>
-<?php } else { ?>
-<span id="el$rowindex$_parcel_info_category" class="form-group parcel_info_category">
-<span<?php echo $parcel_info->category->viewAttributes() ?>>
-<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($parcel_info->category->ViewValue) ?>"></span>
-</span>
-<input type="hidden" data-table="parcel_info" data-field="x_category" name="x<?php echo $parcel_info_grid->RowIndex ?>_category" id="x<?php echo $parcel_info_grid->RowIndex ?>_category" value="<?php echo HtmlEncode($parcel_info->category->FormValue) ?>">
-<?php } ?>
-<input type="hidden" data-table="parcel_info" data-field="x_category" name="o<?php echo $parcel_info_grid->RowIndex ?>_category" id="o<?php echo $parcel_info_grid->RowIndex ?>_category" value="<?php echo HtmlEncode($parcel_info->category->OldValue) ?>">
-</td>
-	<?php } ?>
 	<?php if ($parcel_info->image_id->Visible) { // image_id ?>
 		<td data-name="image_id">
 <?php if (!$parcel_info->isConfirm()) { ?>
@@ -871,6 +975,80 @@ fparcel_infogrid.createAutoSuggest({"id":"x<?php echo $parcel_info_grid->RowInde
 <input type="hidden" data-table="parcel_info" data-field="x_name" name="x<?php echo $parcel_info_grid->RowIndex ?>_name" id="x<?php echo $parcel_info_grid->RowIndex ?>_name" value="<?php echo HtmlEncode($parcel_info->name->FormValue) ?>">
 <?php } ?>
 <input type="hidden" data-table="parcel_info" data-field="x_name" name="o<?php echo $parcel_info_grid->RowIndex ?>_name" id="o<?php echo $parcel_info_grid->RowIndex ?>_name" value="<?php echo HtmlEncode($parcel_info->name->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($parcel_info->categoty->Visible) { // categoty ?>
+		<td data-name="categoty">
+<?php if (!$parcel_info->isConfirm()) { ?>
+<span id="el$rowindex$_parcel_info_categoty" class="form-group parcel_info_categoty">
+<input type="text" data-table="parcel_info" data-field="x_categoty" name="x<?php echo $parcel_info_grid->RowIndex ?>_categoty" id="x<?php echo $parcel_info_grid->RowIndex ?>_categoty" size="30" placeholder="<?php echo HtmlEncode($parcel_info->categoty->getPlaceHolder()) ?>" value="<?php echo $parcel_info->categoty->EditValue ?>"<?php echo $parcel_info->categoty->editAttributes() ?>>
+</span>
+<?php } else { ?>
+<span id="el$rowindex$_parcel_info_categoty" class="form-group parcel_info_categoty">
+<span<?php echo $parcel_info->categoty->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($parcel_info->categoty->ViewValue) ?>"></span>
+</span>
+<input type="hidden" data-table="parcel_info" data-field="x_categoty" name="x<?php echo $parcel_info_grid->RowIndex ?>_categoty" id="x<?php echo $parcel_info_grid->RowIndex ?>_categoty" value="<?php echo HtmlEncode($parcel_info->categoty->FormValue) ?>">
+<?php } ?>
+<input type="hidden" data-table="parcel_info" data-field="x_categoty" name="o<?php echo $parcel_info_grid->RowIndex ?>_categoty" id="o<?php echo $parcel_info_grid->RowIndex ?>_categoty" value="<?php echo HtmlEncode($parcel_info->categoty->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($parcel_info->status->Visible) { // status ?>
+		<td data-name="status">
+<?php if (!$parcel_info->isConfirm()) { ?>
+<span id="el$rowindex$_parcel_info_status" class="form-group parcel_info_status">
+<input type="text" data-table="parcel_info" data-field="x_status" name="x<?php echo $parcel_info_grid->RowIndex ?>_status" id="x<?php echo $parcel_info_grid->RowIndex ?>_status" size="30" placeholder="<?php echo HtmlEncode($parcel_info->status->getPlaceHolder()) ?>" value="<?php echo $parcel_info->status->EditValue ?>"<?php echo $parcel_info->status->editAttributes() ?>>
+</span>
+<?php } else { ?>
+<span id="el$rowindex$_parcel_info_status" class="form-group parcel_info_status">
+<span<?php echo $parcel_info->status->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($parcel_info->status->ViewValue) ?>"></span>
+</span>
+<input type="hidden" data-table="parcel_info" data-field="x_status" name="x<?php echo $parcel_info_grid->RowIndex ?>_status" id="x<?php echo $parcel_info_grid->RowIndex ?>_status" value="<?php echo HtmlEncode($parcel_info->status->FormValue) ?>">
+<?php } ?>
+<input type="hidden" data-table="parcel_info" data-field="x_status" name="o<?php echo $parcel_info_grid->RowIndex ?>_status" id="o<?php echo $parcel_info_grid->RowIndex ?>_status" value="<?php echo HtmlEncode($parcel_info->status->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($parcel_info->createdAt->Visible) { // createdAt ?>
+		<td data-name="createdAt">
+<?php if (!$parcel_info->isConfirm()) { ?>
+<span id="el$rowindex$_parcel_info_createdAt" class="form-group parcel_info_createdAt">
+<input type="text" data-table="parcel_info" data-field="x_createdAt" name="x<?php echo $parcel_info_grid->RowIndex ?>_createdAt" id="x<?php echo $parcel_info_grid->RowIndex ?>_createdAt" placeholder="<?php echo HtmlEncode($parcel_info->createdAt->getPlaceHolder()) ?>" value="<?php echo $parcel_info->createdAt->EditValue ?>"<?php echo $parcel_info->createdAt->editAttributes() ?>>
+<?php if (!$parcel_info->createdAt->ReadOnly && !$parcel_info->createdAt->Disabled && !isset($parcel_info->createdAt->EditAttrs["readonly"]) && !isset($parcel_info->createdAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("fparcel_infogrid", "x<?php echo $parcel_info_grid->RowIndex ?>_createdAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<?php } else { ?>
+<span id="el$rowindex$_parcel_info_createdAt" class="form-group parcel_info_createdAt">
+<span<?php echo $parcel_info->createdAt->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($parcel_info->createdAt->ViewValue) ?>"></span>
+</span>
+<input type="hidden" data-table="parcel_info" data-field="x_createdAt" name="x<?php echo $parcel_info_grid->RowIndex ?>_createdAt" id="x<?php echo $parcel_info_grid->RowIndex ?>_createdAt" value="<?php echo HtmlEncode($parcel_info->createdAt->FormValue) ?>">
+<?php } ?>
+<input type="hidden" data-table="parcel_info" data-field="x_createdAt" name="o<?php echo $parcel_info_grid->RowIndex ?>_createdAt" id="o<?php echo $parcel_info_grid->RowIndex ?>_createdAt" value="<?php echo HtmlEncode($parcel_info->createdAt->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($parcel_info->updatedAt->Visible) { // updatedAt ?>
+		<td data-name="updatedAt">
+<?php if (!$parcel_info->isConfirm()) { ?>
+<span id="el$rowindex$_parcel_info_updatedAt" class="form-group parcel_info_updatedAt">
+<input type="text" data-table="parcel_info" data-field="x_updatedAt" name="x<?php echo $parcel_info_grid->RowIndex ?>_updatedAt" id="x<?php echo $parcel_info_grid->RowIndex ?>_updatedAt" placeholder="<?php echo HtmlEncode($parcel_info->updatedAt->getPlaceHolder()) ?>" value="<?php echo $parcel_info->updatedAt->EditValue ?>"<?php echo $parcel_info->updatedAt->editAttributes() ?>>
+<?php if (!$parcel_info->updatedAt->ReadOnly && !$parcel_info->updatedAt->Disabled && !isset($parcel_info->updatedAt->EditAttrs["readonly"]) && !isset($parcel_info->updatedAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("fparcel_infogrid", "x<?php echo $parcel_info_grid->RowIndex ?>_updatedAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<?php } else { ?>
+<span id="el$rowindex$_parcel_info_updatedAt" class="form-group parcel_info_updatedAt">
+<span<?php echo $parcel_info->updatedAt->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($parcel_info->updatedAt->ViewValue) ?>"></span>
+</span>
+<input type="hidden" data-table="parcel_info" data-field="x_updatedAt" name="x<?php echo $parcel_info_grid->RowIndex ?>_updatedAt" id="x<?php echo $parcel_info_grid->RowIndex ?>_updatedAt" value="<?php echo HtmlEncode($parcel_info->updatedAt->FormValue) ?>">
+<?php } ?>
+<input type="hidden" data-table="parcel_info" data-field="x_updatedAt" name="o<?php echo $parcel_info_grid->RowIndex ?>_updatedAt" id="o<?php echo $parcel_info_grid->RowIndex ?>_updatedAt" value="<?php echo HtmlEncode($parcel_info->updatedAt->OldValue) ?>">
 </td>
 	<?php } ?>
 <?php

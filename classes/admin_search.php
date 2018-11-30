@@ -751,6 +751,10 @@ class admin_search extends admin
 			$this->username->ViewValue = $this->username->CurrentValue;
 			$this->username->ViewCustomAttributes = "";
 
+			// password
+			$this->password->ViewValue = $this->password->CurrentValue;
+			$this->password->ViewCustomAttributes = "";
+
 			// level
 			$this->level->ViewValue = $this->level->CurrentValue;
 			$this->level->ViewCustomAttributes = "";

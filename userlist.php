@@ -64,20 +64,10 @@ fuserlist.validate = function() {
 			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
 				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $user->username->caption(), $user->username->RequiredErrorMessage)) ?>");
 		<?php } ?>
-		<?php if ($user_list->_email->Required) { ?>
-			elm = this.getElements("x" + infix + "__email");
-			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
-				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $user->_email->caption(), $user->_email->RequiredErrorMessage)) ?>");
-		<?php } ?>
 		<?php if ($user_list->gender->Required) { ?>
 			elm = this.getElements("x" + infix + "_gender");
 			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
 				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $user->gender->caption(), $user->gender->RequiredErrorMessage)) ?>");
-		<?php } ?>
-		<?php if ($user_list->phone->Required) { ?>
-			elm = this.getElements("x" + infix + "_phone");
-			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
-				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $user->phone->caption(), $user->phone->RequiredErrorMessage)) ?>");
 		<?php } ?>
 		<?php if ($user_list->address->Required) { ?>
 			elm = this.getElements("x" + infix + "_address");
@@ -125,24 +115,40 @@ fuserlist.validate = function() {
 			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
 				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $user->birthday->caption(), $user->birthday->RequiredErrorMessage)) ?>");
 		<?php } ?>
-		<?php if ($user_list->addDate->Required) { ?>
-			elm = this.getElements("x" + infix + "_addDate");
+		<?php if ($user_list->mobile_phone->Required) { ?>
+			elm = this.getElements("x" + infix + "_mobile_phone");
 			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
-				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $user->addDate->caption(), $user->addDate->RequiredErrorMessage)) ?>");
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $user->mobile_phone->caption(), $user->mobile_phone->RequiredErrorMessage)) ?>");
 		<?php } ?>
-		<?php if ($user_list->updateDate->Required) { ?>
-			elm = this.getElements("x" + infix + "_updateDate");
+		<?php if ($user_list->status->Required) { ?>
+			elm = this.getElements("x" + infix + "_status");
 			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
-				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $user->updateDate->caption(), $user->updateDate->RequiredErrorMessage)) ?>");
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $user->status->caption(), $user->status->RequiredErrorMessage)) ?>");
 		<?php } ?>
-		<?php if ($user_list->activated->Required) { ?>
-			elm = this.getElements("x" + infix + "_activated");
-			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
-				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $user->activated->caption(), $user->activated->RequiredErrorMessage)) ?>");
-		<?php } ?>
-			elm = this.getElements("x" + infix + "_activated");
+			elm = this.getElements("x" + infix + "_status");
 			if (elm && !ew.checkInteger(elm.value))
-				return this.onError(elm, "<?php echo JsEncode($user->activated->errorMessage()) ?>");
+				return this.onError(elm, "<?php echo JsEncode($user->status->errorMessage()) ?>");
+		<?php if ($user_list->session_token->Required) { ?>
+			elm = this.getElements("x" + infix + "_session_token");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $user->session_token->caption(), $user->session_token->RequiredErrorMessage)) ?>");
+		<?php } ?>
+		<?php if ($user_list->createdAt->Required) { ?>
+			elm = this.getElements("x" + infix + "_createdAt");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $user->createdAt->caption(), $user->createdAt->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_createdAt");
+			if (elm && !ew.checkDateDef(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($user->createdAt->errorMessage()) ?>");
+		<?php if ($user_list->updatedAt->Required) { ?>
+			elm = this.getElements("x" + infix + "_updatedAt");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $user->updatedAt->caption(), $user->updatedAt->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_updatedAt");
+			if (elm && !ew.checkDateDef(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($user->updatedAt->errorMessage()) ?>");
 
 			// Fire Form_CustomValidate event
 			if (!this.Form_CustomValidate(fobj))
@@ -160,9 +166,7 @@ fuserlist.validate = function() {
 fuserlist.emptyRow = function(infix) {
 	var fobj = this._form;
 	if (ew.valueChanged(fobj, infix, "username", false)) return false;
-	if (ew.valueChanged(fobj, infix, "_email", false)) return false;
 	if (ew.valueChanged(fobj, infix, "gender", false)) return false;
-	if (ew.valueChanged(fobj, infix, "phone", false)) return false;
 	if (ew.valueChanged(fobj, infix, "address", false)) return false;
 	if (ew.valueChanged(fobj, infix, "country", false)) return false;
 	if (ew.valueChanged(fobj, infix, "photo", false)) return false;
@@ -172,8 +176,11 @@ fuserlist.emptyRow = function(infix) {
 	if (ew.valueChanged(fobj, infix, "send_role", false)) return false;
 	if (ew.valueChanged(fobj, infix, "carrier_role", false)) return false;
 	if (ew.valueChanged(fobj, infix, "birthday", false)) return false;
-	if (ew.valueChanged(fobj, infix, "addDate", false)) return false;
-	if (ew.valueChanged(fobj, infix, "activated", false)) return false;
+	if (ew.valueChanged(fobj, infix, "mobile_phone", false)) return false;
+	if (ew.valueChanged(fobj, infix, "status", false)) return false;
+	if (ew.valueChanged(fobj, infix, "session_token", false)) return false;
+	if (ew.valueChanged(fobj, infix, "createdAt", false)) return false;
+	if (ew.valueChanged(fobj, infix, "updatedAt", false)) return false;
 	return true;
 }
 
@@ -346,30 +353,12 @@ $user_list->ListOptions->render("header", "left");
 		</div></div></th>
 	<?php } ?>
 <?php } ?>
-<?php if ($user->_email->Visible) { // email ?>
-	<?php if ($user->sortUrl($user->_email) == "") { ?>
-		<th data-name="_email" class="<?php echo $user->_email->headerCellClass() ?>"><div id="elh_user__email" class="user__email"><div class="ew-table-header-caption"><?php echo $user->_email->caption() ?></div></div></th>
-	<?php } else { ?>
-		<th data-name="_email" class="<?php echo $user->_email->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $user->SortUrl($user->_email) ?>',1);"><div id="elh_user__email" class="user__email">
-			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $user->_email->caption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ew-table-header-sort"><?php if ($user->_email->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($user->_email->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
-		</div></div></th>
-	<?php } ?>
-<?php } ?>
 <?php if ($user->gender->Visible) { // gender ?>
 	<?php if ($user->sortUrl($user->gender) == "") { ?>
 		<th data-name="gender" class="<?php echo $user->gender->headerCellClass() ?>"><div id="elh_user_gender" class="user_gender"><div class="ew-table-header-caption"><?php echo $user->gender->caption() ?></div></div></th>
 	<?php } else { ?>
 		<th data-name="gender" class="<?php echo $user->gender->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $user->SortUrl($user->gender) ?>',1);"><div id="elh_user_gender" class="user_gender">
 			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $user->gender->caption() ?></span><span class="ew-table-header-sort"><?php if ($user->gender->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($user->gender->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
-		</div></div></th>
-	<?php } ?>
-<?php } ?>
-<?php if ($user->phone->Visible) { // phone ?>
-	<?php if ($user->sortUrl($user->phone) == "") { ?>
-		<th data-name="phone" class="<?php echo $user->phone->headerCellClass() ?>"><div id="elh_user_phone" class="user_phone"><div class="ew-table-header-caption"><?php echo $user->phone->caption() ?></div></div></th>
-	<?php } else { ?>
-		<th data-name="phone" class="<?php echo $user->phone->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $user->SortUrl($user->phone) ?>',1);"><div id="elh_user_phone" class="user_phone">
-			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $user->phone->caption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ew-table-header-sort"><?php if ($user->phone->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($user->phone->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
 		</div></div></th>
 	<?php } ?>
 <?php } ?>
@@ -454,30 +443,48 @@ $user_list->ListOptions->render("header", "left");
 		</div></div></th>
 	<?php } ?>
 <?php } ?>
-<?php if ($user->addDate->Visible) { // addDate ?>
-	<?php if ($user->sortUrl($user->addDate) == "") { ?>
-		<th data-name="addDate" class="<?php echo $user->addDate->headerCellClass() ?>"><div id="elh_user_addDate" class="user_addDate"><div class="ew-table-header-caption"><?php echo $user->addDate->caption() ?></div></div></th>
+<?php if ($user->mobile_phone->Visible) { // mobile_phone ?>
+	<?php if ($user->sortUrl($user->mobile_phone) == "") { ?>
+		<th data-name="mobile_phone" class="<?php echo $user->mobile_phone->headerCellClass() ?>"><div id="elh_user_mobile_phone" class="user_mobile_phone"><div class="ew-table-header-caption"><?php echo $user->mobile_phone->caption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="addDate" class="<?php echo $user->addDate->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $user->SortUrl($user->addDate) ?>',1);"><div id="elh_user_addDate" class="user_addDate">
-			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $user->addDate->caption() ?></span><span class="ew-table-header-sort"><?php if ($user->addDate->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($user->addDate->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
+		<th data-name="mobile_phone" class="<?php echo $user->mobile_phone->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $user->SortUrl($user->mobile_phone) ?>',1);"><div id="elh_user_mobile_phone" class="user_mobile_phone">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $user->mobile_phone->caption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ew-table-header-sort"><?php if ($user->mobile_phone->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($user->mobile_phone->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
 		</div></div></th>
 	<?php } ?>
 <?php } ?>
-<?php if ($user->updateDate->Visible) { // updateDate ?>
-	<?php if ($user->sortUrl($user->updateDate) == "") { ?>
-		<th data-name="updateDate" class="<?php echo $user->updateDate->headerCellClass() ?>"><div id="elh_user_updateDate" class="user_updateDate"><div class="ew-table-header-caption"><?php echo $user->updateDate->caption() ?></div></div></th>
+<?php if ($user->status->Visible) { // status ?>
+	<?php if ($user->sortUrl($user->status) == "") { ?>
+		<th data-name="status" class="<?php echo $user->status->headerCellClass() ?>"><div id="elh_user_status" class="user_status"><div class="ew-table-header-caption"><?php echo $user->status->caption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="updateDate" class="<?php echo $user->updateDate->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $user->SortUrl($user->updateDate) ?>',1);"><div id="elh_user_updateDate" class="user_updateDate">
-			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $user->updateDate->caption() ?></span><span class="ew-table-header-sort"><?php if ($user->updateDate->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($user->updateDate->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
+		<th data-name="status" class="<?php echo $user->status->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $user->SortUrl($user->status) ?>',1);"><div id="elh_user_status" class="user_status">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $user->status->caption() ?></span><span class="ew-table-header-sort"><?php if ($user->status->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($user->status->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
 		</div></div></th>
 	<?php } ?>
 <?php } ?>
-<?php if ($user->activated->Visible) { // activated ?>
-	<?php if ($user->sortUrl($user->activated) == "") { ?>
-		<th data-name="activated" class="<?php echo $user->activated->headerCellClass() ?>"><div id="elh_user_activated" class="user_activated"><div class="ew-table-header-caption"><?php echo $user->activated->caption() ?></div></div></th>
+<?php if ($user->session_token->Visible) { // session_token ?>
+	<?php if ($user->sortUrl($user->session_token) == "") { ?>
+		<th data-name="session_token" class="<?php echo $user->session_token->headerCellClass() ?>"><div id="elh_user_session_token" class="user_session_token"><div class="ew-table-header-caption"><?php echo $user->session_token->caption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="activated" class="<?php echo $user->activated->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $user->SortUrl($user->activated) ?>',1);"><div id="elh_user_activated" class="user_activated">
-			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $user->activated->caption() ?></span><span class="ew-table-header-sort"><?php if ($user->activated->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($user->activated->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
+		<th data-name="session_token" class="<?php echo $user->session_token->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $user->SortUrl($user->session_token) ?>',1);"><div id="elh_user_session_token" class="user_session_token">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $user->session_token->caption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ew-table-header-sort"><?php if ($user->session_token->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($user->session_token->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
+		</div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($user->createdAt->Visible) { // createdAt ?>
+	<?php if ($user->sortUrl($user->createdAt) == "") { ?>
+		<th data-name="createdAt" class="<?php echo $user->createdAt->headerCellClass() ?>"><div id="elh_user_createdAt" class="user_createdAt"><div class="ew-table-header-caption"><?php echo $user->createdAt->caption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="createdAt" class="<?php echo $user->createdAt->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $user->SortUrl($user->createdAt) ?>',1);"><div id="elh_user_createdAt" class="user_createdAt">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $user->createdAt->caption() ?></span><span class="ew-table-header-sort"><?php if ($user->createdAt->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($user->createdAt->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
+		</div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($user->updatedAt->Visible) { // updatedAt ?>
+	<?php if ($user->sortUrl($user->updatedAt) == "") { ?>
+		<th data-name="updatedAt" class="<?php echo $user->updatedAt->headerCellClass() ?>"><div id="elh_user_updatedAt" class="user_updatedAt"><div class="ew-table-header-caption"><?php echo $user->updatedAt->caption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="updatedAt" class="<?php echo $user->updatedAt->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $user->SortUrl($user->updatedAt) ?>',1);"><div id="elh_user_updatedAt" class="user_updatedAt">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $user->updatedAt->caption() ?></span><span class="ew-table-header-sort"><?php if ($user->updatedAt->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($user->updatedAt->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
 		</div></div></th>
 	<?php } ?>
 <?php } ?>
@@ -526,14 +533,6 @@ $user_list->ListOptions->render("body", "left", $user_list->RowCnt);
 <input type="hidden" data-table="user" data-field="x_username" name="o<?php echo $user_list->RowIndex ?>_username" id="o<?php echo $user_list->RowIndex ?>_username" value="<?php echo HtmlEncode($user->username->OldValue) ?>">
 </td>
 	<?php } ?>
-	<?php if ($user->_email->Visible) { // email ?>
-		<td data-name="_email">
-<span id="el<?php echo $user_list->RowCnt ?>_user__email" class="form-group user__email">
-<input type="text" data-table="user" data-field="x__email" name="x<?php echo $user_list->RowIndex ?>__email" id="x<?php echo $user_list->RowIndex ?>__email" size="30" maxlength="100" placeholder="<?php echo HtmlEncode($user->_email->getPlaceHolder()) ?>" value="<?php echo $user->_email->EditValue ?>"<?php echo $user->_email->editAttributes() ?>>
-</span>
-<input type="hidden" data-table="user" data-field="x__email" name="o<?php echo $user_list->RowIndex ?>__email" id="o<?php echo $user_list->RowIndex ?>__email" value="<?php echo HtmlEncode($user->_email->OldValue) ?>">
-</td>
-	<?php } ?>
 	<?php if ($user->gender->Visible) { // gender ?>
 		<td data-name="gender">
 <span id="el<?php echo $user_list->RowCnt ?>_user_gender" class="form-group user_gender">
@@ -544,14 +543,6 @@ $user_list->ListOptions->render("body", "left", $user_list->RowCnt);
 </div>
 </span>
 <input type="hidden" data-table="user" data-field="x_gender" name="o<?php echo $user_list->RowIndex ?>_gender" id="o<?php echo $user_list->RowIndex ?>_gender" value="<?php echo HtmlEncode($user->gender->OldValue) ?>">
-</td>
-	<?php } ?>
-	<?php if ($user->phone->Visible) { // phone ?>
-		<td data-name="phone">
-<span id="el<?php echo $user_list->RowCnt ?>_user_phone" class="form-group user_phone">
-<input type="text" data-table="user" data-field="x_phone" name="x<?php echo $user_list->RowIndex ?>_phone" id="x<?php echo $user_list->RowIndex ?>_phone" size="30" maxlength="100" placeholder="<?php echo HtmlEncode($user->phone->getPlaceHolder()) ?>" value="<?php echo $user->phone->EditValue ?>"<?php echo $user->phone->editAttributes() ?>>
-</span>
-<input type="hidden" data-table="user" data-field="x_phone" name="o<?php echo $user_list->RowIndex ?>_phone" id="o<?php echo $user_list->RowIndex ?>_phone" value="<?php echo HtmlEncode($user->phone->OldValue) ?>">
 </td>
 	<?php } ?>
 	<?php if ($user->address->Visible) { // address ?>
@@ -654,30 +645,54 @@ ew.createDateTimePicker("fuserlist", "x<?php echo $user_list->RowIndex ?>_birthd
 <input type="hidden" data-table="user" data-field="x_birthday" name="o<?php echo $user_list->RowIndex ?>_birthday" id="o<?php echo $user_list->RowIndex ?>_birthday" value="<?php echo HtmlEncode($user->birthday->OldValue) ?>">
 </td>
 	<?php } ?>
-	<?php if ($user->addDate->Visible) { // addDate ?>
-		<td data-name="addDate">
-<span id="el<?php echo $user_list->RowCnt ?>_user_addDate" class="form-group user_addDate">
-<input type="text" data-table="user" data-field="x_addDate" name="x<?php echo $user_list->RowIndex ?>_addDate" id="x<?php echo $user_list->RowIndex ?>_addDate" placeholder="<?php echo HtmlEncode($user->addDate->getPlaceHolder()) ?>" value="<?php echo $user->addDate->EditValue ?>"<?php echo $user->addDate->editAttributes() ?>>
-<?php if (!$user->addDate->ReadOnly && !$user->addDate->Disabled && !isset($user->addDate->EditAttrs["readonly"]) && !isset($user->addDate->EditAttrs["disabled"])) { ?>
+	<?php if ($user->mobile_phone->Visible) { // mobile_phone ?>
+		<td data-name="mobile_phone">
+<span id="el<?php echo $user_list->RowCnt ?>_user_mobile_phone" class="form-group user_mobile_phone">
+<input type="text" data-table="user" data-field="x_mobile_phone" name="x<?php echo $user_list->RowIndex ?>_mobile_phone" id="x<?php echo $user_list->RowIndex ?>_mobile_phone" size="30" maxlength="100" placeholder="<?php echo HtmlEncode($user->mobile_phone->getPlaceHolder()) ?>" value="<?php echo $user->mobile_phone->EditValue ?>"<?php echo $user->mobile_phone->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="user" data-field="x_mobile_phone" name="o<?php echo $user_list->RowIndex ?>_mobile_phone" id="o<?php echo $user_list->RowIndex ?>_mobile_phone" value="<?php echo HtmlEncode($user->mobile_phone->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($user->status->Visible) { // status ?>
+		<td data-name="status">
+<span id="el<?php echo $user_list->RowCnt ?>_user_status" class="form-group user_status">
+<input type="text" data-table="user" data-field="x_status" name="x<?php echo $user_list->RowIndex ?>_status" id="x<?php echo $user_list->RowIndex ?>_status" size="30" placeholder="<?php echo HtmlEncode($user->status->getPlaceHolder()) ?>" value="<?php echo $user->status->EditValue ?>"<?php echo $user->status->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="user" data-field="x_status" name="o<?php echo $user_list->RowIndex ?>_status" id="o<?php echo $user_list->RowIndex ?>_status" value="<?php echo HtmlEncode($user->status->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($user->session_token->Visible) { // session_token ?>
+		<td data-name="session_token">
+<span id="el<?php echo $user_list->RowCnt ?>_user_session_token" class="form-group user_session_token">
+<input type="text" data-table="user" data-field="x_session_token" name="x<?php echo $user_list->RowIndex ?>_session_token" id="x<?php echo $user_list->RowIndex ?>_session_token" size="30" maxlength="255" placeholder="<?php echo HtmlEncode($user->session_token->getPlaceHolder()) ?>" value="<?php echo $user->session_token->EditValue ?>"<?php echo $user->session_token->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="user" data-field="x_session_token" name="o<?php echo $user_list->RowIndex ?>_session_token" id="o<?php echo $user_list->RowIndex ?>_session_token" value="<?php echo HtmlEncode($user->session_token->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($user->createdAt->Visible) { // createdAt ?>
+		<td data-name="createdAt">
+<span id="el<?php echo $user_list->RowCnt ?>_user_createdAt" class="form-group user_createdAt">
+<input type="text" data-table="user" data-field="x_createdAt" name="x<?php echo $user_list->RowIndex ?>_createdAt" id="x<?php echo $user_list->RowIndex ?>_createdAt" placeholder="<?php echo HtmlEncode($user->createdAt->getPlaceHolder()) ?>" value="<?php echo $user->createdAt->EditValue ?>"<?php echo $user->createdAt->editAttributes() ?>>
+<?php if (!$user->createdAt->ReadOnly && !$user->createdAt->Disabled && !isset($user->createdAt->EditAttrs["readonly"]) && !isset($user->createdAt->EditAttrs["disabled"])) { ?>
 <script>
-ew.createDateTimePicker("fuserlist", "x<?php echo $user_list->RowIndex ?>_addDate", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+ew.createDateTimePicker("fuserlist", "x<?php echo $user_list->RowIndex ?>_createdAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
 </script>
 <?php } ?>
 </span>
-<input type="hidden" data-table="user" data-field="x_addDate" name="o<?php echo $user_list->RowIndex ?>_addDate" id="o<?php echo $user_list->RowIndex ?>_addDate" value="<?php echo HtmlEncode($user->addDate->OldValue) ?>">
+<input type="hidden" data-table="user" data-field="x_createdAt" name="o<?php echo $user_list->RowIndex ?>_createdAt" id="o<?php echo $user_list->RowIndex ?>_createdAt" value="<?php echo HtmlEncode($user->createdAt->OldValue) ?>">
 </td>
 	<?php } ?>
-	<?php if ($user->updateDate->Visible) { // updateDate ?>
-		<td data-name="updateDate">
-<input type="hidden" data-table="user" data-field="x_updateDate" name="o<?php echo $user_list->RowIndex ?>_updateDate" id="o<?php echo $user_list->RowIndex ?>_updateDate" value="<?php echo HtmlEncode($user->updateDate->OldValue) ?>">
-</td>
-	<?php } ?>
-	<?php if ($user->activated->Visible) { // activated ?>
-		<td data-name="activated">
-<span id="el<?php echo $user_list->RowCnt ?>_user_activated" class="form-group user_activated">
-<input type="text" data-table="user" data-field="x_activated" name="x<?php echo $user_list->RowIndex ?>_activated" id="x<?php echo $user_list->RowIndex ?>_activated" size="30" placeholder="<?php echo HtmlEncode($user->activated->getPlaceHolder()) ?>" value="<?php echo $user->activated->EditValue ?>"<?php echo $user->activated->editAttributes() ?>>
+	<?php if ($user->updatedAt->Visible) { // updatedAt ?>
+		<td data-name="updatedAt">
+<span id="el<?php echo $user_list->RowCnt ?>_user_updatedAt" class="form-group user_updatedAt">
+<input type="text" data-table="user" data-field="x_updatedAt" name="x<?php echo $user_list->RowIndex ?>_updatedAt" id="x<?php echo $user_list->RowIndex ?>_updatedAt" placeholder="<?php echo HtmlEncode($user->updatedAt->getPlaceHolder()) ?>" value="<?php echo $user->updatedAt->EditValue ?>"<?php echo $user->updatedAt->editAttributes() ?>>
+<?php if (!$user->updatedAt->ReadOnly && !$user->updatedAt->Disabled && !isset($user->updatedAt->EditAttrs["readonly"]) && !isset($user->updatedAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("fuserlist", "x<?php echo $user_list->RowIndex ?>_updatedAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
 </span>
-<input type="hidden" data-table="user" data-field="x_activated" name="o<?php echo $user_list->RowIndex ?>_activated" id="o<?php echo $user_list->RowIndex ?>_activated" value="<?php echo HtmlEncode($user->activated->OldValue) ?>">
+<input type="hidden" data-table="user" data-field="x_updatedAt" name="o<?php echo $user_list->RowIndex ?>_updatedAt" id="o<?php echo $user_list->RowIndex ?>_updatedAt" value="<?php echo HtmlEncode($user->updatedAt->OldValue) ?>">
 </td>
 	<?php } ?>
 <?php
@@ -834,29 +849,6 @@ $user_list->ListOptions->render("body", "left", $user_list->RowCnt);
 <?php if ($user->RowType == ROWTYPE_EDIT || $user->CurrentMode == "edit") { ?>
 <input type="hidden" data-table="user" data-field="x_id" name="x<?php echo $user_list->RowIndex ?>_id" id="x<?php echo $user_list->RowIndex ?>_id" value="<?php echo HtmlEncode($user->id->CurrentValue) ?>">
 <?php } ?>
-	<?php if ($user->_email->Visible) { // email ?>
-		<td data-name="_email"<?php echo $user->_email->cellAttributes() ?>>
-<?php if ($user->RowType == ROWTYPE_ADD) { // Add record ?>
-<span id="el<?php echo $user_list->RowCnt ?>_user__email" class="form-group user__email">
-<input type="text" data-table="user" data-field="x__email" name="x<?php echo $user_list->RowIndex ?>__email" id="x<?php echo $user_list->RowIndex ?>__email" size="30" maxlength="100" placeholder="<?php echo HtmlEncode($user->_email->getPlaceHolder()) ?>" value="<?php echo $user->_email->EditValue ?>"<?php echo $user->_email->editAttributes() ?>>
-</span>
-<input type="hidden" data-table="user" data-field="x__email" name="o<?php echo $user_list->RowIndex ?>__email" id="o<?php echo $user_list->RowIndex ?>__email" value="<?php echo HtmlEncode($user->_email->OldValue) ?>">
-<?php } ?>
-<?php if ($user->RowType == ROWTYPE_EDIT) { // Edit record ?>
-<span id="el<?php echo $user_list->RowCnt ?>_user__email" class="form-group user__email">
-<span<?php echo $user->_email->viewAttributes() ?>>
-<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($user->_email->EditValue) ?>"></span>
-</span>
-<input type="hidden" data-table="user" data-field="x__email" name="x<?php echo $user_list->RowIndex ?>__email" id="x<?php echo $user_list->RowIndex ?>__email" value="<?php echo HtmlEncode($user->_email->CurrentValue) ?>">
-<?php } ?>
-<?php if ($user->RowType == ROWTYPE_VIEW) { // View record ?>
-<span id="el<?php echo $user_list->RowCnt ?>_user__email" class="user__email">
-<span<?php echo $user->_email->viewAttributes() ?>>
-<?php echo $user->_email->getViewValue() ?></span>
-</span>
-<?php } ?>
-</td>
-	<?php } ?>
 	<?php if ($user->gender->Visible) { // gender ?>
 		<td data-name="gender"<?php echo $user->gender->cellAttributes() ?>>
 <?php if ($user->RowType == ROWTYPE_ADD) { // Add record ?>
@@ -880,29 +872,6 @@ $user_list->ListOptions->render("body", "left", $user_list->RowCnt);
 <span id="el<?php echo $user_list->RowCnt ?>_user_gender" class="user_gender">
 <span<?php echo $user->gender->viewAttributes() ?>>
 <?php echo $user->gender->getViewValue() ?></span>
-</span>
-<?php } ?>
-</td>
-	<?php } ?>
-	<?php if ($user->phone->Visible) { // phone ?>
-		<td data-name="phone"<?php echo $user->phone->cellAttributes() ?>>
-<?php if ($user->RowType == ROWTYPE_ADD) { // Add record ?>
-<span id="el<?php echo $user_list->RowCnt ?>_user_phone" class="form-group user_phone">
-<input type="text" data-table="user" data-field="x_phone" name="x<?php echo $user_list->RowIndex ?>_phone" id="x<?php echo $user_list->RowIndex ?>_phone" size="30" maxlength="100" placeholder="<?php echo HtmlEncode($user->phone->getPlaceHolder()) ?>" value="<?php echo $user->phone->EditValue ?>"<?php echo $user->phone->editAttributes() ?>>
-</span>
-<input type="hidden" data-table="user" data-field="x_phone" name="o<?php echo $user_list->RowIndex ?>_phone" id="o<?php echo $user_list->RowIndex ?>_phone" value="<?php echo HtmlEncode($user->phone->OldValue) ?>">
-<?php } ?>
-<?php if ($user->RowType == ROWTYPE_EDIT) { // Edit record ?>
-<span id="el<?php echo $user_list->RowCnt ?>_user_phone" class="form-group user_phone">
-<span<?php echo $user->phone->viewAttributes() ?>>
-<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($user->phone->EditValue) ?>"></span>
-</span>
-<input type="hidden" data-table="user" data-field="x_phone" name="x<?php echo $user_list->RowIndex ?>_phone" id="x<?php echo $user_list->RowIndex ?>_phone" value="<?php echo HtmlEncode($user->phone->CurrentValue) ?>">
-<?php } ?>
-<?php if ($user->RowType == ROWTYPE_VIEW) { // View record ?>
-<span id="el<?php echo $user_list->RowCnt ?>_user_phone" class="user_phone">
-<span<?php echo $user->phone->viewAttributes() ?>>
-<?php echo $user->phone->getViewValue() ?></span>
 </span>
 <?php } ?>
 </td>
@@ -1150,66 +1119,127 @@ ew.createDateTimePicker("fuserlist", "x<?php echo $user_list->RowIndex ?>_birthd
 <?php } ?>
 </td>
 	<?php } ?>
-	<?php if ($user->addDate->Visible) { // addDate ?>
-		<td data-name="addDate"<?php echo $user->addDate->cellAttributes() ?>>
+	<?php if ($user->mobile_phone->Visible) { // mobile_phone ?>
+		<td data-name="mobile_phone"<?php echo $user->mobile_phone->cellAttributes() ?>>
 <?php if ($user->RowType == ROWTYPE_ADD) { // Add record ?>
-<span id="el<?php echo $user_list->RowCnt ?>_user_addDate" class="form-group user_addDate">
-<input type="text" data-table="user" data-field="x_addDate" name="x<?php echo $user_list->RowIndex ?>_addDate" id="x<?php echo $user_list->RowIndex ?>_addDate" placeholder="<?php echo HtmlEncode($user->addDate->getPlaceHolder()) ?>" value="<?php echo $user->addDate->EditValue ?>"<?php echo $user->addDate->editAttributes() ?>>
-<?php if (!$user->addDate->ReadOnly && !$user->addDate->Disabled && !isset($user->addDate->EditAttrs["readonly"]) && !isset($user->addDate->EditAttrs["disabled"])) { ?>
+<span id="el<?php echo $user_list->RowCnt ?>_user_mobile_phone" class="form-group user_mobile_phone">
+<input type="text" data-table="user" data-field="x_mobile_phone" name="x<?php echo $user_list->RowIndex ?>_mobile_phone" id="x<?php echo $user_list->RowIndex ?>_mobile_phone" size="30" maxlength="100" placeholder="<?php echo HtmlEncode($user->mobile_phone->getPlaceHolder()) ?>" value="<?php echo $user->mobile_phone->EditValue ?>"<?php echo $user->mobile_phone->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="user" data-field="x_mobile_phone" name="o<?php echo $user_list->RowIndex ?>_mobile_phone" id="o<?php echo $user_list->RowIndex ?>_mobile_phone" value="<?php echo HtmlEncode($user->mobile_phone->OldValue) ?>">
+<?php } ?>
+<?php if ($user->RowType == ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $user_list->RowCnt ?>_user_mobile_phone" class="form-group user_mobile_phone">
+<input type="text" data-table="user" data-field="x_mobile_phone" name="x<?php echo $user_list->RowIndex ?>_mobile_phone" id="x<?php echo $user_list->RowIndex ?>_mobile_phone" size="30" maxlength="100" placeholder="<?php echo HtmlEncode($user->mobile_phone->getPlaceHolder()) ?>" value="<?php echo $user->mobile_phone->EditValue ?>"<?php echo $user->mobile_phone->editAttributes() ?>>
+</span>
+<?php } ?>
+<?php if ($user->RowType == ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $user_list->RowCnt ?>_user_mobile_phone" class="user_mobile_phone">
+<span<?php echo $user->mobile_phone->viewAttributes() ?>>
+<?php echo $user->mobile_phone->getViewValue() ?></span>
+</span>
+<?php } ?>
+</td>
+	<?php } ?>
+	<?php if ($user->status->Visible) { // status ?>
+		<td data-name="status"<?php echo $user->status->cellAttributes() ?>>
+<?php if ($user->RowType == ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $user_list->RowCnt ?>_user_status" class="form-group user_status">
+<input type="text" data-table="user" data-field="x_status" name="x<?php echo $user_list->RowIndex ?>_status" id="x<?php echo $user_list->RowIndex ?>_status" size="30" placeholder="<?php echo HtmlEncode($user->status->getPlaceHolder()) ?>" value="<?php echo $user->status->EditValue ?>"<?php echo $user->status->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="user" data-field="x_status" name="o<?php echo $user_list->RowIndex ?>_status" id="o<?php echo $user_list->RowIndex ?>_status" value="<?php echo HtmlEncode($user->status->OldValue) ?>">
+<?php } ?>
+<?php if ($user->RowType == ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $user_list->RowCnt ?>_user_status" class="form-group user_status">
+<input type="text" data-table="user" data-field="x_status" name="x<?php echo $user_list->RowIndex ?>_status" id="x<?php echo $user_list->RowIndex ?>_status" size="30" placeholder="<?php echo HtmlEncode($user->status->getPlaceHolder()) ?>" value="<?php echo $user->status->EditValue ?>"<?php echo $user->status->editAttributes() ?>>
+</span>
+<?php } ?>
+<?php if ($user->RowType == ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $user_list->RowCnt ?>_user_status" class="user_status">
+<span<?php echo $user->status->viewAttributes() ?>>
+<?php echo $user->status->getViewValue() ?></span>
+</span>
+<?php } ?>
+</td>
+	<?php } ?>
+	<?php if ($user->session_token->Visible) { // session_token ?>
+		<td data-name="session_token"<?php echo $user->session_token->cellAttributes() ?>>
+<?php if ($user->RowType == ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $user_list->RowCnt ?>_user_session_token" class="form-group user_session_token">
+<input type="text" data-table="user" data-field="x_session_token" name="x<?php echo $user_list->RowIndex ?>_session_token" id="x<?php echo $user_list->RowIndex ?>_session_token" size="30" maxlength="255" placeholder="<?php echo HtmlEncode($user->session_token->getPlaceHolder()) ?>" value="<?php echo $user->session_token->EditValue ?>"<?php echo $user->session_token->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="user" data-field="x_session_token" name="o<?php echo $user_list->RowIndex ?>_session_token" id="o<?php echo $user_list->RowIndex ?>_session_token" value="<?php echo HtmlEncode($user->session_token->OldValue) ?>">
+<?php } ?>
+<?php if ($user->RowType == ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $user_list->RowCnt ?>_user_session_token" class="form-group user_session_token">
+<input type="text" data-table="user" data-field="x_session_token" name="x<?php echo $user_list->RowIndex ?>_session_token" id="x<?php echo $user_list->RowIndex ?>_session_token" size="30" maxlength="255" placeholder="<?php echo HtmlEncode($user->session_token->getPlaceHolder()) ?>" value="<?php echo $user->session_token->EditValue ?>"<?php echo $user->session_token->editAttributes() ?>>
+</span>
+<?php } ?>
+<?php if ($user->RowType == ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $user_list->RowCnt ?>_user_session_token" class="user_session_token">
+<span<?php echo $user->session_token->viewAttributes() ?>>
+<?php echo $user->session_token->getViewValue() ?></span>
+</span>
+<?php } ?>
+</td>
+	<?php } ?>
+	<?php if ($user->createdAt->Visible) { // createdAt ?>
+		<td data-name="createdAt"<?php echo $user->createdAt->cellAttributes() ?>>
+<?php if ($user->RowType == ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $user_list->RowCnt ?>_user_createdAt" class="form-group user_createdAt">
+<input type="text" data-table="user" data-field="x_createdAt" name="x<?php echo $user_list->RowIndex ?>_createdAt" id="x<?php echo $user_list->RowIndex ?>_createdAt" placeholder="<?php echo HtmlEncode($user->createdAt->getPlaceHolder()) ?>" value="<?php echo $user->createdAt->EditValue ?>"<?php echo $user->createdAt->editAttributes() ?>>
+<?php if (!$user->createdAt->ReadOnly && !$user->createdAt->Disabled && !isset($user->createdAt->EditAttrs["readonly"]) && !isset($user->createdAt->EditAttrs["disabled"])) { ?>
 <script>
-ew.createDateTimePicker("fuserlist", "x<?php echo $user_list->RowIndex ?>_addDate", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+ew.createDateTimePicker("fuserlist", "x<?php echo $user_list->RowIndex ?>_createdAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
 </script>
 <?php } ?>
 </span>
-<input type="hidden" data-table="user" data-field="x_addDate" name="o<?php echo $user_list->RowIndex ?>_addDate" id="o<?php echo $user_list->RowIndex ?>_addDate" value="<?php echo HtmlEncode($user->addDate->OldValue) ?>">
+<input type="hidden" data-table="user" data-field="x_createdAt" name="o<?php echo $user_list->RowIndex ?>_createdAt" id="o<?php echo $user_list->RowIndex ?>_createdAt" value="<?php echo HtmlEncode($user->createdAt->OldValue) ?>">
 <?php } ?>
 <?php if ($user->RowType == ROWTYPE_EDIT) { // Edit record ?>
-<span id="el<?php echo $user_list->RowCnt ?>_user_addDate" class="form-group user_addDate">
-<span<?php echo $user->addDate->viewAttributes() ?>>
-<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($user->addDate->EditValue) ?>"></span>
+<span id="el<?php echo $user_list->RowCnt ?>_user_createdAt" class="form-group user_createdAt">
+<input type="text" data-table="user" data-field="x_createdAt" name="x<?php echo $user_list->RowIndex ?>_createdAt" id="x<?php echo $user_list->RowIndex ?>_createdAt" placeholder="<?php echo HtmlEncode($user->createdAt->getPlaceHolder()) ?>" value="<?php echo $user->createdAt->EditValue ?>"<?php echo $user->createdAt->editAttributes() ?>>
+<?php if (!$user->createdAt->ReadOnly && !$user->createdAt->Disabled && !isset($user->createdAt->EditAttrs["readonly"]) && !isset($user->createdAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("fuserlist", "x<?php echo $user_list->RowIndex ?>_createdAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
 </span>
-<input type="hidden" data-table="user" data-field="x_addDate" name="x<?php echo $user_list->RowIndex ?>_addDate" id="x<?php echo $user_list->RowIndex ?>_addDate" value="<?php echo HtmlEncode($user->addDate->CurrentValue) ?>">
 <?php } ?>
 <?php if ($user->RowType == ROWTYPE_VIEW) { // View record ?>
-<span id="el<?php echo $user_list->RowCnt ?>_user_addDate" class="user_addDate">
-<span<?php echo $user->addDate->viewAttributes() ?>>
-<?php echo $user->addDate->getViewValue() ?></span>
+<span id="el<?php echo $user_list->RowCnt ?>_user_createdAt" class="user_createdAt">
+<span<?php echo $user->createdAt->viewAttributes() ?>>
+<?php echo $user->createdAt->getViewValue() ?></span>
 </span>
 <?php } ?>
 </td>
 	<?php } ?>
-	<?php if ($user->updateDate->Visible) { // updateDate ?>
-		<td data-name="updateDate"<?php echo $user->updateDate->cellAttributes() ?>>
+	<?php if ($user->updatedAt->Visible) { // updatedAt ?>
+		<td data-name="updatedAt"<?php echo $user->updatedAt->cellAttributes() ?>>
 <?php if ($user->RowType == ROWTYPE_ADD) { // Add record ?>
-<input type="hidden" data-table="user" data-field="x_updateDate" name="o<?php echo $user_list->RowIndex ?>_updateDate" id="o<?php echo $user_list->RowIndex ?>_updateDate" value="<?php echo HtmlEncode($user->updateDate->OldValue) ?>">
+<span id="el<?php echo $user_list->RowCnt ?>_user_updatedAt" class="form-group user_updatedAt">
+<input type="text" data-table="user" data-field="x_updatedAt" name="x<?php echo $user_list->RowIndex ?>_updatedAt" id="x<?php echo $user_list->RowIndex ?>_updatedAt" placeholder="<?php echo HtmlEncode($user->updatedAt->getPlaceHolder()) ?>" value="<?php echo $user->updatedAt->EditValue ?>"<?php echo $user->updatedAt->editAttributes() ?>>
+<?php if (!$user->updatedAt->ReadOnly && !$user->updatedAt->Disabled && !isset($user->updatedAt->EditAttrs["readonly"]) && !isset($user->updatedAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("fuserlist", "x<?php echo $user_list->RowIndex ?>_updatedAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<input type="hidden" data-table="user" data-field="x_updatedAt" name="o<?php echo $user_list->RowIndex ?>_updatedAt" id="o<?php echo $user_list->RowIndex ?>_updatedAt" value="<?php echo HtmlEncode($user->updatedAt->OldValue) ?>">
 <?php } ?>
 <?php if ($user->RowType == ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $user_list->RowCnt ?>_user_updatedAt" class="form-group user_updatedAt">
+<input type="text" data-table="user" data-field="x_updatedAt" name="x<?php echo $user_list->RowIndex ?>_updatedAt" id="x<?php echo $user_list->RowIndex ?>_updatedAt" placeholder="<?php echo HtmlEncode($user->updatedAt->getPlaceHolder()) ?>" value="<?php echo $user->updatedAt->EditValue ?>"<?php echo $user->updatedAt->editAttributes() ?>>
+<?php if (!$user->updatedAt->ReadOnly && !$user->updatedAt->Disabled && !isset($user->updatedAt->EditAttrs["readonly"]) && !isset($user->updatedAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("fuserlist", "x<?php echo $user_list->RowIndex ?>_updatedAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
 <?php } ?>
-<?php if ($user->RowType == ROWTYPE_VIEW) { // View record ?>
-<span id="el<?php echo $user_list->RowCnt ?>_user_updateDate" class="user_updateDate">
-<span<?php echo $user->updateDate->viewAttributes() ?>>
-<?php echo $user->updateDate->getViewValue() ?></span>
-</span>
-<?php } ?>
-</td>
-	<?php } ?>
-	<?php if ($user->activated->Visible) { // activated ?>
-		<td data-name="activated"<?php echo $user->activated->cellAttributes() ?>>
-<?php if ($user->RowType == ROWTYPE_ADD) { // Add record ?>
-<span id="el<?php echo $user_list->RowCnt ?>_user_activated" class="form-group user_activated">
-<input type="text" data-table="user" data-field="x_activated" name="x<?php echo $user_list->RowIndex ?>_activated" id="x<?php echo $user_list->RowIndex ?>_activated" size="30" placeholder="<?php echo HtmlEncode($user->activated->getPlaceHolder()) ?>" value="<?php echo $user->activated->EditValue ?>"<?php echo $user->activated->editAttributes() ?>>
-</span>
-<input type="hidden" data-table="user" data-field="x_activated" name="o<?php echo $user_list->RowIndex ?>_activated" id="o<?php echo $user_list->RowIndex ?>_activated" value="<?php echo HtmlEncode($user->activated->OldValue) ?>">
-<?php } ?>
-<?php if ($user->RowType == ROWTYPE_EDIT) { // Edit record ?>
-<span id="el<?php echo $user_list->RowCnt ?>_user_activated" class="form-group user_activated">
-<input type="text" data-table="user" data-field="x_activated" name="x<?php echo $user_list->RowIndex ?>_activated" id="x<?php echo $user_list->RowIndex ?>_activated" size="30" placeholder="<?php echo HtmlEncode($user->activated->getPlaceHolder()) ?>" value="<?php echo $user->activated->EditValue ?>"<?php echo $user->activated->editAttributes() ?>>
 </span>
 <?php } ?>
 <?php if ($user->RowType == ROWTYPE_VIEW) { // View record ?>
-<span id="el<?php echo $user_list->RowCnt ?>_user_activated" class="user_activated">
-<span<?php echo $user->activated->viewAttributes() ?>>
-<?php echo $user->activated->getViewValue() ?></span>
+<span id="el<?php echo $user_list->RowCnt ?>_user_updatedAt" class="user_updatedAt">
+<span<?php echo $user->updatedAt->viewAttributes() ?>>
+<?php echo $user->updatedAt->getViewValue() ?></span>
 </span>
 <?php } ?>
 </td>
@@ -1265,14 +1295,6 @@ $user_list->ListOptions->render("body", "left", $user_list->RowIndex);
 <input type="hidden" data-table="user" data-field="x_username" name="o<?php echo $user_list->RowIndex ?>_username" id="o<?php echo $user_list->RowIndex ?>_username" value="<?php echo HtmlEncode($user->username->OldValue) ?>">
 </td>
 	<?php } ?>
-	<?php if ($user->_email->Visible) { // email ?>
-		<td data-name="_email">
-<span id="el$rowindex$_user__email" class="form-group user__email">
-<input type="text" data-table="user" data-field="x__email" name="x<?php echo $user_list->RowIndex ?>__email" id="x<?php echo $user_list->RowIndex ?>__email" size="30" maxlength="100" placeholder="<?php echo HtmlEncode($user->_email->getPlaceHolder()) ?>" value="<?php echo $user->_email->EditValue ?>"<?php echo $user->_email->editAttributes() ?>>
-</span>
-<input type="hidden" data-table="user" data-field="x__email" name="o<?php echo $user_list->RowIndex ?>__email" id="o<?php echo $user_list->RowIndex ?>__email" value="<?php echo HtmlEncode($user->_email->OldValue) ?>">
-</td>
-	<?php } ?>
 	<?php if ($user->gender->Visible) { // gender ?>
 		<td data-name="gender">
 <span id="el$rowindex$_user_gender" class="form-group user_gender">
@@ -1283,14 +1305,6 @@ $user_list->ListOptions->render("body", "left", $user_list->RowIndex);
 </div>
 </span>
 <input type="hidden" data-table="user" data-field="x_gender" name="o<?php echo $user_list->RowIndex ?>_gender" id="o<?php echo $user_list->RowIndex ?>_gender" value="<?php echo HtmlEncode($user->gender->OldValue) ?>">
-</td>
-	<?php } ?>
-	<?php if ($user->phone->Visible) { // phone ?>
-		<td data-name="phone">
-<span id="el$rowindex$_user_phone" class="form-group user_phone">
-<input type="text" data-table="user" data-field="x_phone" name="x<?php echo $user_list->RowIndex ?>_phone" id="x<?php echo $user_list->RowIndex ?>_phone" size="30" maxlength="100" placeholder="<?php echo HtmlEncode($user->phone->getPlaceHolder()) ?>" value="<?php echo $user->phone->EditValue ?>"<?php echo $user->phone->editAttributes() ?>>
-</span>
-<input type="hidden" data-table="user" data-field="x_phone" name="o<?php echo $user_list->RowIndex ?>_phone" id="o<?php echo $user_list->RowIndex ?>_phone" value="<?php echo HtmlEncode($user->phone->OldValue) ?>">
 </td>
 	<?php } ?>
 	<?php if ($user->address->Visible) { // address ?>
@@ -1393,30 +1407,54 @@ ew.createDateTimePicker("fuserlist", "x<?php echo $user_list->RowIndex ?>_birthd
 <input type="hidden" data-table="user" data-field="x_birthday" name="o<?php echo $user_list->RowIndex ?>_birthday" id="o<?php echo $user_list->RowIndex ?>_birthday" value="<?php echo HtmlEncode($user->birthday->OldValue) ?>">
 </td>
 	<?php } ?>
-	<?php if ($user->addDate->Visible) { // addDate ?>
-		<td data-name="addDate">
-<span id="el$rowindex$_user_addDate" class="form-group user_addDate">
-<input type="text" data-table="user" data-field="x_addDate" name="x<?php echo $user_list->RowIndex ?>_addDate" id="x<?php echo $user_list->RowIndex ?>_addDate" placeholder="<?php echo HtmlEncode($user->addDate->getPlaceHolder()) ?>" value="<?php echo $user->addDate->EditValue ?>"<?php echo $user->addDate->editAttributes() ?>>
-<?php if (!$user->addDate->ReadOnly && !$user->addDate->Disabled && !isset($user->addDate->EditAttrs["readonly"]) && !isset($user->addDate->EditAttrs["disabled"])) { ?>
+	<?php if ($user->mobile_phone->Visible) { // mobile_phone ?>
+		<td data-name="mobile_phone">
+<span id="el$rowindex$_user_mobile_phone" class="form-group user_mobile_phone">
+<input type="text" data-table="user" data-field="x_mobile_phone" name="x<?php echo $user_list->RowIndex ?>_mobile_phone" id="x<?php echo $user_list->RowIndex ?>_mobile_phone" size="30" maxlength="100" placeholder="<?php echo HtmlEncode($user->mobile_phone->getPlaceHolder()) ?>" value="<?php echo $user->mobile_phone->EditValue ?>"<?php echo $user->mobile_phone->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="user" data-field="x_mobile_phone" name="o<?php echo $user_list->RowIndex ?>_mobile_phone" id="o<?php echo $user_list->RowIndex ?>_mobile_phone" value="<?php echo HtmlEncode($user->mobile_phone->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($user->status->Visible) { // status ?>
+		<td data-name="status">
+<span id="el$rowindex$_user_status" class="form-group user_status">
+<input type="text" data-table="user" data-field="x_status" name="x<?php echo $user_list->RowIndex ?>_status" id="x<?php echo $user_list->RowIndex ?>_status" size="30" placeholder="<?php echo HtmlEncode($user->status->getPlaceHolder()) ?>" value="<?php echo $user->status->EditValue ?>"<?php echo $user->status->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="user" data-field="x_status" name="o<?php echo $user_list->RowIndex ?>_status" id="o<?php echo $user_list->RowIndex ?>_status" value="<?php echo HtmlEncode($user->status->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($user->session_token->Visible) { // session_token ?>
+		<td data-name="session_token">
+<span id="el$rowindex$_user_session_token" class="form-group user_session_token">
+<input type="text" data-table="user" data-field="x_session_token" name="x<?php echo $user_list->RowIndex ?>_session_token" id="x<?php echo $user_list->RowIndex ?>_session_token" size="30" maxlength="255" placeholder="<?php echo HtmlEncode($user->session_token->getPlaceHolder()) ?>" value="<?php echo $user->session_token->EditValue ?>"<?php echo $user->session_token->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="user" data-field="x_session_token" name="o<?php echo $user_list->RowIndex ?>_session_token" id="o<?php echo $user_list->RowIndex ?>_session_token" value="<?php echo HtmlEncode($user->session_token->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($user->createdAt->Visible) { // createdAt ?>
+		<td data-name="createdAt">
+<span id="el$rowindex$_user_createdAt" class="form-group user_createdAt">
+<input type="text" data-table="user" data-field="x_createdAt" name="x<?php echo $user_list->RowIndex ?>_createdAt" id="x<?php echo $user_list->RowIndex ?>_createdAt" placeholder="<?php echo HtmlEncode($user->createdAt->getPlaceHolder()) ?>" value="<?php echo $user->createdAt->EditValue ?>"<?php echo $user->createdAt->editAttributes() ?>>
+<?php if (!$user->createdAt->ReadOnly && !$user->createdAt->Disabled && !isset($user->createdAt->EditAttrs["readonly"]) && !isset($user->createdAt->EditAttrs["disabled"])) { ?>
 <script>
-ew.createDateTimePicker("fuserlist", "x<?php echo $user_list->RowIndex ?>_addDate", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+ew.createDateTimePicker("fuserlist", "x<?php echo $user_list->RowIndex ?>_createdAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
 </script>
 <?php } ?>
 </span>
-<input type="hidden" data-table="user" data-field="x_addDate" name="o<?php echo $user_list->RowIndex ?>_addDate" id="o<?php echo $user_list->RowIndex ?>_addDate" value="<?php echo HtmlEncode($user->addDate->OldValue) ?>">
+<input type="hidden" data-table="user" data-field="x_createdAt" name="o<?php echo $user_list->RowIndex ?>_createdAt" id="o<?php echo $user_list->RowIndex ?>_createdAt" value="<?php echo HtmlEncode($user->createdAt->OldValue) ?>">
 </td>
 	<?php } ?>
-	<?php if ($user->updateDate->Visible) { // updateDate ?>
-		<td data-name="updateDate">
-<input type="hidden" data-table="user" data-field="x_updateDate" name="o<?php echo $user_list->RowIndex ?>_updateDate" id="o<?php echo $user_list->RowIndex ?>_updateDate" value="<?php echo HtmlEncode($user->updateDate->OldValue) ?>">
-</td>
-	<?php } ?>
-	<?php if ($user->activated->Visible) { // activated ?>
-		<td data-name="activated">
-<span id="el$rowindex$_user_activated" class="form-group user_activated">
-<input type="text" data-table="user" data-field="x_activated" name="x<?php echo $user_list->RowIndex ?>_activated" id="x<?php echo $user_list->RowIndex ?>_activated" size="30" placeholder="<?php echo HtmlEncode($user->activated->getPlaceHolder()) ?>" value="<?php echo $user->activated->EditValue ?>"<?php echo $user->activated->editAttributes() ?>>
+	<?php if ($user->updatedAt->Visible) { // updatedAt ?>
+		<td data-name="updatedAt">
+<span id="el$rowindex$_user_updatedAt" class="form-group user_updatedAt">
+<input type="text" data-table="user" data-field="x_updatedAt" name="x<?php echo $user_list->RowIndex ?>_updatedAt" id="x<?php echo $user_list->RowIndex ?>_updatedAt" placeholder="<?php echo HtmlEncode($user->updatedAt->getPlaceHolder()) ?>" value="<?php echo $user->updatedAt->EditValue ?>"<?php echo $user->updatedAt->editAttributes() ?>>
+<?php if (!$user->updatedAt->ReadOnly && !$user->updatedAt->Disabled && !isset($user->updatedAt->EditAttrs["readonly"]) && !isset($user->updatedAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("fuserlist", "x<?php echo $user_list->RowIndex ?>_updatedAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
 </span>
-<input type="hidden" data-table="user" data-field="x_activated" name="o<?php echo $user_list->RowIndex ?>_activated" id="o<?php echo $user_list->RowIndex ?>_activated" value="<?php echo HtmlEncode($user->activated->OldValue) ?>">
+<input type="hidden" data-table="user" data-field="x_updatedAt" name="o<?php echo $user_list->RowIndex ?>_updatedAt" id="o<?php echo $user_list->RowIndex ?>_updatedAt" value="<?php echo HtmlEncode($user->updatedAt->OldValue) ?>">
 </td>
 	<?php } ?>
 <?php

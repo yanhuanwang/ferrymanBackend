@@ -82,11 +82,6 @@ fparcel_infoedit.validate = function() {
 			elm = this.getElements("x" + infix + "_user_id");
 			if (elm && !ew.checkInteger(elm.value))
 				return this.onError(elm, "<?php echo JsEncode($parcel_info->user_id->errorMessage()) ?>");
-		<?php if ($parcel_info_edit->category->Required) { ?>
-			elm = this.getElements("x" + infix + "_category");
-			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
-				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $parcel_info->category->caption(), $parcel_info->category->RequiredErrorMessage)) ?>");
-		<?php } ?>
 		<?php if ($parcel_info_edit->image_id->Required) { ?>
 			elm = this.getElements("x" + infix + "_image_id");
 			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
@@ -100,6 +95,38 @@ fparcel_infoedit.validate = function() {
 			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
 				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $parcel_info->name->caption(), $parcel_info->name->RequiredErrorMessage)) ?>");
 		<?php } ?>
+		<?php if ($parcel_info_edit->categoty->Required) { ?>
+			elm = this.getElements("x" + infix + "_categoty");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $parcel_info->categoty->caption(), $parcel_info->categoty->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_categoty");
+			if (elm && !ew.checkInteger(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($parcel_info->categoty->errorMessage()) ?>");
+		<?php if ($parcel_info_edit->status->Required) { ?>
+			elm = this.getElements("x" + infix + "_status");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $parcel_info->status->caption(), $parcel_info->status->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_status");
+			if (elm && !ew.checkInteger(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($parcel_info->status->errorMessage()) ?>");
+		<?php if ($parcel_info_edit->createdAt->Required) { ?>
+			elm = this.getElements("x" + infix + "_createdAt");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $parcel_info->createdAt->caption(), $parcel_info->createdAt->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_createdAt");
+			if (elm && !ew.checkDateDef(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($parcel_info->createdAt->errorMessage()) ?>");
+		<?php if ($parcel_info_edit->updatedAt->Required) { ?>
+			elm = this.getElements("x" + infix + "_updatedAt");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $parcel_info->updatedAt->caption(), $parcel_info->updatedAt->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_updatedAt");
+			if (elm && !ew.checkDateDef(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($parcel_info->updatedAt->errorMessage()) ?>");
 
 			// Fire Form_CustomValidate event
 			if (!this.Form_CustomValidate(fobj))
@@ -131,8 +158,6 @@ fparcel_infoedit.validateRequired = <?php echo json_encode(CLIENT_VALIDATE) ?>;
 fparcel_infoedit.lists["x_user_id"] = <?php echo $parcel_info_edit->user_id->Lookup->toClientList() ?>;
 fparcel_infoedit.lists["x_user_id"].options = <?php echo JsonEncode($parcel_info_edit->user_id->lookupOptions()) ?>;
 fparcel_infoedit.autoSuggests["x_user_id"] = <?php echo json_encode(["data" => "ajax=autosuggest"]) ?>;
-fparcel_infoedit.lists["x_category"] = <?php echo $parcel_info_edit->category->Lookup->toClientList() ?>;
-fparcel_infoedit.lists["x_category"].options = <?php echo JsonEncode($parcel_info_edit->category->lookupOptions()) ?>;
 fparcel_infoedit.lists["x_image_id"] = <?php echo $parcel_info_edit->image_id->Lookup->toClientList() ?>;
 fparcel_infoedit.lists["x_image_id"].options = <?php echo JsonEncode($parcel_info_edit->image_id->lookupOptions()) ?>;
 fparcel_infoedit.autoSuggests["x_image_id"] = <?php echo json_encode(["data" => "ajax=autosuggest"]) ?>;
@@ -195,10 +220,6 @@ $parcel_info_edit->showMessage();
 <?php if ($parcel_info->getCurrentMasterTable() == "user") { ?>
 <input type="hidden" name="<?php echo TABLE_SHOW_MASTER ?>" value="user">
 <input type="hidden" name="fk_id" value="<?php echo $parcel_info->user_id->getSessionValue() ?>">
-<?php } ?>
-<?php if ($parcel_info->getCurrentMasterTable() == "category") { ?>
-<input type="hidden" name="<?php echo TABLE_SHOW_MASTER ?>" value="category">
-<input type="hidden" name="fk_id" value="<?php echo $parcel_info->category->getSessionValue() ?>">
 <?php } ?>
 <div class="ew-edit-div"><!-- page* -->
 <?php if ($parcel_info->id->Visible) { // id ?>
@@ -312,37 +333,6 @@ fparcel_infoedit.createAutoSuggest({"id":"x_user_id","forceSelect":false});
 <?php echo $parcel_info->user_id->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
-<?php if ($parcel_info->category->Visible) { // category ?>
-	<div id="r_category" class="form-group row">
-		<label id="elh_parcel_info_category" for="x_category" class="<?php echo $parcel_info_edit->LeftColumnClass ?>"><?php echo $parcel_info->category->caption() ?><?php echo ($parcel_info->category->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
-		<div class="<?php echo $parcel_info_edit->RightColumnClass ?>"><div<?php echo $parcel_info->category->cellAttributes() ?>>
-<?php if (!$parcel_info->isConfirm()) { ?>
-<?php if ($parcel_info->category->getSessionValue() <> "") { ?>
-<span id="el_parcel_info_category">
-<span<?php echo $parcel_info->category->viewAttributes() ?>>
-<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($parcel_info->category->ViewValue) ?>"></span>
-</span>
-<input type="hidden" id="x_category" name="x_category" value="<?php echo HtmlEncode($parcel_info->category->CurrentValue) ?>">
-<?php } else { ?>
-<span id="el_parcel_info_category">
-<div class="input-group">
-	<select class="custom-select ew-custom-select" data-table="parcel_info" data-field="x_category" data-value-separator="<?php echo $parcel_info->category->displayValueSeparatorAttribute() ?>" id="x_category" name="x_category"<?php echo $parcel_info->category->editAttributes() ?>>
-		<?php echo $parcel_info->category->selectOptionListHtml("x_category") ?>
-	</select>
-<?php echo $parcel_info->category->Lookup->getParamTag("p_x_category") ?>
-</div>
-</span>
-<?php } ?>
-<?php } else { ?>
-<span id="el_parcel_info_category">
-<span<?php echo $parcel_info->category->viewAttributes() ?>>
-<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($parcel_info->category->ViewValue) ?>"></span>
-</span>
-<input type="hidden" data-table="parcel_info" data-field="x_category" name="x_category" id="x_category" value="<?php echo HtmlEncode($parcel_info->category->FormValue) ?>">
-<?php } ?>
-<?php echo $parcel_info->category->CustomMsg ?></div></div>
-	</div>
-<?php } ?>
 <?php if ($parcel_info->image_id->Visible) { // image_id ?>
 	<div id="r_image_id" class="form-group row">
 		<label id="elh_parcel_info_image_id" class="<?php echo $parcel_info_edit->LeftColumnClass ?>"><?php echo $parcel_info->image_id->caption() ?><?php echo ($parcel_info->image_id->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
@@ -366,7 +356,7 @@ $wrkonchange = "" . trim(@$parcel_info->image_id->EditAttrs["onchange"]);
 if (trim($wrkonchange) <> "") $wrkonchange = " onchange=\"" . JsEncode($wrkonchange) . "\"";
 $parcel_info->image_id->EditAttrs["onchange"] = "";
 ?>
-<span id="as_x_image_id" class="text-nowrap" style="z-index: 8930">
+<span id="as_x_image_id" class="text-nowrap" style="z-index: 8940">
 	<input type="text" class="form-control" name="sv_x_image_id" id="sv_x_image_id" value="<?php echo RemoveHtml($parcel_info->image_id->EditValue) ?>" size="30" placeholder="<?php echo HtmlEncode($parcel_info->image_id->getPlaceHolder()) ?>" data-placeholder="<?php echo HtmlEncode($parcel_info->image_id->getPlaceHolder()) ?>"<?php echo $parcel_info->image_id->editAttributes() ?>>
 </span>
 <input type="hidden" data-table="parcel_info" data-field="x_image_id" data-value-separator="<?php echo $parcel_info->image_id->displayValueSeparatorAttribute() ?>" name="x_image_id" id="x_image_id" value="<?php echo HtmlEncode($parcel_info->image_id->CurrentValue) ?>"<?php echo $wrkonchange ?>>
@@ -408,15 +398,89 @@ fparcel_infoedit.createAutoSuggest({"id":"x_image_id","forceSelect":false});
 <?php echo $parcel_info->name->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
+<?php if ($parcel_info->categoty->Visible) { // categoty ?>
+	<div id="r_categoty" class="form-group row">
+		<label id="elh_parcel_info_categoty" for="x_categoty" class="<?php echo $parcel_info_edit->LeftColumnClass ?>"><?php echo $parcel_info->categoty->caption() ?><?php echo ($parcel_info->categoty->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
+		<div class="<?php echo $parcel_info_edit->RightColumnClass ?>"><div<?php echo $parcel_info->categoty->cellAttributes() ?>>
+<?php if (!$parcel_info->isConfirm()) { ?>
+<span id="el_parcel_info_categoty">
+<input type="text" data-table="parcel_info" data-field="x_categoty" name="x_categoty" id="x_categoty" size="30" placeholder="<?php echo HtmlEncode($parcel_info->categoty->getPlaceHolder()) ?>" value="<?php echo $parcel_info->categoty->EditValue ?>"<?php echo $parcel_info->categoty->editAttributes() ?>>
+</span>
+<?php } else { ?>
+<span id="el_parcel_info_categoty">
+<span<?php echo $parcel_info->categoty->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($parcel_info->categoty->ViewValue) ?>"></span>
+</span>
+<input type="hidden" data-table="parcel_info" data-field="x_categoty" name="x_categoty" id="x_categoty" value="<?php echo HtmlEncode($parcel_info->categoty->FormValue) ?>">
+<?php } ?>
+<?php echo $parcel_info->categoty->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($parcel_info->status->Visible) { // status ?>
+	<div id="r_status" class="form-group row">
+		<label id="elh_parcel_info_status" for="x_status" class="<?php echo $parcel_info_edit->LeftColumnClass ?>"><?php echo $parcel_info->status->caption() ?><?php echo ($parcel_info->status->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
+		<div class="<?php echo $parcel_info_edit->RightColumnClass ?>"><div<?php echo $parcel_info->status->cellAttributes() ?>>
+<?php if (!$parcel_info->isConfirm()) { ?>
+<span id="el_parcel_info_status">
+<input type="text" data-table="parcel_info" data-field="x_status" name="x_status" id="x_status" size="30" placeholder="<?php echo HtmlEncode($parcel_info->status->getPlaceHolder()) ?>" value="<?php echo $parcel_info->status->EditValue ?>"<?php echo $parcel_info->status->editAttributes() ?>>
+</span>
+<?php } else { ?>
+<span id="el_parcel_info_status">
+<span<?php echo $parcel_info->status->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($parcel_info->status->ViewValue) ?>"></span>
+</span>
+<input type="hidden" data-table="parcel_info" data-field="x_status" name="x_status" id="x_status" value="<?php echo HtmlEncode($parcel_info->status->FormValue) ?>">
+<?php } ?>
+<?php echo $parcel_info->status->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($parcel_info->createdAt->Visible) { // createdAt ?>
+	<div id="r_createdAt" class="form-group row">
+		<label id="elh_parcel_info_createdAt" for="x_createdAt" class="<?php echo $parcel_info_edit->LeftColumnClass ?>"><?php echo $parcel_info->createdAt->caption() ?><?php echo ($parcel_info->createdAt->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
+		<div class="<?php echo $parcel_info_edit->RightColumnClass ?>"><div<?php echo $parcel_info->createdAt->cellAttributes() ?>>
+<?php if (!$parcel_info->isConfirm()) { ?>
+<span id="el_parcel_info_createdAt">
+<input type="text" data-table="parcel_info" data-field="x_createdAt" name="x_createdAt" id="x_createdAt" placeholder="<?php echo HtmlEncode($parcel_info->createdAt->getPlaceHolder()) ?>" value="<?php echo $parcel_info->createdAt->EditValue ?>"<?php echo $parcel_info->createdAt->editAttributes() ?>>
+<?php if (!$parcel_info->createdAt->ReadOnly && !$parcel_info->createdAt->Disabled && !isset($parcel_info->createdAt->EditAttrs["readonly"]) && !isset($parcel_info->createdAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("fparcel_infoedit", "x_createdAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<?php } else { ?>
+<span id="el_parcel_info_createdAt">
+<span<?php echo $parcel_info->createdAt->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($parcel_info->createdAt->ViewValue) ?>"></span>
+</span>
+<input type="hidden" data-table="parcel_info" data-field="x_createdAt" name="x_createdAt" id="x_createdAt" value="<?php echo HtmlEncode($parcel_info->createdAt->FormValue) ?>">
+<?php } ?>
+<?php echo $parcel_info->createdAt->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($parcel_info->updatedAt->Visible) { // updatedAt ?>
+	<div id="r_updatedAt" class="form-group row">
+		<label id="elh_parcel_info_updatedAt" for="x_updatedAt" class="<?php echo $parcel_info_edit->LeftColumnClass ?>"><?php echo $parcel_info->updatedAt->caption() ?><?php echo ($parcel_info->updatedAt->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
+		<div class="<?php echo $parcel_info_edit->RightColumnClass ?>"><div<?php echo $parcel_info->updatedAt->cellAttributes() ?>>
+<?php if (!$parcel_info->isConfirm()) { ?>
+<span id="el_parcel_info_updatedAt">
+<input type="text" data-table="parcel_info" data-field="x_updatedAt" name="x_updatedAt" id="x_updatedAt" placeholder="<?php echo HtmlEncode($parcel_info->updatedAt->getPlaceHolder()) ?>" value="<?php echo $parcel_info->updatedAt->EditValue ?>"<?php echo $parcel_info->updatedAt->editAttributes() ?>>
+<?php if (!$parcel_info->updatedAt->ReadOnly && !$parcel_info->updatedAt->Disabled && !isset($parcel_info->updatedAt->EditAttrs["readonly"]) && !isset($parcel_info->updatedAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("fparcel_infoedit", "x_updatedAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<?php } else { ?>
+<span id="el_parcel_info_updatedAt">
+<span<?php echo $parcel_info->updatedAt->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($parcel_info->updatedAt->ViewValue) ?>"></span>
+</span>
+<input type="hidden" data-table="parcel_info" data-field="x_updatedAt" name="x_updatedAt" id="x_updatedAt" value="<?php echo HtmlEncode($parcel_info->updatedAt->FormValue) ?>">
+<?php } ?>
+<?php echo $parcel_info->updatedAt->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
 </div><!-- /page* -->
-<?php
-	if (in_array("orders", explode(",", $parcel_info->getCurrentDetailTable())) && $orders->DetailEdit) {
-?>
-<?php if ($parcel_info->getCurrentDetailTable() <> "") { ?>
-<h4 class="ew-detail-caption"><?php echo $Language->TablePhrase("orders", "TblCaption") ?></h4>
-<?php } ?>
-<?php include_once "ordersgrid.php" ?>
-<?php } ?>
 <?php if (!$parcel_info_edit->IsModal) { ?>
 <div class="form-group row"><!-- buttons .form-group -->
 	<div class="<?php echo $parcel_info_edit->OffsetColumnClass ?>"><!-- buttons offset -->

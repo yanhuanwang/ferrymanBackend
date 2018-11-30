@@ -327,9 +327,6 @@ class request_trip_add extends request_trip
 		// Table object (admin)
 		if (!isset($GLOBALS['admin'])) $GLOBALS['admin'] = new admin();
 
-		// Table object (category)
-		if (!isset($GLOBALS['category'])) $GLOBALS['category'] = new category();
-
 		// Page ID
 		if (!defined(PROJECT_NAMESPACE . "PAGE_ID"))
 			define(PROJECT_NAMESPACE . "PAGE_ID", 'add');
@@ -564,8 +561,12 @@ class request_trip_add extends request_trip
 		$this->id->Visible = FALSE;
 		$this->from_place->setVisibility();
 		$this->to_place->setVisibility();
-		$this->date->setVisibility();
 		$this->description->setVisibility();
+		$this->user_id->setVisibility();
+		$this->from_date->setVisibility();
+		$this->to_date->setVisibility();
+		$this->createdAt->setVisibility();
+		$this->updatedAt->setVisibility();
 		$this->category->setVisibility();
 		$this->hideFieldsForAddEdit();
 
@@ -585,16 +586,12 @@ class request_trip_add extends request_trip
 		$this->createToken();
 
 		// Set up lookup cache
-		$this->setupLookupOptions($this->category);
-
 		// Check modal
+
 		if ($this->IsModal)
 			$SkipHeaderFooter = TRUE;
 		$this->IsMobileOrModal = IsMobile() || $this->IsModal;
 		$this->FormClassName = "ew-form ew-add-form ew-horizontal";
-
-		// Set up master/detail parameters
-		$this->setupMasterParms();
 		$postBack = FALSE;
 
 		// Set up current action
@@ -700,10 +697,18 @@ class request_trip_add extends request_trip
 		$this->from_place->OldValue = $this->from_place->CurrentValue;
 		$this->to_place->CurrentValue = NULL;
 		$this->to_place->OldValue = $this->to_place->CurrentValue;
-		$this->date->CurrentValue = NULL;
-		$this->date->OldValue = $this->date->CurrentValue;
 		$this->description->CurrentValue = NULL;
 		$this->description->OldValue = $this->description->CurrentValue;
+		$this->user_id->CurrentValue = NULL;
+		$this->user_id->OldValue = $this->user_id->CurrentValue;
+		$this->from_date->CurrentValue = NULL;
+		$this->from_date->OldValue = $this->from_date->CurrentValue;
+		$this->to_date->CurrentValue = NULL;
+		$this->to_date->OldValue = $this->to_date->CurrentValue;
+		$this->createdAt->CurrentValue = NULL;
+		$this->createdAt->OldValue = $this->createdAt->CurrentValue;
+		$this->updatedAt->CurrentValue = NULL;
+		$this->updatedAt->OldValue = $this->updatedAt->CurrentValue;
 		$this->category->CurrentValue = NULL;
 		$this->category->OldValue = $this->category->CurrentValue;
 	}
@@ -733,16 +738,6 @@ class request_trip_add extends request_trip
 				$this->to_place->setFormValue($val);
 		}
 
-		// Check field name 'date' first before field var 'x_date'
-		$val = $CurrentForm->hasValue("date") ? $CurrentForm->getValue("date") : $CurrentForm->getValue("x_date");
-		if (!$this->date->IsDetailKey) {
-			if (IsApi() && $val == NULL)
-				$this->date->Visible = FALSE; // Disable update for API request
-			else
-				$this->date->setFormValue($val);
-			$this->date->CurrentValue = UnFormatDateTime($this->date->CurrentValue, 0);
-		}
-
 		// Check field name 'description' first before field var 'x_description'
 		$val = $CurrentForm->hasValue("description") ? $CurrentForm->getValue("description") : $CurrentForm->getValue("x_description");
 		if (!$this->description->IsDetailKey) {
@@ -750,6 +745,55 @@ class request_trip_add extends request_trip
 				$this->description->Visible = FALSE; // Disable update for API request
 			else
 				$this->description->setFormValue($val);
+		}
+
+		// Check field name 'user_id' first before field var 'x_user_id'
+		$val = $CurrentForm->hasValue("user_id") ? $CurrentForm->getValue("user_id") : $CurrentForm->getValue("x_user_id");
+		if (!$this->user_id->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->user_id->Visible = FALSE; // Disable update for API request
+			else
+				$this->user_id->setFormValue($val);
+		}
+
+		// Check field name 'from_date' first before field var 'x_from_date'
+		$val = $CurrentForm->hasValue("from_date") ? $CurrentForm->getValue("from_date") : $CurrentForm->getValue("x_from_date");
+		if (!$this->from_date->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->from_date->Visible = FALSE; // Disable update for API request
+			else
+				$this->from_date->setFormValue($val);
+			$this->from_date->CurrentValue = UnFormatDateTime($this->from_date->CurrentValue, 0);
+		}
+
+		// Check field name 'to_date' first before field var 'x_to_date'
+		$val = $CurrentForm->hasValue("to_date") ? $CurrentForm->getValue("to_date") : $CurrentForm->getValue("x_to_date");
+		if (!$this->to_date->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->to_date->Visible = FALSE; // Disable update for API request
+			else
+				$this->to_date->setFormValue($val);
+			$this->to_date->CurrentValue = UnFormatDateTime($this->to_date->CurrentValue, 0);
+		}
+
+		// Check field name 'createdAt' first before field var 'x_createdAt'
+		$val = $CurrentForm->hasValue("createdAt") ? $CurrentForm->getValue("createdAt") : $CurrentForm->getValue("x_createdAt");
+		if (!$this->createdAt->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->createdAt->Visible = FALSE; // Disable update for API request
+			else
+				$this->createdAt->setFormValue($val);
+			$this->createdAt->CurrentValue = UnFormatDateTime($this->createdAt->CurrentValue, 0);
+		}
+
+		// Check field name 'updatedAt' first before field var 'x_updatedAt'
+		$val = $CurrentForm->hasValue("updatedAt") ? $CurrentForm->getValue("updatedAt") : $CurrentForm->getValue("x_updatedAt");
+		if (!$this->updatedAt->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->updatedAt->Visible = FALSE; // Disable update for API request
+			else
+				$this->updatedAt->setFormValue($val);
+			$this->updatedAt->CurrentValue = UnFormatDateTime($this->updatedAt->CurrentValue, 0);
 		}
 
 		// Check field name 'category' first before field var 'x_category'
@@ -771,9 +815,16 @@ class request_trip_add extends request_trip
 		global $CurrentForm;
 		$this->from_place->CurrentValue = $this->from_place->FormValue;
 		$this->to_place->CurrentValue = $this->to_place->FormValue;
-		$this->date->CurrentValue = $this->date->FormValue;
-		$this->date->CurrentValue = UnFormatDateTime($this->date->CurrentValue, 0);
 		$this->description->CurrentValue = $this->description->FormValue;
+		$this->user_id->CurrentValue = $this->user_id->FormValue;
+		$this->from_date->CurrentValue = $this->from_date->FormValue;
+		$this->from_date->CurrentValue = UnFormatDateTime($this->from_date->CurrentValue, 0);
+		$this->to_date->CurrentValue = $this->to_date->FormValue;
+		$this->to_date->CurrentValue = UnFormatDateTime($this->to_date->CurrentValue, 0);
+		$this->createdAt->CurrentValue = $this->createdAt->FormValue;
+		$this->createdAt->CurrentValue = UnFormatDateTime($this->createdAt->CurrentValue, 0);
+		$this->updatedAt->CurrentValue = $this->updatedAt->FormValue;
+		$this->updatedAt->CurrentValue = UnFormatDateTime($this->updatedAt->CurrentValue, 0);
 		$this->category->CurrentValue = $this->category->FormValue;
 	}
 
@@ -815,8 +866,12 @@ class request_trip_add extends request_trip
 		$this->id->setDbValue($row['id']);
 		$this->from_place->setDbValue($row['from_place']);
 		$this->to_place->setDbValue($row['to_place']);
-		$this->date->setDbValue($row['date']);
 		$this->description->setDbValue($row['description']);
+		$this->user_id->setDbValue($row['user_id']);
+		$this->from_date->setDbValue($row['from_date']);
+		$this->to_date->setDbValue($row['to_date']);
+		$this->createdAt->setDbValue($row['createdAt']);
+		$this->updatedAt->setDbValue($row['updatedAt']);
 		$this->category->setDbValue($row['category']);
 	}
 
@@ -828,8 +883,12 @@ class request_trip_add extends request_trip
 		$row['id'] = $this->id->CurrentValue;
 		$row['from_place'] = $this->from_place->CurrentValue;
 		$row['to_place'] = $this->to_place->CurrentValue;
-		$row['date'] = $this->date->CurrentValue;
 		$row['description'] = $this->description->CurrentValue;
+		$row['user_id'] = $this->user_id->CurrentValue;
+		$row['from_date'] = $this->from_date->CurrentValue;
+		$row['to_date'] = $this->to_date->CurrentValue;
+		$row['createdAt'] = $this->createdAt->CurrentValue;
+		$row['updatedAt'] = $this->updatedAt->CurrentValue;
 		$row['category'] = $this->category->CurrentValue;
 		return $row;
 	}
@@ -871,8 +930,12 @@ class request_trip_add extends request_trip
 		// id
 		// from_place
 		// to_place
-		// date
 		// description
+		// user_id
+		// from_date
+		// to_date
+		// createdAt
+		// updatedAt
 		// category
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
@@ -889,35 +952,38 @@ class request_trip_add extends request_trip
 			$this->to_place->ViewValue = $this->to_place->CurrentValue;
 			$this->to_place->ViewCustomAttributes = "";
 
-			// date
-			$this->date->ViewValue = $this->date->CurrentValue;
-			$this->date->ViewValue = FormatDateTime($this->date->ViewValue, 0);
-			$this->date->ViewCustomAttributes = "";
-
 			// description
 			$this->description->ViewValue = $this->description->CurrentValue;
 			$this->description->ViewCustomAttributes = "";
 
+			// user_id
+			$this->user_id->ViewValue = $this->user_id->CurrentValue;
+			$this->user_id->ViewValue = FormatNumber($this->user_id->ViewValue, 0, -2, -2, -2);
+			$this->user_id->ViewCustomAttributes = "";
+
+			// from_date
+			$this->from_date->ViewValue = $this->from_date->CurrentValue;
+			$this->from_date->ViewValue = FormatDateTime($this->from_date->ViewValue, 0);
+			$this->from_date->ViewCustomAttributes = "";
+
+			// to_date
+			$this->to_date->ViewValue = $this->to_date->CurrentValue;
+			$this->to_date->ViewValue = FormatDateTime($this->to_date->ViewValue, 0);
+			$this->to_date->ViewCustomAttributes = "";
+
+			// createdAt
+			$this->createdAt->ViewValue = $this->createdAt->CurrentValue;
+			$this->createdAt->ViewValue = FormatDateTime($this->createdAt->ViewValue, 0);
+			$this->createdAt->ViewCustomAttributes = "";
+
+			// updatedAt
+			$this->updatedAt->ViewValue = $this->updatedAt->CurrentValue;
+			$this->updatedAt->ViewValue = FormatDateTime($this->updatedAt->ViewValue, 0);
+			$this->updatedAt->ViewCustomAttributes = "";
+
 			// category
-			$curVal = strval($this->category->CurrentValue);
-			if ($curVal <> "") {
-				$this->category->ViewValue = $this->category->lookupCacheOption($curVal);
-				if ($this->category->ViewValue === NULL) { // Lookup from database
-					$filterWrk = "`id`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
-					$sqlWrk = $this->category->Lookup->getSql(FALSE, $filterWrk, '', $this);
-					$rswrk = Conn()->execute($sqlWrk);
-					if ($rswrk && !$rswrk->EOF) { // Lookup values found
-						$arwrk = array();
-						$arwrk[1] = $rswrk->fields('df');
-						$this->category->ViewValue = $this->category->displayValue($arwrk);
-						$rswrk->Close();
-					} else {
-						$this->category->ViewValue = $this->category->CurrentValue;
-					}
-				}
-			} else {
-				$this->category->ViewValue = NULL;
-			}
+			$this->category->ViewValue = $this->category->CurrentValue;
+			$this->category->ViewValue = FormatNumber($this->category->ViewValue, 0, -2, -2, -2);
 			$this->category->ViewCustomAttributes = "";
 
 			// from_place
@@ -930,15 +996,35 @@ class request_trip_add extends request_trip
 			$this->to_place->HrefValue = "";
 			$this->to_place->TooltipValue = "";
 
-			// date
-			$this->date->LinkCustomAttributes = "";
-			$this->date->HrefValue = "";
-			$this->date->TooltipValue = "";
-
 			// description
 			$this->description->LinkCustomAttributes = "";
 			$this->description->HrefValue = "";
 			$this->description->TooltipValue = "";
+
+			// user_id
+			$this->user_id->LinkCustomAttributes = "";
+			$this->user_id->HrefValue = "";
+			$this->user_id->TooltipValue = "";
+
+			// from_date
+			$this->from_date->LinkCustomAttributes = "";
+			$this->from_date->HrefValue = "";
+			$this->from_date->TooltipValue = "";
+
+			// to_date
+			$this->to_date->LinkCustomAttributes = "";
+			$this->to_date->HrefValue = "";
+			$this->to_date->TooltipValue = "";
+
+			// createdAt
+			$this->createdAt->LinkCustomAttributes = "";
+			$this->createdAt->HrefValue = "";
+			$this->createdAt->TooltipValue = "";
+
+			// updatedAt
+			$this->updatedAt->LinkCustomAttributes = "";
+			$this->updatedAt->HrefValue = "";
+			$this->updatedAt->TooltipValue = "";
 
 			// category
 			$this->category->LinkCustomAttributes = "";
@@ -958,64 +1044,47 @@ class request_trip_add extends request_trip
 			$this->to_place->EditValue = HtmlEncode($this->to_place->CurrentValue);
 			$this->to_place->PlaceHolder = RemoveHtml($this->to_place->caption());
 
-			// date
-			$this->date->EditAttrs["class"] = "form-control";
-			$this->date->EditCustomAttributes = "";
-			$this->date->EditValue = HtmlEncode(FormatDateTime($this->date->CurrentValue, 8));
-			$this->date->PlaceHolder = RemoveHtml($this->date->caption());
-
 			// description
 			$this->description->EditAttrs["class"] = "form-control";
 			$this->description->EditCustomAttributes = "";
 			$this->description->EditValue = HtmlEncode($this->description->CurrentValue);
 			$this->description->PlaceHolder = RemoveHtml($this->description->caption());
 
+			// user_id
+			$this->user_id->EditAttrs["class"] = "form-control";
+			$this->user_id->EditCustomAttributes = "";
+			$this->user_id->EditValue = HtmlEncode($this->user_id->CurrentValue);
+			$this->user_id->PlaceHolder = RemoveHtml($this->user_id->caption());
+
+			// from_date
+			$this->from_date->EditAttrs["class"] = "form-control";
+			$this->from_date->EditCustomAttributes = "";
+			$this->from_date->EditValue = HtmlEncode(FormatDateTime($this->from_date->CurrentValue, 8));
+			$this->from_date->PlaceHolder = RemoveHtml($this->from_date->caption());
+
+			// to_date
+			$this->to_date->EditAttrs["class"] = "form-control";
+			$this->to_date->EditCustomAttributes = "";
+			$this->to_date->EditValue = HtmlEncode(FormatDateTime($this->to_date->CurrentValue, 8));
+			$this->to_date->PlaceHolder = RemoveHtml($this->to_date->caption());
+
+			// createdAt
+			$this->createdAt->EditAttrs["class"] = "form-control";
+			$this->createdAt->EditCustomAttributes = "";
+			$this->createdAt->EditValue = HtmlEncode(FormatDateTime($this->createdAt->CurrentValue, 8));
+			$this->createdAt->PlaceHolder = RemoveHtml($this->createdAt->caption());
+
+			// updatedAt
+			$this->updatedAt->EditAttrs["class"] = "form-control";
+			$this->updatedAt->EditCustomAttributes = "";
+			$this->updatedAt->EditValue = HtmlEncode(FormatDateTime($this->updatedAt->CurrentValue, 8));
+			$this->updatedAt->PlaceHolder = RemoveHtml($this->updatedAt->caption());
+
 			// category
 			$this->category->EditAttrs["class"] = "form-control";
 			$this->category->EditCustomAttributes = "";
-			if ($this->category->getSessionValue() <> "") {
-				$this->category->CurrentValue = $this->category->getSessionValue();
-			$curVal = strval($this->category->CurrentValue);
-			if ($curVal <> "") {
-				$this->category->ViewValue = $this->category->lookupCacheOption($curVal);
-				if ($this->category->ViewValue === NULL) { // Lookup from database
-					$filterWrk = "`id`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
-					$sqlWrk = $this->category->Lookup->getSql(FALSE, $filterWrk, '', $this);
-					$rswrk = Conn()->execute($sqlWrk);
-					if ($rswrk && !$rswrk->EOF) { // Lookup values found
-						$arwrk = array();
-						$arwrk[1] = $rswrk->fields('df');
-						$this->category->ViewValue = $this->category->displayValue($arwrk);
-						$rswrk->Close();
-					} else {
-						$this->category->ViewValue = $this->category->CurrentValue;
-					}
-				}
-			} else {
-				$this->category->ViewValue = NULL;
-			}
-			$this->category->ViewCustomAttributes = "";
-			} else {
-			$curVal = trim(strval($this->category->CurrentValue));
-			if ($curVal <> "")
-				$this->category->ViewValue = $this->category->lookupCacheOption($curVal);
-			else
-				$this->category->ViewValue = $this->category->Lookup !== NULL && is_array($this->category->Lookup->Options) ? $curVal : NULL;
-			if ($this->category->ViewValue !== NULL) { // Load from cache
-				$this->category->EditValue = array_values($this->category->Lookup->Options);
-			} else { // Lookup from database
-				if ($curVal == "") {
-					$filterWrk = "0=1";
-				} else {
-					$filterWrk = "`id`" . SearchString("=", $this->category->CurrentValue, DATATYPE_NUMBER, "");
-				}
-				$sqlWrk = $this->category->Lookup->getSql(TRUE, $filterWrk, '', $this);
-				$rswrk = Conn()->execute($sqlWrk);
-				$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
-				if ($rswrk) $rswrk->Close();
-				$this->category->EditValue = $arwrk;
-			}
-			}
+			$this->category->EditValue = HtmlEncode($this->category->CurrentValue);
+			$this->category->PlaceHolder = RemoveHtml($this->category->caption());
 
 			// Add refer script
 			// from_place
@@ -1027,13 +1096,29 @@ class request_trip_add extends request_trip
 			$this->to_place->LinkCustomAttributes = "";
 			$this->to_place->HrefValue = "";
 
-			// date
-			$this->date->LinkCustomAttributes = "";
-			$this->date->HrefValue = "";
-
 			// description
 			$this->description->LinkCustomAttributes = "";
 			$this->description->HrefValue = "";
+
+			// user_id
+			$this->user_id->LinkCustomAttributes = "";
+			$this->user_id->HrefValue = "";
+
+			// from_date
+			$this->from_date->LinkCustomAttributes = "";
+			$this->from_date->HrefValue = "";
+
+			// to_date
+			$this->to_date->LinkCustomAttributes = "";
+			$this->to_date->HrefValue = "";
+
+			// createdAt
+			$this->createdAt->LinkCustomAttributes = "";
+			$this->createdAt->HrefValue = "";
+
+			// updatedAt
+			$this->updatedAt->LinkCustomAttributes = "";
+			$this->updatedAt->HrefValue = "";
 
 			// category
 			$this->category->LinkCustomAttributes = "";
@@ -1073,23 +1158,58 @@ class request_trip_add extends request_trip
 				AddMessage($FormError, str_replace("%s", $this->to_place->caption(), $this->to_place->RequiredErrorMessage));
 			}
 		}
-		if ($this->date->Required) {
-			if (!$this->date->IsDetailKey && $this->date->FormValue != NULL && $this->date->FormValue == "") {
-				AddMessage($FormError, str_replace("%s", $this->date->caption(), $this->date->RequiredErrorMessage));
-			}
-		}
-		if (!CheckDate($this->date->FormValue)) {
-			AddMessage($FormError, $this->date->errorMessage());
-		}
 		if ($this->description->Required) {
 			if (!$this->description->IsDetailKey && $this->description->FormValue != NULL && $this->description->FormValue == "") {
 				AddMessage($FormError, str_replace("%s", $this->description->caption(), $this->description->RequiredErrorMessage));
 			}
 		}
+		if ($this->user_id->Required) {
+			if (!$this->user_id->IsDetailKey && $this->user_id->FormValue != NULL && $this->user_id->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->user_id->caption(), $this->user_id->RequiredErrorMessage));
+			}
+		}
+		if (!CheckInteger($this->user_id->FormValue)) {
+			AddMessage($FormError, $this->user_id->errorMessage());
+		}
+		if ($this->from_date->Required) {
+			if (!$this->from_date->IsDetailKey && $this->from_date->FormValue != NULL && $this->from_date->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->from_date->caption(), $this->from_date->RequiredErrorMessage));
+			}
+		}
+		if (!CheckDate($this->from_date->FormValue)) {
+			AddMessage($FormError, $this->from_date->errorMessage());
+		}
+		if ($this->to_date->Required) {
+			if (!$this->to_date->IsDetailKey && $this->to_date->FormValue != NULL && $this->to_date->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->to_date->caption(), $this->to_date->RequiredErrorMessage));
+			}
+		}
+		if (!CheckDate($this->to_date->FormValue)) {
+			AddMessage($FormError, $this->to_date->errorMessage());
+		}
+		if ($this->createdAt->Required) {
+			if (!$this->createdAt->IsDetailKey && $this->createdAt->FormValue != NULL && $this->createdAt->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->createdAt->caption(), $this->createdAt->RequiredErrorMessage));
+			}
+		}
+		if (!CheckDate($this->createdAt->FormValue)) {
+			AddMessage($FormError, $this->createdAt->errorMessage());
+		}
+		if ($this->updatedAt->Required) {
+			if (!$this->updatedAt->IsDetailKey && $this->updatedAt->FormValue != NULL && $this->updatedAt->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->updatedAt->caption(), $this->updatedAt->RequiredErrorMessage));
+			}
+		}
+		if (!CheckDate($this->updatedAt->FormValue)) {
+			AddMessage($FormError, $this->updatedAt->errorMessage());
+		}
 		if ($this->category->Required) {
 			if (!$this->category->IsDetailKey && $this->category->FormValue != NULL && $this->category->FormValue == "") {
 				AddMessage($FormError, str_replace("%s", $this->category->caption(), $this->category->RequiredErrorMessage));
 			}
+		}
+		if (!CheckInteger($this->category->FormValue)) {
+			AddMessage($FormError, $this->category->errorMessage());
 		}
 
 		// Return validate result
@@ -1122,11 +1242,23 @@ class request_trip_add extends request_trip
 		// to_place
 		$this->to_place->setDbValueDef($rsnew, $this->to_place->CurrentValue, "", FALSE);
 
-		// date
-		$this->date->setDbValueDef($rsnew, UnFormatDateTime($this->date->CurrentValue, 0), CurrentDate(), FALSE);
-
 		// description
-		$this->description->setDbValueDef($rsnew, $this->description->CurrentValue, "", FALSE);
+		$this->description->setDbValueDef($rsnew, $this->description->CurrentValue, NULL, FALSE);
+
+		// user_id
+		$this->user_id->setDbValueDef($rsnew, $this->user_id->CurrentValue, 0, FALSE);
+
+		// from_date
+		$this->from_date->setDbValueDef($rsnew, UnFormatDateTime($this->from_date->CurrentValue, 0), NULL, FALSE);
+
+		// to_date
+		$this->to_date->setDbValueDef($rsnew, UnFormatDateTime($this->to_date->CurrentValue, 0), NULL, FALSE);
+
+		// createdAt
+		$this->createdAt->setDbValueDef($rsnew, UnFormatDateTime($this->createdAt->CurrentValue, 0), CurrentDate(), FALSE);
+
+		// updatedAt
+		$this->updatedAt->setDbValueDef($rsnew, UnFormatDateTime($this->updatedAt->CurrentValue, 0), CurrentDate(), FALSE);
 
 		// category
 		$this->category->setDbValueDef($rsnew, $this->category->CurrentValue, 0, FALSE);
@@ -1165,72 +1297,6 @@ class request_trip_add extends request_trip
 			WriteJson(["success" => TRUE, $this->TableVar => $row]);
 		}
 		return $addRow;
-	}
-
-	// Set up master/detail based on QueryString
-	protected function setupMasterParms()
-	{
-		$validMaster = FALSE;
-
-		// Get the keys for master table
-		if (Get(TABLE_SHOW_MASTER) !== NULL) {
-			$masterTblVar = Get(TABLE_SHOW_MASTER);
-			if ($masterTblVar == "") {
-				$validMaster = TRUE;
-				$this->DbMasterFilter = "";
-				$this->DbDetailFilter = "";
-			}
-			if ($masterTblVar == "category") {
-				$validMaster = TRUE;
-				if (Get("fk_id") !== NULL) {
-					$GLOBALS["category"]->id->setQueryStringValue(Get("fk_id"));
-					$this->category->setQueryStringValue($GLOBALS["category"]->id->QueryStringValue);
-					$this->category->setSessionValue($this->category->QueryStringValue);
-					if (!is_numeric($GLOBALS["category"]->id->QueryStringValue))
-						$validMaster = FALSE;
-				} else {
-					$validMaster = FALSE;
-				}
-			}
-		} elseif (Post(TABLE_SHOW_MASTER) !== NULL) {
-			$masterTblVar = Post(TABLE_SHOW_MASTER);
-			if ($masterTblVar == "") {
-				$validMaster = TRUE;
-				$this->DbMasterFilter = "";
-				$this->DbDetailFilter = "";
-			}
-			if ($masterTblVar == "category") {
-				$validMaster = TRUE;
-				if (Post("fk_id") !== NULL) {
-					$GLOBALS["category"]->id->setFormValue(Post("fk_id"));
-					$this->category->setFormValue($GLOBALS["category"]->id->FormValue);
-					$this->category->setSessionValue($this->category->FormValue);
-					if (!is_numeric($GLOBALS["category"]->id->FormValue))
-						$validMaster = FALSE;
-				} else {
-					$validMaster = FALSE;
-				}
-			}
-		}
-		if ($validMaster) {
-
-			// Save current master table
-			$this->setCurrentMasterTable($masterTblVar);
-
-			// Reset start record counter (new master key)
-			if (!$this->isAddOrEdit()) {
-				$this->StartRec = 1;
-				$this->setStartRecordNumber($this->StartRec);
-			}
-
-			// Clear previous master key from Session
-			if ($masterTblVar <> "category") {
-				if ($this->category->CurrentValue == "")
-					$this->category->setSessionValue("");
-			}
-		}
-		$this->DbMasterFilter = $this->getMasterFilter(); // Get master filter
-		$this->DbDetailFilter = $this->getDetailFilter(); // Get detail filter
 	}
 
 	// Set up Breadcrumb
@@ -1275,8 +1341,6 @@ class request_trip_add extends request_trip
 
 					// Format the field values
 					switch ($fld->FieldVar) {
-						case "x_category":
-							break;
 					}
 					$ar[strval($row[0])] = $row;
 					$rs->moveNext();

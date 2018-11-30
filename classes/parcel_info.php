@@ -30,9 +30,12 @@ class parcel_info extends DbTable
 	public $to_place;
 	public $description;
 	public $user_id;
-	public $category;
 	public $image_id;
 	public $name;
+	public $categoty;
+	public $status;
+	public $createdAt;
+	public $updatedAt;
 
 	// Constructor
 	public function __construct()
@@ -70,7 +73,6 @@ class parcel_info extends DbTable
 		$this->id = new DbField('parcel_info', 'parcel_info', 'x_id', 'id', '`id`', '`id`', 3, -1, FALSE, '`id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'NO');
 		$this->id->IsAutoIncrement = TRUE; // Autoincrement field
 		$this->id->IsPrimaryKey = TRUE; // Primary key field
-		$this->id->IsForeignKey = TRUE; // Foreign key field
 		$this->id->Sortable = TRUE; // Allow sort
 		$this->id->DefaultErrorMessage = $Language->Phrase("IncorrectInteger");
 		$this->fields['id'] = &$this->id;
@@ -90,8 +92,7 @@ class parcel_info extends DbTable
 		$this->fields['to_place'] = &$this->to_place;
 
 		// description
-		$this->description = new DbField('parcel_info', 'parcel_info', 'x_description', 'description', '`description`', '`description`', 200, -1, FALSE, '`description`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->description->Nullable = FALSE; // NOT NULL field
+		$this->description = new DbField('parcel_info', 'parcel_info', 'x_description', 'description', '`description`', '`description`', 201, -1, FALSE, '`description`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->description->Required = TRUE; // Required field
 		$this->description->Sortable = TRUE; // Allow sort
 		$this->fields['description'] = &$this->description;
@@ -112,25 +113,6 @@ class parcel_info extends DbTable
 		}
 		$this->user_id->DefaultErrorMessage = $Language->Phrase("IncorrectInteger");
 		$this->fields['user_id'] = &$this->user_id;
-
-		// category
-		$this->category = new DbField('parcel_info', 'parcel_info', 'x_category', 'category', '`category`', '`category`', 3, -1, FALSE, '`category`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'SELECT');
-		$this->category->IsForeignKey = TRUE; // Foreign key field
-		$this->category->Nullable = FALSE; // NOT NULL field
-		$this->category->Required = TRUE; // Required field
-		$this->category->Sortable = TRUE; // Allow sort
-		$this->category->UsePleaseSelect = TRUE; // Use PleaseSelect by default
-		$this->category->PleaseSelectText = $Language->Phrase("PleaseSelect"); // PleaseSelect text
-		switch ($CurrentLanguage) {
-			case "en":
-				$this->category->Lookup = new Lookup('category', 'category', FALSE, 'id', ["id","name","",""], [], [], [], [], [], '', '');
-				break;
-			default:
-				$this->category->Lookup = new Lookup('category', 'category', FALSE, 'id', ["id","name","",""], [], [], [], [], [], '', '');
-				break;
-		}
-		$this->category->DefaultErrorMessage = $Language->Phrase("IncorrectInteger");
-		$this->fields['category'] = &$this->category;
 
 		// image_id
 		$this->image_id = new DbField('parcel_info', 'parcel_info', 'x_image_id', 'image_id', '`image_id`', '`image_id`', 3, -1, FALSE, '`image_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
@@ -155,6 +137,38 @@ class parcel_info extends DbTable
 		$this->name->Required = TRUE; // Required field
 		$this->name->Sortable = TRUE; // Allow sort
 		$this->fields['name'] = &$this->name;
+
+		// categoty
+		$this->categoty = new DbField('parcel_info', 'parcel_info', 'x_categoty', 'categoty', '`categoty`', '`categoty`', 3, -1, FALSE, '`categoty`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->categoty->Nullable = FALSE; // NOT NULL field
+		$this->categoty->Required = TRUE; // Required field
+		$this->categoty->Sortable = TRUE; // Allow sort
+		$this->categoty->DefaultErrorMessage = $Language->Phrase("IncorrectInteger");
+		$this->fields['categoty'] = &$this->categoty;
+
+		// status
+		$this->status = new DbField('parcel_info', 'parcel_info', 'x_status', 'status', '`status`', '`status`', 3, -1, FALSE, '`status`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->status->Nullable = FALSE; // NOT NULL field
+		$this->status->Required = TRUE; // Required field
+		$this->status->Sortable = TRUE; // Allow sort
+		$this->status->DefaultErrorMessage = $Language->Phrase("IncorrectInteger");
+		$this->fields['status'] = &$this->status;
+
+		// createdAt
+		$this->createdAt = new DbField('parcel_info', 'parcel_info', 'x_createdAt', 'createdAt', '`createdAt`', CastDateFieldForLike('`createdAt`', 0, "DB"), 135, 0, FALSE, '`createdAt`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->createdAt->Nullable = FALSE; // NOT NULL field
+		$this->createdAt->Required = TRUE; // Required field
+		$this->createdAt->Sortable = TRUE; // Allow sort
+		$this->createdAt->DefaultErrorMessage = str_replace("%s", $GLOBALS["DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
+		$this->fields['createdAt'] = &$this->createdAt;
+
+		// updatedAt
+		$this->updatedAt = new DbField('parcel_info', 'parcel_info', 'x_updatedAt', 'updatedAt', '`updatedAt`', CastDateFieldForLike('`updatedAt`', 0, "DB"), 135, 0, FALSE, '`updatedAt`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->updatedAt->Nullable = FALSE; // NOT NULL field
+		$this->updatedAt->Required = TRUE; // Required field
+		$this->updatedAt->Sortable = TRUE; // Allow sort
+		$this->updatedAt->DefaultErrorMessage = str_replace("%s", $GLOBALS["DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
+		$this->fields['updatedAt'] = &$this->updatedAt;
 	}
 
 	// Field Visibility
@@ -221,12 +235,6 @@ class parcel_info extends DbTable
 			else
 				return "";
 		}
-		if ($this->getCurrentMasterTable() == "category") {
-			if ($this->category->getSessionValue() <> "")
-				$masterFilter .= "`id`=" . QuotedValue($this->category->getSessionValue(), DATATYPE_NUMBER, "DB");
-			else
-				return "";
-		}
 		return $masterFilter;
 	}
 
@@ -245,12 +253,6 @@ class parcel_info extends DbTable
 		if ($this->getCurrentMasterTable() == "user") {
 			if ($this->user_id->getSessionValue() <> "")
 				$detailFilter .= "`user_id`=" . QuotedValue($this->user_id->getSessionValue(), DATATYPE_NUMBER, "DB");
-			else
-				return "";
-		}
-		if ($this->getCurrentMasterTable() == "category") {
-			if ($this->category->getSessionValue() <> "")
-				$detailFilter .= "`category`=" . QuotedValue($this->category->getSessionValue(), DATATYPE_NUMBER, "DB");
 			else
 				return "";
 		}
@@ -279,43 +281,6 @@ class parcel_info extends DbTable
 	public function sqlDetailFilter_user()
 	{
 		return "`user_id`=@user_id@";
-	}
-
-	// Master filter
-	public function sqlMasterFilter_category()
-	{
-		return "`id`=@id@";
-	}
-
-	// Detail filter
-	public function sqlDetailFilter_category()
-	{
-		return "`category`=@category@";
-	}
-
-	// Current detail table name
-	public function getCurrentDetailTable()
-	{
-		return @$_SESSION[PROJECT_NAME . "_" . $this->TableVar . "_" . TABLE_DETAIL_TABLE];
-	}
-	public function setCurrentDetailTable($v)
-	{
-		$_SESSION[PROJECT_NAME . "_" . $this->TableVar . "_" . TABLE_DETAIL_TABLE] = $v;
-	}
-
-	// Get detail url
-	public function getDetailUrl()
-	{
-
-		// Detail url
-		$detailUrl = "";
-		if ($this->getCurrentDetailTable() == "orders") {
-			$detailUrl = $GLOBALS["orders"]->getListUrl() . "?" . TABLE_SHOW_MASTER . "=" . $this->TableVar;
-			$detailUrl .= "&fk_id=" . urlencode($this->id->CurrentValue);
-		}
-		if ($detailUrl == "")
-			$detailUrl = "parcel_infolist.php";
-		return $detailUrl;
 	}
 
 	// Table level SQL
@@ -627,9 +592,12 @@ class parcel_info extends DbTable
 		$this->to_place->DbValue = $row['to_place'];
 		$this->description->DbValue = $row['description'];
 		$this->user_id->DbValue = $row['user_id'];
-		$this->category->DbValue = $row['category'];
 		$this->image_id->DbValue = $row['image_id'];
 		$this->name->DbValue = $row['name'];
+		$this->categoty->DbValue = $row['categoty'];
+		$this->status->DbValue = $row['status'];
+		$this->createdAt->DbValue = $row['createdAt'];
+		$this->updatedAt->DbValue = $row['updatedAt'];
 	}
 
 	// Delete uploaded files
@@ -720,10 +688,7 @@ class parcel_info extends DbTable
 	// Edit URL
 	public function getEditUrl($parm = "")
 	{
-		if ($parm <> "")
-			$url = $this->keyUrl("parcel_infoedit.php", $this->getUrlParm($parm));
-		else
-			$url = $this->keyUrl("parcel_infoedit.php", $this->getUrlParm(TABLE_SHOW_DETAIL . "="));
+		$url = $this->keyUrl("parcel_infoedit.php", $this->getUrlParm($parm));
 		return $this->addMasterUrl($url);
 	}
 
@@ -737,10 +702,7 @@ class parcel_info extends DbTable
 	// Copy URL
 	public function getCopyUrl($parm = "")
 	{
-		if ($parm <> "")
-			$url = $this->keyUrl("parcel_infoadd.php", $this->getUrlParm($parm));
-		else
-			$url = $this->keyUrl("parcel_infoadd.php", $this->getUrlParm(TABLE_SHOW_DETAIL . "="));
+		$url = $this->keyUrl("parcel_infoadd.php", $this->getUrlParm($parm));
 		return $this->addMasterUrl($url);
 	}
 
@@ -767,10 +729,6 @@ class parcel_info extends DbTable
 		if ($this->getCurrentMasterTable() == "user" && !ContainsString($url, TABLE_SHOW_MASTER . "=")) {
 			$url .= (ContainsString($url, "?") ? "&" : "?") . TABLE_SHOW_MASTER . "=" . $this->getCurrentMasterTable();
 			$url .= "&fk_id=" . urlencode($this->user_id->CurrentValue);
-		}
-		if ($this->getCurrentMasterTable() == "category" && !ContainsString($url, TABLE_SHOW_MASTER . "=")) {
-			$url .= (ContainsString($url, "?") ? "&" : "?") . TABLE_SHOW_MASTER . "=" . $this->getCurrentMasterTable();
-			$url .= "&fk_id=" . urlencode($this->category->CurrentValue);
 		}
 		return $url;
 	}
@@ -878,9 +836,12 @@ class parcel_info extends DbTable
 		$this->to_place->setDbValue($rs->fields('to_place'));
 		$this->description->setDbValue($rs->fields('description'));
 		$this->user_id->setDbValue($rs->fields('user_id'));
-		$this->category->setDbValue($rs->fields('category'));
 		$this->image_id->setDbValue($rs->fields('image_id'));
 		$this->name->setDbValue($rs->fields('name'));
+		$this->categoty->setDbValue($rs->fields('categoty'));
+		$this->status->setDbValue($rs->fields('status'));
+		$this->createdAt->setDbValue($rs->fields('createdAt'));
+		$this->updatedAt->setDbValue($rs->fields('updatedAt'));
 	}
 
 	// Render list row values
@@ -897,9 +858,12 @@ class parcel_info extends DbTable
 		// to_place
 		// description
 		// user_id
-		// category
 		// image_id
 		// name
+		// categoty
+		// status
+		// createdAt
+		// updatedAt
 		// id
 
 		$this->id->ViewValue = $this->id->CurrentValue;
@@ -941,29 +905,6 @@ class parcel_info extends DbTable
 		}
 		$this->user_id->ViewCustomAttributes = "";
 
-		// category
-		$curVal = strval($this->category->CurrentValue);
-		if ($curVal <> "") {
-			$this->category->ViewValue = $this->category->lookupCacheOption($curVal);
-			if ($this->category->ViewValue === NULL) { // Lookup from database
-				$filterWrk = "`id`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
-				$sqlWrk = $this->category->Lookup->getSql(FALSE, $filterWrk, '', $this);
-				$rswrk = Conn()->execute($sqlWrk);
-				if ($rswrk && !$rswrk->EOF) { // Lookup values found
-					$arwrk = array();
-					$arwrk[1] = $rswrk->fields('df');
-					$arwrk[2] = $rswrk->fields('df2');
-					$this->category->ViewValue = $this->category->displayValue($arwrk);
-					$rswrk->Close();
-				} else {
-					$this->category->ViewValue = $this->category->CurrentValue;
-				}
-			}
-		} else {
-			$this->category->ViewValue = NULL;
-		}
-		$this->category->ViewCustomAttributes = "";
-
 		// image_id
 		$this->image_id->ViewValue = $this->image_id->CurrentValue;
 		$curVal = strval($this->image_id->CurrentValue);
@@ -991,6 +932,26 @@ class parcel_info extends DbTable
 		$this->name->ViewValue = $this->name->CurrentValue;
 		$this->name->ViewCustomAttributes = "";
 
+		// categoty
+		$this->categoty->ViewValue = $this->categoty->CurrentValue;
+		$this->categoty->ViewValue = FormatNumber($this->categoty->ViewValue, 0, -2, -2, -2);
+		$this->categoty->ViewCustomAttributes = "";
+
+		// status
+		$this->status->ViewValue = $this->status->CurrentValue;
+		$this->status->ViewValue = FormatNumber($this->status->ViewValue, 0, -2, -2, -2);
+		$this->status->ViewCustomAttributes = "";
+
+		// createdAt
+		$this->createdAt->ViewValue = $this->createdAt->CurrentValue;
+		$this->createdAt->ViewValue = FormatDateTime($this->createdAt->ViewValue, 0);
+		$this->createdAt->ViewCustomAttributes = "";
+
+		// updatedAt
+		$this->updatedAt->ViewValue = $this->updatedAt->CurrentValue;
+		$this->updatedAt->ViewValue = FormatDateTime($this->updatedAt->ViewValue, 0);
+		$this->updatedAt->ViewCustomAttributes = "";
+
 		// id
 		$this->id->LinkCustomAttributes = "";
 		$this->id->HrefValue = "";
@@ -1016,11 +977,6 @@ class parcel_info extends DbTable
 		$this->user_id->HrefValue = "";
 		$this->user_id->TooltipValue = "";
 
-		// category
-		$this->category->LinkCustomAttributes = "";
-		$this->category->HrefValue = "";
-		$this->category->TooltipValue = "";
-
 		// image_id
 		$this->image_id->LinkCustomAttributes = "";
 		if (!EmptyValue($this->image_id->CurrentValue)) {
@@ -1036,6 +992,26 @@ class parcel_info extends DbTable
 		$this->name->LinkCustomAttributes = "";
 		$this->name->HrefValue = "";
 		$this->name->TooltipValue = "";
+
+		// categoty
+		$this->categoty->LinkCustomAttributes = "";
+		$this->categoty->HrefValue = "";
+		$this->categoty->TooltipValue = "";
+
+		// status
+		$this->status->LinkCustomAttributes = "";
+		$this->status->HrefValue = "";
+		$this->status->TooltipValue = "";
+
+		// createdAt
+		$this->createdAt->LinkCustomAttributes = "";
+		$this->createdAt->HrefValue = "";
+		$this->createdAt->TooltipValue = "";
+
+		// updatedAt
+		$this->updatedAt->LinkCustomAttributes = "";
+		$this->updatedAt->HrefValue = "";
+		$this->updatedAt->TooltipValue = "";
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -1108,35 +1084,6 @@ class parcel_info extends DbTable
 		$this->user_id->PlaceHolder = RemoveHtml($this->user_id->caption());
 		}
 
-		// category
-		$this->category->EditAttrs["class"] = "form-control";
-		$this->category->EditCustomAttributes = "";
-		if ($this->category->getSessionValue() <> "") {
-			$this->category->CurrentValue = $this->category->getSessionValue();
-		$curVal = strval($this->category->CurrentValue);
-		if ($curVal <> "") {
-			$this->category->ViewValue = $this->category->lookupCacheOption($curVal);
-			if ($this->category->ViewValue === NULL) { // Lookup from database
-				$filterWrk = "`id`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
-				$sqlWrk = $this->category->Lookup->getSql(FALSE, $filterWrk, '', $this);
-				$rswrk = Conn()->execute($sqlWrk);
-				if ($rswrk && !$rswrk->EOF) { // Lookup values found
-					$arwrk = array();
-					$arwrk[1] = $rswrk->fields('df');
-					$arwrk[2] = $rswrk->fields('df2');
-					$this->category->ViewValue = $this->category->displayValue($arwrk);
-					$rswrk->Close();
-				} else {
-					$this->category->ViewValue = $this->category->CurrentValue;
-				}
-			}
-		} else {
-			$this->category->ViewValue = NULL;
-		}
-		$this->category->ViewCustomAttributes = "";
-		} else {
-		}
-
 		// image_id
 		$this->image_id->EditAttrs["class"] = "form-control";
 		$this->image_id->EditCustomAttributes = "";
@@ -1173,6 +1120,30 @@ class parcel_info extends DbTable
 		$this->name->EditCustomAttributes = "";
 		$this->name->EditValue = $this->name->CurrentValue;
 		$this->name->PlaceHolder = RemoveHtml($this->name->caption());
+
+		// categoty
+		$this->categoty->EditAttrs["class"] = "form-control";
+		$this->categoty->EditCustomAttributes = "";
+		$this->categoty->EditValue = $this->categoty->CurrentValue;
+		$this->categoty->PlaceHolder = RemoveHtml($this->categoty->caption());
+
+		// status
+		$this->status->EditAttrs["class"] = "form-control";
+		$this->status->EditCustomAttributes = "";
+		$this->status->EditValue = $this->status->CurrentValue;
+		$this->status->PlaceHolder = RemoveHtml($this->status->caption());
+
+		// createdAt
+		$this->createdAt->EditAttrs["class"] = "form-control";
+		$this->createdAt->EditCustomAttributes = "";
+		$this->createdAt->EditValue = FormatDateTime($this->createdAt->CurrentValue, 8);
+		$this->createdAt->PlaceHolder = RemoveHtml($this->createdAt->caption());
+
+		// updatedAt
+		$this->updatedAt->EditAttrs["class"] = "form-control";
+		$this->updatedAt->EditCustomAttributes = "";
+		$this->updatedAt->EditValue = FormatDateTime($this->updatedAt->CurrentValue, 8);
+		$this->updatedAt->PlaceHolder = RemoveHtml($this->updatedAt->caption());
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -1213,12 +1184,18 @@ class parcel_info extends DbTable
 						$doc->exportCaption($this->description);
 					if ($this->user_id->Exportable)
 						$doc->exportCaption($this->user_id);
-					if ($this->category->Exportable)
-						$doc->exportCaption($this->category);
 					if ($this->image_id->Exportable)
 						$doc->exportCaption($this->image_id);
 					if ($this->name->Exportable)
 						$doc->exportCaption($this->name);
+					if ($this->categoty->Exportable)
+						$doc->exportCaption($this->categoty);
+					if ($this->status->Exportable)
+						$doc->exportCaption($this->status);
+					if ($this->createdAt->Exportable)
+						$doc->exportCaption($this->createdAt);
+					if ($this->updatedAt->Exportable)
+						$doc->exportCaption($this->updatedAt);
 				} else {
 					if ($this->id->Exportable)
 						$doc->exportCaption($this->id);
@@ -1230,12 +1207,18 @@ class parcel_info extends DbTable
 						$doc->exportCaption($this->description);
 					if ($this->user_id->Exportable)
 						$doc->exportCaption($this->user_id);
-					if ($this->category->Exportable)
-						$doc->exportCaption($this->category);
 					if ($this->image_id->Exportable)
 						$doc->exportCaption($this->image_id);
 					if ($this->name->Exportable)
 						$doc->exportCaption($this->name);
+					if ($this->categoty->Exportable)
+						$doc->exportCaption($this->categoty);
+					if ($this->status->Exportable)
+						$doc->exportCaption($this->status);
+					if ($this->createdAt->Exportable)
+						$doc->exportCaption($this->createdAt);
+					if ($this->updatedAt->Exportable)
+						$doc->exportCaption($this->updatedAt);
 				}
 				$doc->endExportRow();
 			}
@@ -1277,12 +1260,18 @@ class parcel_info extends DbTable
 							$doc->exportField($this->description);
 						if ($this->user_id->Exportable)
 							$doc->exportField($this->user_id);
-						if ($this->category->Exportable)
-							$doc->exportField($this->category);
 						if ($this->image_id->Exportable)
 							$doc->exportField($this->image_id);
 						if ($this->name->Exportable)
 							$doc->exportField($this->name);
+						if ($this->categoty->Exportable)
+							$doc->exportField($this->categoty);
+						if ($this->status->Exportable)
+							$doc->exportField($this->status);
+						if ($this->createdAt->Exportable)
+							$doc->exportField($this->createdAt);
+						if ($this->updatedAt->Exportable)
+							$doc->exportField($this->updatedAt);
 					} else {
 						if ($this->id->Exportable)
 							$doc->exportField($this->id);
@@ -1294,12 +1283,18 @@ class parcel_info extends DbTable
 							$doc->exportField($this->description);
 						if ($this->user_id->Exportable)
 							$doc->exportField($this->user_id);
-						if ($this->category->Exportable)
-							$doc->exportField($this->category);
 						if ($this->image_id->Exportable)
 							$doc->exportField($this->image_id);
 						if ($this->name->Exportable)
 							$doc->exportField($this->name);
+						if ($this->categoty->Exportable)
+							$doc->exportField($this->categoty);
+						if ($this->status->Exportable)
+							$doc->exportField($this->status);
+						if ($this->createdAt->Exportable)
+							$doc->exportField($this->createdAt);
+						if ($this->updatedAt->Exportable)
+							$doc->exportField($this->updatedAt);
 					}
 					$doc->endExportRow($rowCnt);
 				}

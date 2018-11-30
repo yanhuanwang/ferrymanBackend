@@ -382,9 +382,6 @@ class request_trip_list extends request_trip
 		// Table object (admin)
 		if (!isset($GLOBALS['admin'])) $GLOBALS['admin'] = new admin();
 
-		// Table object (category)
-		if (!isset($GLOBALS['category'])) $GLOBALS['category'] = new category();
-
 		// Page ID
 		if (!defined(PROJECT_NAMESPACE . "PAGE_ID"))
 			define(PROJECT_NAMESPACE . "PAGE_ID", 'list');
@@ -708,8 +705,12 @@ class request_trip_list extends request_trip
 		$this->id->Visible = FALSE;
 		$this->from_place->setVisibility();
 		$this->to_place->setVisibility();
-		$this->date->setVisibility();
 		$this->description->setVisibility();
+		$this->user_id->setVisibility();
+		$this->from_date->setVisibility();
+		$this->to_date->setVisibility();
+		$this->createdAt->setVisibility();
+		$this->updatedAt->setVisibility();
 		$this->category->setVisibility();
 		$this->hideFieldsForAddEdit();
 
@@ -728,9 +729,6 @@ class request_trip_list extends request_trip
 		// Create Token
 		$this->createToken();
 
-		// Set up master detail parameters
-		$this->setupMasterParms();
-
 		// Setup other options
 		$this->setupOtherOptions();
 
@@ -747,9 +745,8 @@ class request_trip_list extends request_trip
 		}
 
 		// Set up lookup cache
-		$this->setupLookupOptions($this->category);
-
 		// Search filters
+
 		$srchAdvanced = ""; // Advanced search filter
 		$srchBasic = ""; // Basic search filter
 		$filter = "";
@@ -957,28 +954,8 @@ class request_trip_list extends request_trip
 		$filter = "";
 		if (!$Security->canList())
 			$filter = "(0=1)"; // Filter all records
-
-		// Restore master/detail filter
-		$this->DbMasterFilter = $this->getMasterFilter(); // Restore master filter
-		$this->DbDetailFilter = $this->getDetailFilter(); // Restore detail filter
 		AddFilter($filter, $this->DbDetailFilter);
 		AddFilter($filter, $this->SearchWhere);
-
-		// Load master record
-		if ($this->CurrentMode <> "add" && $this->getMasterFilter() <> "" && $this->getCurrentMasterTable() == "category") {
-			global $category;
-			$rsmaster = $category->loadRs($this->DbMasterFilter);
-			$this->MasterRecordExists = ($rsmaster && !$rsmaster->EOF);
-			if (!$this->MasterRecordExists) {
-				$this->setFailureMessage($Language->Phrase("NoRecord")); // Set no record found
-				$this->terminate("categorylist.php"); // Return to master page
-			} else {
-				$category->loadListRowValues($rsmaster);
-				$category->RowType = ROWTYPE_MASTER; // Master row
-				$category->renderListRow();
-				$rsmaster->close();
-			}
-		}
 
 		// Set up filter
 		if ($this->Command == "json") {
@@ -1441,9 +1418,17 @@ class request_trip_list extends request_trip
 			return FALSE;
 		if ($CurrentForm->hasValue("x_to_place") && $CurrentForm->hasValue("o_to_place") && $this->to_place->CurrentValue <> $this->to_place->OldValue)
 			return FALSE;
-		if ($CurrentForm->hasValue("x_date") && $CurrentForm->hasValue("o_date") && $this->date->CurrentValue <> $this->date->OldValue)
-			return FALSE;
 		if ($CurrentForm->hasValue("x_description") && $CurrentForm->hasValue("o_description") && $this->description->CurrentValue <> $this->description->OldValue)
+			return FALSE;
+		if ($CurrentForm->hasValue("x_user_id") && $CurrentForm->hasValue("o_user_id") && $this->user_id->CurrentValue <> $this->user_id->OldValue)
+			return FALSE;
+		if ($CurrentForm->hasValue("x_from_date") && $CurrentForm->hasValue("o_from_date") && $this->from_date->CurrentValue <> $this->from_date->OldValue)
+			return FALSE;
+		if ($CurrentForm->hasValue("x_to_date") && $CurrentForm->hasValue("o_to_date") && $this->to_date->CurrentValue <> $this->to_date->OldValue)
+			return FALSE;
+		if ($CurrentForm->hasValue("x_createdAt") && $CurrentForm->hasValue("o_createdAt") && $this->createdAt->CurrentValue <> $this->createdAt->OldValue)
+			return FALSE;
+		if ($CurrentForm->hasValue("x_updatedAt") && $CurrentForm->hasValue("o_updatedAt") && $this->updatedAt->CurrentValue <> $this->updatedAt->OldValue)
 			return FALSE;
 		if ($CurrentForm->hasValue("x_category") && $CurrentForm->hasValue("o_category") && $this->category->CurrentValue <> $this->category->OldValue)
 			return FALSE;
@@ -1532,8 +1517,12 @@ class request_trip_list extends request_trip
 		$filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
 		$filterList = Concat($filterList, $this->from_place->AdvancedSearch->toJson(), ","); // Field from_place
 		$filterList = Concat($filterList, $this->to_place->AdvancedSearch->toJson(), ","); // Field to_place
-		$filterList = Concat($filterList, $this->date->AdvancedSearch->toJson(), ","); // Field date
 		$filterList = Concat($filterList, $this->description->AdvancedSearch->toJson(), ","); // Field description
+		$filterList = Concat($filterList, $this->user_id->AdvancedSearch->toJson(), ","); // Field user_id
+		$filterList = Concat($filterList, $this->from_date->AdvancedSearch->toJson(), ","); // Field from_date
+		$filterList = Concat($filterList, $this->to_date->AdvancedSearch->toJson(), ","); // Field to_date
+		$filterList = Concat($filterList, $this->createdAt->AdvancedSearch->toJson(), ","); // Field createdAt
+		$filterList = Concat($filterList, $this->updatedAt->AdvancedSearch->toJson(), ","); // Field updatedAt
 		$filterList = Concat($filterList, $this->category->AdvancedSearch->toJson(), ","); // Field category
 		if ($this->BasicSearch->Keyword <> "") {
 			$wrk = "\"" . TABLE_BASIC_SEARCH . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . TABLE_BASIC_SEARCH_TYPE . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
@@ -1597,14 +1586,6 @@ class request_trip_list extends request_trip
 		$this->to_place->AdvancedSearch->SearchOperator2 = @$filter["w_to_place"];
 		$this->to_place->AdvancedSearch->save();
 
-		// Field date
-		$this->date->AdvancedSearch->SearchValue = @$filter["x_date"];
-		$this->date->AdvancedSearch->SearchOperator = @$filter["z_date"];
-		$this->date->AdvancedSearch->SearchCondition = @$filter["v_date"];
-		$this->date->AdvancedSearch->SearchValue2 = @$filter["y_date"];
-		$this->date->AdvancedSearch->SearchOperator2 = @$filter["w_date"];
-		$this->date->AdvancedSearch->save();
-
 		// Field description
 		$this->description->AdvancedSearch->SearchValue = @$filter["x_description"];
 		$this->description->AdvancedSearch->SearchOperator = @$filter["z_description"];
@@ -1612,6 +1593,46 @@ class request_trip_list extends request_trip
 		$this->description->AdvancedSearch->SearchValue2 = @$filter["y_description"];
 		$this->description->AdvancedSearch->SearchOperator2 = @$filter["w_description"];
 		$this->description->AdvancedSearch->save();
+
+		// Field user_id
+		$this->user_id->AdvancedSearch->SearchValue = @$filter["x_user_id"];
+		$this->user_id->AdvancedSearch->SearchOperator = @$filter["z_user_id"];
+		$this->user_id->AdvancedSearch->SearchCondition = @$filter["v_user_id"];
+		$this->user_id->AdvancedSearch->SearchValue2 = @$filter["y_user_id"];
+		$this->user_id->AdvancedSearch->SearchOperator2 = @$filter["w_user_id"];
+		$this->user_id->AdvancedSearch->save();
+
+		// Field from_date
+		$this->from_date->AdvancedSearch->SearchValue = @$filter["x_from_date"];
+		$this->from_date->AdvancedSearch->SearchOperator = @$filter["z_from_date"];
+		$this->from_date->AdvancedSearch->SearchCondition = @$filter["v_from_date"];
+		$this->from_date->AdvancedSearch->SearchValue2 = @$filter["y_from_date"];
+		$this->from_date->AdvancedSearch->SearchOperator2 = @$filter["w_from_date"];
+		$this->from_date->AdvancedSearch->save();
+
+		// Field to_date
+		$this->to_date->AdvancedSearch->SearchValue = @$filter["x_to_date"];
+		$this->to_date->AdvancedSearch->SearchOperator = @$filter["z_to_date"];
+		$this->to_date->AdvancedSearch->SearchCondition = @$filter["v_to_date"];
+		$this->to_date->AdvancedSearch->SearchValue2 = @$filter["y_to_date"];
+		$this->to_date->AdvancedSearch->SearchOperator2 = @$filter["w_to_date"];
+		$this->to_date->AdvancedSearch->save();
+
+		// Field createdAt
+		$this->createdAt->AdvancedSearch->SearchValue = @$filter["x_createdAt"];
+		$this->createdAt->AdvancedSearch->SearchOperator = @$filter["z_createdAt"];
+		$this->createdAt->AdvancedSearch->SearchCondition = @$filter["v_createdAt"];
+		$this->createdAt->AdvancedSearch->SearchValue2 = @$filter["y_createdAt"];
+		$this->createdAt->AdvancedSearch->SearchOperator2 = @$filter["w_createdAt"];
+		$this->createdAt->AdvancedSearch->save();
+
+		// Field updatedAt
+		$this->updatedAt->AdvancedSearch->SearchValue = @$filter["x_updatedAt"];
+		$this->updatedAt->AdvancedSearch->SearchOperator = @$filter["z_updatedAt"];
+		$this->updatedAt->AdvancedSearch->SearchCondition = @$filter["v_updatedAt"];
+		$this->updatedAt->AdvancedSearch->SearchValue2 = @$filter["y_updatedAt"];
+		$this->updatedAt->AdvancedSearch->SearchOperator2 = @$filter["w_updatedAt"];
+		$this->updatedAt->AdvancedSearch->save();
 
 		// Field category
 		$this->category->AdvancedSearch->SearchValue = @$filter["x_category"];
@@ -1634,8 +1655,12 @@ class request_trip_list extends request_trip
 		$this->buildSearchSql($where, $this->id, $default, FALSE); // id
 		$this->buildSearchSql($where, $this->from_place, $default, FALSE); // from_place
 		$this->buildSearchSql($where, $this->to_place, $default, FALSE); // to_place
-		$this->buildSearchSql($where, $this->date, $default, FALSE); // date
 		$this->buildSearchSql($where, $this->description, $default, FALSE); // description
+		$this->buildSearchSql($where, $this->user_id, $default, FALSE); // user_id
+		$this->buildSearchSql($where, $this->from_date, $default, FALSE); // from_date
+		$this->buildSearchSql($where, $this->to_date, $default, FALSE); // to_date
+		$this->buildSearchSql($where, $this->createdAt, $default, FALSE); // createdAt
+		$this->buildSearchSql($where, $this->updatedAt, $default, FALSE); // updatedAt
 		$this->buildSearchSql($where, $this->category, $default, FALSE); // category
 
 		// Set up search parm
@@ -1646,8 +1671,12 @@ class request_trip_list extends request_trip
 			$this->id->AdvancedSearch->save(); // id
 			$this->from_place->AdvancedSearch->save(); // from_place
 			$this->to_place->AdvancedSearch->save(); // to_place
-			$this->date->AdvancedSearch->save(); // date
 			$this->description->AdvancedSearch->save(); // description
+			$this->user_id->AdvancedSearch->save(); // user_id
+			$this->from_date->AdvancedSearch->save(); // from_date
+			$this->to_date->AdvancedSearch->save(); // to_date
+			$this->createdAt->AdvancedSearch->save(); // createdAt
+			$this->updatedAt->AdvancedSearch->save(); // updatedAt
 			$this->category->AdvancedSearch->save(); // category
 		}
 		return $where;
@@ -1833,9 +1862,17 @@ class request_trip_list extends request_trip
 			return TRUE;
 		if ($this->to_place->AdvancedSearch->issetSession())
 			return TRUE;
-		if ($this->date->AdvancedSearch->issetSession())
-			return TRUE;
 		if ($this->description->AdvancedSearch->issetSession())
+			return TRUE;
+		if ($this->user_id->AdvancedSearch->issetSession())
+			return TRUE;
+		if ($this->from_date->AdvancedSearch->issetSession())
+			return TRUE;
+		if ($this->to_date->AdvancedSearch->issetSession())
+			return TRUE;
+		if ($this->createdAt->AdvancedSearch->issetSession())
+			return TRUE;
+		if ($this->updatedAt->AdvancedSearch->issetSession())
 			return TRUE;
 		if ($this->category->AdvancedSearch->issetSession())
 			return TRUE;
@@ -1875,8 +1912,12 @@ class request_trip_list extends request_trip
 		$this->id->AdvancedSearch->unsetSession();
 		$this->from_place->AdvancedSearch->unsetSession();
 		$this->to_place->AdvancedSearch->unsetSession();
-		$this->date->AdvancedSearch->unsetSession();
 		$this->description->AdvancedSearch->unsetSession();
+		$this->user_id->AdvancedSearch->unsetSession();
+		$this->from_date->AdvancedSearch->unsetSession();
+		$this->to_date->AdvancedSearch->unsetSession();
+		$this->createdAt->AdvancedSearch->unsetSession();
+		$this->updatedAt->AdvancedSearch->unsetSession();
 		$this->category->AdvancedSearch->unsetSession();
 	}
 
@@ -1892,8 +1933,12 @@ class request_trip_list extends request_trip
 		$this->id->AdvancedSearch->load();
 		$this->from_place->AdvancedSearch->load();
 		$this->to_place->AdvancedSearch->load();
-		$this->date->AdvancedSearch->load();
 		$this->description->AdvancedSearch->load();
+		$this->user_id->AdvancedSearch->load();
+		$this->from_date->AdvancedSearch->load();
+		$this->to_date->AdvancedSearch->load();
+		$this->createdAt->AdvancedSearch->load();
+		$this->updatedAt->AdvancedSearch->load();
 		$this->category->AdvancedSearch->load();
 	}
 
@@ -1907,8 +1952,12 @@ class request_trip_list extends request_trip
 			$this->CurrentOrderType = Get("ordertype", "");
 			$this->updateSort($this->from_place); // from_place
 			$this->updateSort($this->to_place); // to_place
-			$this->updateSort($this->date); // date
 			$this->updateSort($this->description); // description
+			$this->updateSort($this->user_id); // user_id
+			$this->updateSort($this->from_date); // from_date
+			$this->updateSort($this->to_date); // to_date
+			$this->updateSort($this->createdAt); // createdAt
+			$this->updateSort($this->updatedAt); // updatedAt
 			$this->updateSort($this->category); // category
 			$this->setStartRecordNumber(1); // Reset start position
 		}
@@ -1941,22 +1990,18 @@ class request_trip_list extends request_trip
 			if ($this->Command == "reset" || $this->Command == "resetall")
 				$this->resetSearchParms();
 
-			// Reset master/detail keys
-			if ($this->Command == "resetall") {
-				$this->setCurrentMasterTable(""); // Clear master table
-				$this->DbMasterFilter = "";
-				$this->DbDetailFilter = "";
-				$this->category->setSessionValue("");
-			}
-
 			// Reset sorting order
 			if ($this->Command == "resetsort") {
 				$orderBy = "";
 				$this->setSessionOrderBy($orderBy);
 				$this->from_place->setSort("");
 				$this->to_place->setSort("");
-				$this->date->setSort("");
 				$this->description->setSort("");
+				$this->user_id->setSort("");
+				$this->from_date->setSort("");
+				$this->to_date->setSort("");
+				$this->createdAt->setSort("");
+				$this->updatedAt->setSort("");
 				$this->category->setSort("");
 			}
 
@@ -2507,10 +2552,18 @@ class request_trip_list extends request_trip
 		$this->from_place->OldValue = $this->from_place->CurrentValue;
 		$this->to_place->CurrentValue = NULL;
 		$this->to_place->OldValue = $this->to_place->CurrentValue;
-		$this->date->CurrentValue = NULL;
-		$this->date->OldValue = $this->date->CurrentValue;
 		$this->description->CurrentValue = NULL;
 		$this->description->OldValue = $this->description->CurrentValue;
+		$this->user_id->CurrentValue = NULL;
+		$this->user_id->OldValue = $this->user_id->CurrentValue;
+		$this->from_date->CurrentValue = NULL;
+		$this->from_date->OldValue = $this->from_date->CurrentValue;
+		$this->to_date->CurrentValue = NULL;
+		$this->to_date->OldValue = $this->to_date->CurrentValue;
+		$this->createdAt->CurrentValue = NULL;
+		$this->createdAt->OldValue = $this->createdAt->CurrentValue;
+		$this->updatedAt->CurrentValue = NULL;
+		$this->updatedAt->OldValue = $this->updatedAt->CurrentValue;
 		$this->category->CurrentValue = NULL;
 		$this->category->OldValue = $this->category->CurrentValue;
 	}
@@ -2549,17 +2602,41 @@ class request_trip_list extends request_trip
 			$this->Command = "search";
 		$this->to_place->AdvancedSearch->setSearchOperator(Get("z_to_place", ""));
 
-		// date
-		$this->date->AdvancedSearch->setSearchValue(Get("x_date", Get("date", "")));
-		if ($this->date->AdvancedSearch->SearchValue <> "" && $this->Command == "")
-			$this->Command = "search";
-		$this->date->AdvancedSearch->setSearchOperator(Get("z_date", ""));
-
 		// description
 		$this->description->AdvancedSearch->setSearchValue(Get("x_description", Get("description", "")));
 		if ($this->description->AdvancedSearch->SearchValue <> "" && $this->Command == "")
 			$this->Command = "search";
 		$this->description->AdvancedSearch->setSearchOperator(Get("z_description", ""));
+
+		// user_id
+		$this->user_id->AdvancedSearch->setSearchValue(Get("x_user_id", Get("user_id", "")));
+		if ($this->user_id->AdvancedSearch->SearchValue <> "" && $this->Command == "")
+			$this->Command = "search";
+		$this->user_id->AdvancedSearch->setSearchOperator(Get("z_user_id", ""));
+
+		// from_date
+		$this->from_date->AdvancedSearch->setSearchValue(Get("x_from_date", Get("from_date", "")));
+		if ($this->from_date->AdvancedSearch->SearchValue <> "" && $this->Command == "")
+			$this->Command = "search";
+		$this->from_date->AdvancedSearch->setSearchOperator(Get("z_from_date", ""));
+
+		// to_date
+		$this->to_date->AdvancedSearch->setSearchValue(Get("x_to_date", Get("to_date", "")));
+		if ($this->to_date->AdvancedSearch->SearchValue <> "" && $this->Command == "")
+			$this->Command = "search";
+		$this->to_date->AdvancedSearch->setSearchOperator(Get("z_to_date", ""));
+
+		// createdAt
+		$this->createdAt->AdvancedSearch->setSearchValue(Get("x_createdAt", Get("createdAt", "")));
+		if ($this->createdAt->AdvancedSearch->SearchValue <> "" && $this->Command == "")
+			$this->Command = "search";
+		$this->createdAt->AdvancedSearch->setSearchOperator(Get("z_createdAt", ""));
+
+		// updatedAt
+		$this->updatedAt->AdvancedSearch->setSearchValue(Get("x_updatedAt", Get("updatedAt", "")));
+		if ($this->updatedAt->AdvancedSearch->SearchValue <> "" && $this->Command == "")
+			$this->Command = "search";
+		$this->updatedAt->AdvancedSearch->setSearchOperator(Get("z_updatedAt", ""));
 
 		// category
 		$this->category->AdvancedSearch->setSearchValue(Get("x_category", Get("category", "")));
@@ -2595,17 +2672,6 @@ class request_trip_list extends request_trip
 		}
 		$this->to_place->setOldValue($CurrentForm->getValue("o_to_place"));
 
-		// Check field name 'date' first before field var 'x_date'
-		$val = $CurrentForm->hasValue("date") ? $CurrentForm->getValue("date") : $CurrentForm->getValue("x_date");
-		if (!$this->date->IsDetailKey) {
-			if (IsApi() && $val == NULL)
-				$this->date->Visible = FALSE; // Disable update for API request
-			else
-				$this->date->setFormValue($val);
-			$this->date->CurrentValue = UnFormatDateTime($this->date->CurrentValue, 0);
-		}
-		$this->date->setOldValue($CurrentForm->getValue("o_date"));
-
 		// Check field name 'description' first before field var 'x_description'
 		$val = $CurrentForm->hasValue("description") ? $CurrentForm->getValue("description") : $CurrentForm->getValue("x_description");
 		if (!$this->description->IsDetailKey) {
@@ -2615,6 +2681,60 @@ class request_trip_list extends request_trip
 				$this->description->setFormValue($val);
 		}
 		$this->description->setOldValue($CurrentForm->getValue("o_description"));
+
+		// Check field name 'user_id' first before field var 'x_user_id'
+		$val = $CurrentForm->hasValue("user_id") ? $CurrentForm->getValue("user_id") : $CurrentForm->getValue("x_user_id");
+		if (!$this->user_id->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->user_id->Visible = FALSE; // Disable update for API request
+			else
+				$this->user_id->setFormValue($val);
+		}
+		$this->user_id->setOldValue($CurrentForm->getValue("o_user_id"));
+
+		// Check field name 'from_date' first before field var 'x_from_date'
+		$val = $CurrentForm->hasValue("from_date") ? $CurrentForm->getValue("from_date") : $CurrentForm->getValue("x_from_date");
+		if (!$this->from_date->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->from_date->Visible = FALSE; // Disable update for API request
+			else
+				$this->from_date->setFormValue($val);
+			$this->from_date->CurrentValue = UnFormatDateTime($this->from_date->CurrentValue, 0);
+		}
+		$this->from_date->setOldValue($CurrentForm->getValue("o_from_date"));
+
+		// Check field name 'to_date' first before field var 'x_to_date'
+		$val = $CurrentForm->hasValue("to_date") ? $CurrentForm->getValue("to_date") : $CurrentForm->getValue("x_to_date");
+		if (!$this->to_date->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->to_date->Visible = FALSE; // Disable update for API request
+			else
+				$this->to_date->setFormValue($val);
+			$this->to_date->CurrentValue = UnFormatDateTime($this->to_date->CurrentValue, 0);
+		}
+		$this->to_date->setOldValue($CurrentForm->getValue("o_to_date"));
+
+		// Check field name 'createdAt' first before field var 'x_createdAt'
+		$val = $CurrentForm->hasValue("createdAt") ? $CurrentForm->getValue("createdAt") : $CurrentForm->getValue("x_createdAt");
+		if (!$this->createdAt->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->createdAt->Visible = FALSE; // Disable update for API request
+			else
+				$this->createdAt->setFormValue($val);
+			$this->createdAt->CurrentValue = UnFormatDateTime($this->createdAt->CurrentValue, 0);
+		}
+		$this->createdAt->setOldValue($CurrentForm->getValue("o_createdAt"));
+
+		// Check field name 'updatedAt' first before field var 'x_updatedAt'
+		$val = $CurrentForm->hasValue("updatedAt") ? $CurrentForm->getValue("updatedAt") : $CurrentForm->getValue("x_updatedAt");
+		if (!$this->updatedAt->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->updatedAt->Visible = FALSE; // Disable update for API request
+			else
+				$this->updatedAt->setFormValue($val);
+			$this->updatedAt->CurrentValue = UnFormatDateTime($this->updatedAt->CurrentValue, 0);
+		}
+		$this->updatedAt->setOldValue($CurrentForm->getValue("o_updatedAt"));
 
 		// Check field name 'category' first before field var 'x_category'
 		$val = $CurrentForm->hasValue("category") ? $CurrentForm->getValue("category") : $CurrentForm->getValue("x_category");
@@ -2640,9 +2760,16 @@ class request_trip_list extends request_trip
 			$this->id->CurrentValue = $this->id->FormValue;
 		$this->from_place->CurrentValue = $this->from_place->FormValue;
 		$this->to_place->CurrentValue = $this->to_place->FormValue;
-		$this->date->CurrentValue = $this->date->FormValue;
-		$this->date->CurrentValue = UnFormatDateTime($this->date->CurrentValue, 0);
 		$this->description->CurrentValue = $this->description->FormValue;
+		$this->user_id->CurrentValue = $this->user_id->FormValue;
+		$this->from_date->CurrentValue = $this->from_date->FormValue;
+		$this->from_date->CurrentValue = UnFormatDateTime($this->from_date->CurrentValue, 0);
+		$this->to_date->CurrentValue = $this->to_date->FormValue;
+		$this->to_date->CurrentValue = UnFormatDateTime($this->to_date->CurrentValue, 0);
+		$this->createdAt->CurrentValue = $this->createdAt->FormValue;
+		$this->createdAt->CurrentValue = UnFormatDateTime($this->createdAt->CurrentValue, 0);
+		$this->updatedAt->CurrentValue = $this->updatedAt->FormValue;
+		$this->updatedAt->CurrentValue = UnFormatDateTime($this->updatedAt->CurrentValue, 0);
 		$this->category->CurrentValue = $this->category->FormValue;
 	}
 
@@ -2713,8 +2840,12 @@ class request_trip_list extends request_trip
 		$this->id->setDbValue($row['id']);
 		$this->from_place->setDbValue($row['from_place']);
 		$this->to_place->setDbValue($row['to_place']);
-		$this->date->setDbValue($row['date']);
 		$this->description->setDbValue($row['description']);
+		$this->user_id->setDbValue($row['user_id']);
+		$this->from_date->setDbValue($row['from_date']);
+		$this->to_date->setDbValue($row['to_date']);
+		$this->createdAt->setDbValue($row['createdAt']);
+		$this->updatedAt->setDbValue($row['updatedAt']);
 		$this->category->setDbValue($row['category']);
 	}
 
@@ -2726,8 +2857,12 @@ class request_trip_list extends request_trip
 		$row['id'] = $this->id->CurrentValue;
 		$row['from_place'] = $this->from_place->CurrentValue;
 		$row['to_place'] = $this->to_place->CurrentValue;
-		$row['date'] = $this->date->CurrentValue;
 		$row['description'] = $this->description->CurrentValue;
+		$row['user_id'] = $this->user_id->CurrentValue;
+		$row['from_date'] = $this->from_date->CurrentValue;
+		$row['to_date'] = $this->to_date->CurrentValue;
+		$row['createdAt'] = $this->createdAt->CurrentValue;
+		$row['updatedAt'] = $this->updatedAt->CurrentValue;
 		$row['category'] = $this->category->CurrentValue;
 		return $row;
 	}
@@ -2775,8 +2910,12 @@ class request_trip_list extends request_trip
 		// id
 		// from_place
 		// to_place
-		// date
 		// description
+		// user_id
+		// from_date
+		// to_date
+		// createdAt
+		// updatedAt
 		// category
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
@@ -2793,35 +2932,38 @@ class request_trip_list extends request_trip
 			$this->to_place->ViewValue = $this->to_place->CurrentValue;
 			$this->to_place->ViewCustomAttributes = "";
 
-			// date
-			$this->date->ViewValue = $this->date->CurrentValue;
-			$this->date->ViewValue = FormatDateTime($this->date->ViewValue, 0);
-			$this->date->ViewCustomAttributes = "";
-
 			// description
 			$this->description->ViewValue = $this->description->CurrentValue;
 			$this->description->ViewCustomAttributes = "";
 
+			// user_id
+			$this->user_id->ViewValue = $this->user_id->CurrentValue;
+			$this->user_id->ViewValue = FormatNumber($this->user_id->ViewValue, 0, -2, -2, -2);
+			$this->user_id->ViewCustomAttributes = "";
+
+			// from_date
+			$this->from_date->ViewValue = $this->from_date->CurrentValue;
+			$this->from_date->ViewValue = FormatDateTime($this->from_date->ViewValue, 0);
+			$this->from_date->ViewCustomAttributes = "";
+
+			// to_date
+			$this->to_date->ViewValue = $this->to_date->CurrentValue;
+			$this->to_date->ViewValue = FormatDateTime($this->to_date->ViewValue, 0);
+			$this->to_date->ViewCustomAttributes = "";
+
+			// createdAt
+			$this->createdAt->ViewValue = $this->createdAt->CurrentValue;
+			$this->createdAt->ViewValue = FormatDateTime($this->createdAt->ViewValue, 0);
+			$this->createdAt->ViewCustomAttributes = "";
+
+			// updatedAt
+			$this->updatedAt->ViewValue = $this->updatedAt->CurrentValue;
+			$this->updatedAt->ViewValue = FormatDateTime($this->updatedAt->ViewValue, 0);
+			$this->updatedAt->ViewCustomAttributes = "";
+
 			// category
-			$curVal = strval($this->category->CurrentValue);
-			if ($curVal <> "") {
-				$this->category->ViewValue = $this->category->lookupCacheOption($curVal);
-				if ($this->category->ViewValue === NULL) { // Lookup from database
-					$filterWrk = "`id`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
-					$sqlWrk = $this->category->Lookup->getSql(FALSE, $filterWrk, '', $this);
-					$rswrk = Conn()->execute($sqlWrk);
-					if ($rswrk && !$rswrk->EOF) { // Lookup values found
-						$arwrk = array();
-						$arwrk[1] = $rswrk->fields('df');
-						$this->category->ViewValue = $this->category->displayValue($arwrk);
-						$rswrk->Close();
-					} else {
-						$this->category->ViewValue = $this->category->CurrentValue;
-					}
-				}
-			} else {
-				$this->category->ViewValue = NULL;
-			}
+			$this->category->ViewValue = $this->category->CurrentValue;
+			$this->category->ViewValue = FormatNumber($this->category->ViewValue, 0, -2, -2, -2);
 			$this->category->ViewCustomAttributes = "";
 
 			// from_place
@@ -2834,15 +2976,35 @@ class request_trip_list extends request_trip
 			$this->to_place->HrefValue = "";
 			$this->to_place->TooltipValue = "";
 
-			// date
-			$this->date->LinkCustomAttributes = "";
-			$this->date->HrefValue = "";
-			$this->date->TooltipValue = "";
-
 			// description
 			$this->description->LinkCustomAttributes = "";
 			$this->description->HrefValue = "";
 			$this->description->TooltipValue = "";
+
+			// user_id
+			$this->user_id->LinkCustomAttributes = "";
+			$this->user_id->HrefValue = "";
+			$this->user_id->TooltipValue = "";
+
+			// from_date
+			$this->from_date->LinkCustomAttributes = "";
+			$this->from_date->HrefValue = "";
+			$this->from_date->TooltipValue = "";
+
+			// to_date
+			$this->to_date->LinkCustomAttributes = "";
+			$this->to_date->HrefValue = "";
+			$this->to_date->TooltipValue = "";
+
+			// createdAt
+			$this->createdAt->LinkCustomAttributes = "";
+			$this->createdAt->HrefValue = "";
+			$this->createdAt->TooltipValue = "";
+
+			// updatedAt
+			$this->updatedAt->LinkCustomAttributes = "";
+			$this->updatedAt->HrefValue = "";
+			$this->updatedAt->TooltipValue = "";
 
 			// category
 			$this->category->LinkCustomAttributes = "";
@@ -2862,65 +3024,47 @@ class request_trip_list extends request_trip
 			$this->to_place->EditValue = HtmlEncode($this->to_place->CurrentValue);
 			$this->to_place->PlaceHolder = RemoveHtml($this->to_place->caption());
 
-			// date
-			$this->date->EditAttrs["class"] = "form-control";
-			$this->date->EditCustomAttributes = "";
-			$this->date->EditValue = HtmlEncode(FormatDateTime($this->date->CurrentValue, 8));
-			$this->date->PlaceHolder = RemoveHtml($this->date->caption());
-
 			// description
 			$this->description->EditAttrs["class"] = "form-control";
 			$this->description->EditCustomAttributes = "";
 			$this->description->EditValue = HtmlEncode($this->description->CurrentValue);
 			$this->description->PlaceHolder = RemoveHtml($this->description->caption());
 
+			// user_id
+			$this->user_id->EditAttrs["class"] = "form-control";
+			$this->user_id->EditCustomAttributes = "";
+			$this->user_id->EditValue = HtmlEncode($this->user_id->CurrentValue);
+			$this->user_id->PlaceHolder = RemoveHtml($this->user_id->caption());
+
+			// from_date
+			$this->from_date->EditAttrs["class"] = "form-control";
+			$this->from_date->EditCustomAttributes = "";
+			$this->from_date->EditValue = HtmlEncode(FormatDateTime($this->from_date->CurrentValue, 8));
+			$this->from_date->PlaceHolder = RemoveHtml($this->from_date->caption());
+
+			// to_date
+			$this->to_date->EditAttrs["class"] = "form-control";
+			$this->to_date->EditCustomAttributes = "";
+			$this->to_date->EditValue = HtmlEncode(FormatDateTime($this->to_date->CurrentValue, 8));
+			$this->to_date->PlaceHolder = RemoveHtml($this->to_date->caption());
+
+			// createdAt
+			$this->createdAt->EditAttrs["class"] = "form-control";
+			$this->createdAt->EditCustomAttributes = "";
+			$this->createdAt->EditValue = HtmlEncode(FormatDateTime($this->createdAt->CurrentValue, 8));
+			$this->createdAt->PlaceHolder = RemoveHtml($this->createdAt->caption());
+
+			// updatedAt
+			$this->updatedAt->EditAttrs["class"] = "form-control";
+			$this->updatedAt->EditCustomAttributes = "";
+			$this->updatedAt->EditValue = HtmlEncode(FormatDateTime($this->updatedAt->CurrentValue, 8));
+			$this->updatedAt->PlaceHolder = RemoveHtml($this->updatedAt->caption());
+
 			// category
 			$this->category->EditAttrs["class"] = "form-control";
 			$this->category->EditCustomAttributes = "";
-			if ($this->category->getSessionValue() <> "") {
-				$this->category->CurrentValue = $this->category->getSessionValue();
-				$this->category->OldValue = $this->category->CurrentValue;
-			$curVal = strval($this->category->CurrentValue);
-			if ($curVal <> "") {
-				$this->category->ViewValue = $this->category->lookupCacheOption($curVal);
-				if ($this->category->ViewValue === NULL) { // Lookup from database
-					$filterWrk = "`id`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
-					$sqlWrk = $this->category->Lookup->getSql(FALSE, $filterWrk, '', $this);
-					$rswrk = Conn()->execute($sqlWrk);
-					if ($rswrk && !$rswrk->EOF) { // Lookup values found
-						$arwrk = array();
-						$arwrk[1] = $rswrk->fields('df');
-						$this->category->ViewValue = $this->category->displayValue($arwrk);
-						$rswrk->Close();
-					} else {
-						$this->category->ViewValue = $this->category->CurrentValue;
-					}
-				}
-			} else {
-				$this->category->ViewValue = NULL;
-			}
-			$this->category->ViewCustomAttributes = "";
-			} else {
-			$curVal = trim(strval($this->category->CurrentValue));
-			if ($curVal <> "")
-				$this->category->ViewValue = $this->category->lookupCacheOption($curVal);
-			else
-				$this->category->ViewValue = $this->category->Lookup !== NULL && is_array($this->category->Lookup->Options) ? $curVal : NULL;
-			if ($this->category->ViewValue !== NULL) { // Load from cache
-				$this->category->EditValue = array_values($this->category->Lookup->Options);
-			} else { // Lookup from database
-				if ($curVal == "") {
-					$filterWrk = "0=1";
-				} else {
-					$filterWrk = "`id`" . SearchString("=", $this->category->CurrentValue, DATATYPE_NUMBER, "");
-				}
-				$sqlWrk = $this->category->Lookup->getSql(TRUE, $filterWrk, '', $this);
-				$rswrk = Conn()->execute($sqlWrk);
-				$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
-				if ($rswrk) $rswrk->Close();
-				$this->category->EditValue = $arwrk;
-			}
-			}
+			$this->category->EditValue = HtmlEncode($this->category->CurrentValue);
+			$this->category->PlaceHolder = RemoveHtml($this->category->caption());
 
 			// Add refer script
 			// from_place
@@ -2932,13 +3076,29 @@ class request_trip_list extends request_trip
 			$this->to_place->LinkCustomAttributes = "";
 			$this->to_place->HrefValue = "";
 
-			// date
-			$this->date->LinkCustomAttributes = "";
-			$this->date->HrefValue = "";
-
 			// description
 			$this->description->LinkCustomAttributes = "";
 			$this->description->HrefValue = "";
+
+			// user_id
+			$this->user_id->LinkCustomAttributes = "";
+			$this->user_id->HrefValue = "";
+
+			// from_date
+			$this->from_date->LinkCustomAttributes = "";
+			$this->from_date->HrefValue = "";
+
+			// to_date
+			$this->to_date->LinkCustomAttributes = "";
+			$this->to_date->HrefValue = "";
+
+			// createdAt
+			$this->createdAt->LinkCustomAttributes = "";
+			$this->createdAt->HrefValue = "";
+
+			// updatedAt
+			$this->updatedAt->LinkCustomAttributes = "";
+			$this->updatedAt->HrefValue = "";
 
 			// category
 			$this->category->LinkCustomAttributes = "";
@@ -2957,65 +3117,47 @@ class request_trip_list extends request_trip
 			$this->to_place->EditValue = HtmlEncode($this->to_place->CurrentValue);
 			$this->to_place->PlaceHolder = RemoveHtml($this->to_place->caption());
 
-			// date
-			$this->date->EditAttrs["class"] = "form-control";
-			$this->date->EditCustomAttributes = "";
-			$this->date->EditValue = HtmlEncode(FormatDateTime($this->date->CurrentValue, 8));
-			$this->date->PlaceHolder = RemoveHtml($this->date->caption());
-
 			// description
 			$this->description->EditAttrs["class"] = "form-control";
 			$this->description->EditCustomAttributes = "";
 			$this->description->EditValue = HtmlEncode($this->description->CurrentValue);
 			$this->description->PlaceHolder = RemoveHtml($this->description->caption());
 
+			// user_id
+			$this->user_id->EditAttrs["class"] = "form-control";
+			$this->user_id->EditCustomAttributes = "";
+			$this->user_id->EditValue = HtmlEncode($this->user_id->CurrentValue);
+			$this->user_id->PlaceHolder = RemoveHtml($this->user_id->caption());
+
+			// from_date
+			$this->from_date->EditAttrs["class"] = "form-control";
+			$this->from_date->EditCustomAttributes = "";
+			$this->from_date->EditValue = HtmlEncode(FormatDateTime($this->from_date->CurrentValue, 8));
+			$this->from_date->PlaceHolder = RemoveHtml($this->from_date->caption());
+
+			// to_date
+			$this->to_date->EditAttrs["class"] = "form-control";
+			$this->to_date->EditCustomAttributes = "";
+			$this->to_date->EditValue = HtmlEncode(FormatDateTime($this->to_date->CurrentValue, 8));
+			$this->to_date->PlaceHolder = RemoveHtml($this->to_date->caption());
+
+			// createdAt
+			$this->createdAt->EditAttrs["class"] = "form-control";
+			$this->createdAt->EditCustomAttributes = "";
+			$this->createdAt->EditValue = HtmlEncode(FormatDateTime($this->createdAt->CurrentValue, 8));
+			$this->createdAt->PlaceHolder = RemoveHtml($this->createdAt->caption());
+
+			// updatedAt
+			$this->updatedAt->EditAttrs["class"] = "form-control";
+			$this->updatedAt->EditCustomAttributes = "";
+			$this->updatedAt->EditValue = HtmlEncode(FormatDateTime($this->updatedAt->CurrentValue, 8));
+			$this->updatedAt->PlaceHolder = RemoveHtml($this->updatedAt->caption());
+
 			// category
 			$this->category->EditAttrs["class"] = "form-control";
 			$this->category->EditCustomAttributes = "";
-			if ($this->category->getSessionValue() <> "") {
-				$this->category->CurrentValue = $this->category->getSessionValue();
-				$this->category->OldValue = $this->category->CurrentValue;
-			$curVal = strval($this->category->CurrentValue);
-			if ($curVal <> "") {
-				$this->category->ViewValue = $this->category->lookupCacheOption($curVal);
-				if ($this->category->ViewValue === NULL) { // Lookup from database
-					$filterWrk = "`id`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
-					$sqlWrk = $this->category->Lookup->getSql(FALSE, $filterWrk, '', $this);
-					$rswrk = Conn()->execute($sqlWrk);
-					if ($rswrk && !$rswrk->EOF) { // Lookup values found
-						$arwrk = array();
-						$arwrk[1] = $rswrk->fields('df');
-						$this->category->ViewValue = $this->category->displayValue($arwrk);
-						$rswrk->Close();
-					} else {
-						$this->category->ViewValue = $this->category->CurrentValue;
-					}
-				}
-			} else {
-				$this->category->ViewValue = NULL;
-			}
-			$this->category->ViewCustomAttributes = "";
-			} else {
-			$curVal = trim(strval($this->category->CurrentValue));
-			if ($curVal <> "")
-				$this->category->ViewValue = $this->category->lookupCacheOption($curVal);
-			else
-				$this->category->ViewValue = $this->category->Lookup !== NULL && is_array($this->category->Lookup->Options) ? $curVal : NULL;
-			if ($this->category->ViewValue !== NULL) { // Load from cache
-				$this->category->EditValue = array_values($this->category->Lookup->Options);
-			} else { // Lookup from database
-				if ($curVal == "") {
-					$filterWrk = "0=1";
-				} else {
-					$filterWrk = "`id`" . SearchString("=", $this->category->CurrentValue, DATATYPE_NUMBER, "");
-				}
-				$sqlWrk = $this->category->Lookup->getSql(TRUE, $filterWrk, '', $this);
-				$rswrk = Conn()->execute($sqlWrk);
-				$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
-				if ($rswrk) $rswrk->Close();
-				$this->category->EditValue = $arwrk;
-			}
-			}
+			$this->category->EditValue = HtmlEncode($this->category->CurrentValue);
+			$this->category->PlaceHolder = RemoveHtml($this->category->caption());
 
 			// Edit refer script
 			// from_place
@@ -3027,13 +3169,29 @@ class request_trip_list extends request_trip
 			$this->to_place->LinkCustomAttributes = "";
 			$this->to_place->HrefValue = "";
 
-			// date
-			$this->date->LinkCustomAttributes = "";
-			$this->date->HrefValue = "";
-
 			// description
 			$this->description->LinkCustomAttributes = "";
 			$this->description->HrefValue = "";
+
+			// user_id
+			$this->user_id->LinkCustomAttributes = "";
+			$this->user_id->HrefValue = "";
+
+			// from_date
+			$this->from_date->LinkCustomAttributes = "";
+			$this->from_date->HrefValue = "";
+
+			// to_date
+			$this->to_date->LinkCustomAttributes = "";
+			$this->to_date->HrefValue = "";
+
+			// createdAt
+			$this->createdAt->LinkCustomAttributes = "";
+			$this->createdAt->HrefValue = "";
+
+			// updatedAt
+			$this->updatedAt->LinkCustomAttributes = "";
+			$this->updatedAt->HrefValue = "";
 
 			// category
 			$this->category->LinkCustomAttributes = "";
@@ -3097,23 +3255,58 @@ class request_trip_list extends request_trip
 				AddMessage($FormError, str_replace("%s", $this->to_place->caption(), $this->to_place->RequiredErrorMessage));
 			}
 		}
-		if ($this->date->Required) {
-			if (!$this->date->IsDetailKey && $this->date->FormValue != NULL && $this->date->FormValue == "") {
-				AddMessage($FormError, str_replace("%s", $this->date->caption(), $this->date->RequiredErrorMessage));
-			}
-		}
-		if (!CheckDate($this->date->FormValue)) {
-			AddMessage($FormError, $this->date->errorMessage());
-		}
 		if ($this->description->Required) {
 			if (!$this->description->IsDetailKey && $this->description->FormValue != NULL && $this->description->FormValue == "") {
 				AddMessage($FormError, str_replace("%s", $this->description->caption(), $this->description->RequiredErrorMessage));
 			}
 		}
+		if ($this->user_id->Required) {
+			if (!$this->user_id->IsDetailKey && $this->user_id->FormValue != NULL && $this->user_id->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->user_id->caption(), $this->user_id->RequiredErrorMessage));
+			}
+		}
+		if (!CheckInteger($this->user_id->FormValue)) {
+			AddMessage($FormError, $this->user_id->errorMessage());
+		}
+		if ($this->from_date->Required) {
+			if (!$this->from_date->IsDetailKey && $this->from_date->FormValue != NULL && $this->from_date->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->from_date->caption(), $this->from_date->RequiredErrorMessage));
+			}
+		}
+		if (!CheckDate($this->from_date->FormValue)) {
+			AddMessage($FormError, $this->from_date->errorMessage());
+		}
+		if ($this->to_date->Required) {
+			if (!$this->to_date->IsDetailKey && $this->to_date->FormValue != NULL && $this->to_date->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->to_date->caption(), $this->to_date->RequiredErrorMessage));
+			}
+		}
+		if (!CheckDate($this->to_date->FormValue)) {
+			AddMessage($FormError, $this->to_date->errorMessage());
+		}
+		if ($this->createdAt->Required) {
+			if (!$this->createdAt->IsDetailKey && $this->createdAt->FormValue != NULL && $this->createdAt->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->createdAt->caption(), $this->createdAt->RequiredErrorMessage));
+			}
+		}
+		if (!CheckDate($this->createdAt->FormValue)) {
+			AddMessage($FormError, $this->createdAt->errorMessage());
+		}
+		if ($this->updatedAt->Required) {
+			if (!$this->updatedAt->IsDetailKey && $this->updatedAt->FormValue != NULL && $this->updatedAt->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->updatedAt->caption(), $this->updatedAt->RequiredErrorMessage));
+			}
+		}
+		if (!CheckDate($this->updatedAt->FormValue)) {
+			AddMessage($FormError, $this->updatedAt->errorMessage());
+		}
 		if ($this->category->Required) {
 			if (!$this->category->IsDetailKey && $this->category->FormValue != NULL && $this->category->FormValue == "") {
 				AddMessage($FormError, str_replace("%s", $this->category->caption(), $this->category->RequiredErrorMessage));
 			}
+		}
+		if (!CheckInteger($this->category->FormValue)) {
+			AddMessage($FormError, $this->category->errorMessage());
 		}
 
 		// Return validate result
@@ -3248,11 +3441,23 @@ class request_trip_list extends request_trip
 			// to_place
 			$this->to_place->setDbValueDef($rsnew, $this->to_place->CurrentValue, "", $this->to_place->ReadOnly);
 
-			// date
-			$this->date->setDbValueDef($rsnew, UnFormatDateTime($this->date->CurrentValue, 0), CurrentDate(), $this->date->ReadOnly);
-
 			// description
-			$this->description->setDbValueDef($rsnew, $this->description->CurrentValue, "", $this->description->ReadOnly);
+			$this->description->setDbValueDef($rsnew, $this->description->CurrentValue, NULL, $this->description->ReadOnly);
+
+			// user_id
+			$this->user_id->setDbValueDef($rsnew, $this->user_id->CurrentValue, 0, $this->user_id->ReadOnly);
+
+			// from_date
+			$this->from_date->setDbValueDef($rsnew, UnFormatDateTime($this->from_date->CurrentValue, 0), NULL, $this->from_date->ReadOnly);
+
+			// to_date
+			$this->to_date->setDbValueDef($rsnew, UnFormatDateTime($this->to_date->CurrentValue, 0), NULL, $this->to_date->ReadOnly);
+
+			// createdAt
+			$this->createdAt->setDbValueDef($rsnew, UnFormatDateTime($this->createdAt->CurrentValue, 0), CurrentDate(), $this->createdAt->ReadOnly);
+
+			// updatedAt
+			$this->updatedAt->setDbValueDef($rsnew, UnFormatDateTime($this->updatedAt->CurrentValue, 0), CurrentDate(), $this->updatedAt->ReadOnly);
 
 			// category
 			$this->category->setDbValueDef($rsnew, $this->category->CurrentValue, 0, $this->category->ReadOnly);
@@ -3317,8 +3522,12 @@ class request_trip_list extends request_trip
 		$hash = "";
 		$hash .= GetFieldHash($rs->fields('from_place')); // from_place
 		$hash .= GetFieldHash($rs->fields('to_place')); // to_place
-		$hash .= GetFieldHash($rs->fields('date')); // date
 		$hash .= GetFieldHash($rs->fields('description')); // description
+		$hash .= GetFieldHash($rs->fields('user_id')); // user_id
+		$hash .= GetFieldHash($rs->fields('from_date')); // from_date
+		$hash .= GetFieldHash($rs->fields('to_date')); // to_date
+		$hash .= GetFieldHash($rs->fields('createdAt')); // createdAt
+		$hash .= GetFieldHash($rs->fields('updatedAt')); // updatedAt
 		$hash .= GetFieldHash($rs->fields('category')); // category
 		return md5($hash);
 	}
@@ -3341,11 +3550,23 @@ class request_trip_list extends request_trip
 		// to_place
 		$this->to_place->setDbValueDef($rsnew, $this->to_place->CurrentValue, "", FALSE);
 
-		// date
-		$this->date->setDbValueDef($rsnew, UnFormatDateTime($this->date->CurrentValue, 0), CurrentDate(), FALSE);
-
 		// description
-		$this->description->setDbValueDef($rsnew, $this->description->CurrentValue, "", FALSE);
+		$this->description->setDbValueDef($rsnew, $this->description->CurrentValue, NULL, FALSE);
+
+		// user_id
+		$this->user_id->setDbValueDef($rsnew, $this->user_id->CurrentValue, 0, FALSE);
+
+		// from_date
+		$this->from_date->setDbValueDef($rsnew, UnFormatDateTime($this->from_date->CurrentValue, 0), NULL, FALSE);
+
+		// to_date
+		$this->to_date->setDbValueDef($rsnew, UnFormatDateTime($this->to_date->CurrentValue, 0), NULL, FALSE);
+
+		// createdAt
+		$this->createdAt->setDbValueDef($rsnew, UnFormatDateTime($this->createdAt->CurrentValue, 0), CurrentDate(), FALSE);
+
+		// updatedAt
+		$this->updatedAt->setDbValueDef($rsnew, UnFormatDateTime($this->updatedAt->CurrentValue, 0), CurrentDate(), FALSE);
 
 		// category
 		$this->category->setDbValueDef($rsnew, $this->category->CurrentValue, 0, FALSE);
@@ -3392,8 +3613,12 @@ class request_trip_list extends request_trip
 		$this->id->AdvancedSearch->load();
 		$this->from_place->AdvancedSearch->load();
 		$this->to_place->AdvancedSearch->load();
-		$this->date->AdvancedSearch->load();
 		$this->description->AdvancedSearch->load();
+		$this->user_id->AdvancedSearch->load();
+		$this->from_date->AdvancedSearch->load();
+		$this->to_date->AdvancedSearch->load();
+		$this->createdAt->AdvancedSearch->load();
+		$this->updatedAt->AdvancedSearch->load();
 		$this->category->AdvancedSearch->load();
 	}
 
@@ -3506,26 +3731,6 @@ class request_trip_list extends request_trip
 
 		// Call Page Exporting server event
 		$this->ExportDoc->ExportCustom = !$this->Page_Exporting();
-
-		// Export master record
-		if (EXPORT_MASTER_RECORD && $this->getMasterFilter() <> "" && $this->getCurrentMasterTable() == "category") {
-			global $category;
-			if (!isset($category))
-				$category = new category();
-			$rsmaster = $category->loadRs($this->DbMasterFilter); // Load master record
-			if ($rsmaster && !$rsmaster->EOF) {
-				$exportStyle = $doc->Style;
-				$doc->setStyle("v"); // Change to vertical
-				if (!$this->isExport("csv") || EXPORT_MASTER_RECORD_FOR_CSV) {
-					$doc->Table = &$category;
-					$category->exportDocument($doc, $rsmaster);
-					$doc->exportEmptyRow();
-					$doc->Table = &$this;
-				}
-				$doc->setStyle($exportStyle); // Restore
-				$rsmaster->close();
-			}
-		}
 		$header = $this->PageHeader;
 		$this->Page_DataRendering($header);
 		$doc->Text .= $header;
@@ -3646,78 +3851,6 @@ class request_trip_list extends request_trip
 		}
 	}
 
-	// Set up master/detail based on QueryString
-	protected function setupMasterParms()
-	{
-		$validMaster = FALSE;
-
-		// Get the keys for master table
-		if (Get(TABLE_SHOW_MASTER) !== NULL) {
-			$masterTblVar = Get(TABLE_SHOW_MASTER);
-			if ($masterTblVar == "") {
-				$validMaster = TRUE;
-				$this->DbMasterFilter = "";
-				$this->DbDetailFilter = "";
-			}
-			if ($masterTblVar == "category") {
-				$validMaster = TRUE;
-				if (Get("fk_id") !== NULL) {
-					$GLOBALS["category"]->id->setQueryStringValue(Get("fk_id"));
-					$this->category->setQueryStringValue($GLOBALS["category"]->id->QueryStringValue);
-					$this->category->setSessionValue($this->category->QueryStringValue);
-					if (!is_numeric($GLOBALS["category"]->id->QueryStringValue))
-						$validMaster = FALSE;
-				} else {
-					$validMaster = FALSE;
-				}
-			}
-		} elseif (Post(TABLE_SHOW_MASTER) !== NULL) {
-			$masterTblVar = Post(TABLE_SHOW_MASTER);
-			if ($masterTblVar == "") {
-				$validMaster = TRUE;
-				$this->DbMasterFilter = "";
-				$this->DbDetailFilter = "";
-			}
-			if ($masterTblVar == "category") {
-				$validMaster = TRUE;
-				if (Post("fk_id") !== NULL) {
-					$GLOBALS["category"]->id->setFormValue(Post("fk_id"));
-					$this->category->setFormValue($GLOBALS["category"]->id->FormValue);
-					$this->category->setSessionValue($this->category->FormValue);
-					if (!is_numeric($GLOBALS["category"]->id->FormValue))
-						$validMaster = FALSE;
-				} else {
-					$validMaster = FALSE;
-				}
-			}
-		}
-		if ($validMaster) {
-
-			// Update URL
-			$this->AddUrl = $this->addMasterUrl($this->AddUrl);
-			$this->InlineAddUrl = $this->addMasterUrl($this->InlineAddUrl);
-			$this->GridAddUrl = $this->addMasterUrl($this->GridAddUrl);
-			$this->GridEditUrl = $this->addMasterUrl($this->GridEditUrl);
-
-			// Save current master table
-			$this->setCurrentMasterTable($masterTblVar);
-
-			// Reset start record counter (new master key)
-			if (!$this->isAddOrEdit()) {
-				$this->StartRec = 1;
-				$this->setStartRecordNumber($this->StartRec);
-			}
-
-			// Clear previous master key from Session
-			if ($masterTblVar <> "category") {
-				if ($this->category->CurrentValue == "")
-					$this->category->setSessionValue("");
-			}
-		}
-		$this->DbMasterFilter = $this->getMasterFilter(); // Get master filter
-		$this->DbDetailFilter = $this->getDetailFilter(); // Get detail filter
-	}
-
 	// Set up Breadcrumb
 	protected function setupBreadcrumb()
 	{
@@ -3759,8 +3892,6 @@ class request_trip_list extends request_trip
 
 					// Format the field values
 					switch ($fld->FieldVar) {
-						case "x_category":
-							break;
 					}
 					$ar[strval($row[0])] = $row;
 					$rs->moveNext();

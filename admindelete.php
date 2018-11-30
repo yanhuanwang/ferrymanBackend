@@ -79,6 +79,9 @@ $admin_delete->showMessage();
 <?php if ($admin->username->Visible) { // username ?>
 		<th class="<?php echo $admin->username->headerCellClass() ?>"><span id="elh_admin_username" class="admin_username"><?php echo $admin->username->caption() ?></span></th>
 <?php } ?>
+<?php if ($admin->password->Visible) { // password ?>
+		<th class="<?php echo $admin->password->headerCellClass() ?>"><span id="elh_admin_password" class="admin_password"><?php echo $admin->password->caption() ?></span></th>
+<?php } ?>
 <?php if ($admin->level->Visible) { // level ?>
 		<th class="<?php echo $admin->level->headerCellClass() ?>"><span id="elh_admin_level" class="admin_level"><?php echo $admin->level->caption() ?></span></th>
 <?php } ?>
@@ -117,6 +120,14 @@ while (!$admin_delete->Recordset->EOF) {
 <span id="el<?php echo $admin_delete->RowCnt ?>_admin_username" class="admin_username">
 <span<?php echo $admin->username->viewAttributes() ?>>
 <?php echo $admin->username->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($admin->password->Visible) { // password ?>
+		<td<?php echo $admin->password->cellAttributes() ?>>
+<span id="el<?php echo $admin_delete->RowCnt ?>_admin_password" class="admin_password">
+<span<?php echo $admin->password->viewAttributes() ?>>
+<?php echo $admin->password->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

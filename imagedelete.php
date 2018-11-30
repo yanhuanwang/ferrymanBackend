@@ -50,11 +50,8 @@ fimagedelete.Form_CustomValidate = function(fobj) { // DO NOT CHANGE THIS LINE!
 fimagedelete.validateRequired = <?php echo json_encode(CLIENT_VALIDATE) ?>;
 
 // Dynamic selection lists
-fimagedelete.lists["x__userid"] = <?php echo $image_delete->_userid->Lookup->toClientList() ?>;
-fimagedelete.lists["x__userid"].options = <?php echo JsonEncode($image_delete->_userid->lookupOptions()) ?>;
-fimagedelete.autoSuggests["x__userid"] = <?php echo json_encode(["data" => "ajax=autosuggest"]) ?>;
-
 // Form object for search
+
 </script>
 <script>
 
@@ -79,17 +76,26 @@ $image_delete->showMessage();
 <table class="table ew-table">
 	<thead>
 	<tr class="ew-table-header">
-<?php if ($image->name->Visible) { // name ?>
-		<th class="<?php echo $image->name->headerCellClass() ?>"><span id="elh_image_name" class="image_name"><?php echo $image->name->caption() ?></span></th>
-<?php } ?>
-<?php if ($image->_userid->Visible) { // userid ?>
-		<th class="<?php echo $image->_userid->headerCellClass() ?>"><span id="elh_image__userid" class="image__userid"><?php echo $image->_userid->caption() ?></span></th>
-<?php } ?>
 <?php if ($image->path->Visible) { // path ?>
 		<th class="<?php echo $image->path->headerCellClass() ?>"><span id="elh_image_path" class="image_path"><?php echo $image->path->caption() ?></span></th>
 <?php } ?>
 <?php if ($image->description->Visible) { // description ?>
 		<th class="<?php echo $image->description->headerCellClass() ?>"><span id="elh_image_description" class="image_description"><?php echo $image->description->caption() ?></span></th>
+<?php } ?>
+<?php if ($image->uuid->Visible) { // uuid ?>
+		<th class="<?php echo $image->uuid->headerCellClass() ?>"><span id="elh_image_uuid" class="image_uuid"><?php echo $image->uuid->caption() ?></span></th>
+<?php } ?>
+<?php if ($image->user_id->Visible) { // user_id ?>
+		<th class="<?php echo $image->user_id->headerCellClass() ?>"><span id="elh_image_user_id" class="image_user_id"><?php echo $image->user_id->caption() ?></span></th>
+<?php } ?>
+<?php if ($image->confirmed->Visible) { // confirmed ?>
+		<th class="<?php echo $image->confirmed->headerCellClass() ?>"><span id="elh_image_confirmed" class="image_confirmed"><?php echo $image->confirmed->caption() ?></span></th>
+<?php } ?>
+<?php if ($image->createdAt->Visible) { // createdAt ?>
+		<th class="<?php echo $image->createdAt->headerCellClass() ?>"><span id="elh_image_createdAt" class="image_createdAt"><?php echo $image->createdAt->caption() ?></span></th>
+<?php } ?>
+<?php if ($image->updatedAt->Visible) { // updatedAt ?>
+		<th class="<?php echo $image->updatedAt->headerCellClass() ?>"><span id="elh_image_updatedAt" class="image_updatedAt"><?php echo $image->updatedAt->caption() ?></span></th>
 <?php } ?>
 	</tr>
 	</thead>
@@ -112,22 +118,6 @@ while (!$image_delete->Recordset->EOF) {
 	$image_delete->renderRow();
 ?>
 	<tr<?php echo $image->rowAttributes() ?>>
-<?php if ($image->name->Visible) { // name ?>
-		<td<?php echo $image->name->cellAttributes() ?>>
-<span id="el<?php echo $image_delete->RowCnt ?>_image_name" class="image_name">
-<span<?php echo $image->name->viewAttributes() ?>>
-<?php echo $image->name->getViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
-<?php if ($image->_userid->Visible) { // userid ?>
-		<td<?php echo $image->_userid->cellAttributes() ?>>
-<span id="el<?php echo $image_delete->RowCnt ?>_image__userid" class="image__userid">
-<span<?php echo $image->_userid->viewAttributes() ?>>
-<?php echo $image->_userid->getViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
 <?php if ($image->path->Visible) { // path ?>
 		<td<?php echo $image->path->cellAttributes() ?>>
 <span id="el<?php echo $image_delete->RowCnt ?>_image_path" class="image_path">
@@ -142,6 +132,46 @@ while (!$image_delete->Recordset->EOF) {
 <span id="el<?php echo $image_delete->RowCnt ?>_image_description" class="image_description">
 <span<?php echo $image->description->viewAttributes() ?>>
 <?php echo $image->description->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($image->uuid->Visible) { // uuid ?>
+		<td<?php echo $image->uuid->cellAttributes() ?>>
+<span id="el<?php echo $image_delete->RowCnt ?>_image_uuid" class="image_uuid">
+<span<?php echo $image->uuid->viewAttributes() ?>>
+<?php echo $image->uuid->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($image->user_id->Visible) { // user_id ?>
+		<td<?php echo $image->user_id->cellAttributes() ?>>
+<span id="el<?php echo $image_delete->RowCnt ?>_image_user_id" class="image_user_id">
+<span<?php echo $image->user_id->viewAttributes() ?>>
+<?php echo $image->user_id->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($image->confirmed->Visible) { // confirmed ?>
+		<td<?php echo $image->confirmed->cellAttributes() ?>>
+<span id="el<?php echo $image_delete->RowCnt ?>_image_confirmed" class="image_confirmed">
+<span<?php echo $image->confirmed->viewAttributes() ?>>
+<?php echo $image->confirmed->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($image->createdAt->Visible) { // createdAt ?>
+		<td<?php echo $image->createdAt->cellAttributes() ?>>
+<span id="el<?php echo $image_delete->RowCnt ?>_image_createdAt" class="image_createdAt">
+<span<?php echo $image->createdAt->viewAttributes() ?>>
+<?php echo $image->createdAt->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($image->updatedAt->Visible) { // updatedAt ?>
+		<td<?php echo $image->updatedAt->cellAttributes() ?>>
+<span id="el<?php echo $image_delete->RowCnt ?>_image_updatedAt" class="image_updatedAt">
+<span<?php echo $image->updatedAt->viewAttributes() ?>>
+<?php echo $image->updatedAt->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

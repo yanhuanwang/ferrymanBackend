@@ -189,6 +189,28 @@ $trip_info_view->showMessage();
 </td>
 	</tr>
 <?php } ?>
+<?php if ($trip_info->createdAt->Visible) { // createdAt ?>
+	<tr id="r_createdAt">
+		<td class="<?php echo $trip_info_view->TableLeftColumnClass ?>"><span id="elh_trip_info_createdAt"><?php echo $trip_info->createdAt->caption() ?></span></td>
+		<td data-name="createdAt"<?php echo $trip_info->createdAt->cellAttributes() ?>>
+<span id="el_trip_info_createdAt">
+<span<?php echo $trip_info->createdAt->viewAttributes() ?>>
+<?php echo $trip_info->createdAt->getViewValue() ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($trip_info->updatedAt->Visible) { // updatedAt ?>
+	<tr id="r_updatedAt">
+		<td class="<?php echo $trip_info_view->TableLeftColumnClass ?>"><span id="elh_trip_info_updatedAt"><?php echo $trip_info->updatedAt->caption() ?></span></td>
+		<td data-name="updatedAt"<?php echo $trip_info->updatedAt->cellAttributes() ?>>
+<span id="el_trip_info_updatedAt">
+<span<?php echo $trip_info->updatedAt->viewAttributes() ?>>
+<?php echo $trip_info->updatedAt->getViewValue() ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
 </table>
 <?php if (!$trip_info_view->IsModal) { ?>
 <?php if (!$trip_info->isExport()) { ?>

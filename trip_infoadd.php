@@ -90,6 +90,22 @@ ftrip_infoadd.validate = function() {
 			elm = this.getElements("x" + infix + "_date");
 			if (elm && !ew.checkDateDef(elm.value))
 				return this.onError(elm, "<?php echo JsEncode($trip_info->date->errorMessage()) ?>");
+		<?php if ($trip_info_add->createdAt->Required) { ?>
+			elm = this.getElements("x" + infix + "_createdAt");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $trip_info->createdAt->caption(), $trip_info->createdAt->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_createdAt");
+			if (elm && !ew.checkDateDef(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($trip_info->createdAt->errorMessage()) ?>");
+		<?php if ($trip_info_add->updatedAt->Required) { ?>
+			elm = this.getElements("x" + infix + "_updatedAt");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $trip_info->updatedAt->caption(), $trip_info->updatedAt->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_updatedAt");
+			if (elm && !ew.checkDateDef(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($trip_info->updatedAt->errorMessage()) ?>");
 
 			// Fire Form_CustomValidate event
 			if (!this.Form_CustomValidate(fobj))
@@ -226,6 +242,36 @@ ew.createDateTimePicker("ftrip_infoadd", "x_date", {"ignoreReadonly":true,"useCu
 <?php } ?>
 </span>
 <?php echo $trip_info->date->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($trip_info->createdAt->Visible) { // createdAt ?>
+	<div id="r_createdAt" class="form-group row">
+		<label id="elh_trip_info_createdAt" for="x_createdAt" class="<?php echo $trip_info_add->LeftColumnClass ?>"><?php echo $trip_info->createdAt->caption() ?><?php echo ($trip_info->createdAt->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
+		<div class="<?php echo $trip_info_add->RightColumnClass ?>"><div<?php echo $trip_info->createdAt->cellAttributes() ?>>
+<span id="el_trip_info_createdAt">
+<input type="text" data-table="trip_info" data-field="x_createdAt" name="x_createdAt" id="x_createdAt" placeholder="<?php echo HtmlEncode($trip_info->createdAt->getPlaceHolder()) ?>" value="<?php echo $trip_info->createdAt->EditValue ?>"<?php echo $trip_info->createdAt->editAttributes() ?>>
+<?php if (!$trip_info->createdAt->ReadOnly && !$trip_info->createdAt->Disabled && !isset($trip_info->createdAt->EditAttrs["readonly"]) && !isset($trip_info->createdAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("ftrip_infoadd", "x_createdAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<?php echo $trip_info->createdAt->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($trip_info->updatedAt->Visible) { // updatedAt ?>
+	<div id="r_updatedAt" class="form-group row">
+		<label id="elh_trip_info_updatedAt" for="x_updatedAt" class="<?php echo $trip_info_add->LeftColumnClass ?>"><?php echo $trip_info->updatedAt->caption() ?><?php echo ($trip_info->updatedAt->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
+		<div class="<?php echo $trip_info_add->RightColumnClass ?>"><div<?php echo $trip_info->updatedAt->cellAttributes() ?>>
+<span id="el_trip_info_updatedAt">
+<input type="text" data-table="trip_info" data-field="x_updatedAt" name="x_updatedAt" id="x_updatedAt" placeholder="<?php echo HtmlEncode($trip_info->updatedAt->getPlaceHolder()) ?>" value="<?php echo $trip_info->updatedAt->EditValue ?>"<?php echo $trip_info->updatedAt->editAttributes() ?>>
+<?php if (!$trip_info->updatedAt->ReadOnly && !$trip_info->updatedAt->Disabled && !isset($trip_info->updatedAt->EditAttrs["readonly"]) && !isset($trip_info->updatedAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("ftrip_infoadd", "x_updatedAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<?php echo $trip_info->updatedAt->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
 </div><!-- /page* -->

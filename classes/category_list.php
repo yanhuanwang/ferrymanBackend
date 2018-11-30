@@ -372,7 +372,7 @@ class category_list extends category
 		$this->ExportXmlUrl = $this->pageUrl() . "export=xml";
 		$this->ExportCsvUrl = $this->pageUrl() . "export=csv";
 		$this->ExportPdfUrl = $this->pageUrl() . "export=pdf";
-		$this->AddUrl = "categoryadd.php?" . TABLE_SHOW_DETAIL . "=";
+		$this->AddUrl = "categoryadd.php";
 		$this->InlineAddUrl = $this->pageUrl() . "action=add";
 		$this->GridAddUrl = $this->pageUrl() . "action=gridadd";
 		$this->GridEditUrl = $this->pageUrl() . "action=gridedit";
@@ -604,8 +604,6 @@ class category_list extends category
 	public $MultiSelectKey;
 	public $Command;
 	public $RestoreSearch = FALSE;
-	public $parcel_info_Count;
-	public $request_trip_Count;
 	public $DetailPages;
 	public $OldRecordset;
 
@@ -1915,39 +1913,6 @@ class category_list extends category
 		$item->Visible = $Security->canDelete();
 		$item->OnLeft = TRUE;
 
-		// "detail_parcel_info"
-		$item = &$this->ListOptions->add("detail_parcel_info");
-		$item->CssClass = "text-nowrap";
-		$item->Visible = $Security->allowList(CurrentProjectID() . 'parcel_info') && !$this->ShowMultipleDetails;
-		$item->OnLeft = TRUE;
-		$item->ShowInButtonGroup = FALSE;
-		if (!isset($GLOBALS["parcel_info_grid"]))
-			$GLOBALS["parcel_info_grid"] = new parcel_info_grid();
-
-		// "detail_request_trip"
-		$item = &$this->ListOptions->add("detail_request_trip");
-		$item->CssClass = "text-nowrap";
-		$item->Visible = $Security->allowList(CurrentProjectID() . 'request_trip') && !$this->ShowMultipleDetails;
-		$item->OnLeft = TRUE;
-		$item->ShowInButtonGroup = FALSE;
-		if (!isset($GLOBALS["request_trip_grid"]))
-			$GLOBALS["request_trip_grid"] = new request_trip_grid();
-
-		// Multiple details
-		if ($this->ShowMultipleDetails) {
-			$item = &$this->ListOptions->add("details");
-			$item->CssClass = "text-nowrap";
-			$item->Visible = $this->ShowMultipleDetails;
-			$item->OnLeft = TRUE;
-			$item->ShowInButtonGroup = FALSE;
-		}
-
-		// Set up detail pages
-		$pages = new SubPages();
-		$pages->add("parcel_info");
-		$pages->add("request_trip");
-		$this->DetailPages = $pages;
-
 		// List actions
 		$item = &$this->ListOptions->add("listactions");
 		$item->CssClass = "text-nowrap";
@@ -2124,113 +2089,6 @@ class category_list extends category
 				$opt->Visible = TRUE;
 			}
 		}
-		$detailViewTblVar = "";
-		$detailCopyTblVar = "";
-		$detailEditTblVar = "";
-
-		// "detail_parcel_info"
-		$opt = &$this->ListOptions->Items["detail_parcel_info"];
-		if ($Security->allowList(CurrentProjectID() . 'parcel_info')) {
-			$body = $Language->Phrase("DetailLink") . $Language->TablePhrase("parcel_info", "TblCaption");
-			$body .= "&nbsp;" . str_replace("%c", $this->parcel_info_Count, $Language->Phrase("DetailCount"));
-			$body = "<a class=\"btn btn-default ew-row-link ew-detail\" data-action=\"list\" href=\"" . HtmlEncode("parcel_infolist.php?" . TABLE_SHOW_MASTER . "=category&fk_id=" . urlencode(strval($this->id->CurrentValue)) . "") . "\">" . $body . "</a>";
-			$links = "";
-			if ($GLOBALS["parcel_info_grid"]->DetailView && $Security->canView() && $Security->allowView(CurrentProjectID() . 'parcel_info')) {
-				$caption = $Language->Phrase("MasterDetailViewLink");
-				$url = $this->getViewUrl(TABLE_SHOW_DETAIL . "=parcel_info");
-				$links .= "<li><a class=\"dropdown-item ew-row-link ew-detail-view\" data-action=\"view\" data-caption=\"" . HtmlTitle($caption) . "\" href=\"" . HtmlEncode($url) . "\">" . HtmlImageAndText($caption) . "</a></li>";
-				if ($detailViewTblVar <> "")
-					$detailViewTblVar .= ",";
-				$detailViewTblVar .= "parcel_info";
-			}
-			if ($GLOBALS["parcel_info_grid"]->DetailEdit && $Security->canEdit() && $Security->allowEdit(CurrentProjectID() . 'parcel_info')) {
-				$caption = $Language->Phrase("MasterDetailEditLink");
-				$url = $this->getEditUrl(TABLE_SHOW_DETAIL . "=parcel_info");
-				$links .= "<li><a class=\"dropdown-item ew-row-link ew-detail-edit\" data-action=\"edit\" data-caption=\"" . HtmlTitle($caption) . "\" href=\"" . HtmlEncode($url) . "\">" . HtmlImageAndText($caption) . "</a></li>";
-				if ($detailEditTblVar <> "")
-					$detailEditTblVar .= ",";
-				$detailEditTblVar .= "parcel_info";
-			}
-			if ($GLOBALS["parcel_info_grid"]->DetailAdd && $Security->canAdd() && $Security->allowAdd(CurrentProjectID() . 'parcel_info')) {
-				$caption = $Language->Phrase("MasterDetailCopyLink");
-				$url = $this->getCopyUrl(TABLE_SHOW_DETAIL . "=parcel_info");
-				$links .= "<li><a class=\"dropdown-item ew-row-link ew-detail-copy\" data-action=\"add\" data-caption=\"" . HtmlTitle($caption) . "\" href=\"" . HtmlEncode($url) . "\">" . HtmlImageAndText($caption) . "</a></li>";
-				if ($detailCopyTblVar <> "")
-					$detailCopyTblVar .= ",";
-				$detailCopyTblVar .= "parcel_info";
-			}
-			if ($links <> "") {
-				$body .= "<button class=\"dropdown-toggle btn btn-default ew-detail\" data-toggle=\"dropdown\"></button>";
-				$body .= "<ul class=\"dropdown-menu\">". $links . "</ul>";
-			}
-			$body = "<div class=\"btn-group btn-group-sm ew-btn-group\">" . $body . "</div>";
-			$opt->Body = $body;
-			if ($this->ShowMultipleDetails)
-				$opt->Visible = FALSE;
-		}
-
-		// "detail_request_trip"
-		$opt = &$this->ListOptions->Items["detail_request_trip"];
-		if ($Security->allowList(CurrentProjectID() . 'request_trip')) {
-			$body = $Language->Phrase("DetailLink") . $Language->TablePhrase("request_trip", "TblCaption");
-			$body .= "&nbsp;" . str_replace("%c", $this->request_trip_Count, $Language->Phrase("DetailCount"));
-			$body = "<a class=\"btn btn-default ew-row-link ew-detail\" data-action=\"list\" href=\"" . HtmlEncode("request_triplist.php?" . TABLE_SHOW_MASTER . "=category&fk_id=" . urlencode(strval($this->id->CurrentValue)) . "") . "\">" . $body . "</a>";
-			$links = "";
-			if ($GLOBALS["request_trip_grid"]->DetailView && $Security->canView() && $Security->allowView(CurrentProjectID() . 'request_trip')) {
-				$caption = $Language->Phrase("MasterDetailViewLink");
-				$url = $this->getViewUrl(TABLE_SHOW_DETAIL . "=request_trip");
-				$links .= "<li><a class=\"dropdown-item ew-row-link ew-detail-view\" data-action=\"view\" data-caption=\"" . HtmlTitle($caption) . "\" href=\"" . HtmlEncode($url) . "\">" . HtmlImageAndText($caption) . "</a></li>";
-				if ($detailViewTblVar <> "")
-					$detailViewTblVar .= ",";
-				$detailViewTblVar .= "request_trip";
-			}
-			if ($GLOBALS["request_trip_grid"]->DetailEdit && $Security->canEdit() && $Security->allowEdit(CurrentProjectID() . 'request_trip')) {
-				$caption = $Language->Phrase("MasterDetailEditLink");
-				$url = $this->getEditUrl(TABLE_SHOW_DETAIL . "=request_trip");
-				$links .= "<li><a class=\"dropdown-item ew-row-link ew-detail-edit\" data-action=\"edit\" data-caption=\"" . HtmlTitle($caption) . "\" href=\"" . HtmlEncode($url) . "\">" . HtmlImageAndText($caption) . "</a></li>";
-				if ($detailEditTblVar <> "")
-					$detailEditTblVar .= ",";
-				$detailEditTblVar .= "request_trip";
-			}
-			if ($GLOBALS["request_trip_grid"]->DetailAdd && $Security->canAdd() && $Security->allowAdd(CurrentProjectID() . 'request_trip')) {
-				$caption = $Language->Phrase("MasterDetailCopyLink");
-				$url = $this->getCopyUrl(TABLE_SHOW_DETAIL . "=request_trip");
-				$links .= "<li><a class=\"dropdown-item ew-row-link ew-detail-copy\" data-action=\"add\" data-caption=\"" . HtmlTitle($caption) . "\" href=\"" . HtmlEncode($url) . "\">" . HtmlImageAndText($caption) . "</a></li>";
-				if ($detailCopyTblVar <> "")
-					$detailCopyTblVar .= ",";
-				$detailCopyTblVar .= "request_trip";
-			}
-			if ($links <> "") {
-				$body .= "<button class=\"dropdown-toggle btn btn-default ew-detail\" data-toggle=\"dropdown\"></button>";
-				$body .= "<ul class=\"dropdown-menu\">". $links . "</ul>";
-			}
-			$body = "<div class=\"btn-group btn-group-sm ew-btn-group\">" . $body . "</div>";
-			$opt->Body = $body;
-			if ($this->ShowMultipleDetails)
-				$opt->Visible = FALSE;
-		}
-		if ($this->ShowMultipleDetails) {
-			$body = "<div class=\"btn-group btn-group-sm ew-btn-group\">";
-			$links = "";
-			if ($detailViewTblVar <> "") {
-				$links .= "<li><a class=\"dropdown-item ew-row-link ew-detail-view\" data-action=\"view\" data-caption=\"" . HtmlTitle($Language->Phrase("MasterDetailViewLink")) . "\" href=\"" . HtmlEncode($this->getViewUrl(TABLE_SHOW_DETAIL . "=" . $detailViewTblVar)) . "\">" . HtmlImageAndText($Language->Phrase("MasterDetailViewLink")) . "</a></li>";
-			}
-			if ($detailEditTblVar <> "") {
-				$links .= "<li><a class=\"dropdown-item ew-row-link ew-detail-edit\" data-action=\"edit\" data-caption=\"" . HtmlTitle($Language->Phrase("MasterDetailEditLink")) . "\" href=\"" . HtmlEncode($this->getEditUrl(TABLE_SHOW_DETAIL . "=" . $detailEditTblVar)) . "\">" . HtmlImageAndText($Language->Phrase("MasterDetailEditLink")) . "</a></li>";
-			}
-			if ($detailCopyTblVar <> "") {
-				$links .= "<li><a class=\"dropdown-item ew-row-link ew-detail-copy\" data-action=\"add\" data-caption=\"" . HtmlTitle($Language->Phrase("MasterDetailCopyLink")) . "\" href=\"" . HtmlEncode($this->GetCopyUrl(TABLE_SHOW_DETAIL . "=" . $detailCopyTblVar)) . "\">" . HtmlImageAndText($Language->Phrase("MasterDetailCopyLink")) . "</a></li>";
-			}
-			if ($links <> "") {
-				$body .= "<button class=\"dropdown-toggle btn btn-default ew-master-detail\" title=\"" . HtmlTitle($Language->Phrase("MultipleMasterDetails")) . "\" data-toggle=\"dropdown\">" . $Language->Phrase("MultipleMasterDetails") . "</button>";
-				$body .= "<ul class=\"dropdown-menu ew-menu\">". $links . "</ul>";
-			}
-			$body .= "</div>";
-
-			// Multiple details
-			$opt = &$this->ListOptions->Items["details"];
-			$opt->Body = $body;
-		}
 
 		// "checkbox"
 		$opt = &$this->ListOptions->Items["checkbox"];
@@ -2264,45 +2122,6 @@ class category_list extends category
 		$item = &$option->add("gridadd");
 		$item->Body = "<a class=\"ew-add-edit ew-grid-add\" title=\"" . HtmlTitle($Language->Phrase("GridAddLink")) . "\" data-caption=\"" . HtmlTitle($Language->Phrase("GridAddLink")) . "\" href=\"" . HtmlEncode($this->GridAddUrl) . "\">" . $Language->Phrase("GridAddLink") . "</a>";
 		$item->Visible = ($this->GridAddUrl <> "" && $Security->canAdd());
-		$option = $options["detail"];
-		$detailTableLink = "";
-		$item = &$option->add("detailadd_parcel_info");
-		$url = $this->getAddUrl(TABLE_SHOW_DETAIL . "=parcel_info");
-		$caption = $Language->Phrase("Add") . "&nbsp;" . $this->tableCaption() . "/" . $GLOBALS["parcel_info"]->tableCaption();
-		$item->Body = "<a class=\"ew-detail-add-group ew-detail-add\" title=\"" . HtmlTitle($caption) . "\" data-caption=\"" . HtmlTitle($caption) . "\" href=\"" . HtmlEncode($url) . "\">" . $caption . "</a>";
-		$item->Visible = ($GLOBALS["parcel_info"]->DetailAdd && $Security->allowAdd(CurrentProjectID() . 'parcel_info') && $Security->canAdd());
-		if ($item->Visible) {
-			if ($detailTableLink <> "")
-				$detailTableLink .= ",";
-			$detailTableLink .= "parcel_info";
-		}
-		$item = &$option->add("detailadd_request_trip");
-		$url = $this->getAddUrl(TABLE_SHOW_DETAIL . "=request_trip");
-		$caption = $Language->Phrase("Add") . "&nbsp;" . $this->tableCaption() . "/" . $GLOBALS["request_trip"]->tableCaption();
-		$item->Body = "<a class=\"ew-detail-add-group ew-detail-add\" title=\"" . HtmlTitle($caption) . "\" data-caption=\"" . HtmlTitle($caption) . "\" href=\"" . HtmlEncode($url) . "\">" . $caption . "</a>";
-		$item->Visible = ($GLOBALS["request_trip"]->DetailAdd && $Security->allowAdd(CurrentProjectID() . 'request_trip') && $Security->canAdd());
-		if ($item->Visible) {
-			if ($detailTableLink <> "")
-				$detailTableLink .= ",";
-			$detailTableLink .= "request_trip";
-		}
-
-		// Add multiple details
-		if ($this->ShowMultipleDetails) {
-			$item = &$option->add("detailsadd");
-			$url = $this->getAddUrl(TABLE_SHOW_DETAIL . "=" . $detailTableLink);
-			$caption = $Language->Phrase("AddMasterDetailLink");
-			$item->Body = "<a class=\"ew-detail-add-group ew-detail-add\" title=\"" . HtmlTitle($caption) . "\" data-caption=\"" . HtmlTitle($caption) . "\" href=\"" . HtmlEncode($url) . "\">" . $caption . "</a>";
-			$item->Visible = ($detailTableLink <> "" && $Security->canAdd());
-
-			// Hide single master/detail items
-			$ar = explode(",", $detailTableLink);
-			$cnt = count($ar);
-			for ($i = 0; $i < $cnt; $i++) {
-				if ($item = &$option->getItem("detailadd_" . $ar[$i]))
-					$item->Visible = FALSE;
-			}
-		}
 
 		// Add grid edit
 		$option = $options["addedit"];
@@ -2750,20 +2569,6 @@ class category_list extends category
 		$this->id->setDbValue($row['id']);
 		$this->name->setDbValue($row['name']);
 		$this->description->setDbValue($row['description']);
-		if (!isset($GLOBALS["parcel_info_grid"]))
-			$GLOBALS["parcel_info_grid"] = new parcel_info_grid();
-		$detailFilter = $GLOBALS["parcel_info"]->sqlDetailFilter_category();
-		$detailFilter = str_replace("@category@", AdjustSql($this->id->DbValue, "DB"), $detailFilter);
-		$GLOBALS["parcel_info"]->setCurrentMasterTable("category");
-		$detailFilter = $GLOBALS["parcel_info"]->applyUserIDFilters($detailFilter);
-		$this->parcel_info_Count = $GLOBALS["parcel_info"]->loadRecordCount($detailFilter);
-		if (!isset($GLOBALS["request_trip_grid"]))
-			$GLOBALS["request_trip_grid"] = new request_trip_grid();
-		$detailFilter = $GLOBALS["request_trip"]->sqlDetailFilter_category();
-		$detailFilter = str_replace("@category@", AdjustSql($this->id->DbValue, "DB"), $detailFilter);
-		$GLOBALS["request_trip"]->setCurrentMasterTable("category");
-		$detailFilter = $GLOBALS["request_trip"]->applyUserIDFilters($detailFilter);
-		$this->request_trip_Count = $GLOBALS["request_trip"]->loadRecordCount($detailFilter);
 	}
 
 	// Return a row with default values

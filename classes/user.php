@@ -28,9 +28,7 @@ class user extends DbTable
 	public $id;
 	public $username;
 	public $password;
-	public $_email;
 	public $gender;
-	public $phone;
 	public $address;
 	public $country;
 	public $photo;
@@ -40,9 +38,11 @@ class user extends DbTable
 	public $send_role;
 	public $carrier_role;
 	public $birthday;
-	public $addDate;
-	public $updateDate;
-	public $activated;
+	public $mobile_phone;
+	public $status;
+	public $session_token;
+	public $createdAt;
+	public $updatedAt;
 
 	// Constructor
 	public function __construct()
@@ -77,7 +77,7 @@ class user extends DbTable
 		$this->BasicSearch = new BasicSearch($this->TableVar);
 
 		// id
-		$this->id = new DbField('user', 'user', 'x_id', 'id', '`id`', '`id`', 19, -1, FALSE, '`id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'NO');
+		$this->id = new DbField('user', 'user', 'x_id', 'id', '`id`', '`id`', 3, -1, FALSE, '`id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'NO');
 		$this->id->IsAutoIncrement = TRUE; // Autoincrement field
 		$this->id->IsPrimaryKey = TRUE; // Primary key field
 		$this->id->IsForeignKey = TRUE; // Foreign key field
@@ -87,28 +87,17 @@ class user extends DbTable
 
 		// username
 		$this->username = new DbField('user', 'user', 'x_username', 'username', '`username`', '`username`', 200, -1, FALSE, '`username`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->username->Nullable = FALSE; // NOT NULL field
 		$this->username->Required = TRUE; // Required field
 		$this->username->Sortable = TRUE; // Allow sort
 		$this->fields['username'] = &$this->username;
 
 		// password
 		$this->password = new DbField('user', 'user', 'x_password', 'password', '`password`', '`password`', 200, -1, FALSE, '`password`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->password->Nullable = FALSE; // NOT NULL field
 		$this->password->Sortable = FALSE; // Allow sort
 		$this->fields['password'] = &$this->password;
 
-		// email
-		$this->_email = new DbField('user', 'user', 'x__email', 'email', '`email`', '`email`', 200, -1, FALSE, '`email`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->_email->Nullable = FALSE; // NOT NULL field
-		$this->_email->Required = TRUE; // Required field
-		$this->_email->Sortable = TRUE; // Allow sort
-		$this->_email->DefaultErrorMessage = $Language->Phrase("IncorrectEmail");
-		$this->fields['email'] = &$this->_email;
-
 		// gender
 		$this->gender = new DbField('user', 'user', 'x_gender', 'gender', '`gender`', '`gender`', 3, -1, FALSE, '`gender`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'SELECT');
-		$this->gender->Nullable = FALSE; // NOT NULL field
 		$this->gender->Required = TRUE; // Required field
 		$this->gender->Sortable = TRUE; // Allow sort
 		$this->gender->UsePleaseSelect = TRUE; // Use PleaseSelect by default
@@ -125,52 +114,38 @@ class user extends DbTable
 		$this->gender->DefaultErrorMessage = $Language->Phrase("IncorrectInteger");
 		$this->fields['gender'] = &$this->gender;
 
-		// phone
-		$this->phone = new DbField('user', 'user', 'x_phone', 'phone', '`phone`', '`phone`', 200, -1, FALSE, '`phone`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->phone->Nullable = FALSE; // NOT NULL field
-		$this->phone->Required = TRUE; // Required field
-		$this->phone->Sortable = TRUE; // Allow sort
-		$this->fields['phone'] = &$this->phone;
-
 		// address
 		$this->address = new DbField('user', 'user', 'x_address', 'address', '`address`', '`address`', 200, -1, FALSE, '`address`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->address->Nullable = FALSE; // NOT NULL field
 		$this->address->Required = TRUE; // Required field
 		$this->address->Sortable = TRUE; // Allow sort
 		$this->fields['address'] = &$this->address;
 
 		// country
 		$this->country = new DbField('user', 'user', 'x_country', 'country', '`country`', '`country`', 200, -1, FALSE, '`country`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->country->Nullable = FALSE; // NOT NULL field
 		$this->country->Required = TRUE; // Required field
 		$this->country->Sortable = TRUE; // Allow sort
 		$this->fields['country'] = &$this->country;
 
 		// photo
 		$this->photo = new DbField('user', 'user', 'x_photo', 'photo', '`photo`', '`photo`', 200, -1, TRUE, '`photo`', FALSE, FALSE, FALSE, 'IMAGE', 'FILE');
-		$this->photo->Nullable = FALSE; // NOT NULL field
 		$this->photo->Required = TRUE; // Required field
 		$this->photo->Sortable = TRUE; // Allow sort
 		$this->fields['photo'] = &$this->photo;
 
 		// nickname
 		$this->nickname = new DbField('user', 'user', 'x_nickname', 'nickname', '`nickname`', '`nickname`', 200, -1, FALSE, '`nickname`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->nickname->Nullable = FALSE; // NOT NULL field
 		$this->nickname->Required = TRUE; // Required field
 		$this->nickname->Sortable = TRUE; // Allow sort
 		$this->fields['nickname'] = &$this->nickname;
 
 		// region
 		$this->region = new DbField('user', 'user', 'x_region', 'region', '`region`', '`region`', 200, -1, FALSE, '`region`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->region->Nullable = FALSE; // NOT NULL field
 		$this->region->Required = TRUE; // Required field
 		$this->region->Sortable = TRUE; // Allow sort
 		$this->fields['region'] = &$this->region;
 
 		// locked
 		$this->locked = new DbField('user', 'user', 'x_locked', 'locked', '`locked`', '`locked`', 16, -1, FALSE, '`locked`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'SELECT');
-		$this->locked->Nullable = FALSE; // NOT NULL field
-		$this->locked->Required = TRUE; // Required field
 		$this->locked->Sortable = TRUE; // Allow sort
 		$this->locked->UsePleaseSelect = TRUE; // Use PleaseSelect by default
 		$this->locked->PleaseSelectText = $Language->Phrase("PleaseSelect"); // PleaseSelect text
@@ -188,8 +163,6 @@ class user extends DbTable
 
 		// send_role
 		$this->send_role = new DbField('user', 'user', 'x_send_role', 'send_role', '`send_role`', '`send_role`', 16, -1, FALSE, '`send_role`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'SELECT');
-		$this->send_role->Nullable = FALSE; // NOT NULL field
-		$this->send_role->Required = TRUE; // Required field
 		$this->send_role->Sortable = TRUE; // Allow sort
 		$this->send_role->UsePleaseSelect = TRUE; // Use PleaseSelect by default
 		$this->send_role->PleaseSelectText = $Language->Phrase("PleaseSelect"); // PleaseSelect text
@@ -207,8 +180,6 @@ class user extends DbTable
 
 		// carrier_role
 		$this->carrier_role = new DbField('user', 'user', 'x_carrier_role', 'carrier_role', '`carrier_role`', '`carrier_role`', 16, -1, FALSE, '`carrier_role`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'SELECT');
-		$this->carrier_role->Nullable = FALSE; // NOT NULL field
-		$this->carrier_role->Required = TRUE; // Required field
 		$this->carrier_role->Sortable = TRUE; // Allow sort
 		$this->carrier_role->UsePleaseSelect = TRUE; // Use PleaseSelect by default
 		$this->carrier_role->PleaseSelectText = $Language->Phrase("PleaseSelect"); // PleaseSelect text
@@ -225,32 +196,44 @@ class user extends DbTable
 		$this->fields['carrier_role'] = &$this->carrier_role;
 
 		// birthday
-		$this->birthday = new DbField('user', 'user', 'x_birthday', 'birthday', '`birthday`', CastDateFieldForLike('`birthday`', 0, "DB"), 133, 0, FALSE, '`birthday`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->birthday->Nullable = FALSE; // NOT NULL field
+		$this->birthday = new DbField('user', 'user', 'x_birthday', 'birthday', '`birthday`', CastDateFieldForLike('`birthday`', 0, "DB"), 135, 0, FALSE, '`birthday`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->birthday->Required = TRUE; // Required field
 		$this->birthday->Sortable = TRUE; // Allow sort
 		$this->birthday->DefaultErrorMessage = str_replace("%s", $GLOBALS["DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
 		$this->fields['birthday'] = &$this->birthday;
 
-		// addDate
-		$this->addDate = new DbField('user', 'user', 'x_addDate', 'addDate', '`addDate`', CastDateFieldForLike('`addDate`', 0, "DB"), 135, 0, FALSE, '`addDate`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->addDate->Sortable = TRUE; // Allow sort
-		$this->addDate->DefaultErrorMessage = str_replace("%s", $GLOBALS["DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
-		$this->fields['addDate'] = &$this->addDate;
+		// mobile_phone
+		$this->mobile_phone = new DbField('user', 'user', 'x_mobile_phone', 'mobile_phone', '`mobile_phone`', '`mobile_phone`', 200, -1, FALSE, '`mobile_phone`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->mobile_phone->Sortable = TRUE; // Allow sort
+		$this->fields['mobile_phone'] = &$this->mobile_phone;
 
-		// updateDate
-		$this->updateDate = new DbField('user', 'user', 'x_updateDate', 'updateDate', '`updateDate`', CastDateFieldForLike('`updateDate`', 0, "DB"), 135, 0, FALSE, '`updateDate`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->updateDate->Sortable = TRUE; // Allow sort
-		$this->updateDate->DefaultErrorMessage = str_replace("%s", $GLOBALS["DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
-		$this->fields['updateDate'] = &$this->updateDate;
+		// status
+		$this->status = new DbField('user', 'user', 'x_status', 'status', '`status`', '`status`', 3, -1, FALSE, '`status`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->status->Nullable = FALSE; // NOT NULL field
+		$this->status->Sortable = TRUE; // Allow sort
+		$this->status->DefaultErrorMessage = $Language->Phrase("IncorrectInteger");
+		$this->fields['status'] = &$this->status;
 
-		// activated
-		$this->activated = new DbField('user', 'user', 'x_activated', 'activated', '`activated`', '`activated`', 16, -1, FALSE, '`activated`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->activated->Nullable = FALSE; // NOT NULL field
-		$this->activated->Required = TRUE; // Required field
-		$this->activated->Sortable = TRUE; // Allow sort
-		$this->activated->DefaultErrorMessage = $Language->Phrase("IncorrectInteger");
-		$this->fields['activated'] = &$this->activated;
+		// session_token
+		$this->session_token = new DbField('user', 'user', 'x_session_token', 'session_token', '`session_token`', '`session_token`', 200, -1, FALSE, '`session_token`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->session_token->Sortable = TRUE; // Allow sort
+		$this->fields['session_token'] = &$this->session_token;
+
+		// createdAt
+		$this->createdAt = new DbField('user', 'user', 'x_createdAt', 'createdAt', '`createdAt`', CastDateFieldForLike('`createdAt`', 0, "DB"), 135, 0, FALSE, '`createdAt`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->createdAt->Nullable = FALSE; // NOT NULL field
+		$this->createdAt->Required = TRUE; // Required field
+		$this->createdAt->Sortable = TRUE; // Allow sort
+		$this->createdAt->DefaultErrorMessage = str_replace("%s", $GLOBALS["DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
+		$this->fields['createdAt'] = &$this->createdAt;
+
+		// updatedAt
+		$this->updatedAt = new DbField('user', 'user', 'x_updatedAt', 'updatedAt', '`updatedAt`', CastDateFieldForLike('`updatedAt`', 0, "DB"), 135, 0, FALSE, '`updatedAt`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->updatedAt->Nullable = FALSE; // NOT NULL field
+		$this->updatedAt->Required = TRUE; // Required field
+		$this->updatedAt->Sortable = TRUE; // Allow sort
+		$this->updatedAt->DefaultErrorMessage = str_replace("%s", $GLOBALS["DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
+		$this->fields['updatedAt'] = &$this->updatedAt;
 	}
 
 	// Field Visibility
@@ -305,10 +288,6 @@ class user extends DbTable
 
 		// Detail url
 		$detailUrl = "";
-		if ($this->getCurrentDetailTable() == "image") {
-			$detailUrl = $GLOBALS["image"]->getListUrl() . "?" . TABLE_SHOW_MASTER . "=" . $this->TableVar;
-			$detailUrl .= "&fk_id=" . urlencode($this->id->CurrentValue);
-		}
 		if ($this->getCurrentDetailTable() == "trip_info") {
 			$detailUrl = $GLOBALS["trip_info"]->getListUrl() . "?" . TABLE_SHOW_MASTER . "=" . $this->TableVar;
 			$detailUrl .= "&fk_id=" . urlencode($this->id->CurrentValue);
@@ -317,9 +296,8 @@ class user extends DbTable
 			$detailUrl = $GLOBALS["parcel_info"]->getListUrl() . "?" . TABLE_SHOW_MASTER . "=" . $this->TableVar;
 			$detailUrl .= "&fk_id=" . urlencode($this->id->CurrentValue);
 		}
-		if ($this->getCurrentDetailTable() == "orders") {
-			$detailUrl = $GLOBALS["orders"]->getListUrl() . "?" . TABLE_SHOW_MASTER . "=" . $this->TableVar;
-			$detailUrl .= "&fk_id=" . urlencode($this->id->CurrentValue);
+		if ($this->getCurrentDetailTable() == "order") {
+			$detailUrl = $GLOBALS["order"]->getListUrl() . "?" . TABLE_SHOW_MASTER . "=" . $this->TableVar;
 			$detailUrl .= "&fk_id=" . urlencode($this->id->CurrentValue);
 		}
 		if ($detailUrl == "")
@@ -634,9 +612,7 @@ class user extends DbTable
 		$this->id->DbValue = $row['id'];
 		$this->username->DbValue = $row['username'];
 		$this->password->DbValue = $row['password'];
-		$this->_email->DbValue = $row['email'];
 		$this->gender->DbValue = $row['gender'];
-		$this->phone->DbValue = $row['phone'];
 		$this->address->DbValue = $row['address'];
 		$this->country->DbValue = $row['country'];
 		$this->photo->Upload->DbValue = $row['photo'];
@@ -646,9 +622,11 @@ class user extends DbTable
 		$this->send_role->DbValue = $row['send_role'];
 		$this->carrier_role->DbValue = $row['carrier_role'];
 		$this->birthday->DbValue = $row['birthday'];
-		$this->addDate->DbValue = $row['addDate'];
-		$this->updateDate->DbValue = $row['updateDate'];
-		$this->activated->DbValue = $row['activated'];
+		$this->mobile_phone->DbValue = $row['mobile_phone'];
+		$this->status->DbValue = $row['status'];
+		$this->session_token->DbValue = $row['session_token'];
+		$this->createdAt->DbValue = $row['createdAt'];
+		$this->updatedAt->DbValue = $row['updatedAt'];
 	}
 
 	// Delete uploaded files
@@ -888,9 +866,7 @@ class user extends DbTable
 		$this->id->setDbValue($rs->fields('id'));
 		$this->username->setDbValue($rs->fields('username'));
 		$this->password->setDbValue($rs->fields('password'));
-		$this->_email->setDbValue($rs->fields('email'));
 		$this->gender->setDbValue($rs->fields('gender'));
-		$this->phone->setDbValue($rs->fields('phone'));
 		$this->address->setDbValue($rs->fields('address'));
 		$this->country->setDbValue($rs->fields('country'));
 		$this->photo->Upload->DbValue = $rs->fields('photo');
@@ -900,9 +876,11 @@ class user extends DbTable
 		$this->send_role->setDbValue($rs->fields('send_role'));
 		$this->carrier_role->setDbValue($rs->fields('carrier_role'));
 		$this->birthday->setDbValue($rs->fields('birthday'));
-		$this->addDate->setDbValue($rs->fields('addDate'));
-		$this->updateDate->setDbValue($rs->fields('updateDate'));
-		$this->activated->setDbValue($rs->fields('activated'));
+		$this->mobile_phone->setDbValue($rs->fields('mobile_phone'));
+		$this->status->setDbValue($rs->fields('status'));
+		$this->session_token->setDbValue($rs->fields('session_token'));
+		$this->createdAt->setDbValue($rs->fields('createdAt'));
+		$this->updatedAt->setDbValue($rs->fields('updatedAt'));
 	}
 
 	// Render list row values
@@ -920,9 +898,7 @@ class user extends DbTable
 
 		$this->password->CellCssStyle = "white-space: nowrap;";
 
-		// email
 		// gender
-		// phone
 		// address
 		// country
 		// photo
@@ -932,9 +908,11 @@ class user extends DbTable
 		// send_role
 		// carrier_role
 		// birthday
-		// addDate
-		// updateDate
-		// activated
+		// mobile_phone
+		// status
+		// session_token
+		// createdAt
+		// updatedAt
 		// id
 
 		$this->id->ViewValue = $this->id->CurrentValue;
@@ -948,10 +926,6 @@ class user extends DbTable
 		$this->password->ViewValue = $this->password->CurrentValue;
 		$this->password->ViewCustomAttributes = "";
 
-		// email
-		$this->_email->ViewValue = $this->_email->CurrentValue;
-		$this->_email->ViewCustomAttributes = "";
-
 		// gender
 		if (strval($this->gender->CurrentValue) <> "") {
 			$this->gender->ViewValue = $this->gender->optionCaption($this->gender->CurrentValue);
@@ -959,10 +933,6 @@ class user extends DbTable
 			$this->gender->ViewValue = NULL;
 		}
 		$this->gender->ViewCustomAttributes = "";
-
-		// phone
-		$this->phone->ViewValue = $this->phone->CurrentValue;
-		$this->phone->ViewCustomAttributes = "";
 
 		// address
 		$this->address->ViewValue = $this->address->CurrentValue;
@@ -1018,20 +988,28 @@ class user extends DbTable
 		$this->birthday->ViewValue = FormatDateTime($this->birthday->ViewValue, 0);
 		$this->birthday->ViewCustomAttributes = "";
 
-		// addDate
-		$this->addDate->ViewValue = $this->addDate->CurrentValue;
-		$this->addDate->ViewValue = FormatDateTime($this->addDate->ViewValue, 0);
-		$this->addDate->ViewCustomAttributes = "";
+		// mobile_phone
+		$this->mobile_phone->ViewValue = $this->mobile_phone->CurrentValue;
+		$this->mobile_phone->ViewCustomAttributes = "";
 
-		// updateDate
-		$this->updateDate->ViewValue = $this->updateDate->CurrentValue;
-		$this->updateDate->ViewValue = FormatDateTime($this->updateDate->ViewValue, 0);
-		$this->updateDate->ViewCustomAttributes = "";
+		// status
+		$this->status->ViewValue = $this->status->CurrentValue;
+		$this->status->ViewValue = FormatNumber($this->status->ViewValue, 0, -2, -2, -2);
+		$this->status->ViewCustomAttributes = "";
 
-		// activated
-		$this->activated->ViewValue = $this->activated->CurrentValue;
-		$this->activated->ViewValue = FormatNumber($this->activated->ViewValue, 0, -2, -2, -2);
-		$this->activated->ViewCustomAttributes = "";
+		// session_token
+		$this->session_token->ViewValue = $this->session_token->CurrentValue;
+		$this->session_token->ViewCustomAttributes = "";
+
+		// createdAt
+		$this->createdAt->ViewValue = $this->createdAt->CurrentValue;
+		$this->createdAt->ViewValue = FormatDateTime($this->createdAt->ViewValue, 0);
+		$this->createdAt->ViewCustomAttributes = "";
+
+		// updatedAt
+		$this->updatedAt->ViewValue = $this->updatedAt->CurrentValue;
+		$this->updatedAt->ViewValue = FormatDateTime($this->updatedAt->ViewValue, 0);
+		$this->updatedAt->ViewCustomAttributes = "";
 
 		// id
 		$this->id->LinkCustomAttributes = "";
@@ -1048,20 +1026,10 @@ class user extends DbTable
 		$this->password->HrefValue = "";
 		$this->password->TooltipValue = "";
 
-		// email
-		$this->_email->LinkCustomAttributes = "";
-		$this->_email->HrefValue = "";
-		$this->_email->TooltipValue = "";
-
 		// gender
 		$this->gender->LinkCustomAttributes = "";
 		$this->gender->HrefValue = "";
 		$this->gender->TooltipValue = "";
-
-		// phone
-		$this->phone->LinkCustomAttributes = "";
-		$this->phone->HrefValue = "";
-		$this->phone->TooltipValue = "";
 
 		// address
 		$this->address->LinkCustomAttributes = "";
@@ -1121,20 +1089,30 @@ class user extends DbTable
 		$this->birthday->HrefValue = "";
 		$this->birthday->TooltipValue = "";
 
-		// addDate
-		$this->addDate->LinkCustomAttributes = "";
-		$this->addDate->HrefValue = "";
-		$this->addDate->TooltipValue = "";
+		// mobile_phone
+		$this->mobile_phone->LinkCustomAttributes = "";
+		$this->mobile_phone->HrefValue = "";
+		$this->mobile_phone->TooltipValue = "";
 
-		// updateDate
-		$this->updateDate->LinkCustomAttributes = "";
-		$this->updateDate->HrefValue = "";
-		$this->updateDate->TooltipValue = "";
+		// status
+		$this->status->LinkCustomAttributes = "";
+		$this->status->HrefValue = "";
+		$this->status->TooltipValue = "";
 
-		// activated
-		$this->activated->LinkCustomAttributes = "";
-		$this->activated->HrefValue = "";
-		$this->activated->TooltipValue = "";
+		// session_token
+		$this->session_token->LinkCustomAttributes = "";
+		$this->session_token->HrefValue = "";
+		$this->session_token->TooltipValue = "";
+
+		// createdAt
+		$this->createdAt->LinkCustomAttributes = "";
+		$this->createdAt->HrefValue = "";
+		$this->createdAt->TooltipValue = "";
+
+		// updatedAt
+		$this->updatedAt->LinkCustomAttributes = "";
+		$this->updatedAt->HrefValue = "";
+		$this->updatedAt->TooltipValue = "";
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -1169,12 +1147,6 @@ class user extends DbTable
 		$this->password->EditValue = $this->password->CurrentValue;
 		$this->password->PlaceHolder = RemoveHtml($this->password->caption());
 
-		// email
-		$this->_email->EditAttrs["class"] = "form-control";
-		$this->_email->EditCustomAttributes = "";
-		$this->_email->EditValue = $this->_email->CurrentValue;
-		$this->_email->ViewCustomAttributes = "";
-
 		// gender
 		$this->gender->EditAttrs["class"] = "form-control";
 		$this->gender->EditCustomAttributes = "";
@@ -1184,12 +1156,6 @@ class user extends DbTable
 			$this->gender->EditValue = NULL;
 		}
 		$this->gender->ViewCustomAttributes = "";
-
-		// phone
-		$this->phone->EditAttrs["class"] = "form-control";
-		$this->phone->EditCustomAttributes = "";
-		$this->phone->EditValue = $this->phone->CurrentValue;
-		$this->phone->ViewCustomAttributes = "";
 
 		// address
 		$this->address->EditAttrs["class"] = "form-control";
@@ -1248,20 +1214,35 @@ class user extends DbTable
 		$this->birthday->EditValue = FormatDateTime($this->birthday->EditValue, 0);
 		$this->birthday->ViewCustomAttributes = "";
 
-		// addDate
-		$this->addDate->EditAttrs["class"] = "form-control";
-		$this->addDate->EditCustomAttributes = "";
-		$this->addDate->EditValue = $this->addDate->CurrentValue;
-		$this->addDate->EditValue = FormatDateTime($this->addDate->EditValue, 0);
-		$this->addDate->ViewCustomAttributes = "";
+		// mobile_phone
+		$this->mobile_phone->EditAttrs["class"] = "form-control";
+		$this->mobile_phone->EditCustomAttributes = "";
+		$this->mobile_phone->EditValue = $this->mobile_phone->CurrentValue;
+		$this->mobile_phone->PlaceHolder = RemoveHtml($this->mobile_phone->caption());
 
-		// updateDate
-		// activated
+		// status
+		$this->status->EditAttrs["class"] = "form-control";
+		$this->status->EditCustomAttributes = "";
+		$this->status->EditValue = $this->status->CurrentValue;
+		$this->status->PlaceHolder = RemoveHtml($this->status->caption());
 
-		$this->activated->EditAttrs["class"] = "form-control";
-		$this->activated->EditCustomAttributes = "";
-		$this->activated->EditValue = $this->activated->CurrentValue;
-		$this->activated->PlaceHolder = RemoveHtml($this->activated->caption());
+		// session_token
+		$this->session_token->EditAttrs["class"] = "form-control";
+		$this->session_token->EditCustomAttributes = "";
+		$this->session_token->EditValue = $this->session_token->CurrentValue;
+		$this->session_token->PlaceHolder = RemoveHtml($this->session_token->caption());
+
+		// createdAt
+		$this->createdAt->EditAttrs["class"] = "form-control";
+		$this->createdAt->EditCustomAttributes = "";
+		$this->createdAt->EditValue = FormatDateTime($this->createdAt->CurrentValue, 8);
+		$this->createdAt->PlaceHolder = RemoveHtml($this->createdAt->caption());
+
+		// updatedAt
+		$this->updatedAt->EditAttrs["class"] = "form-control";
+		$this->updatedAt->EditCustomAttributes = "";
+		$this->updatedAt->EditValue = FormatDateTime($this->updatedAt->CurrentValue, 8);
+		$this->updatedAt->PlaceHolder = RemoveHtml($this->updatedAt->caption());
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -1296,12 +1277,8 @@ class user extends DbTable
 						$doc->exportCaption($this->id);
 					if ($this->username->Exportable)
 						$doc->exportCaption($this->username);
-					if ($this->_email->Exportable)
-						$doc->exportCaption($this->_email);
 					if ($this->gender->Exportable)
 						$doc->exportCaption($this->gender);
-					if ($this->phone->Exportable)
-						$doc->exportCaption($this->phone);
 					if ($this->address->Exportable)
 						$doc->exportCaption($this->address);
 					if ($this->country->Exportable)
@@ -1320,23 +1297,23 @@ class user extends DbTable
 						$doc->exportCaption($this->carrier_role);
 					if ($this->birthday->Exportable)
 						$doc->exportCaption($this->birthday);
-					if ($this->addDate->Exportable)
-						$doc->exportCaption($this->addDate);
-					if ($this->updateDate->Exportable)
-						$doc->exportCaption($this->updateDate);
-					if ($this->activated->Exportable)
-						$doc->exportCaption($this->activated);
+					if ($this->mobile_phone->Exportable)
+						$doc->exportCaption($this->mobile_phone);
+					if ($this->status->Exportable)
+						$doc->exportCaption($this->status);
+					if ($this->session_token->Exportable)
+						$doc->exportCaption($this->session_token);
+					if ($this->createdAt->Exportable)
+						$doc->exportCaption($this->createdAt);
+					if ($this->updatedAt->Exportable)
+						$doc->exportCaption($this->updatedAt);
 				} else {
 					if ($this->id->Exportable)
 						$doc->exportCaption($this->id);
 					if ($this->username->Exportable)
 						$doc->exportCaption($this->username);
-					if ($this->_email->Exportable)
-						$doc->exportCaption($this->_email);
 					if ($this->gender->Exportable)
 						$doc->exportCaption($this->gender);
-					if ($this->phone->Exportable)
-						$doc->exportCaption($this->phone);
 					if ($this->address->Exportable)
 						$doc->exportCaption($this->address);
 					if ($this->country->Exportable)
@@ -1355,12 +1332,16 @@ class user extends DbTable
 						$doc->exportCaption($this->carrier_role);
 					if ($this->birthday->Exportable)
 						$doc->exportCaption($this->birthday);
-					if ($this->addDate->Exportable)
-						$doc->exportCaption($this->addDate);
-					if ($this->updateDate->Exportable)
-						$doc->exportCaption($this->updateDate);
-					if ($this->activated->Exportable)
-						$doc->exportCaption($this->activated);
+					if ($this->mobile_phone->Exportable)
+						$doc->exportCaption($this->mobile_phone);
+					if ($this->status->Exportable)
+						$doc->exportCaption($this->status);
+					if ($this->session_token->Exportable)
+						$doc->exportCaption($this->session_token);
+					if ($this->createdAt->Exportable)
+						$doc->exportCaption($this->createdAt);
+					if ($this->updatedAt->Exportable)
+						$doc->exportCaption($this->updatedAt);
 				}
 				$doc->endExportRow();
 			}
@@ -1396,12 +1377,8 @@ class user extends DbTable
 							$doc->exportField($this->id);
 						if ($this->username->Exportable)
 							$doc->exportField($this->username);
-						if ($this->_email->Exportable)
-							$doc->exportField($this->_email);
 						if ($this->gender->Exportable)
 							$doc->exportField($this->gender);
-						if ($this->phone->Exportable)
-							$doc->exportField($this->phone);
 						if ($this->address->Exportable)
 							$doc->exportField($this->address);
 						if ($this->country->Exportable)
@@ -1420,23 +1397,23 @@ class user extends DbTable
 							$doc->exportField($this->carrier_role);
 						if ($this->birthday->Exportable)
 							$doc->exportField($this->birthday);
-						if ($this->addDate->Exportable)
-							$doc->exportField($this->addDate);
-						if ($this->updateDate->Exportable)
-							$doc->exportField($this->updateDate);
-						if ($this->activated->Exportable)
-							$doc->exportField($this->activated);
+						if ($this->mobile_phone->Exportable)
+							$doc->exportField($this->mobile_phone);
+						if ($this->status->Exportable)
+							$doc->exportField($this->status);
+						if ($this->session_token->Exportable)
+							$doc->exportField($this->session_token);
+						if ($this->createdAt->Exportable)
+							$doc->exportField($this->createdAt);
+						if ($this->updatedAt->Exportable)
+							$doc->exportField($this->updatedAt);
 					} else {
 						if ($this->id->Exportable)
 							$doc->exportField($this->id);
 						if ($this->username->Exportable)
 							$doc->exportField($this->username);
-						if ($this->_email->Exportable)
-							$doc->exportField($this->_email);
 						if ($this->gender->Exportable)
 							$doc->exportField($this->gender);
-						if ($this->phone->Exportable)
-							$doc->exportField($this->phone);
 						if ($this->address->Exportable)
 							$doc->exportField($this->address);
 						if ($this->country->Exportable)
@@ -1455,12 +1432,16 @@ class user extends DbTable
 							$doc->exportField($this->carrier_role);
 						if ($this->birthday->Exportable)
 							$doc->exportField($this->birthday);
-						if ($this->addDate->Exportable)
-							$doc->exportField($this->addDate);
-						if ($this->updateDate->Exportable)
-							$doc->exportField($this->updateDate);
-						if ($this->activated->Exportable)
-							$doc->exportField($this->activated);
+						if ($this->mobile_phone->Exportable)
+							$doc->exportField($this->mobile_phone);
+						if ($this->status->Exportable)
+							$doc->exportField($this->status);
+						if ($this->session_token->Exportable)
+							$doc->exportField($this->session_token);
+						if ($this->createdAt->Exportable)
+							$doc->exportField($this->createdAt);
+						if ($this->updatedAt->Exportable)
+							$doc->exportField($this->updatedAt);
 					}
 					$doc->endExportRow($rowCnt);
 				}

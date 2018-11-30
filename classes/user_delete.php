@@ -537,9 +537,7 @@ class user_delete extends user
 		$this->id->Visible = FALSE;
 		$this->username->setVisibility();
 		$this->password->Visible = FALSE;
-		$this->_email->setVisibility();
 		$this->gender->setVisibility();
-		$this->phone->setVisibility();
 		$this->address->setVisibility();
 		$this->country->setVisibility();
 		$this->photo->setVisibility();
@@ -549,9 +547,11 @@ class user_delete extends user
 		$this->send_role->setVisibility();
 		$this->carrier_role->setVisibility();
 		$this->birthday->setVisibility();
-		$this->addDate->setVisibility();
-		$this->updateDate->setVisibility();
-		$this->activated->setVisibility();
+		$this->mobile_phone->setVisibility();
+		$this->status->setVisibility();
+		$this->session_token->setVisibility();
+		$this->createdAt->setVisibility();
+		$this->updatedAt->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Global Page Loading event (in userfn*.php)
@@ -684,9 +684,7 @@ class user_delete extends user
 		$this->id->setDbValue($row['id']);
 		$this->username->setDbValue($row['username']);
 		$this->password->setDbValue($row['password']);
-		$this->_email->setDbValue($row['email']);
 		$this->gender->setDbValue($row['gender']);
-		$this->phone->setDbValue($row['phone']);
 		$this->address->setDbValue($row['address']);
 		$this->country->setDbValue($row['country']);
 		$this->photo->Upload->DbValue = $row['photo'];
@@ -697,9 +695,11 @@ class user_delete extends user
 		$this->send_role->setDbValue($row['send_role']);
 		$this->carrier_role->setDbValue($row['carrier_role']);
 		$this->birthday->setDbValue($row['birthday']);
-		$this->addDate->setDbValue($row['addDate']);
-		$this->updateDate->setDbValue($row['updateDate']);
-		$this->activated->setDbValue($row['activated']);
+		$this->mobile_phone->setDbValue($row['mobile_phone']);
+		$this->status->setDbValue($row['status']);
+		$this->session_token->setDbValue($row['session_token']);
+		$this->createdAt->setDbValue($row['createdAt']);
+		$this->updatedAt->setDbValue($row['updatedAt']);
 	}
 
 	// Return a row with default values
@@ -709,9 +709,7 @@ class user_delete extends user
 		$row['id'] = NULL;
 		$row['username'] = NULL;
 		$row['password'] = NULL;
-		$row['email'] = NULL;
 		$row['gender'] = NULL;
-		$row['phone'] = NULL;
 		$row['address'] = NULL;
 		$row['country'] = NULL;
 		$row['photo'] = NULL;
@@ -721,9 +719,11 @@ class user_delete extends user
 		$row['send_role'] = NULL;
 		$row['carrier_role'] = NULL;
 		$row['birthday'] = NULL;
-		$row['addDate'] = NULL;
-		$row['updateDate'] = NULL;
-		$row['activated'] = NULL;
+		$row['mobile_phone'] = NULL;
+		$row['status'] = NULL;
+		$row['session_token'] = NULL;
+		$row['createdAt'] = NULL;
+		$row['updatedAt'] = NULL;
 		return $row;
 	}
 
@@ -744,9 +744,7 @@ class user_delete extends user
 
 		$this->password->CellCssStyle = "white-space: nowrap;";
 
-		// email
 		// gender
-		// phone
 		// address
 		// country
 		// photo
@@ -756,9 +754,11 @@ class user_delete extends user
 		// send_role
 		// carrier_role
 		// birthday
-		// addDate
-		// updateDate
-		// activated
+		// mobile_phone
+		// status
+		// session_token
+		// createdAt
+		// updatedAt
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
@@ -770,10 +770,6 @@ class user_delete extends user
 			$this->username->ViewValue = $this->username->CurrentValue;
 			$this->username->ViewCustomAttributes = "";
 
-			// email
-			$this->_email->ViewValue = $this->_email->CurrentValue;
-			$this->_email->ViewCustomAttributes = "";
-
 			// gender
 			if (strval($this->gender->CurrentValue) <> "") {
 				$this->gender->ViewValue = $this->gender->optionCaption($this->gender->CurrentValue);
@@ -781,10 +777,6 @@ class user_delete extends user
 				$this->gender->ViewValue = NULL;
 			}
 			$this->gender->ViewCustomAttributes = "";
-
-			// phone
-			$this->phone->ViewValue = $this->phone->CurrentValue;
-			$this->phone->ViewCustomAttributes = "";
 
 			// address
 			$this->address->ViewValue = $this->address->CurrentValue;
@@ -840,40 +832,38 @@ class user_delete extends user
 			$this->birthday->ViewValue = FormatDateTime($this->birthday->ViewValue, 0);
 			$this->birthday->ViewCustomAttributes = "";
 
-			// addDate
-			$this->addDate->ViewValue = $this->addDate->CurrentValue;
-			$this->addDate->ViewValue = FormatDateTime($this->addDate->ViewValue, 0);
-			$this->addDate->ViewCustomAttributes = "";
+			// mobile_phone
+			$this->mobile_phone->ViewValue = $this->mobile_phone->CurrentValue;
+			$this->mobile_phone->ViewCustomAttributes = "";
 
-			// updateDate
-			$this->updateDate->ViewValue = $this->updateDate->CurrentValue;
-			$this->updateDate->ViewValue = FormatDateTime($this->updateDate->ViewValue, 0);
-			$this->updateDate->ViewCustomAttributes = "";
+			// status
+			$this->status->ViewValue = $this->status->CurrentValue;
+			$this->status->ViewValue = FormatNumber($this->status->ViewValue, 0, -2, -2, -2);
+			$this->status->ViewCustomAttributes = "";
 
-			// activated
-			$this->activated->ViewValue = $this->activated->CurrentValue;
-			$this->activated->ViewValue = FormatNumber($this->activated->ViewValue, 0, -2, -2, -2);
-			$this->activated->ViewCustomAttributes = "";
+			// session_token
+			$this->session_token->ViewValue = $this->session_token->CurrentValue;
+			$this->session_token->ViewCustomAttributes = "";
+
+			// createdAt
+			$this->createdAt->ViewValue = $this->createdAt->CurrentValue;
+			$this->createdAt->ViewValue = FormatDateTime($this->createdAt->ViewValue, 0);
+			$this->createdAt->ViewCustomAttributes = "";
+
+			// updatedAt
+			$this->updatedAt->ViewValue = $this->updatedAt->CurrentValue;
+			$this->updatedAt->ViewValue = FormatDateTime($this->updatedAt->ViewValue, 0);
+			$this->updatedAt->ViewCustomAttributes = "";
 
 			// username
 			$this->username->LinkCustomAttributes = "";
 			$this->username->HrefValue = "";
 			$this->username->TooltipValue = "";
 
-			// email
-			$this->_email->LinkCustomAttributes = "";
-			$this->_email->HrefValue = "";
-			$this->_email->TooltipValue = "";
-
 			// gender
 			$this->gender->LinkCustomAttributes = "";
 			$this->gender->HrefValue = "";
 			$this->gender->TooltipValue = "";
-
-			// phone
-			$this->phone->LinkCustomAttributes = "";
-			$this->phone->HrefValue = "";
-			$this->phone->TooltipValue = "";
 
 			// address
 			$this->address->LinkCustomAttributes = "";
@@ -933,20 +923,30 @@ class user_delete extends user
 			$this->birthday->HrefValue = "";
 			$this->birthday->TooltipValue = "";
 
-			// addDate
-			$this->addDate->LinkCustomAttributes = "";
-			$this->addDate->HrefValue = "";
-			$this->addDate->TooltipValue = "";
+			// mobile_phone
+			$this->mobile_phone->LinkCustomAttributes = "";
+			$this->mobile_phone->HrefValue = "";
+			$this->mobile_phone->TooltipValue = "";
 
-			// updateDate
-			$this->updateDate->LinkCustomAttributes = "";
-			$this->updateDate->HrefValue = "";
-			$this->updateDate->TooltipValue = "";
+			// status
+			$this->status->LinkCustomAttributes = "";
+			$this->status->HrefValue = "";
+			$this->status->TooltipValue = "";
 
-			// activated
-			$this->activated->LinkCustomAttributes = "";
-			$this->activated->HrefValue = "";
-			$this->activated->TooltipValue = "";
+			// session_token
+			$this->session_token->LinkCustomAttributes = "";
+			$this->session_token->HrefValue = "";
+			$this->session_token->TooltipValue = "";
+
+			// createdAt
+			$this->createdAt->LinkCustomAttributes = "";
+			$this->createdAt->HrefValue = "";
+			$this->createdAt->TooltipValue = "";
+
+			// updatedAt
+			$this->updatedAt->LinkCustomAttributes = "";
+			$this->updatedAt->HrefValue = "";
+			$this->updatedAt->TooltipValue = "";
 		}
 
 		// Call Row Rendered event

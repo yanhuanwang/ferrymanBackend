@@ -503,7 +503,6 @@ class category_add extends category
 	public $Priv = 0;
 	public $OldRecordset;
 	public $CopyRecord;
-	public $DetailPages; // Detail pages object
 
 	//
 	// Page run
@@ -564,9 +563,6 @@ class category_add extends category
 		$this->description->setVisibility();
 		$this->hideFieldsForAddEdit();
 
-		// Set up detail page object
-		$this->setupDetailPages();
-
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
 
@@ -624,9 +620,6 @@ class category_add extends category
 			$this->loadFormValues(); // Load form values
 		}
 
-		// Set up detail parameters
-		$this->setupDetailParms();
-
 		// Validate form if post back
 		if ($postBack) {
 			if (!$this->validateForm()) {
@@ -648,19 +641,13 @@ class category_add extends category
 						$this->setFailureMessage($Language->Phrase("NoRecord")); // No record found
 					$this->terminate("categorylist.php"); // No matching record, return to list
 				}
-
-				// Set up detail parameters
-				$this->setupDetailParms();
 				break;
 			case "insert": // Add new record
 				$this->SendEmail = TRUE; // Send email on add success
 				if ($this->addRow($this->OldRecordset)) { // Add successful
 					if ($this->getSuccessMessage() == "")
 						$this->setSuccessMessage($Language->Phrase("AddSuccess")); // Set up success message
-					if ($this->getCurrentDetailTable() <> "") // Master/detail add
-						$returnUrl = $this->getDetailUrl();
-					else
-						$returnUrl = $this->getReturnUrl();
+					$returnUrl = $this->getReturnUrl();
 					if (GetPageName($returnUrl) == "categorylist.php")
 						$returnUrl = $this->addMasterUrl($returnUrl); // List page, return to List page with correct master key if necessary
 					elseif (GetPageName($returnUrl) == "categoryview.php")
@@ -674,9 +661,6 @@ class category_add extends category
 				} else {
 					$this->EventCancelled = TRUE; // Event cancelled
 					$this->restoreFormValues(); // Add failed, restore form values
-
-					// Set up detail parameters
-					$this->setupDetailParms();
 				}
 		}
 
@@ -916,19 +900,6 @@ class category_add extends category
 			}
 		}
 
-		// Validate detail grid
-		$detailTblVar = explode(",", $this->getCurrentDetailTable());
-		if (in_array("parcel_info", $detailTblVar) && $GLOBALS["parcel_info"]->DetailAdd) {
-			if (!isset($GLOBALS["parcel_info_grid"]))
-				$GLOBALS["parcel_info_grid"] = new parcel_info_grid(); // Get detail page object
-			$GLOBALS["parcel_info_grid"]->validateGridForm();
-		}
-		if (in_array("request_trip", $detailTblVar) && $GLOBALS["request_trip"]->DetailAdd) {
-			if (!isset($GLOBALS["request_trip_grid"]))
-				$GLOBALS["request_trip_grid"] = new request_trip_grid(); // Get detail page object
-			$GLOBALS["request_trip_grid"]->validateGridForm();
-		}
-
 		// Return validate result
 		$validateForm = ($FormError == "");
 
@@ -957,10 +928,6 @@ class category_add extends category
 			}
 		}
 		$conn = &$this->getConnection();
-
-		// Begin transaction
-		if ($this->getCurrentDetailTable() <> "")
-			$conn->beginTrans();
 
 		// Load db values from rsold
 		$this->loadDbValues($rsold);
@@ -995,40 +962,6 @@ class category_add extends category
 			}
 			$addRow = FALSE;
 		}
-
-		// Add detail records
-		if ($addRow) {
-			$detailTblVar = explode(",", $this->getCurrentDetailTable());
-			if (in_array("parcel_info", $detailTblVar) && $GLOBALS["parcel_info"]->DetailAdd) {
-				$GLOBALS["parcel_info"]->category->setSessionValue($this->id->CurrentValue); // Set master key
-				if (!isset($GLOBALS["parcel_info_grid"]))
-					$GLOBALS["parcel_info_grid"] = new parcel_info_grid(); // Get detail page object
-				$Security->loadCurrentUserLevel($this->ProjectID . "parcel_info"); // Load user level of detail table
-				$addRow = $GLOBALS["parcel_info_grid"]->gridInsert();
-				$Security->loadCurrentUserLevel($this->ProjectID . $this->TableName); // Restore user level of master table
-				if (!$addRow)
-					$GLOBALS["parcel_info"]->category->setSessionValue(""); // Clear master key if insert failed
-			}
-			if (in_array("request_trip", $detailTblVar) && $GLOBALS["request_trip"]->DetailAdd) {
-				$GLOBALS["request_trip"]->category->setSessionValue($this->id->CurrentValue); // Set master key
-				if (!isset($GLOBALS["request_trip_grid"]))
-					$GLOBALS["request_trip_grid"] = new request_trip_grid(); // Get detail page object
-				$Security->loadCurrentUserLevel($this->ProjectID . "request_trip"); // Load user level of detail table
-				$addRow = $GLOBALS["request_trip_grid"]->gridInsert();
-				$Security->loadCurrentUserLevel($this->ProjectID . $this->TableName); // Restore user level of master table
-				if (!$addRow)
-					$GLOBALS["request_trip"]->category->setSessionValue(""); // Clear master key if insert failed
-			}
-		}
-
-		// Commit/Rollback transaction
-		if ($this->getCurrentDetailTable() <> "") {
-			if ($addRow) {
-				$conn->commitTrans(); // Commit transaction
-			} else {
-				$conn->rollbackTrans(); // Rollback transaction
-			}
-		}
 		if ($addRow) {
 
 			// Call Row Inserted event
@@ -1044,58 +977,6 @@ class category_add extends category
 		return $addRow;
 	}
 
-	// Set up detail parms based on QueryString
-	protected function setupDetailParms()
-	{
-
-		// Get the keys for master table
-		if (Get(TABLE_SHOW_DETAIL) !== NULL) {
-			$detailTblVar = Get(TABLE_SHOW_DETAIL);
-			$this->setCurrentDetailTable($detailTblVar);
-		} else {
-			$detailTblVar = $this->getCurrentDetailTable();
-		}
-		if ($detailTblVar <> "") {
-			$detailTblVar = explode(",", $detailTblVar);
-			if (in_array("parcel_info", $detailTblVar)) {
-				if (!isset($GLOBALS["parcel_info_grid"]))
-					$GLOBALS["parcel_info_grid"] = new parcel_info_grid();
-				if ($GLOBALS["parcel_info_grid"]->DetailAdd) {
-					if ($this->CopyRecord)
-						$GLOBALS["parcel_info_grid"]->CurrentMode = "copy";
-					else
-						$GLOBALS["parcel_info_grid"]->CurrentMode = "add";
-					$GLOBALS["parcel_info_grid"]->CurrentAction = "gridadd";
-
-					// Save current master table to detail table
-					$GLOBALS["parcel_info_grid"]->setCurrentMasterTable($this->TableVar);
-					$GLOBALS["parcel_info_grid"]->setStartRecordNumber(1);
-					$GLOBALS["parcel_info_grid"]->category->IsDetailKey = TRUE;
-					$GLOBALS["parcel_info_grid"]->category->CurrentValue = $this->id->CurrentValue;
-					$GLOBALS["parcel_info_grid"]->category->setSessionValue($GLOBALS["parcel_info_grid"]->category->CurrentValue);
-				}
-			}
-			if (in_array("request_trip", $detailTblVar)) {
-				if (!isset($GLOBALS["request_trip_grid"]))
-					$GLOBALS["request_trip_grid"] = new request_trip_grid();
-				if ($GLOBALS["request_trip_grid"]->DetailAdd) {
-					if ($this->CopyRecord)
-						$GLOBALS["request_trip_grid"]->CurrentMode = "copy";
-					else
-						$GLOBALS["request_trip_grid"]->CurrentMode = "add";
-					$GLOBALS["request_trip_grid"]->CurrentAction = "gridadd";
-
-					// Save current master table to detail table
-					$GLOBALS["request_trip_grid"]->setCurrentMasterTable($this->TableVar);
-					$GLOBALS["request_trip_grid"]->setStartRecordNumber(1);
-					$GLOBALS["request_trip_grid"]->category->IsDetailKey = TRUE;
-					$GLOBALS["request_trip_grid"]->category->CurrentValue = $this->id->CurrentValue;
-					$GLOBALS["request_trip_grid"]->category->setSessionValue($GLOBALS["request_trip_grid"]->category->CurrentValue);
-				}
-			}
-		}
-	}
-
 	// Set up Breadcrumb
 	protected function setupBreadcrumb()
 	{
@@ -1105,16 +986,6 @@ class category_add extends category
 		$Breadcrumb->add("list", $this->TableVar, $this->addMasterUrl("categorylist.php"), "", $this->TableVar, TRUE);
 		$pageId = ($this->isCopy()) ? "Copy" : "Add";
 		$Breadcrumb->add("add", $pageId, $url);
-	}
-
-	// Set up detail pages
-	protected function setupDetailPages()
-	{
-		$pages = new SubPages();
-		$pages->Style = "pills";
-		$pages->add('parcel_info');
-		$pages->add('request_trip');
-		$this->DetailPages = $pages;
 	}
 
 	// Setup lookup options

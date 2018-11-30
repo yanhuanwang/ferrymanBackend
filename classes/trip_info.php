@@ -32,6 +32,8 @@ class trip_info extends DbTable
 	public $user_id;
 	public $flight_number;
 	public $date;
+	public $createdAt;
+	public $updatedAt;
 
 	// Constructor
 	public function __construct()
@@ -125,6 +127,18 @@ class trip_info extends DbTable
 		$this->date->Sortable = TRUE; // Allow sort
 		$this->date->DefaultErrorMessage = str_replace("%s", $GLOBALS["DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
 		$this->fields['date'] = &$this->date;
+
+		// createdAt
+		$this->createdAt = new DbField('trip_info', 'trip_info', 'x_createdAt', 'createdAt', '`createdAt`', CastDateFieldForLike('`createdAt`', 0, "DB"), 135, 0, FALSE, '`createdAt`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->createdAt->Sortable = TRUE; // Allow sort
+		$this->createdAt->DefaultErrorMessage = str_replace("%s", $GLOBALS["DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
+		$this->fields['createdAt'] = &$this->createdAt;
+
+		// updatedAt
+		$this->updatedAt = new DbField('trip_info', 'trip_info', 'x_updatedAt', 'updatedAt', '`updatedAt`', CastDateFieldForLike('`updatedAt`', 0, "DB"), 135, 0, FALSE, '`updatedAt`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->updatedAt->Sortable = TRUE; // Allow sort
+		$this->updatedAt->DefaultErrorMessage = str_replace("%s", $GLOBALS["DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
+		$this->fields['updatedAt'] = &$this->updatedAt;
 	}
 
 	// Field Visibility
@@ -526,6 +540,8 @@ class trip_info extends DbTable
 		$this->user_id->DbValue = $row['user_id'];
 		$this->flight_number->DbValue = $row['flight_number'];
 		$this->date->DbValue = $row['date'];
+		$this->createdAt->DbValue = $row['createdAt'];
+		$this->updatedAt->DbValue = $row['updatedAt'];
 	}
 
 	// Delete uploaded files
@@ -762,6 +778,8 @@ class trip_info extends DbTable
 		$this->user_id->setDbValue($rs->fields('user_id'));
 		$this->flight_number->setDbValue($rs->fields('flight_number'));
 		$this->date->setDbValue($rs->fields('date'));
+		$this->createdAt->setDbValue($rs->fields('createdAt'));
+		$this->updatedAt->setDbValue($rs->fields('updatedAt'));
 	}
 
 	// Render list row values
@@ -780,6 +798,8 @@ class trip_info extends DbTable
 		// user_id
 		// flight_number
 		// date
+		// createdAt
+		// updatedAt
 		// id
 
 		$this->id->ViewValue = $this->id->CurrentValue;
@@ -830,6 +850,16 @@ class trip_info extends DbTable
 		$this->date->ViewValue = FormatDateTime($this->date->ViewValue, 0);
 		$this->date->ViewCustomAttributes = "";
 
+		// createdAt
+		$this->createdAt->ViewValue = $this->createdAt->CurrentValue;
+		$this->createdAt->ViewValue = FormatDateTime($this->createdAt->ViewValue, 0);
+		$this->createdAt->ViewCustomAttributes = "";
+
+		// updatedAt
+		$this->updatedAt->ViewValue = $this->updatedAt->CurrentValue;
+		$this->updatedAt->ViewValue = FormatDateTime($this->updatedAt->ViewValue, 0);
+		$this->updatedAt->ViewCustomAttributes = "";
+
 		// id
 		$this->id->LinkCustomAttributes = "";
 		$this->id->HrefValue = "";
@@ -864,6 +894,16 @@ class trip_info extends DbTable
 		$this->date->LinkCustomAttributes = "";
 		$this->date->HrefValue = "";
 		$this->date->TooltipValue = "";
+
+		// createdAt
+		$this->createdAt->LinkCustomAttributes = "";
+		$this->createdAt->HrefValue = "";
+		$this->createdAt->TooltipValue = "";
+
+		// updatedAt
+		$this->updatedAt->LinkCustomAttributes = "";
+		$this->updatedAt->HrefValue = "";
+		$this->updatedAt->TooltipValue = "";
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -948,6 +988,18 @@ class trip_info extends DbTable
 		$this->date->EditValue = FormatDateTime($this->date->CurrentValue, 8);
 		$this->date->PlaceHolder = RemoveHtml($this->date->caption());
 
+		// createdAt
+		$this->createdAt->EditAttrs["class"] = "form-control";
+		$this->createdAt->EditCustomAttributes = "";
+		$this->createdAt->EditValue = FormatDateTime($this->createdAt->CurrentValue, 8);
+		$this->createdAt->PlaceHolder = RemoveHtml($this->createdAt->caption());
+
+		// updatedAt
+		$this->updatedAt->EditAttrs["class"] = "form-control";
+		$this->updatedAt->EditCustomAttributes = "";
+		$this->updatedAt->EditValue = FormatDateTime($this->updatedAt->CurrentValue, 8);
+		$this->updatedAt->PlaceHolder = RemoveHtml($this->updatedAt->caption());
+
 		// Call Row Rendered event
 		$this->Row_Rendered();
 	}
@@ -991,6 +1043,10 @@ class trip_info extends DbTable
 						$doc->exportCaption($this->flight_number);
 					if ($this->date->Exportable)
 						$doc->exportCaption($this->date);
+					if ($this->createdAt->Exportable)
+						$doc->exportCaption($this->createdAt);
+					if ($this->updatedAt->Exportable)
+						$doc->exportCaption($this->updatedAt);
 				} else {
 					if ($this->id->Exportable)
 						$doc->exportCaption($this->id);
@@ -1006,6 +1062,10 @@ class trip_info extends DbTable
 						$doc->exportCaption($this->flight_number);
 					if ($this->date->Exportable)
 						$doc->exportCaption($this->date);
+					if ($this->createdAt->Exportable)
+						$doc->exportCaption($this->createdAt);
+					if ($this->updatedAt->Exportable)
+						$doc->exportCaption($this->updatedAt);
 				}
 				$doc->endExportRow();
 			}
@@ -1051,6 +1111,10 @@ class trip_info extends DbTable
 							$doc->exportField($this->flight_number);
 						if ($this->date->Exportable)
 							$doc->exportField($this->date);
+						if ($this->createdAt->Exportable)
+							$doc->exportField($this->createdAt);
+						if ($this->updatedAt->Exportable)
+							$doc->exportField($this->updatedAt);
 					} else {
 						if ($this->id->Exportable)
 							$doc->exportField($this->id);
@@ -1066,6 +1130,10 @@ class trip_info extends DbTable
 							$doc->exportField($this->flight_number);
 						if ($this->date->Exportable)
 							$doc->exportField($this->date);
+						if ($this->createdAt->Exportable)
+							$doc->exportField($this->createdAt);
+						if ($this->updatedAt->Exportable)
+							$doc->exportField($this->updatedAt);
 					}
 					$doc->endExportRow($rowCnt);
 				}

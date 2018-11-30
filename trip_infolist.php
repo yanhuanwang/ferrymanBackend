@@ -95,6 +95,22 @@ ftrip_infolist.validate = function() {
 			elm = this.getElements("x" + infix + "_date");
 			if (elm && !ew.checkDateDef(elm.value))
 				return this.onError(elm, "<?php echo JsEncode($trip_info->date->errorMessage()) ?>");
+		<?php if ($trip_info_list->createdAt->Required) { ?>
+			elm = this.getElements("x" + infix + "_createdAt");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $trip_info->createdAt->caption(), $trip_info->createdAt->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_createdAt");
+			if (elm && !ew.checkDateDef(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($trip_info->createdAt->errorMessage()) ?>");
+		<?php if ($trip_info_list->updatedAt->Required) { ?>
+			elm = this.getElements("x" + infix + "_updatedAt");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $trip_info->updatedAt->caption(), $trip_info->updatedAt->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_updatedAt");
+			if (elm && !ew.checkDateDef(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($trip_info->updatedAt->errorMessage()) ?>");
 
 			// Fire Form_CustomValidate event
 			if (!this.Form_CustomValidate(fobj))
@@ -117,6 +133,8 @@ ftrip_infolist.emptyRow = function(infix) {
 	if (ew.valueChanged(fobj, infix, "user_id", false)) return false;
 	if (ew.valueChanged(fobj, infix, "flight_number", false)) return false;
 	if (ew.valueChanged(fobj, infix, "date", false)) return false;
+	if (ew.valueChanged(fobj, infix, "createdAt", false)) return false;
+	if (ew.valueChanged(fobj, infix, "updatedAt", false)) return false;
 	return true;
 }
 
@@ -342,6 +360,24 @@ $trip_info_list->ListOptions->render("header", "left");
 		</div></div></th>
 	<?php } ?>
 <?php } ?>
+<?php if ($trip_info->createdAt->Visible) { // createdAt ?>
+	<?php if ($trip_info->sortUrl($trip_info->createdAt) == "") { ?>
+		<th data-name="createdAt" class="<?php echo $trip_info->createdAt->headerCellClass() ?>"><div id="elh_trip_info_createdAt" class="trip_info_createdAt"><div class="ew-table-header-caption"><?php echo $trip_info->createdAt->caption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="createdAt" class="<?php echo $trip_info->createdAt->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $trip_info->SortUrl($trip_info->createdAt) ?>',1);"><div id="elh_trip_info_createdAt" class="trip_info_createdAt">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $trip_info->createdAt->caption() ?></span><span class="ew-table-header-sort"><?php if ($trip_info->createdAt->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($trip_info->createdAt->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
+		</div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($trip_info->updatedAt->Visible) { // updatedAt ?>
+	<?php if ($trip_info->sortUrl($trip_info->updatedAt) == "") { ?>
+		<th data-name="updatedAt" class="<?php echo $trip_info->updatedAt->headerCellClass() ?>"><div id="elh_trip_info_updatedAt" class="trip_info_updatedAt"><div class="ew-table-header-caption"><?php echo $trip_info->updatedAt->caption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="updatedAt" class="<?php echo $trip_info->updatedAt->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $trip_info->SortUrl($trip_info->updatedAt) ?>',1);"><div id="elh_trip_info_updatedAt" class="trip_info_updatedAt">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $trip_info->updatedAt->caption() ?></span><span class="ew-table-header-sort"><?php if ($trip_info->updatedAt->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($trip_info->updatedAt->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
+		</div></div></th>
+	<?php } ?>
+<?php } ?>
 <?php
 
 // Render list options (header, right)
@@ -449,6 +485,32 @@ ew.createDateTimePicker("ftrip_infolist", "x<?php echo $trip_info_list->RowIndex
 <?php } ?>
 </span>
 <input type="hidden" data-table="trip_info" data-field="x_date" name="o<?php echo $trip_info_list->RowIndex ?>_date" id="o<?php echo $trip_info_list->RowIndex ?>_date" value="<?php echo HtmlEncode($trip_info->date->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($trip_info->createdAt->Visible) { // createdAt ?>
+		<td data-name="createdAt">
+<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_createdAt" class="form-group trip_info_createdAt">
+<input type="text" data-table="trip_info" data-field="x_createdAt" name="x<?php echo $trip_info_list->RowIndex ?>_createdAt" id="x<?php echo $trip_info_list->RowIndex ?>_createdAt" placeholder="<?php echo HtmlEncode($trip_info->createdAt->getPlaceHolder()) ?>" value="<?php echo $trip_info->createdAt->EditValue ?>"<?php echo $trip_info->createdAt->editAttributes() ?>>
+<?php if (!$trip_info->createdAt->ReadOnly && !$trip_info->createdAt->Disabled && !isset($trip_info->createdAt->EditAttrs["readonly"]) && !isset($trip_info->createdAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("ftrip_infolist", "x<?php echo $trip_info_list->RowIndex ?>_createdAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<input type="hidden" data-table="trip_info" data-field="x_createdAt" name="o<?php echo $trip_info_list->RowIndex ?>_createdAt" id="o<?php echo $trip_info_list->RowIndex ?>_createdAt" value="<?php echo HtmlEncode($trip_info->createdAt->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($trip_info->updatedAt->Visible) { // updatedAt ?>
+		<td data-name="updatedAt">
+<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_updatedAt" class="form-group trip_info_updatedAt">
+<input type="text" data-table="trip_info" data-field="x_updatedAt" name="x<?php echo $trip_info_list->RowIndex ?>_updatedAt" id="x<?php echo $trip_info_list->RowIndex ?>_updatedAt" placeholder="<?php echo HtmlEncode($trip_info->updatedAt->getPlaceHolder()) ?>" value="<?php echo $trip_info->updatedAt->EditValue ?>"<?php echo $trip_info->updatedAt->editAttributes() ?>>
+<?php if (!$trip_info->updatedAt->ReadOnly && !$trip_info->updatedAt->Disabled && !isset($trip_info->updatedAt->EditAttrs["readonly"]) && !isset($trip_info->updatedAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("ftrip_infolist", "x<?php echo $trip_info_list->RowIndex ?>_updatedAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<input type="hidden" data-table="trip_info" data-field="x_updatedAt" name="o<?php echo $trip_info_list->RowIndex ?>_updatedAt" id="o<?php echo $trip_info_list->RowIndex ?>_updatedAt" value="<?php echo HtmlEncode($trip_info->updatedAt->OldValue) ?>">
 </td>
 	<?php } ?>
 <?php
@@ -756,6 +818,68 @@ ew.createDateTimePicker("ftrip_infolist", "x<?php echo $trip_info_list->RowIndex
 <?php } ?>
 </td>
 	<?php } ?>
+	<?php if ($trip_info->createdAt->Visible) { // createdAt ?>
+		<td data-name="createdAt"<?php echo $trip_info->createdAt->cellAttributes() ?>>
+<?php if ($trip_info->RowType == ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_createdAt" class="form-group trip_info_createdAt">
+<input type="text" data-table="trip_info" data-field="x_createdAt" name="x<?php echo $trip_info_list->RowIndex ?>_createdAt" id="x<?php echo $trip_info_list->RowIndex ?>_createdAt" placeholder="<?php echo HtmlEncode($trip_info->createdAt->getPlaceHolder()) ?>" value="<?php echo $trip_info->createdAt->EditValue ?>"<?php echo $trip_info->createdAt->editAttributes() ?>>
+<?php if (!$trip_info->createdAt->ReadOnly && !$trip_info->createdAt->Disabled && !isset($trip_info->createdAt->EditAttrs["readonly"]) && !isset($trip_info->createdAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("ftrip_infolist", "x<?php echo $trip_info_list->RowIndex ?>_createdAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<input type="hidden" data-table="trip_info" data-field="x_createdAt" name="o<?php echo $trip_info_list->RowIndex ?>_createdAt" id="o<?php echo $trip_info_list->RowIndex ?>_createdAt" value="<?php echo HtmlEncode($trip_info->createdAt->OldValue) ?>">
+<?php } ?>
+<?php if ($trip_info->RowType == ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_createdAt" class="form-group trip_info_createdAt">
+<input type="text" data-table="trip_info" data-field="x_createdAt" name="x<?php echo $trip_info_list->RowIndex ?>_createdAt" id="x<?php echo $trip_info_list->RowIndex ?>_createdAt" placeholder="<?php echo HtmlEncode($trip_info->createdAt->getPlaceHolder()) ?>" value="<?php echo $trip_info->createdAt->EditValue ?>"<?php echo $trip_info->createdAt->editAttributes() ?>>
+<?php if (!$trip_info->createdAt->ReadOnly && !$trip_info->createdAt->Disabled && !isset($trip_info->createdAt->EditAttrs["readonly"]) && !isset($trip_info->createdAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("ftrip_infolist", "x<?php echo $trip_info_list->RowIndex ?>_createdAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<?php } ?>
+<?php if ($trip_info->RowType == ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_createdAt" class="trip_info_createdAt">
+<span<?php echo $trip_info->createdAt->viewAttributes() ?>>
+<?php echo $trip_info->createdAt->getViewValue() ?></span>
+</span>
+<?php } ?>
+</td>
+	<?php } ?>
+	<?php if ($trip_info->updatedAt->Visible) { // updatedAt ?>
+		<td data-name="updatedAt"<?php echo $trip_info->updatedAt->cellAttributes() ?>>
+<?php if ($trip_info->RowType == ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_updatedAt" class="form-group trip_info_updatedAt">
+<input type="text" data-table="trip_info" data-field="x_updatedAt" name="x<?php echo $trip_info_list->RowIndex ?>_updatedAt" id="x<?php echo $trip_info_list->RowIndex ?>_updatedAt" placeholder="<?php echo HtmlEncode($trip_info->updatedAt->getPlaceHolder()) ?>" value="<?php echo $trip_info->updatedAt->EditValue ?>"<?php echo $trip_info->updatedAt->editAttributes() ?>>
+<?php if (!$trip_info->updatedAt->ReadOnly && !$trip_info->updatedAt->Disabled && !isset($trip_info->updatedAt->EditAttrs["readonly"]) && !isset($trip_info->updatedAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("ftrip_infolist", "x<?php echo $trip_info_list->RowIndex ?>_updatedAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<input type="hidden" data-table="trip_info" data-field="x_updatedAt" name="o<?php echo $trip_info_list->RowIndex ?>_updatedAt" id="o<?php echo $trip_info_list->RowIndex ?>_updatedAt" value="<?php echo HtmlEncode($trip_info->updatedAt->OldValue) ?>">
+<?php } ?>
+<?php if ($trip_info->RowType == ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_updatedAt" class="form-group trip_info_updatedAt">
+<input type="text" data-table="trip_info" data-field="x_updatedAt" name="x<?php echo $trip_info_list->RowIndex ?>_updatedAt" id="x<?php echo $trip_info_list->RowIndex ?>_updatedAt" placeholder="<?php echo HtmlEncode($trip_info->updatedAt->getPlaceHolder()) ?>" value="<?php echo $trip_info->updatedAt->EditValue ?>"<?php echo $trip_info->updatedAt->editAttributes() ?>>
+<?php if (!$trip_info->updatedAt->ReadOnly && !$trip_info->updatedAt->Disabled && !isset($trip_info->updatedAt->EditAttrs["readonly"]) && !isset($trip_info->updatedAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("ftrip_infolist", "x<?php echo $trip_info_list->RowIndex ?>_updatedAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<?php } ?>
+<?php if ($trip_info->RowType == ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_updatedAt" class="trip_info_updatedAt">
+<span<?php echo $trip_info->updatedAt->viewAttributes() ?>>
+<?php echo $trip_info->updatedAt->getViewValue() ?></span>
+</span>
+<?php } ?>
+</td>
+	<?php } ?>
 <?php
 
 // Render list options (body, right)
@@ -869,6 +993,32 @@ ew.createDateTimePicker("ftrip_infolist", "x<?php echo $trip_info_list->RowIndex
 <?php } ?>
 </span>
 <input type="hidden" data-table="trip_info" data-field="x_date" name="o<?php echo $trip_info_list->RowIndex ?>_date" id="o<?php echo $trip_info_list->RowIndex ?>_date" value="<?php echo HtmlEncode($trip_info->date->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($trip_info->createdAt->Visible) { // createdAt ?>
+		<td data-name="createdAt">
+<span id="el$rowindex$_trip_info_createdAt" class="form-group trip_info_createdAt">
+<input type="text" data-table="trip_info" data-field="x_createdAt" name="x<?php echo $trip_info_list->RowIndex ?>_createdAt" id="x<?php echo $trip_info_list->RowIndex ?>_createdAt" placeholder="<?php echo HtmlEncode($trip_info->createdAt->getPlaceHolder()) ?>" value="<?php echo $trip_info->createdAt->EditValue ?>"<?php echo $trip_info->createdAt->editAttributes() ?>>
+<?php if (!$trip_info->createdAt->ReadOnly && !$trip_info->createdAt->Disabled && !isset($trip_info->createdAt->EditAttrs["readonly"]) && !isset($trip_info->createdAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("ftrip_infolist", "x<?php echo $trip_info_list->RowIndex ?>_createdAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<input type="hidden" data-table="trip_info" data-field="x_createdAt" name="o<?php echo $trip_info_list->RowIndex ?>_createdAt" id="o<?php echo $trip_info_list->RowIndex ?>_createdAt" value="<?php echo HtmlEncode($trip_info->createdAt->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($trip_info->updatedAt->Visible) { // updatedAt ?>
+		<td data-name="updatedAt">
+<span id="el$rowindex$_trip_info_updatedAt" class="form-group trip_info_updatedAt">
+<input type="text" data-table="trip_info" data-field="x_updatedAt" name="x<?php echo $trip_info_list->RowIndex ?>_updatedAt" id="x<?php echo $trip_info_list->RowIndex ?>_updatedAt" placeholder="<?php echo HtmlEncode($trip_info->updatedAt->getPlaceHolder()) ?>" value="<?php echo $trip_info->updatedAt->EditValue ?>"<?php echo $trip_info->updatedAt->editAttributes() ?>>
+<?php if (!$trip_info->updatedAt->ReadOnly && !$trip_info->updatedAt->Disabled && !isset($trip_info->updatedAt->EditAttrs["readonly"]) && !isset($trip_info->updatedAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("ftrip_infolist", "x<?php echo $trip_info_list->RowIndex ?>_updatedAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<input type="hidden" data-table="trip_info" data-field="x_updatedAt" name="o<?php echo $trip_info_list->RowIndex ?>_updatedAt" id="o<?php echo $trip_info_list->RowIndex ?>_updatedAt" value="<?php echo HtmlEncode($trip_info->updatedAt->OldValue) ?>">
 </td>
 	<?php } ?>
 <?php

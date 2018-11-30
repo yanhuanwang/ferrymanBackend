@@ -701,7 +701,7 @@ class admin_list extends admin
 		$this->setupExportOptions();
 		$this->id->Visible = FALSE;
 		$this->username->setVisibility();
-		$this->password->Visible = FALSE;
+		$this->password->setVisibility();
 		$this->level->setVisibility();
 		$this->locked->setVisibility();
 		$this->_email->setVisibility();
@@ -1410,6 +1410,8 @@ class admin_list extends admin
 		global $CurrentForm;
 		if ($CurrentForm->hasValue("x_username") && $CurrentForm->hasValue("o_username") && $this->username->CurrentValue <> $this->username->OldValue)
 			return FALSE;
+		if ($CurrentForm->hasValue("x_password") && $CurrentForm->hasValue("o_password") && $this->password->CurrentValue <> $this->password->OldValue)
+			return FALSE;
 		if ($CurrentForm->hasValue("x_level") && $CurrentForm->hasValue("o_level") && $this->level->CurrentValue <> $this->level->OldValue)
 			return FALSE;
 		if ($CurrentForm->hasValue("x_locked") && $CurrentForm->hasValue("o_locked") && $this->locked->CurrentValue <> $this->locked->OldValue)
@@ -1876,6 +1878,7 @@ class admin_list extends admin
 			$this->CurrentOrder = Get("order");
 			$this->CurrentOrderType = Get("ordertype", "");
 			$this->updateSort($this->username); // username
+			$this->updateSort($this->password); // password
 			$this->updateSort($this->level); // level
 			$this->updateSort($this->locked); // locked
 			$this->updateSort($this->_email); // email
@@ -1916,6 +1919,7 @@ class admin_list extends admin
 				$orderBy = "";
 				$this->setSessionOrderBy($orderBy);
 				$this->username->setSort("");
+				$this->password->setSort("");
 				$this->level->setSort("");
 				$this->locked->setSort("");
 				$this->_email->setSort("");
@@ -2570,6 +2574,16 @@ class admin_list extends admin
 		}
 		$this->username->setOldValue($CurrentForm->getValue("o_username"));
 
+		// Check field name 'password' first before field var 'x_password'
+		$val = $CurrentForm->hasValue("password") ? $CurrentForm->getValue("password") : $CurrentForm->getValue("x_password");
+		if (!$this->password->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->password->Visible = FALSE; // Disable update for API request
+			else
+				$this->password->setFormValue($val);
+		}
+		$this->password->setOldValue($CurrentForm->getValue("o_password"));
+
 		// Check field name 'level' first before field var 'x_level'
 		$val = $CurrentForm->hasValue("level") ? $CurrentForm->getValue("level") : $CurrentForm->getValue("x_level");
 		if (!$this->level->IsDetailKey) {
@@ -2623,6 +2637,7 @@ class admin_list extends admin
 		if (!$this->isGridAdd() && !$this->isAdd())
 			$this->id->CurrentValue = $this->id->FormValue;
 		$this->username->CurrentValue = $this->username->FormValue;
+		$this->password->CurrentValue = $this->password->FormValue;
 		$this->level->CurrentValue = $this->level->FormValue;
 		$this->locked->CurrentValue = $this->locked->FormValue;
 		$this->_email->CurrentValue = $this->_email->FormValue;
@@ -2760,9 +2775,6 @@ class admin_list extends admin
 		// id
 		// username
 		// password
-
-		$this->password->CellCssStyle = "white-space: nowrap;";
-
 		// level
 		// locked
 		// email
@@ -2777,6 +2789,10 @@ class admin_list extends admin
 			// username
 			$this->username->ViewValue = $this->username->CurrentValue;
 			$this->username->ViewCustomAttributes = "";
+
+			// password
+			$this->password->ViewValue = $this->password->CurrentValue;
+			$this->password->ViewCustomAttributes = "";
 
 			// level
 			$this->level->ViewValue = $this->level->CurrentValue;
@@ -2801,6 +2817,11 @@ class admin_list extends admin
 			$this->username->TooltipValue = "";
 			if (!$this->isExport())
 				$this->username->ViewValue = $this->highlightValue($this->username);
+
+			// password
+			$this->password->LinkCustomAttributes = "";
+			$this->password->HrefValue = "";
+			$this->password->TooltipValue = "";
 
 			// level
 			$this->level->LinkCustomAttributes = "";
@@ -2835,6 +2856,12 @@ class admin_list extends admin
 			$this->username->EditValue = HtmlEncode($this->username->CurrentValue);
 			$this->username->PlaceHolder = RemoveHtml($this->username->caption());
 
+			// password
+			$this->password->EditAttrs["class"] = "form-control";
+			$this->password->EditCustomAttributes = "";
+			$this->password->EditValue = HtmlEncode($this->password->CurrentValue);
+			$this->password->PlaceHolder = RemoveHtml($this->password->caption());
+
 			// level
 			$this->level->EditAttrs["class"] = "form-control";
 			$this->level->EditCustomAttributes = "";
@@ -2865,6 +2892,10 @@ class admin_list extends admin
 			$this->username->LinkCustomAttributes = "";
 			$this->username->HrefValue = "";
 
+			// password
+			$this->password->LinkCustomAttributes = "";
+			$this->password->HrefValue = "";
+
 			// level
 			$this->level->LinkCustomAttributes = "";
 			$this->level->HrefValue = "";
@@ -2887,6 +2918,12 @@ class admin_list extends admin
 			$this->username->EditCustomAttributes = "";
 			$this->username->EditValue = HtmlEncode($this->username->CurrentValue);
 			$this->username->PlaceHolder = RemoveHtml($this->username->caption());
+
+			// password
+			$this->password->EditAttrs["class"] = "form-control";
+			$this->password->EditCustomAttributes = "";
+			$this->password->EditValue = HtmlEncode($this->password->CurrentValue);
+			$this->password->PlaceHolder = RemoveHtml($this->password->caption());
 
 			// level
 			$this->level->EditAttrs["class"] = "form-control";
@@ -2917,6 +2954,10 @@ class admin_list extends admin
 
 			$this->username->LinkCustomAttributes = "";
 			$this->username->HrefValue = "";
+
+			// password
+			$this->password->LinkCustomAttributes = "";
+			$this->password->HrefValue = "";
 
 			// level
 			$this->level->LinkCustomAttributes = "";
@@ -3170,6 +3211,9 @@ class admin_list extends admin
 			// username
 			$this->username->setDbValueDef($rsnew, $this->username->CurrentValue, "", $this->username->ReadOnly);
 
+			// password
+			$this->password->setDbValueDef($rsnew, $this->password->CurrentValue, "", $this->password->ReadOnly || ENCRYPTED_PASSWORD && $rs->fields('password') == $this->password->CurrentValue);
+
 			// level
 			$this->level->setDbValueDef($rsnew, $this->level->CurrentValue, 0, $this->level->ReadOnly);
 
@@ -3241,6 +3285,7 @@ class admin_list extends admin
 			return "";
 		$hash = "";
 		$hash .= GetFieldHash($rs->fields('username')); // username
+		$hash .= GetFieldHash($rs->fields('password')); // password
 		$hash .= GetFieldHash($rs->fields('level')); // level
 		$hash .= GetFieldHash($rs->fields('locked')); // locked
 		$hash .= GetFieldHash($rs->fields('email')); // email
@@ -3273,6 +3318,9 @@ class admin_list extends admin
 
 		// username
 		$this->username->setDbValueDef($rsnew, $this->username->CurrentValue, "", FALSE);
+
+		// password
+		$this->password->setDbValueDef($rsnew, $this->password->CurrentValue, "", FALSE);
 
 		// level
 		$this->level->setDbValueDef($rsnew, $this->level->CurrentValue, 0, FALSE);

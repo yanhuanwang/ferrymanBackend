@@ -53,8 +53,6 @@ fparcel_infodelete.validateRequired = <?php echo json_encode(CLIENT_VALIDATE) ?>
 fparcel_infodelete.lists["x_user_id"] = <?php echo $parcel_info_delete->user_id->Lookup->toClientList() ?>;
 fparcel_infodelete.lists["x_user_id"].options = <?php echo JsonEncode($parcel_info_delete->user_id->lookupOptions()) ?>;
 fparcel_infodelete.autoSuggests["x_user_id"] = <?php echo json_encode(["data" => "ajax=autosuggest"]) ?>;
-fparcel_infodelete.lists["x_category"] = <?php echo $parcel_info_delete->category->Lookup->toClientList() ?>;
-fparcel_infodelete.lists["x_category"].options = <?php echo JsonEncode($parcel_info_delete->category->lookupOptions()) ?>;
 fparcel_infodelete.lists["x_image_id"] = <?php echo $parcel_info_delete->image_id->Lookup->toClientList() ?>;
 fparcel_infodelete.lists["x_image_id"].options = <?php echo JsonEncode($parcel_info_delete->image_id->lookupOptions()) ?>;
 fparcel_infodelete.autoSuggests["x_image_id"] = <?php echo json_encode(["data" => "ajax=autosuggest"]) ?>;
@@ -96,14 +94,23 @@ $parcel_info_delete->showMessage();
 <?php if ($parcel_info->user_id->Visible) { // user_id ?>
 		<th class="<?php echo $parcel_info->user_id->headerCellClass() ?>"><span id="elh_parcel_info_user_id" class="parcel_info_user_id"><?php echo $parcel_info->user_id->caption() ?></span></th>
 <?php } ?>
-<?php if ($parcel_info->category->Visible) { // category ?>
-		<th class="<?php echo $parcel_info->category->headerCellClass() ?>"><span id="elh_parcel_info_category" class="parcel_info_category"><?php echo $parcel_info->category->caption() ?></span></th>
-<?php } ?>
 <?php if ($parcel_info->image_id->Visible) { // image_id ?>
 		<th class="<?php echo $parcel_info->image_id->headerCellClass() ?>"><span id="elh_parcel_info_image_id" class="parcel_info_image_id"><?php echo $parcel_info->image_id->caption() ?></span></th>
 <?php } ?>
 <?php if ($parcel_info->name->Visible) { // name ?>
 		<th class="<?php echo $parcel_info->name->headerCellClass() ?>"><span id="elh_parcel_info_name" class="parcel_info_name"><?php echo $parcel_info->name->caption() ?></span></th>
+<?php } ?>
+<?php if ($parcel_info->categoty->Visible) { // categoty ?>
+		<th class="<?php echo $parcel_info->categoty->headerCellClass() ?>"><span id="elh_parcel_info_categoty" class="parcel_info_categoty"><?php echo $parcel_info->categoty->caption() ?></span></th>
+<?php } ?>
+<?php if ($parcel_info->status->Visible) { // status ?>
+		<th class="<?php echo $parcel_info->status->headerCellClass() ?>"><span id="elh_parcel_info_status" class="parcel_info_status"><?php echo $parcel_info->status->caption() ?></span></th>
+<?php } ?>
+<?php if ($parcel_info->createdAt->Visible) { // createdAt ?>
+		<th class="<?php echo $parcel_info->createdAt->headerCellClass() ?>"><span id="elh_parcel_info_createdAt" class="parcel_info_createdAt"><?php echo $parcel_info->createdAt->caption() ?></span></th>
+<?php } ?>
+<?php if ($parcel_info->updatedAt->Visible) { // updatedAt ?>
+		<th class="<?php echo $parcel_info->updatedAt->headerCellClass() ?>"><span id="elh_parcel_info_updatedAt" class="parcel_info_updatedAt"><?php echo $parcel_info->updatedAt->caption() ?></span></th>
 <?php } ?>
 	</tr>
 	</thead>
@@ -158,14 +165,6 @@ while (!$parcel_info_delete->Recordset->EOF) {
 </span>
 </td>
 <?php } ?>
-<?php if ($parcel_info->category->Visible) { // category ?>
-		<td<?php echo $parcel_info->category->cellAttributes() ?>>
-<span id="el<?php echo $parcel_info_delete->RowCnt ?>_parcel_info_category" class="parcel_info_category">
-<span<?php echo $parcel_info->category->viewAttributes() ?>>
-<?php echo $parcel_info->category->getViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
 <?php if ($parcel_info->image_id->Visible) { // image_id ?>
 		<td<?php echo $parcel_info->image_id->cellAttributes() ?>>
 <span id="el<?php echo $parcel_info_delete->RowCnt ?>_parcel_info_image_id" class="parcel_info_image_id">
@@ -184,6 +183,38 @@ while (!$parcel_info_delete->Recordset->EOF) {
 <span id="el<?php echo $parcel_info_delete->RowCnt ?>_parcel_info_name" class="parcel_info_name">
 <span<?php echo $parcel_info->name->viewAttributes() ?>>
 <?php echo $parcel_info->name->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($parcel_info->categoty->Visible) { // categoty ?>
+		<td<?php echo $parcel_info->categoty->cellAttributes() ?>>
+<span id="el<?php echo $parcel_info_delete->RowCnt ?>_parcel_info_categoty" class="parcel_info_categoty">
+<span<?php echo $parcel_info->categoty->viewAttributes() ?>>
+<?php echo $parcel_info->categoty->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($parcel_info->status->Visible) { // status ?>
+		<td<?php echo $parcel_info->status->cellAttributes() ?>>
+<span id="el<?php echo $parcel_info_delete->RowCnt ?>_parcel_info_status" class="parcel_info_status">
+<span<?php echo $parcel_info->status->viewAttributes() ?>>
+<?php echo $parcel_info->status->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($parcel_info->createdAt->Visible) { // createdAt ?>
+		<td<?php echo $parcel_info->createdAt->cellAttributes() ?>>
+<span id="el<?php echo $parcel_info_delete->RowCnt ?>_parcel_info_createdAt" class="parcel_info_createdAt">
+<span<?php echo $parcel_info->createdAt->viewAttributes() ?>>
+<?php echo $parcel_info->createdAt->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($parcel_info->updatedAt->Visible) { // updatedAt ?>
+		<td<?php echo $parcel_info->updatedAt->cellAttributes() ?>>
+<span id="el<?php echo $parcel_info_delete->RowCnt ?>_parcel_info_updatedAt" class="parcel_info_updatedAt">
+<span<?php echo $parcel_info->updatedAt->viewAttributes() ?>>
+<?php echo $parcel_info->updatedAt->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

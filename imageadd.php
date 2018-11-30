@@ -54,19 +54,6 @@ fimageadd.validate = function() {
 	for (var i = startcnt; i <= rowcnt; i++) {
 		var infix = ($k[0]) ? String(i) : "";
 		$fobj.data("rowindex", infix);
-		<?php if ($image_add->name->Required) { ?>
-			elm = this.getElements("x" + infix + "_name");
-			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
-				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $image->name->caption(), $image->name->RequiredErrorMessage)) ?>");
-		<?php } ?>
-		<?php if ($image_add->_userid->Required) { ?>
-			elm = this.getElements("x" + infix + "__userid");
-			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
-				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $image->_userid->caption(), $image->_userid->RequiredErrorMessage)) ?>");
-		<?php } ?>
-			elm = this.getElements("x" + infix + "__userid");
-			if (elm && !ew.checkInteger(elm.value))
-				return this.onError(elm, "<?php echo JsEncode($image->_userid->errorMessage()) ?>");
 		<?php if ($image_add->path->Required) { ?>
 			felm = this.getElements("x" + infix + "_path");
 			elm = this.getElements("fn_x" + infix + "_path");
@@ -78,6 +65,43 @@ fimageadd.validate = function() {
 			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
 				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $image->description->caption(), $image->description->RequiredErrorMessage)) ?>");
 		<?php } ?>
+		<?php if ($image_add->uuid->Required) { ?>
+			elm = this.getElements("x" + infix + "_uuid");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $image->uuid->caption(), $image->uuid->RequiredErrorMessage)) ?>");
+		<?php } ?>
+		<?php if ($image_add->user_id->Required) { ?>
+			elm = this.getElements("x" + infix + "_user_id");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $image->user_id->caption(), $image->user_id->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_user_id");
+			if (elm && !ew.checkInteger(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($image->user_id->errorMessage()) ?>");
+		<?php if ($image_add->confirmed->Required) { ?>
+			elm = this.getElements("x" + infix + "_confirmed");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $image->confirmed->caption(), $image->confirmed->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_confirmed");
+			if (elm && !ew.checkInteger(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($image->confirmed->errorMessage()) ?>");
+		<?php if ($image_add->createdAt->Required) { ?>
+			elm = this.getElements("x" + infix + "_createdAt");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $image->createdAt->caption(), $image->createdAt->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_createdAt");
+			if (elm && !ew.checkDateDef(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($image->createdAt->errorMessage()) ?>");
+		<?php if ($image_add->updatedAt->Required) { ?>
+			elm = this.getElements("x" + infix + "_updatedAt");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $image->updatedAt->caption(), $image->updatedAt->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_updatedAt");
+			if (elm && !ew.checkDateDef(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($image->updatedAt->errorMessage()) ?>");
 
 			// Fire Form_CustomValidate event
 			if (!this.Form_CustomValidate(fobj))
@@ -108,11 +132,8 @@ fimageadd.Form_CustomValidate = function(fobj) { // DO NOT CHANGE THIS LINE!
 fimageadd.validateRequired = <?php echo json_encode(CLIENT_VALIDATE) ?>;
 
 // Dynamic selection lists
-fimageadd.lists["x__userid"] = <?php echo $image_add->_userid->Lookup->toClientList() ?>;
-fimageadd.lists["x__userid"].options = <?php echo JsonEncode($image_add->_userid->lookupOptions()) ?>;
-fimageadd.autoSuggests["x__userid"] = <?php echo json_encode(["data" => "ajax=autosuggest"]) ?>;
-
 // Form object for search
+
 </script>
 <script>
 
@@ -134,66 +155,7 @@ $image_add->showMessage();
 <input type="hidden" name="action" id="action" value="confirm">
 <?php } ?>
 <input type="hidden" name="modal" value="<?php echo (int)$image_add->IsModal ?>">
-<?php if ($image->getCurrentMasterTable() == "user") { ?>
-<input type="hidden" name="<?php echo TABLE_SHOW_MASTER ?>" value="user">
-<input type="hidden" name="fk_id" value="<?php echo $image->_userid->getSessionValue() ?>">
-<?php } ?>
 <div class="ew-add-div"><!-- page* -->
-<?php if ($image->name->Visible) { // name ?>
-	<div id="r_name" class="form-group row">
-		<label id="elh_image_name" for="x_name" class="<?php echo $image_add->LeftColumnClass ?>"><?php echo $image->name->caption() ?><?php echo ($image->name->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
-		<div class="<?php echo $image_add->RightColumnClass ?>"><div<?php echo $image->name->cellAttributes() ?>>
-<?php if (!$image->isConfirm()) { ?>
-<span id="el_image_name">
-<input type="text" data-table="image" data-field="x_name" name="x_name" id="x_name" size="30" maxlength="100" placeholder="<?php echo HtmlEncode($image->name->getPlaceHolder()) ?>" value="<?php echo $image->name->EditValue ?>"<?php echo $image->name->editAttributes() ?>>
-</span>
-<?php } else { ?>
-<span id="el_image_name">
-<span<?php echo $image->name->viewAttributes() ?>>
-<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($image->name->ViewValue) ?>"></span>
-</span>
-<input type="hidden" data-table="image" data-field="x_name" name="x_name" id="x_name" value="<?php echo HtmlEncode($image->name->FormValue) ?>">
-<?php } ?>
-<?php echo $image->name->CustomMsg ?></div></div>
-	</div>
-<?php } ?>
-<?php if ($image->_userid->Visible) { // userid ?>
-	<div id="r__userid" class="form-group row">
-		<label id="elh_image__userid" class="<?php echo $image_add->LeftColumnClass ?>"><?php echo $image->_userid->caption() ?><?php echo ($image->_userid->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
-		<div class="<?php echo $image_add->RightColumnClass ?>"><div<?php echo $image->_userid->cellAttributes() ?>>
-<?php if (!$image->isConfirm()) { ?>
-<?php if ($image->_userid->getSessionValue() <> "") { ?>
-<span id="el_image__userid">
-<span<?php echo $image->_userid->viewAttributes() ?>>
-<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($image->_userid->ViewValue) ?>"></span>
-</span>
-<input type="hidden" id="x__userid" name="x__userid" value="<?php echo HtmlEncode($image->_userid->CurrentValue) ?>">
-<?php } else { ?>
-<span id="el_image__userid">
-<?php
-$wrkonchange = "" . trim(@$image->_userid->EditAttrs["onchange"]);
-if (trim($wrkonchange) <> "") $wrkonchange = " onchange=\"" . JsEncode($wrkonchange) . "\"";
-$image->_userid->EditAttrs["onchange"] = "";
-?>
-<span id="as_x__userid" class="text-nowrap" style="z-index: 8970">
-	<input type="text" class="form-control" name="sv_x__userid" id="sv_x__userid" value="<?php echo RemoveHtml($image->_userid->EditValue) ?>" size="30" placeholder="<?php echo HtmlEncode($image->_userid->getPlaceHolder()) ?>" data-placeholder="<?php echo HtmlEncode($image->_userid->getPlaceHolder()) ?>"<?php echo $image->_userid->editAttributes() ?>>
-</span>
-<input type="hidden" data-table="image" data-field="x__userid" data-value-separator="<?php echo $image->_userid->displayValueSeparatorAttribute() ?>" name="x__userid" id="x__userid" value="<?php echo HtmlEncode($image->_userid->CurrentValue) ?>"<?php echo $wrkonchange ?>>
-<script>
-fimageadd.createAutoSuggest({"id":"x__userid","forceSelect":false});
-</script>
-</span>
-<?php } ?>
-<?php } else { ?>
-<span id="el_image__userid">
-<span<?php echo $image->_userid->viewAttributes() ?>>
-<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($image->_userid->ViewValue) ?>"></span>
-</span>
-<input type="hidden" data-table="image" data-field="x__userid" name="x__userid" id="x__userid" value="<?php echo HtmlEncode($image->_userid->FormValue) ?>">
-<?php } ?>
-<?php echo $image->_userid->CustomMsg ?></div></div>
-	</div>
-<?php } ?>
 <?php if ($image->path->Visible) { // path ?>
 	<div id="r_path" class="form-group row">
 		<label id="elh_image_path" class="<?php echo $image_add->LeftColumnClass ?>"><?php echo $image->path->caption() ?><?php echo ($image->path->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
@@ -206,7 +168,7 @@ fimageadd.createAutoSuggest({"id":"x__userid","forceSelect":false});
 </span>
 <input type="hidden" name="fn_x_path" id= "fn_x_path" value="<?php echo $image->path->Upload->FileName ?>">
 <input type="hidden" name="fa_x_path" id= "fa_x_path" value="0">
-<input type="hidden" name="fs_x_path" id= "fs_x_path" value="100">
+<input type="hidden" name="fs_x_path" id= "fs_x_path" value="256">
 <input type="hidden" name="fx_x_path" id= "fx_x_path" value="<?php echo $image->path->UploadAllowedFileExt ?>">
 <input type="hidden" name="fm_x_path" id= "fm_x_path" value="<?php echo $image->path->UploadMaxFileSize ?>">
 </div>
@@ -231,6 +193,106 @@ fimageadd.createAutoSuggest({"id":"x__userid","forceSelect":false});
 <input type="hidden" data-table="image" data-field="x_description" name="x_description" id="x_description" value="<?php echo HtmlEncode($image->description->FormValue) ?>">
 <?php } ?>
 <?php echo $image->description->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($image->uuid->Visible) { // uuid ?>
+	<div id="r_uuid" class="form-group row">
+		<label id="elh_image_uuid" for="x_uuid" class="<?php echo $image_add->LeftColumnClass ?>"><?php echo $image->uuid->caption() ?><?php echo ($image->uuid->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
+		<div class="<?php echo $image_add->RightColumnClass ?>"><div<?php echo $image->uuid->cellAttributes() ?>>
+<?php if (!$image->isConfirm()) { ?>
+<span id="el_image_uuid">
+<input type="text" data-table="image" data-field="x_uuid" name="x_uuid" id="x_uuid" size="30" maxlength="50" placeholder="<?php echo HtmlEncode($image->uuid->getPlaceHolder()) ?>" value="<?php echo $image->uuid->EditValue ?>"<?php echo $image->uuid->editAttributes() ?>>
+</span>
+<?php } else { ?>
+<span id="el_image_uuid">
+<span<?php echo $image->uuid->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($image->uuid->ViewValue) ?>"></span>
+</span>
+<input type="hidden" data-table="image" data-field="x_uuid" name="x_uuid" id="x_uuid" value="<?php echo HtmlEncode($image->uuid->FormValue) ?>">
+<?php } ?>
+<?php echo $image->uuid->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($image->user_id->Visible) { // user_id ?>
+	<div id="r_user_id" class="form-group row">
+		<label id="elh_image_user_id" for="x_user_id" class="<?php echo $image_add->LeftColumnClass ?>"><?php echo $image->user_id->caption() ?><?php echo ($image->user_id->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
+		<div class="<?php echo $image_add->RightColumnClass ?>"><div<?php echo $image->user_id->cellAttributes() ?>>
+<?php if (!$image->isConfirm()) { ?>
+<span id="el_image_user_id">
+<input type="text" data-table="image" data-field="x_user_id" name="x_user_id" id="x_user_id" size="30" placeholder="<?php echo HtmlEncode($image->user_id->getPlaceHolder()) ?>" value="<?php echo $image->user_id->EditValue ?>"<?php echo $image->user_id->editAttributes() ?>>
+</span>
+<?php } else { ?>
+<span id="el_image_user_id">
+<span<?php echo $image->user_id->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($image->user_id->ViewValue) ?>"></span>
+</span>
+<input type="hidden" data-table="image" data-field="x_user_id" name="x_user_id" id="x_user_id" value="<?php echo HtmlEncode($image->user_id->FormValue) ?>">
+<?php } ?>
+<?php echo $image->user_id->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($image->confirmed->Visible) { // confirmed ?>
+	<div id="r_confirmed" class="form-group row">
+		<label id="elh_image_confirmed" for="x_confirmed" class="<?php echo $image_add->LeftColumnClass ?>"><?php echo $image->confirmed->caption() ?><?php echo ($image->confirmed->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
+		<div class="<?php echo $image_add->RightColumnClass ?>"><div<?php echo $image->confirmed->cellAttributes() ?>>
+<?php if (!$image->isConfirm()) { ?>
+<span id="el_image_confirmed">
+<input type="text" data-table="image" data-field="x_confirmed" name="x_confirmed" id="x_confirmed" size="30" placeholder="<?php echo HtmlEncode($image->confirmed->getPlaceHolder()) ?>" value="<?php echo $image->confirmed->EditValue ?>"<?php echo $image->confirmed->editAttributes() ?>>
+</span>
+<?php } else { ?>
+<span id="el_image_confirmed">
+<span<?php echo $image->confirmed->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($image->confirmed->ViewValue) ?>"></span>
+</span>
+<input type="hidden" data-table="image" data-field="x_confirmed" name="x_confirmed" id="x_confirmed" value="<?php echo HtmlEncode($image->confirmed->FormValue) ?>">
+<?php } ?>
+<?php echo $image->confirmed->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($image->createdAt->Visible) { // createdAt ?>
+	<div id="r_createdAt" class="form-group row">
+		<label id="elh_image_createdAt" for="x_createdAt" class="<?php echo $image_add->LeftColumnClass ?>"><?php echo $image->createdAt->caption() ?><?php echo ($image->createdAt->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
+		<div class="<?php echo $image_add->RightColumnClass ?>"><div<?php echo $image->createdAt->cellAttributes() ?>>
+<?php if (!$image->isConfirm()) { ?>
+<span id="el_image_createdAt">
+<input type="text" data-table="image" data-field="x_createdAt" name="x_createdAt" id="x_createdAt" placeholder="<?php echo HtmlEncode($image->createdAt->getPlaceHolder()) ?>" value="<?php echo $image->createdAt->EditValue ?>"<?php echo $image->createdAt->editAttributes() ?>>
+<?php if (!$image->createdAt->ReadOnly && !$image->createdAt->Disabled && !isset($image->createdAt->EditAttrs["readonly"]) && !isset($image->createdAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("fimageadd", "x_createdAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<?php } else { ?>
+<span id="el_image_createdAt">
+<span<?php echo $image->createdAt->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($image->createdAt->ViewValue) ?>"></span>
+</span>
+<input type="hidden" data-table="image" data-field="x_createdAt" name="x_createdAt" id="x_createdAt" value="<?php echo HtmlEncode($image->createdAt->FormValue) ?>">
+<?php } ?>
+<?php echo $image->createdAt->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($image->updatedAt->Visible) { // updatedAt ?>
+	<div id="r_updatedAt" class="form-group row">
+		<label id="elh_image_updatedAt" for="x_updatedAt" class="<?php echo $image_add->LeftColumnClass ?>"><?php echo $image->updatedAt->caption() ?><?php echo ($image->updatedAt->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
+		<div class="<?php echo $image_add->RightColumnClass ?>"><div<?php echo $image->updatedAt->cellAttributes() ?>>
+<?php if (!$image->isConfirm()) { ?>
+<span id="el_image_updatedAt">
+<input type="text" data-table="image" data-field="x_updatedAt" name="x_updatedAt" id="x_updatedAt" placeholder="<?php echo HtmlEncode($image->updatedAt->getPlaceHolder()) ?>" value="<?php echo $image->updatedAt->EditValue ?>"<?php echo $image->updatedAt->editAttributes() ?>>
+<?php if (!$image->updatedAt->ReadOnly && !$image->updatedAt->Disabled && !isset($image->updatedAt->EditAttrs["readonly"]) && !isset($image->updatedAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("fimageadd", "x_updatedAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<?php } else { ?>
+<span id="el_image_updatedAt">
+<span<?php echo $image->updatedAt->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($image->updatedAt->ViewValue) ?>"></span>
+</span>
+<input type="hidden" data-table="image" data-field="x_updatedAt" name="x_updatedAt" id="x_updatedAt" value="<?php echo HtmlEncode($image->updatedAt->FormValue) ?>">
+<?php } ?>
+<?php echo $image->updatedAt->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
 </div><!-- /page* -->

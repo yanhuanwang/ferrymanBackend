@@ -59,19 +59,6 @@ fimagelist.validate = function() {
 		var checkrow = (gridinsert) ? !this.emptyRow(infix) : true;
 		if (checkrow) {
 			addcnt++;
-		<?php if ($image_list->name->Required) { ?>
-			elm = this.getElements("x" + infix + "_name");
-			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
-				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $image->name->caption(), $image->name->RequiredErrorMessage)) ?>");
-		<?php } ?>
-		<?php if ($image_list->_userid->Required) { ?>
-			elm = this.getElements("x" + infix + "__userid");
-			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
-				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $image->_userid->caption(), $image->_userid->RequiredErrorMessage)) ?>");
-		<?php } ?>
-			elm = this.getElements("x" + infix + "__userid");
-			if (elm && !ew.checkInteger(elm.value))
-				return this.onError(elm, "<?php echo JsEncode($image->_userid->errorMessage()) ?>");
 		<?php if ($image_list->path->Required) { ?>
 			felm = this.getElements("x" + infix + "_path");
 			elm = this.getElements("fn_x" + infix + "_path");
@@ -83,6 +70,43 @@ fimagelist.validate = function() {
 			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
 				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $image->description->caption(), $image->description->RequiredErrorMessage)) ?>");
 		<?php } ?>
+		<?php if ($image_list->uuid->Required) { ?>
+			elm = this.getElements("x" + infix + "_uuid");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $image->uuid->caption(), $image->uuid->RequiredErrorMessage)) ?>");
+		<?php } ?>
+		<?php if ($image_list->user_id->Required) { ?>
+			elm = this.getElements("x" + infix + "_user_id");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $image->user_id->caption(), $image->user_id->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_user_id");
+			if (elm && !ew.checkInteger(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($image->user_id->errorMessage()) ?>");
+		<?php if ($image_list->confirmed->Required) { ?>
+			elm = this.getElements("x" + infix + "_confirmed");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $image->confirmed->caption(), $image->confirmed->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_confirmed");
+			if (elm && !ew.checkInteger(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($image->confirmed->errorMessage()) ?>");
+		<?php if ($image_list->createdAt->Required) { ?>
+			elm = this.getElements("x" + infix + "_createdAt");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $image->createdAt->caption(), $image->createdAt->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_createdAt");
+			if (elm && !ew.checkDateDef(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($image->createdAt->errorMessage()) ?>");
+		<?php if ($image_list->updatedAt->Required) { ?>
+			elm = this.getElements("x" + infix + "_updatedAt");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $image->updatedAt->caption(), $image->updatedAt->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_updatedAt");
+			if (elm && !ew.checkDateDef(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($image->updatedAt->errorMessage()) ?>");
 
 			// Fire Form_CustomValidate event
 			if (!this.Form_CustomValidate(fobj))
@@ -99,10 +123,13 @@ fimagelist.validate = function() {
 // Check empty row
 fimagelist.emptyRow = function(infix) {
 	var fobj = this._form;
-	if (ew.valueChanged(fobj, infix, "name", false)) return false;
-	if (ew.valueChanged(fobj, infix, "_userid", false)) return false;
 	if (ew.valueChanged(fobj, infix, "path", false)) return false;
 	if (ew.valueChanged(fobj, infix, "description", false)) return false;
+	if (ew.valueChanged(fobj, infix, "uuid", false)) return false;
+	if (ew.valueChanged(fobj, infix, "user_id", false)) return false;
+	if (ew.valueChanged(fobj, infix, "confirmed", false)) return false;
+	if (ew.valueChanged(fobj, infix, "createdAt", false)) return false;
+	if (ew.valueChanged(fobj, infix, "updatedAt", false)) return false;
 	return true;
 }
 
@@ -117,11 +144,8 @@ fimagelist.Form_CustomValidate = function(fobj) { // DO NOT CHANGE THIS LINE!
 fimagelist.validateRequired = <?php echo json_encode(CLIENT_VALIDATE) ?>;
 
 // Dynamic selection lists
-fimagelist.lists["x__userid"] = <?php echo $image_list->_userid->Lookup->toClientList() ?>;
-fimagelist.lists["x__userid"].options = <?php echo JsonEncode($image_list->_userid->lookupOptions()) ?>;
-fimagelist.autoSuggests["x__userid"] = <?php echo json_encode(["data" => "ajax=autosuggest"]) ?>;
-
 // Form object for search
+
 var fimagelistsrch = currentSearchForm = new ew.Form("fimagelistsrch");
 
 // Filters
@@ -148,15 +172,6 @@ fimagelistsrch.filterList = <?php echo $image_list->getFilterList() ?>;
 <?php } ?>
 <div class="clearfix"></div>
 </div>
-<?php } ?>
-<?php if (!$image->isExport() || EXPORT_MASTER_RECORD && $image->isExport("print")) { ?>
-<?php
-if ($image_list->DbMasterFilter <> "" && $image->getCurrentMasterTable() == "user") {
-	if ($image_list->MasterRecordExists) {
-		include_once "usermaster.php";
-	}
-}
-?>
 <?php } ?>
 <?php
 $image_list->renderOtherOptions();
@@ -254,10 +269,6 @@ $image_list->showMessage();
 <input type="hidden" name="<?php echo TOKEN_NAME ?>" value="<?php echo $image_list->Token ?>">
 <?php } ?>
 <input type="hidden" name="t" value="image">
-<?php if ($image->getCurrentMasterTable() == "user" && $image->CurrentAction) { ?>
-<input type="hidden" name="<?php echo TABLE_SHOW_MASTER ?>" value="user">
-<input type="hidden" name="fk_id" value="<?php echo $image->_userid->getSessionValue() ?>">
-<?php } ?>
 <div id="gmp_image" class="<?php if (IsResponsiveLayout()) { ?>table-responsive <?php } ?>card-body ew-grid-middle-panel">
 <?php if ($image_list->TotalRecs > 0 || $image->isAdd() || $image->isCopy() || $image->isGridEdit()) { ?>
 <table id="tbl_imagelist" class="table ew-table"><!-- .ew-table ##-->
@@ -274,24 +285,6 @@ $image_list->renderListOptions();
 // Render list options (header, left)
 $image_list->ListOptions->render("header", "left");
 ?>
-<?php if ($image->name->Visible) { // name ?>
-	<?php if ($image->sortUrl($image->name) == "") { ?>
-		<th data-name="name" class="<?php echo $image->name->headerCellClass() ?>"><div id="elh_image_name" class="image_name"><div class="ew-table-header-caption"><?php echo $image->name->caption() ?></div></div></th>
-	<?php } else { ?>
-		<th data-name="name" class="<?php echo $image->name->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $image->SortUrl($image->name) ?>',1);"><div id="elh_image_name" class="image_name">
-			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $image->name->caption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ew-table-header-sort"><?php if ($image->name->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($image->name->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
-		</div></div></th>
-	<?php } ?>
-<?php } ?>
-<?php if ($image->_userid->Visible) { // userid ?>
-	<?php if ($image->sortUrl($image->_userid) == "") { ?>
-		<th data-name="_userid" class="<?php echo $image->_userid->headerCellClass() ?>"><div id="elh_image__userid" class="image__userid"><div class="ew-table-header-caption"><?php echo $image->_userid->caption() ?></div></div></th>
-	<?php } else { ?>
-		<th data-name="_userid" class="<?php echo $image->_userid->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $image->SortUrl($image->_userid) ?>',1);"><div id="elh_image__userid" class="image__userid">
-			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $image->_userid->caption() ?></span><span class="ew-table-header-sort"><?php if ($image->_userid->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($image->_userid->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
-		</div></div></th>
-	<?php } ?>
-<?php } ?>
 <?php if ($image->path->Visible) { // path ?>
 	<?php if ($image->sortUrl($image->path) == "") { ?>
 		<th data-name="path" class="<?php echo $image->path->headerCellClass() ?>"><div id="elh_image_path" class="image_path"><div class="ew-table-header-caption"><?php echo $image->path->caption() ?></div></div></th>
@@ -307,6 +300,51 @@ $image_list->ListOptions->render("header", "left");
 	<?php } else { ?>
 		<th data-name="description" class="<?php echo $image->description->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $image->SortUrl($image->description) ?>',1);"><div id="elh_image_description" class="image_description">
 			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $image->description->caption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ew-table-header-sort"><?php if ($image->description->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($image->description->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
+		</div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($image->uuid->Visible) { // uuid ?>
+	<?php if ($image->sortUrl($image->uuid) == "") { ?>
+		<th data-name="uuid" class="<?php echo $image->uuid->headerCellClass() ?>"><div id="elh_image_uuid" class="image_uuid"><div class="ew-table-header-caption"><?php echo $image->uuid->caption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="uuid" class="<?php echo $image->uuid->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $image->SortUrl($image->uuid) ?>',1);"><div id="elh_image_uuid" class="image_uuid">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $image->uuid->caption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ew-table-header-sort"><?php if ($image->uuid->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($image->uuid->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
+		</div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($image->user_id->Visible) { // user_id ?>
+	<?php if ($image->sortUrl($image->user_id) == "") { ?>
+		<th data-name="user_id" class="<?php echo $image->user_id->headerCellClass() ?>"><div id="elh_image_user_id" class="image_user_id"><div class="ew-table-header-caption"><?php echo $image->user_id->caption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="user_id" class="<?php echo $image->user_id->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $image->SortUrl($image->user_id) ?>',1);"><div id="elh_image_user_id" class="image_user_id">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $image->user_id->caption() ?></span><span class="ew-table-header-sort"><?php if ($image->user_id->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($image->user_id->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
+		</div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($image->confirmed->Visible) { // confirmed ?>
+	<?php if ($image->sortUrl($image->confirmed) == "") { ?>
+		<th data-name="confirmed" class="<?php echo $image->confirmed->headerCellClass() ?>"><div id="elh_image_confirmed" class="image_confirmed"><div class="ew-table-header-caption"><?php echo $image->confirmed->caption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="confirmed" class="<?php echo $image->confirmed->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $image->SortUrl($image->confirmed) ?>',1);"><div id="elh_image_confirmed" class="image_confirmed">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $image->confirmed->caption() ?></span><span class="ew-table-header-sort"><?php if ($image->confirmed->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($image->confirmed->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
+		</div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($image->createdAt->Visible) { // createdAt ?>
+	<?php if ($image->sortUrl($image->createdAt) == "") { ?>
+		<th data-name="createdAt" class="<?php echo $image->createdAt->headerCellClass() ?>"><div id="elh_image_createdAt" class="image_createdAt"><div class="ew-table-header-caption"><?php echo $image->createdAt->caption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="createdAt" class="<?php echo $image->createdAt->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $image->SortUrl($image->createdAt) ?>',1);"><div id="elh_image_createdAt" class="image_createdAt">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $image->createdAt->caption() ?></span><span class="ew-table-header-sort"><?php if ($image->createdAt->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($image->createdAt->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
+		</div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($image->updatedAt->Visible) { // updatedAt ?>
+	<?php if ($image->sortUrl($image->updatedAt) == "") { ?>
+		<th data-name="updatedAt" class="<?php echo $image->updatedAt->headerCellClass() ?>"><div id="elh_image_updatedAt" class="image_updatedAt"><div class="ew-table-header-caption"><?php echo $image->updatedAt->caption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="updatedAt" class="<?php echo $image->updatedAt->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $image->SortUrl($image->updatedAt) ?>',1);"><div id="elh_image_updatedAt" class="image_updatedAt">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $image->updatedAt->caption() ?></span><span class="ew-table-header-sort"><?php if ($image->updatedAt->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($image->updatedAt->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
 		</div></div></th>
 	<?php } ?>
 <?php } ?>
@@ -347,41 +385,6 @@ $image_list->ListOptions->render("header", "right");
 // Render list options (body, left)
 $image_list->ListOptions->render("body", "left", $image_list->RowCnt);
 ?>
-	<?php if ($image->name->Visible) { // name ?>
-		<td data-name="name">
-<span id="el<?php echo $image_list->RowCnt ?>_image_name" class="form-group image_name">
-<input type="text" data-table="image" data-field="x_name" name="x<?php echo $image_list->RowIndex ?>_name" id="x<?php echo $image_list->RowIndex ?>_name" size="30" maxlength="100" placeholder="<?php echo HtmlEncode($image->name->getPlaceHolder()) ?>" value="<?php echo $image->name->EditValue ?>"<?php echo $image->name->editAttributes() ?>>
-</span>
-<input type="hidden" data-table="image" data-field="x_name" name="o<?php echo $image_list->RowIndex ?>_name" id="o<?php echo $image_list->RowIndex ?>_name" value="<?php echo HtmlEncode($image->name->OldValue) ?>">
-</td>
-	<?php } ?>
-	<?php if ($image->_userid->Visible) { // userid ?>
-		<td data-name="_userid">
-<?php if ($image->_userid->getSessionValue() <> "") { ?>
-<span id="el<?php echo $image_list->RowCnt ?>_image__userid" class="form-group image__userid">
-<span<?php echo $image->_userid->viewAttributes() ?>>
-<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($image->_userid->ViewValue) ?>"></span>
-</span>
-<input type="hidden" id="x<?php echo $image_list->RowIndex ?>__userid" name="x<?php echo $image_list->RowIndex ?>__userid" value="<?php echo HtmlEncode($image->_userid->CurrentValue) ?>">
-<?php } else { ?>
-<span id="el<?php echo $image_list->RowCnt ?>_image__userid" class="form-group image__userid">
-<?php
-$wrkonchange = "" . trim(@$image->_userid->EditAttrs["onchange"]);
-if (trim($wrkonchange) <> "") $wrkonchange = " onchange=\"" . JsEncode($wrkonchange) . "\"";
-$image->_userid->EditAttrs["onchange"] = "";
-?>
-<span id="as_x<?php echo $image_list->RowIndex ?>__userid" class="text-nowrap" style="z-index: <?php echo (9000 - $image_list->RowCnt * 10) ?>">
-	<input type="text" class="form-control" name="sv_x<?php echo $image_list->RowIndex ?>__userid" id="sv_x<?php echo $image_list->RowIndex ?>__userid" value="<?php echo RemoveHtml($image->_userid->EditValue) ?>" size="30" placeholder="<?php echo HtmlEncode($image->_userid->getPlaceHolder()) ?>" data-placeholder="<?php echo HtmlEncode($image->_userid->getPlaceHolder()) ?>"<?php echo $image->_userid->editAttributes() ?>>
-</span>
-<input type="hidden" data-table="image" data-field="x__userid" data-value-separator="<?php echo $image->_userid->displayValueSeparatorAttribute() ?>" name="x<?php echo $image_list->RowIndex ?>__userid" id="x<?php echo $image_list->RowIndex ?>__userid" value="<?php echo HtmlEncode($image->_userid->CurrentValue) ?>"<?php echo $wrkonchange ?>>
-<script>
-fimagelist.createAutoSuggest({"id":"x<?php echo $image_list->RowIndex ?>__userid","forceSelect":false});
-</script>
-</span>
-<?php } ?>
-<input type="hidden" data-table="image" data-field="x__userid" name="o<?php echo $image_list->RowIndex ?>__userid" id="o<?php echo $image_list->RowIndex ?>__userid" value="<?php echo HtmlEncode($image->_userid->OldValue) ?>">
-</td>
-	<?php } ?>
 	<?php if ($image->path->Visible) { // path ?>
 		<td data-name="path">
 <span id="el<?php echo $image_list->RowCnt ?>_image_path" class="form-group image_path">
@@ -392,7 +395,7 @@ fimagelist.createAutoSuggest({"id":"x<?php echo $image_list->RowIndex ?>__userid
 </span>
 <input type="hidden" name="fn_x<?php echo $image_list->RowIndex ?>_path" id= "fn_x<?php echo $image_list->RowIndex ?>_path" value="<?php echo $image->path->Upload->FileName ?>">
 <input type="hidden" name="fa_x<?php echo $image_list->RowIndex ?>_path" id= "fa_x<?php echo $image_list->RowIndex ?>_path" value="0">
-<input type="hidden" name="fs_x<?php echo $image_list->RowIndex ?>_path" id= "fs_x<?php echo $image_list->RowIndex ?>_path" value="100">
+<input type="hidden" name="fs_x<?php echo $image_list->RowIndex ?>_path" id= "fs_x<?php echo $image_list->RowIndex ?>_path" value="256">
 <input type="hidden" name="fx_x<?php echo $image_list->RowIndex ?>_path" id= "fx_x<?php echo $image_list->RowIndex ?>_path" value="<?php echo $image->path->UploadAllowedFileExt ?>">
 <input type="hidden" name="fm_x<?php echo $image_list->RowIndex ?>_path" id= "fm_x<?php echo $image_list->RowIndex ?>_path" value="<?php echo $image->path->UploadMaxFileSize ?>">
 </div>
@@ -407,6 +410,56 @@ fimagelist.createAutoSuggest({"id":"x<?php echo $image_list->RowIndex ?>__userid
 <input type="text" data-table="image" data-field="x_description" name="x<?php echo $image_list->RowIndex ?>_description" id="x<?php echo $image_list->RowIndex ?>_description" size="30" maxlength="100" placeholder="<?php echo HtmlEncode($image->description->getPlaceHolder()) ?>" value="<?php echo $image->description->EditValue ?>"<?php echo $image->description->editAttributes() ?>>
 </span>
 <input type="hidden" data-table="image" data-field="x_description" name="o<?php echo $image_list->RowIndex ?>_description" id="o<?php echo $image_list->RowIndex ?>_description" value="<?php echo HtmlEncode($image->description->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($image->uuid->Visible) { // uuid ?>
+		<td data-name="uuid">
+<span id="el<?php echo $image_list->RowCnt ?>_image_uuid" class="form-group image_uuid">
+<input type="text" data-table="image" data-field="x_uuid" name="x<?php echo $image_list->RowIndex ?>_uuid" id="x<?php echo $image_list->RowIndex ?>_uuid" size="30" maxlength="50" placeholder="<?php echo HtmlEncode($image->uuid->getPlaceHolder()) ?>" value="<?php echo $image->uuid->EditValue ?>"<?php echo $image->uuid->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="image" data-field="x_uuid" name="o<?php echo $image_list->RowIndex ?>_uuid" id="o<?php echo $image_list->RowIndex ?>_uuid" value="<?php echo HtmlEncode($image->uuid->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($image->user_id->Visible) { // user_id ?>
+		<td data-name="user_id">
+<span id="el<?php echo $image_list->RowCnt ?>_image_user_id" class="form-group image_user_id">
+<input type="text" data-table="image" data-field="x_user_id" name="x<?php echo $image_list->RowIndex ?>_user_id" id="x<?php echo $image_list->RowIndex ?>_user_id" size="30" placeholder="<?php echo HtmlEncode($image->user_id->getPlaceHolder()) ?>" value="<?php echo $image->user_id->EditValue ?>"<?php echo $image->user_id->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="image" data-field="x_user_id" name="o<?php echo $image_list->RowIndex ?>_user_id" id="o<?php echo $image_list->RowIndex ?>_user_id" value="<?php echo HtmlEncode($image->user_id->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($image->confirmed->Visible) { // confirmed ?>
+		<td data-name="confirmed">
+<span id="el<?php echo $image_list->RowCnt ?>_image_confirmed" class="form-group image_confirmed">
+<input type="text" data-table="image" data-field="x_confirmed" name="x<?php echo $image_list->RowIndex ?>_confirmed" id="x<?php echo $image_list->RowIndex ?>_confirmed" size="30" placeholder="<?php echo HtmlEncode($image->confirmed->getPlaceHolder()) ?>" value="<?php echo $image->confirmed->EditValue ?>"<?php echo $image->confirmed->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="image" data-field="x_confirmed" name="o<?php echo $image_list->RowIndex ?>_confirmed" id="o<?php echo $image_list->RowIndex ?>_confirmed" value="<?php echo HtmlEncode($image->confirmed->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($image->createdAt->Visible) { // createdAt ?>
+		<td data-name="createdAt">
+<span id="el<?php echo $image_list->RowCnt ?>_image_createdAt" class="form-group image_createdAt">
+<input type="text" data-table="image" data-field="x_createdAt" name="x<?php echo $image_list->RowIndex ?>_createdAt" id="x<?php echo $image_list->RowIndex ?>_createdAt" placeholder="<?php echo HtmlEncode($image->createdAt->getPlaceHolder()) ?>" value="<?php echo $image->createdAt->EditValue ?>"<?php echo $image->createdAt->editAttributes() ?>>
+<?php if (!$image->createdAt->ReadOnly && !$image->createdAt->Disabled && !isset($image->createdAt->EditAttrs["readonly"]) && !isset($image->createdAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("fimagelist", "x<?php echo $image_list->RowIndex ?>_createdAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<input type="hidden" data-table="image" data-field="x_createdAt" name="o<?php echo $image_list->RowIndex ?>_createdAt" id="o<?php echo $image_list->RowIndex ?>_createdAt" value="<?php echo HtmlEncode($image->createdAt->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($image->updatedAt->Visible) { // updatedAt ?>
+		<td data-name="updatedAt">
+<span id="el<?php echo $image_list->RowCnt ?>_image_updatedAt" class="form-group image_updatedAt">
+<input type="text" data-table="image" data-field="x_updatedAt" name="x<?php echo $image_list->RowIndex ?>_updatedAt" id="x<?php echo $image_list->RowIndex ?>_updatedAt" placeholder="<?php echo HtmlEncode($image->updatedAt->getPlaceHolder()) ?>" value="<?php echo $image->updatedAt->EditValue ?>"<?php echo $image->updatedAt->editAttributes() ?>>
+<?php if (!$image->updatedAt->ReadOnly && !$image->updatedAt->Disabled && !isset($image->updatedAt->EditAttrs["readonly"]) && !isset($image->updatedAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("fimagelist", "x<?php echo $image_list->RowIndex ?>_updatedAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<input type="hidden" data-table="image" data-field="x_updatedAt" name="o<?php echo $image_list->RowIndex ?>_updatedAt" id="o<?php echo $image_list->RowIndex ?>_updatedAt" value="<?php echo HtmlEncode($image->updatedAt->OldValue) ?>">
 </td>
 	<?php } ?>
 <?php
@@ -533,93 +586,6 @@ while ($image_list->RecCnt < $image_list->StopRec) {
 // Render list options (body, left)
 $image_list->ListOptions->render("body", "left", $image_list->RowCnt);
 ?>
-	<?php if ($image->name->Visible) { // name ?>
-		<td data-name="name"<?php echo $image->name->cellAttributes() ?>>
-<?php if ($image->RowType == ROWTYPE_ADD) { // Add record ?>
-<span id="el<?php echo $image_list->RowCnt ?>_image_name" class="form-group image_name">
-<input type="text" data-table="image" data-field="x_name" name="x<?php echo $image_list->RowIndex ?>_name" id="x<?php echo $image_list->RowIndex ?>_name" size="30" maxlength="100" placeholder="<?php echo HtmlEncode($image->name->getPlaceHolder()) ?>" value="<?php echo $image->name->EditValue ?>"<?php echo $image->name->editAttributes() ?>>
-</span>
-<input type="hidden" data-table="image" data-field="x_name" name="o<?php echo $image_list->RowIndex ?>_name" id="o<?php echo $image_list->RowIndex ?>_name" value="<?php echo HtmlEncode($image->name->OldValue) ?>">
-<?php } ?>
-<?php if ($image->RowType == ROWTYPE_EDIT) { // Edit record ?>
-<span id="el<?php echo $image_list->RowCnt ?>_image_name" class="form-group image_name">
-<input type="text" data-table="image" data-field="x_name" name="x<?php echo $image_list->RowIndex ?>_name" id="x<?php echo $image_list->RowIndex ?>_name" size="30" maxlength="100" placeholder="<?php echo HtmlEncode($image->name->getPlaceHolder()) ?>" value="<?php echo $image->name->EditValue ?>"<?php echo $image->name->editAttributes() ?>>
-</span>
-<?php } ?>
-<?php if ($image->RowType == ROWTYPE_VIEW) { // View record ?>
-<span id="el<?php echo $image_list->RowCnt ?>_image_name" class="image_name">
-<span<?php echo $image->name->viewAttributes() ?>>
-<?php echo $image->name->getViewValue() ?></span>
-</span>
-<?php } ?>
-</td>
-	<?php } ?>
-<?php if ($image->RowType == ROWTYPE_ADD) { // Add record ?>
-<input type="hidden" data-table="image" data-field="x_id" name="x<?php echo $image_list->RowIndex ?>_id" id="x<?php echo $image_list->RowIndex ?>_id" value="<?php echo HtmlEncode($image->id->CurrentValue) ?>">
-<input type="hidden" data-table="image" data-field="x_id" name="o<?php echo $image_list->RowIndex ?>_id" id="o<?php echo $image_list->RowIndex ?>_id" value="<?php echo HtmlEncode($image->id->OldValue) ?>">
-<?php } ?>
-<?php if ($image->RowType == ROWTYPE_EDIT || $image->CurrentMode == "edit") { ?>
-<input type="hidden" data-table="image" data-field="x_id" name="x<?php echo $image_list->RowIndex ?>_id" id="x<?php echo $image_list->RowIndex ?>_id" value="<?php echo HtmlEncode($image->id->CurrentValue) ?>">
-<?php } ?>
-	<?php if ($image->_userid->Visible) { // userid ?>
-		<td data-name="_userid"<?php echo $image->_userid->cellAttributes() ?>>
-<?php if ($image->RowType == ROWTYPE_ADD) { // Add record ?>
-<?php if ($image->_userid->getSessionValue() <> "") { ?>
-<span id="el<?php echo $image_list->RowCnt ?>_image__userid" class="form-group image__userid">
-<span<?php echo $image->_userid->viewAttributes() ?>>
-<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($image->_userid->ViewValue) ?>"></span>
-</span>
-<input type="hidden" id="x<?php echo $image_list->RowIndex ?>__userid" name="x<?php echo $image_list->RowIndex ?>__userid" value="<?php echo HtmlEncode($image->_userid->CurrentValue) ?>">
-<?php } else { ?>
-<span id="el<?php echo $image_list->RowCnt ?>_image__userid" class="form-group image__userid">
-<?php
-$wrkonchange = "" . trim(@$image->_userid->EditAttrs["onchange"]);
-if (trim($wrkonchange) <> "") $wrkonchange = " onchange=\"" . JsEncode($wrkonchange) . "\"";
-$image->_userid->EditAttrs["onchange"] = "";
-?>
-<span id="as_x<?php echo $image_list->RowIndex ?>__userid" class="text-nowrap" style="z-index: <?php echo (9000 - $image_list->RowCnt * 10) ?>">
-	<input type="text" class="form-control" name="sv_x<?php echo $image_list->RowIndex ?>__userid" id="sv_x<?php echo $image_list->RowIndex ?>__userid" value="<?php echo RemoveHtml($image->_userid->EditValue) ?>" size="30" placeholder="<?php echo HtmlEncode($image->_userid->getPlaceHolder()) ?>" data-placeholder="<?php echo HtmlEncode($image->_userid->getPlaceHolder()) ?>"<?php echo $image->_userid->editAttributes() ?>>
-</span>
-<input type="hidden" data-table="image" data-field="x__userid" data-value-separator="<?php echo $image->_userid->displayValueSeparatorAttribute() ?>" name="x<?php echo $image_list->RowIndex ?>__userid" id="x<?php echo $image_list->RowIndex ?>__userid" value="<?php echo HtmlEncode($image->_userid->CurrentValue) ?>"<?php echo $wrkonchange ?>>
-<script>
-fimagelist.createAutoSuggest({"id":"x<?php echo $image_list->RowIndex ?>__userid","forceSelect":false});
-</script>
-</span>
-<?php } ?>
-<input type="hidden" data-table="image" data-field="x__userid" name="o<?php echo $image_list->RowIndex ?>__userid" id="o<?php echo $image_list->RowIndex ?>__userid" value="<?php echo HtmlEncode($image->_userid->OldValue) ?>">
-<?php } ?>
-<?php if ($image->RowType == ROWTYPE_EDIT) { // Edit record ?>
-<?php if ($image->_userid->getSessionValue() <> "") { ?>
-<span id="el<?php echo $image_list->RowCnt ?>_image__userid" class="form-group image__userid">
-<span<?php echo $image->_userid->viewAttributes() ?>>
-<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($image->_userid->ViewValue) ?>"></span>
-</span>
-<input type="hidden" id="x<?php echo $image_list->RowIndex ?>__userid" name="x<?php echo $image_list->RowIndex ?>__userid" value="<?php echo HtmlEncode($image->_userid->CurrentValue) ?>">
-<?php } else { ?>
-<span id="el<?php echo $image_list->RowCnt ?>_image__userid" class="form-group image__userid">
-<?php
-$wrkonchange = "" . trim(@$image->_userid->EditAttrs["onchange"]);
-if (trim($wrkonchange) <> "") $wrkonchange = " onchange=\"" . JsEncode($wrkonchange) . "\"";
-$image->_userid->EditAttrs["onchange"] = "";
-?>
-<span id="as_x<?php echo $image_list->RowIndex ?>__userid" class="text-nowrap" style="z-index: <?php echo (9000 - $image_list->RowCnt * 10) ?>">
-	<input type="text" class="form-control" name="sv_x<?php echo $image_list->RowIndex ?>__userid" id="sv_x<?php echo $image_list->RowIndex ?>__userid" value="<?php echo RemoveHtml($image->_userid->EditValue) ?>" size="30" placeholder="<?php echo HtmlEncode($image->_userid->getPlaceHolder()) ?>" data-placeholder="<?php echo HtmlEncode($image->_userid->getPlaceHolder()) ?>"<?php echo $image->_userid->editAttributes() ?>>
-</span>
-<input type="hidden" data-table="image" data-field="x__userid" data-value-separator="<?php echo $image->_userid->displayValueSeparatorAttribute() ?>" name="x<?php echo $image_list->RowIndex ?>__userid" id="x<?php echo $image_list->RowIndex ?>__userid" value="<?php echo HtmlEncode($image->_userid->CurrentValue) ?>"<?php echo $wrkonchange ?>>
-<script>
-fimagelist.createAutoSuggest({"id":"x<?php echo $image_list->RowIndex ?>__userid","forceSelect":false});
-</script>
-</span>
-<?php } ?>
-<?php } ?>
-<?php if ($image->RowType == ROWTYPE_VIEW) { // View record ?>
-<span id="el<?php echo $image_list->RowCnt ?>_image__userid" class="image__userid">
-<span<?php echo $image->_userid->viewAttributes() ?>>
-<?php echo $image->_userid->getViewValue() ?></span>
-</span>
-<?php } ?>
-</td>
-	<?php } ?>
 	<?php if ($image->path->Visible) { // path ?>
 		<td data-name="path"<?php echo $image->path->cellAttributes() ?>>
 <?php if ($image->RowType == ROWTYPE_ADD) { // Add record ?>
@@ -631,7 +597,7 @@ fimagelist.createAutoSuggest({"id":"x<?php echo $image_list->RowIndex ?>__userid
 </span>
 <input type="hidden" name="fn_x<?php echo $image_list->RowIndex ?>_path" id= "fn_x<?php echo $image_list->RowIndex ?>_path" value="<?php echo $image->path->Upload->FileName ?>">
 <input type="hidden" name="fa_x<?php echo $image_list->RowIndex ?>_path" id= "fa_x<?php echo $image_list->RowIndex ?>_path" value="0">
-<input type="hidden" name="fs_x<?php echo $image_list->RowIndex ?>_path" id= "fs_x<?php echo $image_list->RowIndex ?>_path" value="100">
+<input type="hidden" name="fs_x<?php echo $image_list->RowIndex ?>_path" id= "fs_x<?php echo $image_list->RowIndex ?>_path" value="256">
 <input type="hidden" name="fx_x<?php echo $image_list->RowIndex ?>_path" id= "fx_x<?php echo $image_list->RowIndex ?>_path" value="<?php echo $image->path->UploadAllowedFileExt ?>">
 <input type="hidden" name="fm_x<?php echo $image_list->RowIndex ?>_path" id= "fm_x<?php echo $image_list->RowIndex ?>_path" value="<?php echo $image->path->UploadMaxFileSize ?>">
 </div>
@@ -652,7 +618,7 @@ fimagelist.createAutoSuggest({"id":"x<?php echo $image_list->RowIndex ?>__userid
 <?php } else { ?>
 <input type="hidden" name="fa_x<?php echo $image_list->RowIndex ?>_path" id= "fa_x<?php echo $image_list->RowIndex ?>_path" value="1">
 <?php } ?>
-<input type="hidden" name="fs_x<?php echo $image_list->RowIndex ?>_path" id= "fs_x<?php echo $image_list->RowIndex ?>_path" value="100">
+<input type="hidden" name="fs_x<?php echo $image_list->RowIndex ?>_path" id= "fs_x<?php echo $image_list->RowIndex ?>_path" value="256">
 <input type="hidden" name="fx_x<?php echo $image_list->RowIndex ?>_path" id= "fx_x<?php echo $image_list->RowIndex ?>_path" value="<?php echo $image->path->UploadAllowedFileExt ?>">
 <input type="hidden" name="fm_x<?php echo $image_list->RowIndex ?>_path" id= "fm_x<?php echo $image_list->RowIndex ?>_path" value="<?php echo $image->path->UploadMaxFileSize ?>">
 </div>
@@ -668,6 +634,13 @@ fimagelist.createAutoSuggest({"id":"x<?php echo $image_list->RowIndex ?>__userid
 <?php } ?>
 </td>
 	<?php } ?>
+<?php if ($image->RowType == ROWTYPE_ADD) { // Add record ?>
+<input type="hidden" data-table="image" data-field="x_id" name="x<?php echo $image_list->RowIndex ?>_id" id="x<?php echo $image_list->RowIndex ?>_id" value="<?php echo HtmlEncode($image->id->CurrentValue) ?>">
+<input type="hidden" data-table="image" data-field="x_id" name="o<?php echo $image_list->RowIndex ?>_id" id="o<?php echo $image_list->RowIndex ?>_id" value="<?php echo HtmlEncode($image->id->OldValue) ?>">
+<?php } ?>
+<?php if ($image->RowType == ROWTYPE_EDIT || $image->CurrentMode == "edit") { ?>
+<input type="hidden" data-table="image" data-field="x_id" name="x<?php echo $image_list->RowIndex ?>_id" id="x<?php echo $image_list->RowIndex ?>_id" value="<?php echo HtmlEncode($image->id->CurrentValue) ?>">
+<?php } ?>
 	<?php if ($image->description->Visible) { // description ?>
 		<td data-name="description"<?php echo $image->description->cellAttributes() ?>>
 <?php if ($image->RowType == ROWTYPE_ADD) { // Add record ?>
@@ -685,6 +658,131 @@ fimagelist.createAutoSuggest({"id":"x<?php echo $image_list->RowIndex ?>__userid
 <span id="el<?php echo $image_list->RowCnt ?>_image_description" class="image_description">
 <span<?php echo $image->description->viewAttributes() ?>>
 <?php echo $image->description->getViewValue() ?></span>
+</span>
+<?php } ?>
+</td>
+	<?php } ?>
+	<?php if ($image->uuid->Visible) { // uuid ?>
+		<td data-name="uuid"<?php echo $image->uuid->cellAttributes() ?>>
+<?php if ($image->RowType == ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $image_list->RowCnt ?>_image_uuid" class="form-group image_uuid">
+<input type="text" data-table="image" data-field="x_uuid" name="x<?php echo $image_list->RowIndex ?>_uuid" id="x<?php echo $image_list->RowIndex ?>_uuid" size="30" maxlength="50" placeholder="<?php echo HtmlEncode($image->uuid->getPlaceHolder()) ?>" value="<?php echo $image->uuid->EditValue ?>"<?php echo $image->uuid->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="image" data-field="x_uuid" name="o<?php echo $image_list->RowIndex ?>_uuid" id="o<?php echo $image_list->RowIndex ?>_uuid" value="<?php echo HtmlEncode($image->uuid->OldValue) ?>">
+<?php } ?>
+<?php if ($image->RowType == ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $image_list->RowCnt ?>_image_uuid" class="form-group image_uuid">
+<input type="text" data-table="image" data-field="x_uuid" name="x<?php echo $image_list->RowIndex ?>_uuid" id="x<?php echo $image_list->RowIndex ?>_uuid" size="30" maxlength="50" placeholder="<?php echo HtmlEncode($image->uuid->getPlaceHolder()) ?>" value="<?php echo $image->uuid->EditValue ?>"<?php echo $image->uuid->editAttributes() ?>>
+</span>
+<?php } ?>
+<?php if ($image->RowType == ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $image_list->RowCnt ?>_image_uuid" class="image_uuid">
+<span<?php echo $image->uuid->viewAttributes() ?>>
+<?php echo $image->uuid->getViewValue() ?></span>
+</span>
+<?php } ?>
+</td>
+	<?php } ?>
+	<?php if ($image->user_id->Visible) { // user_id ?>
+		<td data-name="user_id"<?php echo $image->user_id->cellAttributes() ?>>
+<?php if ($image->RowType == ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $image_list->RowCnt ?>_image_user_id" class="form-group image_user_id">
+<input type="text" data-table="image" data-field="x_user_id" name="x<?php echo $image_list->RowIndex ?>_user_id" id="x<?php echo $image_list->RowIndex ?>_user_id" size="30" placeholder="<?php echo HtmlEncode($image->user_id->getPlaceHolder()) ?>" value="<?php echo $image->user_id->EditValue ?>"<?php echo $image->user_id->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="image" data-field="x_user_id" name="o<?php echo $image_list->RowIndex ?>_user_id" id="o<?php echo $image_list->RowIndex ?>_user_id" value="<?php echo HtmlEncode($image->user_id->OldValue) ?>">
+<?php } ?>
+<?php if ($image->RowType == ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $image_list->RowCnt ?>_image_user_id" class="form-group image_user_id">
+<input type="text" data-table="image" data-field="x_user_id" name="x<?php echo $image_list->RowIndex ?>_user_id" id="x<?php echo $image_list->RowIndex ?>_user_id" size="30" placeholder="<?php echo HtmlEncode($image->user_id->getPlaceHolder()) ?>" value="<?php echo $image->user_id->EditValue ?>"<?php echo $image->user_id->editAttributes() ?>>
+</span>
+<?php } ?>
+<?php if ($image->RowType == ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $image_list->RowCnt ?>_image_user_id" class="image_user_id">
+<span<?php echo $image->user_id->viewAttributes() ?>>
+<?php echo $image->user_id->getViewValue() ?></span>
+</span>
+<?php } ?>
+</td>
+	<?php } ?>
+	<?php if ($image->confirmed->Visible) { // confirmed ?>
+		<td data-name="confirmed"<?php echo $image->confirmed->cellAttributes() ?>>
+<?php if ($image->RowType == ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $image_list->RowCnt ?>_image_confirmed" class="form-group image_confirmed">
+<input type="text" data-table="image" data-field="x_confirmed" name="x<?php echo $image_list->RowIndex ?>_confirmed" id="x<?php echo $image_list->RowIndex ?>_confirmed" size="30" placeholder="<?php echo HtmlEncode($image->confirmed->getPlaceHolder()) ?>" value="<?php echo $image->confirmed->EditValue ?>"<?php echo $image->confirmed->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="image" data-field="x_confirmed" name="o<?php echo $image_list->RowIndex ?>_confirmed" id="o<?php echo $image_list->RowIndex ?>_confirmed" value="<?php echo HtmlEncode($image->confirmed->OldValue) ?>">
+<?php } ?>
+<?php if ($image->RowType == ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $image_list->RowCnt ?>_image_confirmed" class="form-group image_confirmed">
+<input type="text" data-table="image" data-field="x_confirmed" name="x<?php echo $image_list->RowIndex ?>_confirmed" id="x<?php echo $image_list->RowIndex ?>_confirmed" size="30" placeholder="<?php echo HtmlEncode($image->confirmed->getPlaceHolder()) ?>" value="<?php echo $image->confirmed->EditValue ?>"<?php echo $image->confirmed->editAttributes() ?>>
+</span>
+<?php } ?>
+<?php if ($image->RowType == ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $image_list->RowCnt ?>_image_confirmed" class="image_confirmed">
+<span<?php echo $image->confirmed->viewAttributes() ?>>
+<?php echo $image->confirmed->getViewValue() ?></span>
+</span>
+<?php } ?>
+</td>
+	<?php } ?>
+	<?php if ($image->createdAt->Visible) { // createdAt ?>
+		<td data-name="createdAt"<?php echo $image->createdAt->cellAttributes() ?>>
+<?php if ($image->RowType == ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $image_list->RowCnt ?>_image_createdAt" class="form-group image_createdAt">
+<input type="text" data-table="image" data-field="x_createdAt" name="x<?php echo $image_list->RowIndex ?>_createdAt" id="x<?php echo $image_list->RowIndex ?>_createdAt" placeholder="<?php echo HtmlEncode($image->createdAt->getPlaceHolder()) ?>" value="<?php echo $image->createdAt->EditValue ?>"<?php echo $image->createdAt->editAttributes() ?>>
+<?php if (!$image->createdAt->ReadOnly && !$image->createdAt->Disabled && !isset($image->createdAt->EditAttrs["readonly"]) && !isset($image->createdAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("fimagelist", "x<?php echo $image_list->RowIndex ?>_createdAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<input type="hidden" data-table="image" data-field="x_createdAt" name="o<?php echo $image_list->RowIndex ?>_createdAt" id="o<?php echo $image_list->RowIndex ?>_createdAt" value="<?php echo HtmlEncode($image->createdAt->OldValue) ?>">
+<?php } ?>
+<?php if ($image->RowType == ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $image_list->RowCnt ?>_image_createdAt" class="form-group image_createdAt">
+<input type="text" data-table="image" data-field="x_createdAt" name="x<?php echo $image_list->RowIndex ?>_createdAt" id="x<?php echo $image_list->RowIndex ?>_createdAt" placeholder="<?php echo HtmlEncode($image->createdAt->getPlaceHolder()) ?>" value="<?php echo $image->createdAt->EditValue ?>"<?php echo $image->createdAt->editAttributes() ?>>
+<?php if (!$image->createdAt->ReadOnly && !$image->createdAt->Disabled && !isset($image->createdAt->EditAttrs["readonly"]) && !isset($image->createdAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("fimagelist", "x<?php echo $image_list->RowIndex ?>_createdAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<?php } ?>
+<?php if ($image->RowType == ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $image_list->RowCnt ?>_image_createdAt" class="image_createdAt">
+<span<?php echo $image->createdAt->viewAttributes() ?>>
+<?php echo $image->createdAt->getViewValue() ?></span>
+</span>
+<?php } ?>
+</td>
+	<?php } ?>
+	<?php if ($image->updatedAt->Visible) { // updatedAt ?>
+		<td data-name="updatedAt"<?php echo $image->updatedAt->cellAttributes() ?>>
+<?php if ($image->RowType == ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $image_list->RowCnt ?>_image_updatedAt" class="form-group image_updatedAt">
+<input type="text" data-table="image" data-field="x_updatedAt" name="x<?php echo $image_list->RowIndex ?>_updatedAt" id="x<?php echo $image_list->RowIndex ?>_updatedAt" placeholder="<?php echo HtmlEncode($image->updatedAt->getPlaceHolder()) ?>" value="<?php echo $image->updatedAt->EditValue ?>"<?php echo $image->updatedAt->editAttributes() ?>>
+<?php if (!$image->updatedAt->ReadOnly && !$image->updatedAt->Disabled && !isset($image->updatedAt->EditAttrs["readonly"]) && !isset($image->updatedAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("fimagelist", "x<?php echo $image_list->RowIndex ?>_updatedAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<input type="hidden" data-table="image" data-field="x_updatedAt" name="o<?php echo $image_list->RowIndex ?>_updatedAt" id="o<?php echo $image_list->RowIndex ?>_updatedAt" value="<?php echo HtmlEncode($image->updatedAt->OldValue) ?>">
+<?php } ?>
+<?php if ($image->RowType == ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $image_list->RowCnt ?>_image_updatedAt" class="form-group image_updatedAt">
+<input type="text" data-table="image" data-field="x_updatedAt" name="x<?php echo $image_list->RowIndex ?>_updatedAt" id="x<?php echo $image_list->RowIndex ?>_updatedAt" placeholder="<?php echo HtmlEncode($image->updatedAt->getPlaceHolder()) ?>" value="<?php echo $image->updatedAt->EditValue ?>"<?php echo $image->updatedAt->editAttributes() ?>>
+<?php if (!$image->updatedAt->ReadOnly && !$image->updatedAt->Disabled && !isset($image->updatedAt->EditAttrs["readonly"]) && !isset($image->updatedAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("fimagelist", "x<?php echo $image_list->RowIndex ?>_updatedAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<?php } ?>
+<?php if ($image->RowType == ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $image_list->RowCnt ?>_image_updatedAt" class="image_updatedAt">
+<span<?php echo $image->updatedAt->viewAttributes() ?>>
+<?php echo $image->updatedAt->getViewValue() ?></span>
 </span>
 <?php } ?>
 </td>
@@ -732,41 +830,6 @@ fimagelist.updateLists(<?php echo $image_list->RowIndex ?>);
 // Render list options (body, left)
 $image_list->ListOptions->render("body", "left", $image_list->RowIndex);
 ?>
-	<?php if ($image->name->Visible) { // name ?>
-		<td data-name="name">
-<span id="el$rowindex$_image_name" class="form-group image_name">
-<input type="text" data-table="image" data-field="x_name" name="x<?php echo $image_list->RowIndex ?>_name" id="x<?php echo $image_list->RowIndex ?>_name" size="30" maxlength="100" placeholder="<?php echo HtmlEncode($image->name->getPlaceHolder()) ?>" value="<?php echo $image->name->EditValue ?>"<?php echo $image->name->editAttributes() ?>>
-</span>
-<input type="hidden" data-table="image" data-field="x_name" name="o<?php echo $image_list->RowIndex ?>_name" id="o<?php echo $image_list->RowIndex ?>_name" value="<?php echo HtmlEncode($image->name->OldValue) ?>">
-</td>
-	<?php } ?>
-	<?php if ($image->_userid->Visible) { // userid ?>
-		<td data-name="_userid">
-<?php if ($image->_userid->getSessionValue() <> "") { ?>
-<span id="el$rowindex$_image__userid" class="form-group image__userid">
-<span<?php echo $image->_userid->viewAttributes() ?>>
-<input type="text" readonly class="form-control-plaintext" value="<?php echo RemoveHtml($image->_userid->ViewValue) ?>"></span>
-</span>
-<input type="hidden" id="x<?php echo $image_list->RowIndex ?>__userid" name="x<?php echo $image_list->RowIndex ?>__userid" value="<?php echo HtmlEncode($image->_userid->CurrentValue) ?>">
-<?php } else { ?>
-<span id="el$rowindex$_image__userid" class="form-group image__userid">
-<?php
-$wrkonchange = "" . trim(@$image->_userid->EditAttrs["onchange"]);
-if (trim($wrkonchange) <> "") $wrkonchange = " onchange=\"" . JsEncode($wrkonchange) . "\"";
-$image->_userid->EditAttrs["onchange"] = "";
-?>
-<span id="as_x<?php echo $image_list->RowIndex ?>__userid" class="text-nowrap" style="z-index: <?php echo (9000 - $image_list->RowCnt * 10) ?>">
-	<input type="text" class="form-control" name="sv_x<?php echo $image_list->RowIndex ?>__userid" id="sv_x<?php echo $image_list->RowIndex ?>__userid" value="<?php echo RemoveHtml($image->_userid->EditValue) ?>" size="30" placeholder="<?php echo HtmlEncode($image->_userid->getPlaceHolder()) ?>" data-placeholder="<?php echo HtmlEncode($image->_userid->getPlaceHolder()) ?>"<?php echo $image->_userid->editAttributes() ?>>
-</span>
-<input type="hidden" data-table="image" data-field="x__userid" data-value-separator="<?php echo $image->_userid->displayValueSeparatorAttribute() ?>" name="x<?php echo $image_list->RowIndex ?>__userid" id="x<?php echo $image_list->RowIndex ?>__userid" value="<?php echo HtmlEncode($image->_userid->CurrentValue) ?>"<?php echo $wrkonchange ?>>
-<script>
-fimagelist.createAutoSuggest({"id":"x<?php echo $image_list->RowIndex ?>__userid","forceSelect":false});
-</script>
-</span>
-<?php } ?>
-<input type="hidden" data-table="image" data-field="x__userid" name="o<?php echo $image_list->RowIndex ?>__userid" id="o<?php echo $image_list->RowIndex ?>__userid" value="<?php echo HtmlEncode($image->_userid->OldValue) ?>">
-</td>
-	<?php } ?>
 	<?php if ($image->path->Visible) { // path ?>
 		<td data-name="path">
 <span id="el$rowindex$_image_path" class="form-group image_path">
@@ -777,7 +840,7 @@ fimagelist.createAutoSuggest({"id":"x<?php echo $image_list->RowIndex ?>__userid
 </span>
 <input type="hidden" name="fn_x<?php echo $image_list->RowIndex ?>_path" id= "fn_x<?php echo $image_list->RowIndex ?>_path" value="<?php echo $image->path->Upload->FileName ?>">
 <input type="hidden" name="fa_x<?php echo $image_list->RowIndex ?>_path" id= "fa_x<?php echo $image_list->RowIndex ?>_path" value="0">
-<input type="hidden" name="fs_x<?php echo $image_list->RowIndex ?>_path" id= "fs_x<?php echo $image_list->RowIndex ?>_path" value="100">
+<input type="hidden" name="fs_x<?php echo $image_list->RowIndex ?>_path" id= "fs_x<?php echo $image_list->RowIndex ?>_path" value="256">
 <input type="hidden" name="fx_x<?php echo $image_list->RowIndex ?>_path" id= "fx_x<?php echo $image_list->RowIndex ?>_path" value="<?php echo $image->path->UploadAllowedFileExt ?>">
 <input type="hidden" name="fm_x<?php echo $image_list->RowIndex ?>_path" id= "fm_x<?php echo $image_list->RowIndex ?>_path" value="<?php echo $image->path->UploadMaxFileSize ?>">
 </div>
@@ -792,6 +855,56 @@ fimagelist.createAutoSuggest({"id":"x<?php echo $image_list->RowIndex ?>__userid
 <input type="text" data-table="image" data-field="x_description" name="x<?php echo $image_list->RowIndex ?>_description" id="x<?php echo $image_list->RowIndex ?>_description" size="30" maxlength="100" placeholder="<?php echo HtmlEncode($image->description->getPlaceHolder()) ?>" value="<?php echo $image->description->EditValue ?>"<?php echo $image->description->editAttributes() ?>>
 </span>
 <input type="hidden" data-table="image" data-field="x_description" name="o<?php echo $image_list->RowIndex ?>_description" id="o<?php echo $image_list->RowIndex ?>_description" value="<?php echo HtmlEncode($image->description->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($image->uuid->Visible) { // uuid ?>
+		<td data-name="uuid">
+<span id="el$rowindex$_image_uuid" class="form-group image_uuid">
+<input type="text" data-table="image" data-field="x_uuid" name="x<?php echo $image_list->RowIndex ?>_uuid" id="x<?php echo $image_list->RowIndex ?>_uuid" size="30" maxlength="50" placeholder="<?php echo HtmlEncode($image->uuid->getPlaceHolder()) ?>" value="<?php echo $image->uuid->EditValue ?>"<?php echo $image->uuid->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="image" data-field="x_uuid" name="o<?php echo $image_list->RowIndex ?>_uuid" id="o<?php echo $image_list->RowIndex ?>_uuid" value="<?php echo HtmlEncode($image->uuid->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($image->user_id->Visible) { // user_id ?>
+		<td data-name="user_id">
+<span id="el$rowindex$_image_user_id" class="form-group image_user_id">
+<input type="text" data-table="image" data-field="x_user_id" name="x<?php echo $image_list->RowIndex ?>_user_id" id="x<?php echo $image_list->RowIndex ?>_user_id" size="30" placeholder="<?php echo HtmlEncode($image->user_id->getPlaceHolder()) ?>" value="<?php echo $image->user_id->EditValue ?>"<?php echo $image->user_id->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="image" data-field="x_user_id" name="o<?php echo $image_list->RowIndex ?>_user_id" id="o<?php echo $image_list->RowIndex ?>_user_id" value="<?php echo HtmlEncode($image->user_id->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($image->confirmed->Visible) { // confirmed ?>
+		<td data-name="confirmed">
+<span id="el$rowindex$_image_confirmed" class="form-group image_confirmed">
+<input type="text" data-table="image" data-field="x_confirmed" name="x<?php echo $image_list->RowIndex ?>_confirmed" id="x<?php echo $image_list->RowIndex ?>_confirmed" size="30" placeholder="<?php echo HtmlEncode($image->confirmed->getPlaceHolder()) ?>" value="<?php echo $image->confirmed->EditValue ?>"<?php echo $image->confirmed->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="image" data-field="x_confirmed" name="o<?php echo $image_list->RowIndex ?>_confirmed" id="o<?php echo $image_list->RowIndex ?>_confirmed" value="<?php echo HtmlEncode($image->confirmed->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($image->createdAt->Visible) { // createdAt ?>
+		<td data-name="createdAt">
+<span id="el$rowindex$_image_createdAt" class="form-group image_createdAt">
+<input type="text" data-table="image" data-field="x_createdAt" name="x<?php echo $image_list->RowIndex ?>_createdAt" id="x<?php echo $image_list->RowIndex ?>_createdAt" placeholder="<?php echo HtmlEncode($image->createdAt->getPlaceHolder()) ?>" value="<?php echo $image->createdAt->EditValue ?>"<?php echo $image->createdAt->editAttributes() ?>>
+<?php if (!$image->createdAt->ReadOnly && !$image->createdAt->Disabled && !isset($image->createdAt->EditAttrs["readonly"]) && !isset($image->createdAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("fimagelist", "x<?php echo $image_list->RowIndex ?>_createdAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<input type="hidden" data-table="image" data-field="x_createdAt" name="o<?php echo $image_list->RowIndex ?>_createdAt" id="o<?php echo $image_list->RowIndex ?>_createdAt" value="<?php echo HtmlEncode($image->createdAt->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($image->updatedAt->Visible) { // updatedAt ?>
+		<td data-name="updatedAt">
+<span id="el$rowindex$_image_updatedAt" class="form-group image_updatedAt">
+<input type="text" data-table="image" data-field="x_updatedAt" name="x<?php echo $image_list->RowIndex ?>_updatedAt" id="x<?php echo $image_list->RowIndex ?>_updatedAt" placeholder="<?php echo HtmlEncode($image->updatedAt->getPlaceHolder()) ?>" value="<?php echo $image->updatedAt->EditValue ?>"<?php echo $image->updatedAt->editAttributes() ?>>
+<?php if (!$image->updatedAt->ReadOnly && !$image->updatedAt->Disabled && !isset($image->updatedAt->EditAttrs["readonly"]) && !isset($image->updatedAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("fimagelist", "x<?php echo $image_list->RowIndex ?>_updatedAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<input type="hidden" data-table="image" data-field="x_updatedAt" name="o<?php echo $image_list->RowIndex ?>_updatedAt" id="o<?php echo $image_list->RowIndex ?>_updatedAt" value="<?php echo HtmlEncode($image->updatedAt->OldValue) ?>">
 </td>
 	<?php } ?>
 <?php

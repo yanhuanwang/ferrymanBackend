@@ -51,10 +51,8 @@ frequest_tripview.Form_CustomValidate = function(fobj) { // DO NOT CHANGE THIS L
 frequest_tripview.validateRequired = <?php echo json_encode(CLIENT_VALIDATE) ?>;
 
 // Dynamic selection lists
-frequest_tripview.lists["x_category"] = <?php echo $request_trip_view->category->Lookup->toClientList() ?>;
-frequest_tripview.lists["x_category"].options = <?php echo JsonEncode($request_trip_view->category->lookupOptions()) ?>;
-
 // Form object for search
+
 </script>
 <script>
 
@@ -144,17 +142,6 @@ $request_trip_view->showMessage();
 </td>
 	</tr>
 <?php } ?>
-<?php if ($request_trip->date->Visible) { // date ?>
-	<tr id="r_date">
-		<td class="<?php echo $request_trip_view->TableLeftColumnClass ?>"><span id="elh_request_trip_date"><?php echo $request_trip->date->caption() ?></span></td>
-		<td data-name="date"<?php echo $request_trip->date->cellAttributes() ?>>
-<span id="el_request_trip_date">
-<span<?php echo $request_trip->date->viewAttributes() ?>>
-<?php echo $request_trip->date->getViewValue() ?></span>
-</span>
-</td>
-	</tr>
-<?php } ?>
 <?php if ($request_trip->description->Visible) { // description ?>
 	<tr id="r_description">
 		<td class="<?php echo $request_trip_view->TableLeftColumnClass ?>"><span id="elh_request_trip_description"><?php echo $request_trip->description->caption() ?></span></td>
@@ -162,6 +149,61 @@ $request_trip_view->showMessage();
 <span id="el_request_trip_description">
 <span<?php echo $request_trip->description->viewAttributes() ?>>
 <?php echo $request_trip->description->getViewValue() ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($request_trip->user_id->Visible) { // user_id ?>
+	<tr id="r_user_id">
+		<td class="<?php echo $request_trip_view->TableLeftColumnClass ?>"><span id="elh_request_trip_user_id"><?php echo $request_trip->user_id->caption() ?></span></td>
+		<td data-name="user_id"<?php echo $request_trip->user_id->cellAttributes() ?>>
+<span id="el_request_trip_user_id">
+<span<?php echo $request_trip->user_id->viewAttributes() ?>>
+<?php echo $request_trip->user_id->getViewValue() ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($request_trip->from_date->Visible) { // from_date ?>
+	<tr id="r_from_date">
+		<td class="<?php echo $request_trip_view->TableLeftColumnClass ?>"><span id="elh_request_trip_from_date"><?php echo $request_trip->from_date->caption() ?></span></td>
+		<td data-name="from_date"<?php echo $request_trip->from_date->cellAttributes() ?>>
+<span id="el_request_trip_from_date">
+<span<?php echo $request_trip->from_date->viewAttributes() ?>>
+<?php echo $request_trip->from_date->getViewValue() ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($request_trip->to_date->Visible) { // to_date ?>
+	<tr id="r_to_date">
+		<td class="<?php echo $request_trip_view->TableLeftColumnClass ?>"><span id="elh_request_trip_to_date"><?php echo $request_trip->to_date->caption() ?></span></td>
+		<td data-name="to_date"<?php echo $request_trip->to_date->cellAttributes() ?>>
+<span id="el_request_trip_to_date">
+<span<?php echo $request_trip->to_date->viewAttributes() ?>>
+<?php echo $request_trip->to_date->getViewValue() ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($request_trip->createdAt->Visible) { // createdAt ?>
+	<tr id="r_createdAt">
+		<td class="<?php echo $request_trip_view->TableLeftColumnClass ?>"><span id="elh_request_trip_createdAt"><?php echo $request_trip->createdAt->caption() ?></span></td>
+		<td data-name="createdAt"<?php echo $request_trip->createdAt->cellAttributes() ?>>
+<span id="el_request_trip_createdAt">
+<span<?php echo $request_trip->createdAt->viewAttributes() ?>>
+<?php echo $request_trip->createdAt->getViewValue() ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($request_trip->updatedAt->Visible) { // updatedAt ?>
+	<tr id="r_updatedAt">
+		<td class="<?php echo $request_trip_view->TableLeftColumnClass ?>"><span id="elh_request_trip_updatedAt"><?php echo $request_trip->updatedAt->caption() ?></span></td>
+		<td data-name="updatedAt"<?php echo $request_trip->updatedAt->cellAttributes() ?>>
+<span id="el_request_trip_updatedAt">
+<span<?php echo $request_trip->updatedAt->viewAttributes() ?>>
+<?php echo $request_trip->updatedAt->getViewValue() ?></span>
 </span>
 </td>
 	</tr>

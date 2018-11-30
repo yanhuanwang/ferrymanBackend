@@ -324,9 +324,6 @@ class image_delete extends image
 			$GLOBALS["Table"] = &$GLOBALS["image"];
 		}
 
-		// Table object (user)
-		if (!isset($GLOBALS['user'])) $GLOBALS['user'] = new user();
-
 		// Table object (admin)
 		if (!isset($GLOBALS['admin'])) $GLOBALS['admin'] = new admin();
 
@@ -538,10 +535,13 @@ class image_delete extends image
 		}
 		$this->CurrentAction = Param("action"); // Set up current action
 		$this->id->Visible = FALSE;
-		$this->name->setVisibility();
-		$this->_userid->setVisibility();
 		$this->path->setVisibility();
 		$this->description->setVisibility();
+		$this->uuid->setVisibility();
+		$this->user_id->setVisibility();
+		$this->confirmed->setVisibility();
+		$this->createdAt->setVisibility();
+		$this->updatedAt->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Global Page Loading event (in userfn*.php)
@@ -560,12 +560,8 @@ class image_delete extends image
 		$this->createToken();
 
 		// Set up lookup cache
-		$this->setupLookupOptions($this->_userid);
-
-		// Set up master/detail parameters
-		$this->setupMasterParms();
-
 		// Set up Breadcrumb
+
 		$this->setupBreadcrumb();
 
 		// Load key parameters
@@ -676,11 +672,14 @@ class image_delete extends image
 		if (!$rs || $rs->EOF)
 			return;
 		$this->id->setDbValue($row['id']);
-		$this->name->setDbValue($row['name']);
-		$this->_userid->setDbValue($row['userid']);
 		$this->path->Upload->DbValue = $row['path'];
 		$this->path->setDbValue($this->path->Upload->DbValue);
 		$this->description->setDbValue($row['description']);
+		$this->uuid->setDbValue($row['uuid']);
+		$this->user_id->setDbValue($row['user_id']);
+		$this->confirmed->setDbValue($row['confirmed']);
+		$this->createdAt->setDbValue($row['createdAt']);
+		$this->updatedAt->setDbValue($row['updatedAt']);
 	}
 
 	// Return a row with default values
@@ -688,10 +687,13 @@ class image_delete extends image
 	{
 		$row = [];
 		$row['id'] = NULL;
-		$row['name'] = NULL;
-		$row['userid'] = NULL;
 		$row['path'] = NULL;
 		$row['description'] = NULL;
+		$row['uuid'] = NULL;
+		$row['user_id'] = NULL;
+		$row['confirmed'] = NULL;
+		$row['createdAt'] = NULL;
+		$row['updatedAt'] = NULL;
 		return $row;
 	}
 
@@ -707,44 +709,19 @@ class image_delete extends image
 
 		// Common render codes for all row types
 		// id
-		// name
-		// userid
 		// path
 		// description
+		// uuid
+		// user_id
+		// confirmed
+		// createdAt
+		// updatedAt
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
 			// id
 			$this->id->ViewValue = $this->id->CurrentValue;
 			$this->id->ViewCustomAttributes = "";
-
-			// name
-			$this->name->ViewValue = $this->name->CurrentValue;
-			$this->name->ViewCustomAttributes = "";
-
-			// userid
-			$this->_userid->ViewValue = $this->_userid->CurrentValue;
-			$curVal = strval($this->_userid->CurrentValue);
-			if ($curVal <> "") {
-				$this->_userid->ViewValue = $this->_userid->lookupCacheOption($curVal);
-				if ($this->_userid->ViewValue === NULL) { // Lookup from database
-					$filterWrk = "`id`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
-					$sqlWrk = $this->_userid->Lookup->getSql(FALSE, $filterWrk, '', $this);
-					$rswrk = Conn()->execute($sqlWrk);
-					if ($rswrk && !$rswrk->EOF) { // Lookup values found
-						$arwrk = array();
-						$arwrk[1] = $rswrk->fields('df');
-						$arwrk[2] = $rswrk->fields('df2');
-						$this->_userid->ViewValue = $this->_userid->displayValue($arwrk);
-						$rswrk->Close();
-					} else {
-						$this->_userid->ViewValue = $this->_userid->CurrentValue;
-					}
-				}
-			} else {
-				$this->_userid->ViewValue = NULL;
-			}
-			$this->_userid->ViewCustomAttributes = "";
 
 			// path
 			if (!EmptyValue($this->path->Upload->DbValue)) {
@@ -759,15 +736,29 @@ class image_delete extends image
 			$this->description->ViewValue = $this->description->CurrentValue;
 			$this->description->ViewCustomAttributes = "";
 
-			// name
-			$this->name->LinkCustomAttributes = "";
-			$this->name->HrefValue = "";
-			$this->name->TooltipValue = "";
+			// uuid
+			$this->uuid->ViewValue = $this->uuid->CurrentValue;
+			$this->uuid->ViewCustomAttributes = "";
 
-			// userid
-			$this->_userid->LinkCustomAttributes = "";
-			$this->_userid->HrefValue = "";
-			$this->_userid->TooltipValue = "";
+			// user_id
+			$this->user_id->ViewValue = $this->user_id->CurrentValue;
+			$this->user_id->ViewValue = FormatNumber($this->user_id->ViewValue, 0, -2, -2, -2);
+			$this->user_id->ViewCustomAttributes = "";
+
+			// confirmed
+			$this->confirmed->ViewValue = $this->confirmed->CurrentValue;
+			$this->confirmed->ViewValue = FormatNumber($this->confirmed->ViewValue, 0, -2, -2, -2);
+			$this->confirmed->ViewCustomAttributes = "";
+
+			// createdAt
+			$this->createdAt->ViewValue = $this->createdAt->CurrentValue;
+			$this->createdAt->ViewValue = FormatDateTime($this->createdAt->ViewValue, 0);
+			$this->createdAt->ViewCustomAttributes = "";
+
+			// updatedAt
+			$this->updatedAt->ViewValue = $this->updatedAt->CurrentValue;
+			$this->updatedAt->ViewValue = FormatDateTime($this->updatedAt->ViewValue, 0);
+			$this->updatedAt->ViewCustomAttributes = "";
 
 			// path
 			$this->path->LinkCustomAttributes = "";
@@ -791,6 +782,31 @@ class image_delete extends image
 			$this->description->LinkCustomAttributes = "";
 			$this->description->HrefValue = "";
 			$this->description->TooltipValue = "";
+
+			// uuid
+			$this->uuid->LinkCustomAttributes = "";
+			$this->uuid->HrefValue = "";
+			$this->uuid->TooltipValue = "";
+
+			// user_id
+			$this->user_id->LinkCustomAttributes = "";
+			$this->user_id->HrefValue = "";
+			$this->user_id->TooltipValue = "";
+
+			// confirmed
+			$this->confirmed->LinkCustomAttributes = "";
+			$this->confirmed->HrefValue = "";
+			$this->confirmed->TooltipValue = "";
+
+			// createdAt
+			$this->createdAt->LinkCustomAttributes = "";
+			$this->createdAt->HrefValue = "";
+			$this->createdAt->TooltipValue = "";
+
+			// updatedAt
+			$this->updatedAt->LinkCustomAttributes = "";
+			$this->updatedAt->HrefValue = "";
+			$this->updatedAt->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -891,72 +907,6 @@ class image_delete extends image
 		return $deleteRows;
 	}
 
-	// Set up master/detail based on QueryString
-	protected function setupMasterParms()
-	{
-		$validMaster = FALSE;
-
-		// Get the keys for master table
-		if (Get(TABLE_SHOW_MASTER) !== NULL) {
-			$masterTblVar = Get(TABLE_SHOW_MASTER);
-			if ($masterTblVar == "") {
-				$validMaster = TRUE;
-				$this->DbMasterFilter = "";
-				$this->DbDetailFilter = "";
-			}
-			if ($masterTblVar == "user") {
-				$validMaster = TRUE;
-				if (Get("fk_id") !== NULL) {
-					$GLOBALS["user"]->id->setQueryStringValue(Get("fk_id"));
-					$this->_userid->setQueryStringValue($GLOBALS["user"]->id->QueryStringValue);
-					$this->_userid->setSessionValue($this->_userid->QueryStringValue);
-					if (!is_numeric($GLOBALS["user"]->id->QueryStringValue))
-						$validMaster = FALSE;
-				} else {
-					$validMaster = FALSE;
-				}
-			}
-		} elseif (Post(TABLE_SHOW_MASTER) !== NULL) {
-			$masterTblVar = Post(TABLE_SHOW_MASTER);
-			if ($masterTblVar == "") {
-				$validMaster = TRUE;
-				$this->DbMasterFilter = "";
-				$this->DbDetailFilter = "";
-			}
-			if ($masterTblVar == "user") {
-				$validMaster = TRUE;
-				if (Post("fk_id") !== NULL) {
-					$GLOBALS["user"]->id->setFormValue(Post("fk_id"));
-					$this->_userid->setFormValue($GLOBALS["user"]->id->FormValue);
-					$this->_userid->setSessionValue($this->_userid->FormValue);
-					if (!is_numeric($GLOBALS["user"]->id->FormValue))
-						$validMaster = FALSE;
-				} else {
-					$validMaster = FALSE;
-				}
-			}
-		}
-		if ($validMaster) {
-
-			// Save current master table
-			$this->setCurrentMasterTable($masterTblVar);
-
-			// Reset start record counter (new master key)
-			if (!$this->isAddOrEdit()) {
-				$this->StartRec = 1;
-				$this->setStartRecordNumber($this->StartRec);
-			}
-
-			// Clear previous master key from Session
-			if ($masterTblVar <> "user") {
-				if ($this->_userid->CurrentValue == "")
-					$this->_userid->setSessionValue("");
-			}
-		}
-		$this->DbMasterFilter = $this->getMasterFilter(); // Get master filter
-		$this->DbDetailFilter = $this->getDetailFilter(); // Get detail filter
-	}
-
 	// Set up Breadcrumb
 	protected function setupBreadcrumb()
 	{
@@ -999,8 +949,6 @@ class image_delete extends image
 
 					// Format the field values
 					switch ($fld->FieldVar) {
-						case "x__userid":
-							break;
 					}
 					$ar[strval($row[0])] = $row;
 					$rs->moveNext();

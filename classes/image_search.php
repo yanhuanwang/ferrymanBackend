@@ -324,9 +324,6 @@ class image_search extends image
 			$GLOBALS["Table"] = &$GLOBALS["image"];
 		}
 
-		// Table object (user)
-		if (!isset($GLOBALS['user'])) $GLOBALS['user'] = new user();
-
 		// Table object (admin)
 		if (!isset($GLOBALS['admin'])) $GLOBALS['admin'] = new admin();
 
@@ -556,10 +553,13 @@ class image_search extends image
 		$CurrentForm = new HttpForm();
 		$this->CurrentAction = Param("action"); // Set up current action
 		$this->id->setVisibility();
-		$this->name->setVisibility();
-		$this->_userid->setVisibility();
 		$this->path->Visible = FALSE;
 		$this->description->setVisibility();
+		$this->uuid->setVisibility();
+		$this->user_id->setVisibility();
+		$this->confirmed->setVisibility();
+		$this->createdAt->setVisibility();
+		$this->updatedAt->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Global Page Loading event (in userfn*.php)
@@ -578,9 +578,8 @@ class image_search extends image
 		$this->createToken();
 
 		// Set up lookup cache
-		$this->setupLookupOptions($this->_userid);
-
 		// Set up Breadcrumb
+
 		$this->setupBreadcrumb();
 
 		// Check modal
@@ -624,9 +623,12 @@ class image_search extends image
 	{
 		$srchUrl = "";
 		$this->buildSearchUrl($srchUrl, $this->id); // id
-		$this->buildSearchUrl($srchUrl, $this->name); // name
-		$this->buildSearchUrl($srchUrl, $this->_userid); // userid
 		$this->buildSearchUrl($srchUrl, $this->description); // description
+		$this->buildSearchUrl($srchUrl, $this->uuid); // uuid
+		$this->buildSearchUrl($srchUrl, $this->user_id); // user_id
+		$this->buildSearchUrl($srchUrl, $this->confirmed); // confirmed
+		$this->buildSearchUrl($srchUrl, $this->createdAt); // createdAt
+		$this->buildSearchUrl($srchUrl, $this->updatedAt); // updatedAt
 		if ($srchUrl <> "")
 			$srchUrl .= "&";
 		$srchUrl .= "cmd=search";
@@ -704,17 +706,29 @@ class image_search extends image
 		$this->id->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_id"));
 		$this->id->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_id"));
 
-		// name
-		$this->name->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_name"));
-		$this->name->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_name"));
-
-		// userid
-		$this->_userid->AdvancedSearch->setSearchValue($CurrentForm->getValue("x__userid"));
-		$this->_userid->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z__userid"));
-
 		// description
 		$this->description->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_description"));
 		$this->description->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_description"));
+
+		// uuid
+		$this->uuid->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_uuid"));
+		$this->uuid->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_uuid"));
+
+		// user_id
+		$this->user_id->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_user_id"));
+		$this->user_id->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_user_id"));
+
+		// confirmed
+		$this->confirmed->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_confirmed"));
+		$this->confirmed->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_confirmed"));
+
+		// createdAt
+		$this->createdAt->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_createdAt"));
+		$this->createdAt->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_createdAt"));
+
+		// updatedAt
+		$this->updatedAt->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_updatedAt"));
+		$this->updatedAt->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_updatedAt"));
 	}
 
 	// Render row values based on field settings
@@ -729,44 +743,19 @@ class image_search extends image
 
 		// Common render codes for all row types
 		// id
-		// name
-		// userid
 		// path
 		// description
+		// uuid
+		// user_id
+		// confirmed
+		// createdAt
+		// updatedAt
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
 			// id
 			$this->id->ViewValue = $this->id->CurrentValue;
 			$this->id->ViewCustomAttributes = "";
-
-			// name
-			$this->name->ViewValue = $this->name->CurrentValue;
-			$this->name->ViewCustomAttributes = "";
-
-			// userid
-			$this->_userid->ViewValue = $this->_userid->CurrentValue;
-			$curVal = strval($this->_userid->CurrentValue);
-			if ($curVal <> "") {
-				$this->_userid->ViewValue = $this->_userid->lookupCacheOption($curVal);
-				if ($this->_userid->ViewValue === NULL) { // Lookup from database
-					$filterWrk = "`id`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
-					$sqlWrk = $this->_userid->Lookup->getSql(FALSE, $filterWrk, '', $this);
-					$rswrk = Conn()->execute($sqlWrk);
-					if ($rswrk && !$rswrk->EOF) { // Lookup values found
-						$arwrk = array();
-						$arwrk[1] = $rswrk->fields('df');
-						$arwrk[2] = $rswrk->fields('df2');
-						$this->_userid->ViewValue = $this->_userid->displayValue($arwrk);
-						$rswrk->Close();
-					} else {
-						$this->_userid->ViewValue = $this->_userid->CurrentValue;
-					}
-				}
-			} else {
-				$this->_userid->ViewValue = NULL;
-			}
-			$this->_userid->ViewCustomAttributes = "";
 
 			// path
 			if (!EmptyValue($this->path->Upload->DbValue)) {
@@ -781,25 +770,64 @@ class image_search extends image
 			$this->description->ViewValue = $this->description->CurrentValue;
 			$this->description->ViewCustomAttributes = "";
 
+			// uuid
+			$this->uuid->ViewValue = $this->uuid->CurrentValue;
+			$this->uuid->ViewCustomAttributes = "";
+
+			// user_id
+			$this->user_id->ViewValue = $this->user_id->CurrentValue;
+			$this->user_id->ViewValue = FormatNumber($this->user_id->ViewValue, 0, -2, -2, -2);
+			$this->user_id->ViewCustomAttributes = "";
+
+			// confirmed
+			$this->confirmed->ViewValue = $this->confirmed->CurrentValue;
+			$this->confirmed->ViewValue = FormatNumber($this->confirmed->ViewValue, 0, -2, -2, -2);
+			$this->confirmed->ViewCustomAttributes = "";
+
+			// createdAt
+			$this->createdAt->ViewValue = $this->createdAt->CurrentValue;
+			$this->createdAt->ViewValue = FormatDateTime($this->createdAt->ViewValue, 0);
+			$this->createdAt->ViewCustomAttributes = "";
+
+			// updatedAt
+			$this->updatedAt->ViewValue = $this->updatedAt->CurrentValue;
+			$this->updatedAt->ViewValue = FormatDateTime($this->updatedAt->ViewValue, 0);
+			$this->updatedAt->ViewCustomAttributes = "";
+
 			// id
 			$this->id->LinkCustomAttributes = "";
 			$this->id->HrefValue = "";
 			$this->id->TooltipValue = "";
 
-			// name
-			$this->name->LinkCustomAttributes = "";
-			$this->name->HrefValue = "";
-			$this->name->TooltipValue = "";
-
-			// userid
-			$this->_userid->LinkCustomAttributes = "";
-			$this->_userid->HrefValue = "";
-			$this->_userid->TooltipValue = "";
-
 			// description
 			$this->description->LinkCustomAttributes = "";
 			$this->description->HrefValue = "";
 			$this->description->TooltipValue = "";
+
+			// uuid
+			$this->uuid->LinkCustomAttributes = "";
+			$this->uuid->HrefValue = "";
+			$this->uuid->TooltipValue = "";
+
+			// user_id
+			$this->user_id->LinkCustomAttributes = "";
+			$this->user_id->HrefValue = "";
+			$this->user_id->TooltipValue = "";
+
+			// confirmed
+			$this->confirmed->LinkCustomAttributes = "";
+			$this->confirmed->HrefValue = "";
+			$this->confirmed->TooltipValue = "";
+
+			// createdAt
+			$this->createdAt->LinkCustomAttributes = "";
+			$this->createdAt->HrefValue = "";
+			$this->createdAt->TooltipValue = "";
+
+			// updatedAt
+			$this->updatedAt->LinkCustomAttributes = "";
+			$this->updatedAt->HrefValue = "";
+			$this->updatedAt->TooltipValue = "";
 		} elseif ($this->RowType == ROWTYPE_SEARCH) { // Search row
 
 			// id
@@ -808,43 +836,41 @@ class image_search extends image
 			$this->id->EditValue = HtmlEncode($this->id->AdvancedSearch->SearchValue);
 			$this->id->PlaceHolder = RemoveHtml($this->id->caption());
 
-			// name
-			$this->name->EditAttrs["class"] = "form-control";
-			$this->name->EditCustomAttributes = "";
-			$this->name->EditValue = HtmlEncode($this->name->AdvancedSearch->SearchValue);
-			$this->name->PlaceHolder = RemoveHtml($this->name->caption());
-
-			// userid
-			$this->_userid->EditAttrs["class"] = "form-control";
-			$this->_userid->EditCustomAttributes = "";
-			$this->_userid->EditValue = HtmlEncode($this->_userid->AdvancedSearch->SearchValue);
-			$curVal = strval($this->_userid->AdvancedSearch->SearchValue);
-			if ($curVal <> "") {
-				$this->_userid->EditValue = $this->_userid->lookupCacheOption($curVal);
-				if ($this->_userid->EditValue === NULL) { // Lookup from database
-					$filterWrk = "`id`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
-					$sqlWrk = $this->_userid->Lookup->getSql(FALSE, $filterWrk, '', $this);
-					$rswrk = Conn()->execute($sqlWrk);
-					if ($rswrk && !$rswrk->EOF) { // Lookup values found
-						$arwrk = array();
-						$arwrk[1] = HtmlEncode($rswrk->fields('df'));
-						$arwrk[2] = HtmlEncode($rswrk->fields('df2'));
-						$this->_userid->EditValue = $this->_userid->displayValue($arwrk);
-						$rswrk->Close();
-					} else {
-						$this->_userid->EditValue = HtmlEncode($this->_userid->AdvancedSearch->SearchValue);
-					}
-				}
-			} else {
-				$this->_userid->EditValue = NULL;
-			}
-			$this->_userid->PlaceHolder = RemoveHtml($this->_userid->caption());
-
 			// description
 			$this->description->EditAttrs["class"] = "form-control";
 			$this->description->EditCustomAttributes = "";
 			$this->description->EditValue = HtmlEncode($this->description->AdvancedSearch->SearchValue);
 			$this->description->PlaceHolder = RemoveHtml($this->description->caption());
+
+			// uuid
+			$this->uuid->EditAttrs["class"] = "form-control";
+			$this->uuid->EditCustomAttributes = "";
+			$this->uuid->EditValue = HtmlEncode($this->uuid->AdvancedSearch->SearchValue);
+			$this->uuid->PlaceHolder = RemoveHtml($this->uuid->caption());
+
+			// user_id
+			$this->user_id->EditAttrs["class"] = "form-control";
+			$this->user_id->EditCustomAttributes = "";
+			$this->user_id->EditValue = HtmlEncode($this->user_id->AdvancedSearch->SearchValue);
+			$this->user_id->PlaceHolder = RemoveHtml($this->user_id->caption());
+
+			// confirmed
+			$this->confirmed->EditAttrs["class"] = "form-control";
+			$this->confirmed->EditCustomAttributes = "";
+			$this->confirmed->EditValue = HtmlEncode($this->confirmed->AdvancedSearch->SearchValue);
+			$this->confirmed->PlaceHolder = RemoveHtml($this->confirmed->caption());
+
+			// createdAt
+			$this->createdAt->EditAttrs["class"] = "form-control";
+			$this->createdAt->EditCustomAttributes = "";
+			$this->createdAt->EditValue = HtmlEncode(FormatDateTime(UnFormatDateTime($this->createdAt->AdvancedSearch->SearchValue, 0), 8));
+			$this->createdAt->PlaceHolder = RemoveHtml($this->createdAt->caption());
+
+			// updatedAt
+			$this->updatedAt->EditAttrs["class"] = "form-control";
+			$this->updatedAt->EditCustomAttributes = "";
+			$this->updatedAt->EditValue = HtmlEncode(FormatDateTime(UnFormatDateTime($this->updatedAt->AdvancedSearch->SearchValue, 0), 8));
+			$this->updatedAt->PlaceHolder = RemoveHtml($this->updatedAt->caption());
 		}
 		if ($this->RowType == ROWTYPE_ADD || $this->RowType == ROWTYPE_EDIT || $this->RowType == ROWTYPE_SEARCH) // Add/Edit/Search row
 			$this->setupFieldTitles();
@@ -868,8 +894,17 @@ class image_search extends image
 		if (!CheckInteger($this->id->AdvancedSearch->SearchValue)) {
 			AddMessage($SearchError, $this->id->errorMessage());
 		}
-		if (!CheckInteger($this->_userid->AdvancedSearch->SearchValue)) {
-			AddMessage($SearchError, $this->_userid->errorMessage());
+		if (!CheckInteger($this->user_id->AdvancedSearch->SearchValue)) {
+			AddMessage($SearchError, $this->user_id->errorMessage());
+		}
+		if (!CheckInteger($this->confirmed->AdvancedSearch->SearchValue)) {
+			AddMessage($SearchError, $this->confirmed->errorMessage());
+		}
+		if (!CheckDate($this->createdAt->AdvancedSearch->SearchValue)) {
+			AddMessage($SearchError, $this->createdAt->errorMessage());
+		}
+		if (!CheckDate($this->updatedAt->AdvancedSearch->SearchValue)) {
+			AddMessage($SearchError, $this->updatedAt->errorMessage());
 		}
 
 		// Return validate result
@@ -888,9 +923,12 @@ class image_search extends image
 	public function loadAdvancedSearch()
 	{
 		$this->id->AdvancedSearch->load();
-		$this->name->AdvancedSearch->load();
-		$this->_userid->AdvancedSearch->load();
 		$this->description->AdvancedSearch->load();
+		$this->uuid->AdvancedSearch->load();
+		$this->user_id->AdvancedSearch->load();
+		$this->confirmed->AdvancedSearch->load();
+		$this->createdAt->AdvancedSearch->load();
+		$this->updatedAt->AdvancedSearch->load();
 	}
 
 	// Set up Breadcrumb
@@ -935,8 +973,6 @@ class image_search extends image
 
 					// Format the field values
 					switch ($fld->FieldVar) {
-						case "x__userid":
-							break;
 					}
 					$ar[strval($row[0])] = $row;
 					$rs->moveNext();

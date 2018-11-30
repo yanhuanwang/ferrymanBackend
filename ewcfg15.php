@@ -34,7 +34,7 @@ define(PROJECT_NAMESPACE . "UNFORMAT_YEAR", 50); // Unformat year
 define(PROJECT_NAMESPACE . "PROJECT_NAME", "ferryman"); // Project name
 define(PROJECT_NAMESPACE . "CONFIG_FILE_FOLDER", PROJECT_NAME); // Config file name
 define(PROJECT_NAMESPACE . "PROJECT_ID", "{D49A959E-F136-47C9-B9D7-6B34755F62D4}"); // Project ID (GUID)
-define(PROJECT_NAMESPACE . "RANDOM_KEY", 'xfIgUDzyY39De47b'); // Random key for encryption
+define(PROJECT_NAMESPACE . "RANDOM_KEY", 'vCEy8iSSjjCs3p9r'); // Random key for encryption
 define(PROJECT_NAMESPACE . "ENCRYPTION_KEY", ''); // Encryption key for data protection
 define(PROJECT_NAMESPACE . "PROJECT_STYLESHEET_FILENAME", "phpcss/ferryman.css"); // Project stylesheet file name
 define(PROJECT_NAMESPACE . "PROJECT_CHARSET", "utf-8"); // Project charset
@@ -90,7 +90,7 @@ if (!isset($GLOBALS["ADODB_OUTP"]))
 	$GLOBALS["ADODB_OUTP"] = PROJECT_NAMESPACE . 'SetDebugMessage';
 
 // Database connection info
-$CONNECTIONS["DB"] = array("conn" => NULL, "id" => "DB", "type" => "MYSQL", "host" => "localhost", "port" => 3306, "user" => "root", "pass" => "", "db" => "ferryman", "qs" => "`", "qe" => "`");
+$CONNECTIONS["DB"] = array("conn" => NULL, "id" => "DB", "type" => "MYSQL", "host" => "127.0.0.1", "port" => 33061, "user" => "ferry", "pass" => "112222", "db" => "ferry", "qs" => "`", "qe" => "`");
 $CONNECTIONS[0] = &$CONNECTIONS["DB"];
 $CONNECTIONS["ferryman1"] = array("conn" => NULL, "id" => "ferryman1", "type" => "MYSQL", "host" => "localhost", "port" => 3306, "user" => "root", "pass" => "", "db" => "ferryman", "qs" => "`", "qe" => "`", "new" => TRUE);
 $CONNECTIONS[1] = &$CONNECTIONS["ferryman1"];

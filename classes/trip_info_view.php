@@ -671,6 +671,8 @@ class trip_info_view extends trip_info
 		$this->user_id->setVisibility();
 		$this->flight_number->setVisibility();
 		$this->date->setVisibility();
+		$this->createdAt->setVisibility();
+		$this->updatedAt->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Global Page Loading event (in userfn*.php)
@@ -946,6 +948,8 @@ class trip_info_view extends trip_info
 		$this->user_id->setDbValue($row['user_id']);
 		$this->flight_number->setDbValue($row['flight_number']);
 		$this->date->setDbValue($row['date']);
+		$this->createdAt->setDbValue($row['createdAt']);
+		$this->updatedAt->setDbValue($row['updatedAt']);
 	}
 
 	// Return a row with default values
@@ -959,6 +963,8 @@ class trip_info_view extends trip_info
 		$row['user_id'] = NULL;
 		$row['flight_number'] = NULL;
 		$row['date'] = NULL;
+		$row['createdAt'] = NULL;
+		$row['updatedAt'] = NULL;
 		return $row;
 	}
 
@@ -986,6 +992,8 @@ class trip_info_view extends trip_info
 		// user_id
 		// flight_number
 		// date
+		// createdAt
+		// updatedAt
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
@@ -1038,6 +1046,16 @@ class trip_info_view extends trip_info
 			$this->date->ViewValue = FormatDateTime($this->date->ViewValue, 0);
 			$this->date->ViewCustomAttributes = "";
 
+			// createdAt
+			$this->createdAt->ViewValue = $this->createdAt->CurrentValue;
+			$this->createdAt->ViewValue = FormatDateTime($this->createdAt->ViewValue, 0);
+			$this->createdAt->ViewCustomAttributes = "";
+
+			// updatedAt
+			$this->updatedAt->ViewValue = $this->updatedAt->CurrentValue;
+			$this->updatedAt->ViewValue = FormatDateTime($this->updatedAt->ViewValue, 0);
+			$this->updatedAt->ViewCustomAttributes = "";
+
 			// id
 			$this->id->LinkCustomAttributes = "";
 			$this->id->HrefValue = "";
@@ -1072,6 +1090,16 @@ class trip_info_view extends trip_info
 			$this->date->LinkCustomAttributes = "";
 			$this->date->HrefValue = "";
 			$this->date->TooltipValue = "";
+
+			// createdAt
+			$this->createdAt->LinkCustomAttributes = "";
+			$this->createdAt->HrefValue = "";
+			$this->createdAt->TooltipValue = "";
+
+			// updatedAt
+			$this->updatedAt->LinkCustomAttributes = "";
+			$this->updatedAt->HrefValue = "";
+			$this->updatedAt->TooltipValue = "";
 		}
 
 		// Call Row Rendered event

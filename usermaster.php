@@ -16,17 +16,6 @@ namespace PHPMaker2019\ferryman;
 </td>
 		</tr>
 <?php } ?>
-<?php if ($user->_email->Visible) { // email ?>
-		<tr id="r__email">
-			<td class="<?php echo $user->TableLeftColumnClass ?>"><?php echo $user->_email->caption() ?></td>
-			<td<?php echo $user->_email->cellAttributes() ?>>
-<span id="el_user__email">
-<span<?php echo $user->_email->viewAttributes() ?>>
-<?php echo $user->_email->getViewValue() ?></span>
-</span>
-</td>
-		</tr>
-<?php } ?>
 <?php if ($user->gender->Visible) { // gender ?>
 		<tr id="r_gender">
 			<td class="<?php echo $user->TableLeftColumnClass ?>"><?php echo $user->gender->caption() ?></td>
@@ -34,17 +23,6 @@ namespace PHPMaker2019\ferryman;
 <span id="el_user_gender">
 <span<?php echo $user->gender->viewAttributes() ?>>
 <?php echo $user->gender->getViewValue() ?></span>
-</span>
-</td>
-		</tr>
-<?php } ?>
-<?php if ($user->phone->Visible) { // phone ?>
-		<tr id="r_phone">
-			<td class="<?php echo $user->TableLeftColumnClass ?>"><?php echo $user->phone->caption() ?></td>
-			<td<?php echo $user->phone->cellAttributes() ?>>
-<span id="el_user_phone">
-<span<?php echo $user->phone->viewAttributes() ?>>
-<?php echo $user->phone->getViewValue() ?></span>
 </span>
 </td>
 		</tr>
@@ -149,35 +127,57 @@ namespace PHPMaker2019\ferryman;
 </td>
 		</tr>
 <?php } ?>
-<?php if ($user->addDate->Visible) { // addDate ?>
-		<tr id="r_addDate">
-			<td class="<?php echo $user->TableLeftColumnClass ?>"><?php echo $user->addDate->caption() ?></td>
-			<td<?php echo $user->addDate->cellAttributes() ?>>
-<span id="el_user_addDate">
-<span<?php echo $user->addDate->viewAttributes() ?>>
-<?php echo $user->addDate->getViewValue() ?></span>
+<?php if ($user->mobile_phone->Visible) { // mobile_phone ?>
+		<tr id="r_mobile_phone">
+			<td class="<?php echo $user->TableLeftColumnClass ?>"><?php echo $user->mobile_phone->caption() ?></td>
+			<td<?php echo $user->mobile_phone->cellAttributes() ?>>
+<span id="el_user_mobile_phone">
+<span<?php echo $user->mobile_phone->viewAttributes() ?>>
+<?php echo $user->mobile_phone->getViewValue() ?></span>
 </span>
 </td>
 		</tr>
 <?php } ?>
-<?php if ($user->updateDate->Visible) { // updateDate ?>
-		<tr id="r_updateDate">
-			<td class="<?php echo $user->TableLeftColumnClass ?>"><?php echo $user->updateDate->caption() ?></td>
-			<td<?php echo $user->updateDate->cellAttributes() ?>>
-<span id="el_user_updateDate">
-<span<?php echo $user->updateDate->viewAttributes() ?>>
-<?php echo $user->updateDate->getViewValue() ?></span>
+<?php if ($user->status->Visible) { // status ?>
+		<tr id="r_status">
+			<td class="<?php echo $user->TableLeftColumnClass ?>"><?php echo $user->status->caption() ?></td>
+			<td<?php echo $user->status->cellAttributes() ?>>
+<span id="el_user_status">
+<span<?php echo $user->status->viewAttributes() ?>>
+<?php echo $user->status->getViewValue() ?></span>
 </span>
 </td>
 		</tr>
 <?php } ?>
-<?php if ($user->activated->Visible) { // activated ?>
-		<tr id="r_activated">
-			<td class="<?php echo $user->TableLeftColumnClass ?>"><?php echo $user->activated->caption() ?></td>
-			<td<?php echo $user->activated->cellAttributes() ?>>
-<span id="el_user_activated">
-<span<?php echo $user->activated->viewAttributes() ?>>
-<?php echo $user->activated->getViewValue() ?></span>
+<?php if ($user->session_token->Visible) { // session_token ?>
+		<tr id="r_session_token">
+			<td class="<?php echo $user->TableLeftColumnClass ?>"><?php echo $user->session_token->caption() ?></td>
+			<td<?php echo $user->session_token->cellAttributes() ?>>
+<span id="el_user_session_token">
+<span<?php echo $user->session_token->viewAttributes() ?>>
+<?php echo $user->session_token->getViewValue() ?></span>
+</span>
+</td>
+		</tr>
+<?php } ?>
+<?php if ($user->createdAt->Visible) { // createdAt ?>
+		<tr id="r_createdAt">
+			<td class="<?php echo $user->TableLeftColumnClass ?>"><?php echo $user->createdAt->caption() ?></td>
+			<td<?php echo $user->createdAt->cellAttributes() ?>>
+<span id="el_user_createdAt">
+<span<?php echo $user->createdAt->viewAttributes() ?>>
+<?php echo $user->createdAt->getViewValue() ?></span>
+</span>
+</td>
+		</tr>
+<?php } ?>
+<?php if ($user->updatedAt->Visible) { // updatedAt ?>
+		<tr id="r_updatedAt">
+			<td class="<?php echo $user->TableLeftColumnClass ?>"><?php echo $user->updatedAt->caption() ?></td>
+			<td<?php echo $user->updatedAt->cellAttributes() ?>>
+<span id="el_user_updatedAt">
+<span<?php echo $user->updatedAt->viewAttributes() ?>>
+<?php echo $user->updatedAt->getViewValue() ?></span>
 </span>
 </td>
 		</tr>

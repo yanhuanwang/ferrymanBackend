@@ -83,7 +83,8 @@ class admin extends DbTable
 		// password
 		$this->password = new DbField('admin', 'admin', 'x_password', 'password', '`password`', '`password`', 200, -1, FALSE, '`password`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->password->Nullable = FALSE; // NOT NULL field
-		$this->password->Sortable = FALSE; // Allow sort
+		$this->password->Required = TRUE; // Required field
+		$this->password->Sortable = TRUE; // Allow sort
 		$this->fields['password'] = &$this->password;
 
 		// level
@@ -718,9 +719,6 @@ class admin extends DbTable
 		// id
 		// username
 		// password
-
-		$this->password->CellCssStyle = "white-space: nowrap;";
-
 		// level
 		// locked
 		// email
@@ -895,6 +893,8 @@ class admin extends DbTable
 						$doc->exportCaption($this->id);
 					if ($this->username->Exportable)
 						$doc->exportCaption($this->username);
+					if ($this->password->Exportable)
+						$doc->exportCaption($this->password);
 					if ($this->level->Exportable)
 						$doc->exportCaption($this->level);
 					if ($this->locked->Exportable)
@@ -953,6 +953,8 @@ class admin extends DbTable
 							$doc->exportField($this->id);
 						if ($this->username->Exportable)
 							$doc->exportField($this->username);
+						if ($this->password->Exportable)
+							$doc->exportField($this->password);
 						if ($this->level->Exportable)
 							$doc->exportField($this->level);
 						if ($this->locked->Exportable)

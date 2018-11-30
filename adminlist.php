@@ -64,6 +64,11 @@ fadminlist.validate = function() {
 			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
 				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $admin->username->caption(), $admin->username->RequiredErrorMessage)) ?>");
 		<?php } ?>
+		<?php if ($admin_list->password->Required) { ?>
+			elm = this.getElements("x" + infix + "_password");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $admin->password->caption(), $admin->password->RequiredErrorMessage)) ?>");
+		<?php } ?>
 		<?php if ($admin_list->level->Required) { ?>
 			elm = this.getElements("x" + infix + "_level");
 			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
@@ -110,6 +115,7 @@ fadminlist.validate = function() {
 fadminlist.emptyRow = function(infix) {
 	var fobj = this._form;
 	if (ew.valueChanged(fobj, infix, "username", false)) return false;
+	if (ew.valueChanged(fobj, infix, "password", false)) return false;
 	if (ew.valueChanged(fobj, infix, "level", false)) return false;
 	if (ew.valueChanged(fobj, infix, "locked", false)) return false;
 	if (ew.valueChanged(fobj, infix, "_email", false)) return false;
@@ -278,6 +284,15 @@ $admin_list->ListOptions->render("header", "left");
 		</div></div></th>
 	<?php } ?>
 <?php } ?>
+<?php if ($admin->password->Visible) { // password ?>
+	<?php if ($admin->sortUrl($admin->password) == "") { ?>
+		<th data-name="password" class="<?php echo $admin->password->headerCellClass() ?>"><div id="elh_admin_password" class="admin_password"><div class="ew-table-header-caption"><?php echo $admin->password->caption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="password" class="<?php echo $admin->password->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $admin->SortUrl($admin->password) ?>',1);"><div id="elh_admin_password" class="admin_password">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $admin->password->caption() ?></span><span class="ew-table-header-sort"><?php if ($admin->password->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($admin->password->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
+		</div></div></th>
+	<?php } ?>
+<?php } ?>
 <?php if ($admin->level->Visible) { // level ?>
 	<?php if ($admin->sortUrl($admin->level) == "") { ?>
 		<th data-name="level" class="<?php echo $admin->level->headerCellClass() ?>"><div id="elh_admin_level" class="admin_level"><div class="ew-table-header-caption"><?php echo $admin->level->caption() ?></div></div></th>
@@ -357,6 +372,14 @@ $admin_list->ListOptions->render("body", "left", $admin_list->RowCnt);
 <input type="text" data-table="admin" data-field="x_username" name="x<?php echo $admin_list->RowIndex ?>_username" id="x<?php echo $admin_list->RowIndex ?>_username" size="30" maxlength="100" placeholder="<?php echo HtmlEncode($admin->username->getPlaceHolder()) ?>" value="<?php echo $admin->username->EditValue ?>"<?php echo $admin->username->editAttributes() ?>>
 </span>
 <input type="hidden" data-table="admin" data-field="x_username" name="o<?php echo $admin_list->RowIndex ?>_username" id="o<?php echo $admin_list->RowIndex ?>_username" value="<?php echo HtmlEncode($admin->username->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($admin->password->Visible) { // password ?>
+		<td data-name="password">
+<span id="el<?php echo $admin_list->RowCnt ?>_admin_password" class="form-group admin_password">
+<input type="text" data-table="admin" data-field="x_password" name="x<?php echo $admin_list->RowIndex ?>_password" id="x<?php echo $admin_list->RowIndex ?>_password" size="30" maxlength="100" placeholder="<?php echo HtmlEncode($admin->password->getPlaceHolder()) ?>" value="<?php echo $admin->password->EditValue ?>"<?php echo $admin->password->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="admin" data-field="x_password" name="o<?php echo $admin_list->RowIndex ?>_password" id="o<?php echo $admin_list->RowIndex ?>_password" value="<?php echo HtmlEncode($admin->password->OldValue) ?>">
 </td>
 	<?php } ?>
 	<?php if ($admin->level->Visible) { // level ?>
@@ -543,6 +566,27 @@ $admin_list->ListOptions->render("body", "left", $admin_list->RowCnt);
 <?php if ($admin->RowType == ROWTYPE_EDIT || $admin->CurrentMode == "edit") { ?>
 <input type="hidden" data-table="admin" data-field="x_id" name="x<?php echo $admin_list->RowIndex ?>_id" id="x<?php echo $admin_list->RowIndex ?>_id" value="<?php echo HtmlEncode($admin->id->CurrentValue) ?>">
 <?php } ?>
+	<?php if ($admin->password->Visible) { // password ?>
+		<td data-name="password"<?php echo $admin->password->cellAttributes() ?>>
+<?php if ($admin->RowType == ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $admin_list->RowCnt ?>_admin_password" class="form-group admin_password">
+<input type="text" data-table="admin" data-field="x_password" name="x<?php echo $admin_list->RowIndex ?>_password" id="x<?php echo $admin_list->RowIndex ?>_password" size="30" maxlength="100" placeholder="<?php echo HtmlEncode($admin->password->getPlaceHolder()) ?>" value="<?php echo $admin->password->EditValue ?>"<?php echo $admin->password->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="admin" data-field="x_password" name="o<?php echo $admin_list->RowIndex ?>_password" id="o<?php echo $admin_list->RowIndex ?>_password" value="<?php echo HtmlEncode($admin->password->OldValue) ?>">
+<?php } ?>
+<?php if ($admin->RowType == ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $admin_list->RowCnt ?>_admin_password" class="form-group admin_password">
+<input type="text" data-table="admin" data-field="x_password" name="x<?php echo $admin_list->RowIndex ?>_password" id="x<?php echo $admin_list->RowIndex ?>_password" size="30" maxlength="100" placeholder="<?php echo HtmlEncode($admin->password->getPlaceHolder()) ?>" value="<?php echo $admin->password->EditValue ?>"<?php echo $admin->password->editAttributes() ?>>
+</span>
+<?php } ?>
+<?php if ($admin->RowType == ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $admin_list->RowCnt ?>_admin_password" class="admin_password">
+<span<?php echo $admin->password->viewAttributes() ?>>
+<?php echo $admin->password->getViewValue() ?></span>
+</span>
+<?php } ?>
+</td>
+	<?php } ?>
 	<?php if ($admin->level->Visible) { // level ?>
 		<td data-name="level"<?php echo $admin->level->cellAttributes() ?>>
 <?php if ($admin->RowType == ROWTYPE_ADD) { // Add record ?>
@@ -676,6 +720,14 @@ $admin_list->ListOptions->render("body", "left", $admin_list->RowIndex);
 <input type="text" data-table="admin" data-field="x_username" name="x<?php echo $admin_list->RowIndex ?>_username" id="x<?php echo $admin_list->RowIndex ?>_username" size="30" maxlength="100" placeholder="<?php echo HtmlEncode($admin->username->getPlaceHolder()) ?>" value="<?php echo $admin->username->EditValue ?>"<?php echo $admin->username->editAttributes() ?>>
 </span>
 <input type="hidden" data-table="admin" data-field="x_username" name="o<?php echo $admin_list->RowIndex ?>_username" id="o<?php echo $admin_list->RowIndex ?>_username" value="<?php echo HtmlEncode($admin->username->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($admin->password->Visible) { // password ?>
+		<td data-name="password">
+<span id="el$rowindex$_admin_password" class="form-group admin_password">
+<input type="text" data-table="admin" data-field="x_password" name="x<?php echo $admin_list->RowIndex ?>_password" id="x<?php echo $admin_list->RowIndex ?>_password" size="30" maxlength="100" placeholder="<?php echo HtmlEncode($admin->password->getPlaceHolder()) ?>" value="<?php echo $admin->password->EditValue ?>"<?php echo $admin->password->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="admin" data-field="x_password" name="o<?php echo $admin_list->RowIndex ?>_password" id="o<?php echo $admin_list->RowIndex ?>_password" value="<?php echo HtmlEncode($admin->password->OldValue) ?>">
 </td>
 	<?php } ?>
 	<?php if ($admin->level->Visible) { // level ?>

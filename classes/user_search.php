@@ -555,9 +555,7 @@ class user_search extends user
 		$this->id->setVisibility();
 		$this->username->setVisibility();
 		$this->password->Visible = FALSE;
-		$this->_email->setVisibility();
 		$this->gender->setVisibility();
-		$this->phone->setVisibility();
 		$this->address->setVisibility();
 		$this->country->setVisibility();
 		$this->photo->setVisibility();
@@ -567,9 +565,11 @@ class user_search extends user
 		$this->send_role->setVisibility();
 		$this->carrier_role->setVisibility();
 		$this->birthday->setVisibility();
-		$this->addDate->setVisibility();
-		$this->updateDate->setVisibility();
-		$this->activated->setVisibility();
+		$this->mobile_phone->setVisibility();
+		$this->status->setVisibility();
+		$this->session_token->setVisibility();
+		$this->createdAt->setVisibility();
+		$this->updatedAt->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Global Page Loading event (in userfn*.php)
@@ -634,9 +634,7 @@ class user_search extends user
 		$srchUrl = "";
 		$this->buildSearchUrl($srchUrl, $this->id); // id
 		$this->buildSearchUrl($srchUrl, $this->username); // username
-		$this->buildSearchUrl($srchUrl, $this->_email); // email
 		$this->buildSearchUrl($srchUrl, $this->gender); // gender
-		$this->buildSearchUrl($srchUrl, $this->phone); // phone
 		$this->buildSearchUrl($srchUrl, $this->address); // address
 		$this->buildSearchUrl($srchUrl, $this->country); // country
 		$this->buildSearchUrl($srchUrl, $this->photo); // photo
@@ -646,9 +644,11 @@ class user_search extends user
 		$this->buildSearchUrl($srchUrl, $this->send_role); // send_role
 		$this->buildSearchUrl($srchUrl, $this->carrier_role); // carrier_role
 		$this->buildSearchUrl($srchUrl, $this->birthday); // birthday
-		$this->buildSearchUrl($srchUrl, $this->addDate); // addDate
-		$this->buildSearchUrl($srchUrl, $this->updateDate); // updateDate
-		$this->buildSearchUrl($srchUrl, $this->activated); // activated
+		$this->buildSearchUrl($srchUrl, $this->mobile_phone); // mobile_phone
+		$this->buildSearchUrl($srchUrl, $this->status); // status
+		$this->buildSearchUrl($srchUrl, $this->session_token); // session_token
+		$this->buildSearchUrl($srchUrl, $this->createdAt); // createdAt
+		$this->buildSearchUrl($srchUrl, $this->updatedAt); // updatedAt
 		if ($srchUrl <> "")
 			$srchUrl .= "&";
 		$srchUrl .= "cmd=search";
@@ -730,17 +730,9 @@ class user_search extends user
 		$this->username->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_username"));
 		$this->username->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_username"));
 
-		// email
-		$this->_email->AdvancedSearch->setSearchValue($CurrentForm->getValue("x__email"));
-		$this->_email->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z__email"));
-
 		// gender
 		$this->gender->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_gender"));
 		$this->gender->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_gender"));
-
-		// phone
-		$this->phone->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_phone"));
-		$this->phone->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_phone"));
 
 		// address
 		$this->address->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_address"));
@@ -778,17 +770,25 @@ class user_search extends user
 		$this->birthday->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_birthday"));
 		$this->birthday->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_birthday"));
 
-		// addDate
-		$this->addDate->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_addDate"));
-		$this->addDate->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_addDate"));
+		// mobile_phone
+		$this->mobile_phone->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_mobile_phone"));
+		$this->mobile_phone->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_mobile_phone"));
 
-		// updateDate
-		$this->updateDate->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_updateDate"));
-		$this->updateDate->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_updateDate"));
+		// status
+		$this->status->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_status"));
+		$this->status->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_status"));
 
-		// activated
-		$this->activated->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_activated"));
-		$this->activated->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_activated"));
+		// session_token
+		$this->session_token->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_session_token"));
+		$this->session_token->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_session_token"));
+
+		// createdAt
+		$this->createdAt->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_createdAt"));
+		$this->createdAt->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_createdAt"));
+
+		// updatedAt
+		$this->updatedAt->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_updatedAt"));
+		$this->updatedAt->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_updatedAt"));
 	}
 
 	// Render row values based on field settings
@@ -805,9 +805,7 @@ class user_search extends user
 		// id
 		// username
 		// password
-		// email
 		// gender
-		// phone
 		// address
 		// country
 		// photo
@@ -817,9 +815,11 @@ class user_search extends user
 		// send_role
 		// carrier_role
 		// birthday
-		// addDate
-		// updateDate
-		// activated
+		// mobile_phone
+		// status
+		// session_token
+		// createdAt
+		// updatedAt
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
@@ -831,10 +831,6 @@ class user_search extends user
 			$this->username->ViewValue = $this->username->CurrentValue;
 			$this->username->ViewCustomAttributes = "";
 
-			// email
-			$this->_email->ViewValue = $this->_email->CurrentValue;
-			$this->_email->ViewCustomAttributes = "";
-
 			// gender
 			if (strval($this->gender->CurrentValue) <> "") {
 				$this->gender->ViewValue = $this->gender->optionCaption($this->gender->CurrentValue);
@@ -842,10 +838,6 @@ class user_search extends user
 				$this->gender->ViewValue = NULL;
 			}
 			$this->gender->ViewCustomAttributes = "";
-
-			// phone
-			$this->phone->ViewValue = $this->phone->CurrentValue;
-			$this->phone->ViewCustomAttributes = "";
 
 			// address
 			$this->address->ViewValue = $this->address->CurrentValue;
@@ -901,20 +893,28 @@ class user_search extends user
 			$this->birthday->ViewValue = FormatDateTime($this->birthday->ViewValue, 0);
 			$this->birthday->ViewCustomAttributes = "";
 
-			// addDate
-			$this->addDate->ViewValue = $this->addDate->CurrentValue;
-			$this->addDate->ViewValue = FormatDateTime($this->addDate->ViewValue, 0);
-			$this->addDate->ViewCustomAttributes = "";
+			// mobile_phone
+			$this->mobile_phone->ViewValue = $this->mobile_phone->CurrentValue;
+			$this->mobile_phone->ViewCustomAttributes = "";
 
-			// updateDate
-			$this->updateDate->ViewValue = $this->updateDate->CurrentValue;
-			$this->updateDate->ViewValue = FormatDateTime($this->updateDate->ViewValue, 0);
-			$this->updateDate->ViewCustomAttributes = "";
+			// status
+			$this->status->ViewValue = $this->status->CurrentValue;
+			$this->status->ViewValue = FormatNumber($this->status->ViewValue, 0, -2, -2, -2);
+			$this->status->ViewCustomAttributes = "";
 
-			// activated
-			$this->activated->ViewValue = $this->activated->CurrentValue;
-			$this->activated->ViewValue = FormatNumber($this->activated->ViewValue, 0, -2, -2, -2);
-			$this->activated->ViewCustomAttributes = "";
+			// session_token
+			$this->session_token->ViewValue = $this->session_token->CurrentValue;
+			$this->session_token->ViewCustomAttributes = "";
+
+			// createdAt
+			$this->createdAt->ViewValue = $this->createdAt->CurrentValue;
+			$this->createdAt->ViewValue = FormatDateTime($this->createdAt->ViewValue, 0);
+			$this->createdAt->ViewCustomAttributes = "";
+
+			// updatedAt
+			$this->updatedAt->ViewValue = $this->updatedAt->CurrentValue;
+			$this->updatedAt->ViewValue = FormatDateTime($this->updatedAt->ViewValue, 0);
+			$this->updatedAt->ViewCustomAttributes = "";
 
 			// id
 			$this->id->LinkCustomAttributes = "";
@@ -926,20 +926,10 @@ class user_search extends user
 			$this->username->HrefValue = "";
 			$this->username->TooltipValue = "";
 
-			// email
-			$this->_email->LinkCustomAttributes = "";
-			$this->_email->HrefValue = "";
-			$this->_email->TooltipValue = "";
-
 			// gender
 			$this->gender->LinkCustomAttributes = "";
 			$this->gender->HrefValue = "";
 			$this->gender->TooltipValue = "";
-
-			// phone
-			$this->phone->LinkCustomAttributes = "";
-			$this->phone->HrefValue = "";
-			$this->phone->TooltipValue = "";
 
 			// address
 			$this->address->LinkCustomAttributes = "";
@@ -999,20 +989,30 @@ class user_search extends user
 			$this->birthday->HrefValue = "";
 			$this->birthday->TooltipValue = "";
 
-			// addDate
-			$this->addDate->LinkCustomAttributes = "";
-			$this->addDate->HrefValue = "";
-			$this->addDate->TooltipValue = "";
+			// mobile_phone
+			$this->mobile_phone->LinkCustomAttributes = "";
+			$this->mobile_phone->HrefValue = "";
+			$this->mobile_phone->TooltipValue = "";
 
-			// updateDate
-			$this->updateDate->LinkCustomAttributes = "";
-			$this->updateDate->HrefValue = "";
-			$this->updateDate->TooltipValue = "";
+			// status
+			$this->status->LinkCustomAttributes = "";
+			$this->status->HrefValue = "";
+			$this->status->TooltipValue = "";
 
-			// activated
-			$this->activated->LinkCustomAttributes = "";
-			$this->activated->HrefValue = "";
-			$this->activated->TooltipValue = "";
+			// session_token
+			$this->session_token->LinkCustomAttributes = "";
+			$this->session_token->HrefValue = "";
+			$this->session_token->TooltipValue = "";
+
+			// createdAt
+			$this->createdAt->LinkCustomAttributes = "";
+			$this->createdAt->HrefValue = "";
+			$this->createdAt->TooltipValue = "";
+
+			// updatedAt
+			$this->updatedAt->LinkCustomAttributes = "";
+			$this->updatedAt->HrefValue = "";
+			$this->updatedAt->TooltipValue = "";
 		} elseif ($this->RowType == ROWTYPE_SEARCH) { // Search row
 
 			// id
@@ -1027,22 +1027,10 @@ class user_search extends user
 			$this->username->EditValue = HtmlEncode($this->username->AdvancedSearch->SearchValue);
 			$this->username->PlaceHolder = RemoveHtml($this->username->caption());
 
-			// email
-			$this->_email->EditAttrs["class"] = "form-control";
-			$this->_email->EditCustomAttributes = "";
-			$this->_email->EditValue = HtmlEncode($this->_email->AdvancedSearch->SearchValue);
-			$this->_email->PlaceHolder = RemoveHtml($this->_email->caption());
-
 			// gender
 			$this->gender->EditAttrs["class"] = "form-control";
 			$this->gender->EditCustomAttributes = "";
 			$this->gender->EditValue = $this->gender->options(TRUE);
-
-			// phone
-			$this->phone->EditAttrs["class"] = "form-control";
-			$this->phone->EditCustomAttributes = "";
-			$this->phone->EditValue = HtmlEncode($this->phone->AdvancedSearch->SearchValue);
-			$this->phone->PlaceHolder = RemoveHtml($this->phone->caption());
 
 			// address
 			$this->address->EditAttrs["class"] = "form-control";
@@ -1095,23 +1083,35 @@ class user_search extends user
 			$this->birthday->EditValue = HtmlEncode(FormatDateTime(UnFormatDateTime($this->birthday->AdvancedSearch->SearchValue, 0), 8));
 			$this->birthday->PlaceHolder = RemoveHtml($this->birthday->caption());
 
-			// addDate
-			$this->addDate->EditAttrs["class"] = "form-control";
-			$this->addDate->EditCustomAttributes = "";
-			$this->addDate->EditValue = HtmlEncode(FormatDateTime(UnFormatDateTime($this->addDate->AdvancedSearch->SearchValue, 0), 8));
-			$this->addDate->PlaceHolder = RemoveHtml($this->addDate->caption());
+			// mobile_phone
+			$this->mobile_phone->EditAttrs["class"] = "form-control";
+			$this->mobile_phone->EditCustomAttributes = "";
+			$this->mobile_phone->EditValue = HtmlEncode($this->mobile_phone->AdvancedSearch->SearchValue);
+			$this->mobile_phone->PlaceHolder = RemoveHtml($this->mobile_phone->caption());
 
-			// updateDate
-			$this->updateDate->EditAttrs["class"] = "form-control";
-			$this->updateDate->EditCustomAttributes = "";
-			$this->updateDate->EditValue = HtmlEncode(FormatDateTime(UnFormatDateTime($this->updateDate->AdvancedSearch->SearchValue, 0), 8));
-			$this->updateDate->PlaceHolder = RemoveHtml($this->updateDate->caption());
+			// status
+			$this->status->EditAttrs["class"] = "form-control";
+			$this->status->EditCustomAttributes = "";
+			$this->status->EditValue = HtmlEncode($this->status->AdvancedSearch->SearchValue);
+			$this->status->PlaceHolder = RemoveHtml($this->status->caption());
 
-			// activated
-			$this->activated->EditAttrs["class"] = "form-control";
-			$this->activated->EditCustomAttributes = "";
-			$this->activated->EditValue = HtmlEncode($this->activated->AdvancedSearch->SearchValue);
-			$this->activated->PlaceHolder = RemoveHtml($this->activated->caption());
+			// session_token
+			$this->session_token->EditAttrs["class"] = "form-control";
+			$this->session_token->EditCustomAttributes = "";
+			$this->session_token->EditValue = HtmlEncode($this->session_token->AdvancedSearch->SearchValue);
+			$this->session_token->PlaceHolder = RemoveHtml($this->session_token->caption());
+
+			// createdAt
+			$this->createdAt->EditAttrs["class"] = "form-control";
+			$this->createdAt->EditCustomAttributes = "";
+			$this->createdAt->EditValue = HtmlEncode(FormatDateTime(UnFormatDateTime($this->createdAt->AdvancedSearch->SearchValue, 0), 8));
+			$this->createdAt->PlaceHolder = RemoveHtml($this->createdAt->caption());
+
+			// updatedAt
+			$this->updatedAt->EditAttrs["class"] = "form-control";
+			$this->updatedAt->EditCustomAttributes = "";
+			$this->updatedAt->EditValue = HtmlEncode(FormatDateTime(UnFormatDateTime($this->updatedAt->AdvancedSearch->SearchValue, 0), 8));
+			$this->updatedAt->PlaceHolder = RemoveHtml($this->updatedAt->caption());
 		}
 		if ($this->RowType == ROWTYPE_ADD || $this->RowType == ROWTYPE_EDIT || $this->RowType == ROWTYPE_SEARCH) // Add/Edit/Search row
 			$this->setupFieldTitles();
@@ -1138,14 +1138,14 @@ class user_search extends user
 		if (!CheckDate($this->birthday->AdvancedSearch->SearchValue)) {
 			AddMessage($SearchError, $this->birthday->errorMessage());
 		}
-		if (!CheckDate($this->addDate->AdvancedSearch->SearchValue)) {
-			AddMessage($SearchError, $this->addDate->errorMessage());
+		if (!CheckInteger($this->status->AdvancedSearch->SearchValue)) {
+			AddMessage($SearchError, $this->status->errorMessage());
 		}
-		if (!CheckDate($this->updateDate->AdvancedSearch->SearchValue)) {
-			AddMessage($SearchError, $this->updateDate->errorMessage());
+		if (!CheckDate($this->createdAt->AdvancedSearch->SearchValue)) {
+			AddMessage($SearchError, $this->createdAt->errorMessage());
 		}
-		if (!CheckInteger($this->activated->AdvancedSearch->SearchValue)) {
-			AddMessage($SearchError, $this->activated->errorMessage());
+		if (!CheckDate($this->updatedAt->AdvancedSearch->SearchValue)) {
+			AddMessage($SearchError, $this->updatedAt->errorMessage());
 		}
 
 		// Return validate result
@@ -1165,9 +1165,7 @@ class user_search extends user
 	{
 		$this->id->AdvancedSearch->load();
 		$this->username->AdvancedSearch->load();
-		$this->_email->AdvancedSearch->load();
 		$this->gender->AdvancedSearch->load();
-		$this->phone->AdvancedSearch->load();
 		$this->address->AdvancedSearch->load();
 		$this->country->AdvancedSearch->load();
 		$this->photo->AdvancedSearch->load();
@@ -1177,9 +1175,11 @@ class user_search extends user
 		$this->send_role->AdvancedSearch->load();
 		$this->carrier_role->AdvancedSearch->load();
 		$this->birthday->AdvancedSearch->load();
-		$this->addDate->AdvancedSearch->load();
-		$this->updateDate->AdvancedSearch->load();
-		$this->activated->AdvancedSearch->load();
+		$this->mobile_phone->AdvancedSearch->load();
+		$this->status->AdvancedSearch->load();
+		$this->session_token->AdvancedSearch->load();
+		$this->createdAt->AdvancedSearch->load();
+		$this->updatedAt->AdvancedSearch->load();
 	}
 
 	// Set up Breadcrumb

@@ -5,28 +5,6 @@ namespace PHPMaker2019\ferryman;
 <div class="ew-master-div">
 <table id="tbl_imagemaster" class="table ew-view-table ew-master-table ew-vertical">
 	<tbody>
-<?php if ($image->name->Visible) { // name ?>
-		<tr id="r_name">
-			<td class="<?php echo $image->TableLeftColumnClass ?>"><?php echo $image->name->caption() ?></td>
-			<td<?php echo $image->name->cellAttributes() ?>>
-<span id="el_image_name">
-<span<?php echo $image->name->viewAttributes() ?>>
-<?php echo $image->name->getViewValue() ?></span>
-</span>
-</td>
-		</tr>
-<?php } ?>
-<?php if ($image->_userid->Visible) { // userid ?>
-		<tr id="r__userid">
-			<td class="<?php echo $image->TableLeftColumnClass ?>"><?php echo $image->_userid->caption() ?></td>
-			<td<?php echo $image->_userid->cellAttributes() ?>>
-<span id="el_image__userid">
-<span<?php echo $image->_userid->viewAttributes() ?>>
-<?php echo $image->_userid->getViewValue() ?></span>
-</span>
-</td>
-		</tr>
-<?php } ?>
 <?php if ($image->path->Visible) { // path ?>
 		<tr id="r_path">
 			<td class="<?php echo $image->TableLeftColumnClass ?>"><?php echo $image->path->caption() ?></td>
@@ -46,6 +24,61 @@ namespace PHPMaker2019\ferryman;
 <span id="el_image_description">
 <span<?php echo $image->description->viewAttributes() ?>>
 <?php echo $image->description->getViewValue() ?></span>
+</span>
+</td>
+		</tr>
+<?php } ?>
+<?php if ($image->uuid->Visible) { // uuid ?>
+		<tr id="r_uuid">
+			<td class="<?php echo $image->TableLeftColumnClass ?>"><?php echo $image->uuid->caption() ?></td>
+			<td<?php echo $image->uuid->cellAttributes() ?>>
+<span id="el_image_uuid">
+<span<?php echo $image->uuid->viewAttributes() ?>>
+<?php echo $image->uuid->getViewValue() ?></span>
+</span>
+</td>
+		</tr>
+<?php } ?>
+<?php if ($image->user_id->Visible) { // user_id ?>
+		<tr id="r_user_id">
+			<td class="<?php echo $image->TableLeftColumnClass ?>"><?php echo $image->user_id->caption() ?></td>
+			<td<?php echo $image->user_id->cellAttributes() ?>>
+<span id="el_image_user_id">
+<span<?php echo $image->user_id->viewAttributes() ?>>
+<?php echo $image->user_id->getViewValue() ?></span>
+</span>
+</td>
+		</tr>
+<?php } ?>
+<?php if ($image->confirmed->Visible) { // confirmed ?>
+		<tr id="r_confirmed">
+			<td class="<?php echo $image->TableLeftColumnClass ?>"><?php echo $image->confirmed->caption() ?></td>
+			<td<?php echo $image->confirmed->cellAttributes() ?>>
+<span id="el_image_confirmed">
+<span<?php echo $image->confirmed->viewAttributes() ?>>
+<?php echo $image->confirmed->getViewValue() ?></span>
+</span>
+</td>
+		</tr>
+<?php } ?>
+<?php if ($image->createdAt->Visible) { // createdAt ?>
+		<tr id="r_createdAt">
+			<td class="<?php echo $image->TableLeftColumnClass ?>"><?php echo $image->createdAt->caption() ?></td>
+			<td<?php echo $image->createdAt->cellAttributes() ?>>
+<span id="el_image_createdAt">
+<span<?php echo $image->createdAt->viewAttributes() ?>>
+<?php echo $image->createdAt->getViewValue() ?></span>
+</span>
+</td>
+		</tr>
+<?php } ?>
+<?php if ($image->updatedAt->Visible) { // updatedAt ?>
+		<tr id="r_updatedAt">
+			<td class="<?php echo $image->TableLeftColumnClass ?>"><?php echo $image->updatedAt->caption() ?></td>
+			<td<?php echo $image->updatedAt->cellAttributes() ?>>
+<span id="el_image_updatedAt">
+<span<?php echo $image->updatedAt->viewAttributes() ?>>
+<?php echo $image->updatedAt->getViewValue() ?></span>
 </span>
 </td>
 		</tr>

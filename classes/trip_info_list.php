@@ -715,6 +715,8 @@ class trip_info_list extends trip_info
 		$this->user_id->setVisibility();
 		$this->flight_number->setVisibility();
 		$this->date->setVisibility();
+		$this->createdAt->setVisibility();
+		$this->updatedAt->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Global Page Loading event (in userfn*.php)
@@ -1459,6 +1461,10 @@ class trip_info_list extends trip_info
 			return FALSE;
 		if ($CurrentForm->hasValue("x_date") && $CurrentForm->hasValue("o_date") && $this->date->CurrentValue <> $this->date->OldValue)
 			return FALSE;
+		if ($CurrentForm->hasValue("x_createdAt") && $CurrentForm->hasValue("o_createdAt") && $this->createdAt->CurrentValue <> $this->createdAt->OldValue)
+			return FALSE;
+		if ($CurrentForm->hasValue("x_updatedAt") && $CurrentForm->hasValue("o_updatedAt") && $this->updatedAt->CurrentValue <> $this->updatedAt->OldValue)
+			return FALSE;
 		return TRUE;
 	}
 
@@ -1548,6 +1554,8 @@ class trip_info_list extends trip_info
 		$filterList = Concat($filterList, $this->user_id->AdvancedSearch->toJson(), ","); // Field user_id
 		$filterList = Concat($filterList, $this->flight_number->AdvancedSearch->toJson(), ","); // Field flight_number
 		$filterList = Concat($filterList, $this->date->AdvancedSearch->toJson(), ","); // Field date
+		$filterList = Concat($filterList, $this->createdAt->AdvancedSearch->toJson(), ","); // Field createdAt
+		$filterList = Concat($filterList, $this->updatedAt->AdvancedSearch->toJson(), ","); // Field updatedAt
 		if ($this->BasicSearch->Keyword <> "") {
 			$wrk = "\"" . TABLE_BASIC_SEARCH . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . TABLE_BASIC_SEARCH_TYPE . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
 			$filterList = Concat($filterList, $wrk, ",");
@@ -1641,6 +1649,22 @@ class trip_info_list extends trip_info
 		$this->date->AdvancedSearch->SearchValue2 = @$filter["y_date"];
 		$this->date->AdvancedSearch->SearchOperator2 = @$filter["w_date"];
 		$this->date->AdvancedSearch->save();
+
+		// Field createdAt
+		$this->createdAt->AdvancedSearch->SearchValue = @$filter["x_createdAt"];
+		$this->createdAt->AdvancedSearch->SearchOperator = @$filter["z_createdAt"];
+		$this->createdAt->AdvancedSearch->SearchCondition = @$filter["v_createdAt"];
+		$this->createdAt->AdvancedSearch->SearchValue2 = @$filter["y_createdAt"];
+		$this->createdAt->AdvancedSearch->SearchOperator2 = @$filter["w_createdAt"];
+		$this->createdAt->AdvancedSearch->save();
+
+		// Field updatedAt
+		$this->updatedAt->AdvancedSearch->SearchValue = @$filter["x_updatedAt"];
+		$this->updatedAt->AdvancedSearch->SearchOperator = @$filter["z_updatedAt"];
+		$this->updatedAt->AdvancedSearch->SearchCondition = @$filter["v_updatedAt"];
+		$this->updatedAt->AdvancedSearch->SearchValue2 = @$filter["y_updatedAt"];
+		$this->updatedAt->AdvancedSearch->SearchOperator2 = @$filter["w_updatedAt"];
+		$this->updatedAt->AdvancedSearch->save();
 		$this->BasicSearch->setKeyword(@$filter[TABLE_BASIC_SEARCH]);
 		$this->BasicSearch->setType(@$filter[TABLE_BASIC_SEARCH_TYPE]);
 	}
@@ -1659,6 +1683,8 @@ class trip_info_list extends trip_info
 		$this->buildSearchSql($where, $this->user_id, $default, FALSE); // user_id
 		$this->buildSearchSql($where, $this->flight_number, $default, FALSE); // flight_number
 		$this->buildSearchSql($where, $this->date, $default, FALSE); // date
+		$this->buildSearchSql($where, $this->createdAt, $default, FALSE); // createdAt
+		$this->buildSearchSql($where, $this->updatedAt, $default, FALSE); // updatedAt
 
 		// Set up search parm
 		if (!$default && $where <> "" && in_array($this->Command, array("", "reset", "resetall"))) {
@@ -1672,6 +1698,8 @@ class trip_info_list extends trip_info
 			$this->user_id->AdvancedSearch->save(); // user_id
 			$this->flight_number->AdvancedSearch->save(); // flight_number
 			$this->date->AdvancedSearch->save(); // date
+			$this->createdAt->AdvancedSearch->save(); // createdAt
+			$this->updatedAt->AdvancedSearch->save(); // updatedAt
 		}
 		return $where;
 	}
@@ -1865,6 +1893,10 @@ class trip_info_list extends trip_info
 			return TRUE;
 		if ($this->date->AdvancedSearch->issetSession())
 			return TRUE;
+		if ($this->createdAt->AdvancedSearch->issetSession())
+			return TRUE;
+		if ($this->updatedAt->AdvancedSearch->issetSession())
+			return TRUE;
 		return FALSE;
 	}
 
@@ -1905,6 +1937,8 @@ class trip_info_list extends trip_info
 		$this->user_id->AdvancedSearch->unsetSession();
 		$this->flight_number->AdvancedSearch->unsetSession();
 		$this->date->AdvancedSearch->unsetSession();
+		$this->createdAt->AdvancedSearch->unsetSession();
+		$this->updatedAt->AdvancedSearch->unsetSession();
 	}
 
 	// Restore all search parameters
@@ -1923,6 +1957,8 @@ class trip_info_list extends trip_info
 		$this->user_id->AdvancedSearch->load();
 		$this->flight_number->AdvancedSearch->load();
 		$this->date->AdvancedSearch->load();
+		$this->createdAt->AdvancedSearch->load();
+		$this->updatedAt->AdvancedSearch->load();
 	}
 
 	// Set up sort parameters
@@ -1939,6 +1975,8 @@ class trip_info_list extends trip_info
 			$this->updateSort($this->user_id); // user_id
 			$this->updateSort($this->flight_number); // flight_number
 			$this->updateSort($this->date); // date
+			$this->updateSort($this->createdAt); // createdAt
+			$this->updateSort($this->updatedAt); // updatedAt
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -1988,6 +2026,8 @@ class trip_info_list extends trip_info
 				$this->user_id->setSort("");
 				$this->flight_number->setSort("");
 				$this->date->setSort("");
+				$this->createdAt->setSort("");
+				$this->updatedAt->setSort("");
 			}
 
 			// Reset start position
@@ -2545,6 +2585,10 @@ class trip_info_list extends trip_info
 		$this->flight_number->OldValue = $this->flight_number->CurrentValue;
 		$this->date->CurrentValue = NULL;
 		$this->date->OldValue = $this->date->CurrentValue;
+		$this->createdAt->CurrentValue = NULL;
+		$this->createdAt->OldValue = $this->createdAt->CurrentValue;
+		$this->updatedAt->CurrentValue = NULL;
+		$this->updatedAt->OldValue = $this->updatedAt->CurrentValue;
 	}
 
 	// Load basic search values
@@ -2604,6 +2648,18 @@ class trip_info_list extends trip_info
 		if ($this->date->AdvancedSearch->SearchValue <> "" && $this->Command == "")
 			$this->Command = "search";
 		$this->date->AdvancedSearch->setSearchOperator(Get("z_date", ""));
+
+		// createdAt
+		$this->createdAt->AdvancedSearch->setSearchValue(Get("x_createdAt", Get("createdAt", "")));
+		if ($this->createdAt->AdvancedSearch->SearchValue <> "" && $this->Command == "")
+			$this->Command = "search";
+		$this->createdAt->AdvancedSearch->setSearchOperator(Get("z_createdAt", ""));
+
+		// updatedAt
+		$this->updatedAt->AdvancedSearch->setSearchValue(Get("x_updatedAt", Get("updatedAt", "")));
+		if ($this->updatedAt->AdvancedSearch->SearchValue <> "" && $this->Command == "")
+			$this->Command = "search";
+		$this->updatedAt->AdvancedSearch->setSearchOperator(Get("z_updatedAt", ""));
 	}
 
 	// Load form values
@@ -2674,6 +2730,28 @@ class trip_info_list extends trip_info
 		}
 		$this->date->setOldValue($CurrentForm->getValue("o_date"));
 
+		// Check field name 'createdAt' first before field var 'x_createdAt'
+		$val = $CurrentForm->hasValue("createdAt") ? $CurrentForm->getValue("createdAt") : $CurrentForm->getValue("x_createdAt");
+		if (!$this->createdAt->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->createdAt->Visible = FALSE; // Disable update for API request
+			else
+				$this->createdAt->setFormValue($val);
+			$this->createdAt->CurrentValue = UnFormatDateTime($this->createdAt->CurrentValue, 0);
+		}
+		$this->createdAt->setOldValue($CurrentForm->getValue("o_createdAt"));
+
+		// Check field name 'updatedAt' first before field var 'x_updatedAt'
+		$val = $CurrentForm->hasValue("updatedAt") ? $CurrentForm->getValue("updatedAt") : $CurrentForm->getValue("x_updatedAt");
+		if (!$this->updatedAt->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->updatedAt->Visible = FALSE; // Disable update for API request
+			else
+				$this->updatedAt->setFormValue($val);
+			$this->updatedAt->CurrentValue = UnFormatDateTime($this->updatedAt->CurrentValue, 0);
+		}
+		$this->updatedAt->setOldValue($CurrentForm->getValue("o_updatedAt"));
+
 		// Check field name 'id' first before field var 'x_id'
 		$val = $CurrentForm->hasValue("id") ? $CurrentForm->getValue("id") : $CurrentForm->getValue("x_id");
 		if (!$this->id->IsDetailKey && !$this->isGridAdd() && !$this->isAdd())
@@ -2693,6 +2771,10 @@ class trip_info_list extends trip_info
 		$this->flight_number->CurrentValue = $this->flight_number->FormValue;
 		$this->date->CurrentValue = $this->date->FormValue;
 		$this->date->CurrentValue = UnFormatDateTime($this->date->CurrentValue, 0);
+		$this->createdAt->CurrentValue = $this->createdAt->FormValue;
+		$this->createdAt->CurrentValue = UnFormatDateTime($this->createdAt->CurrentValue, 0);
+		$this->updatedAt->CurrentValue = $this->updatedAt->FormValue;
+		$this->updatedAt->CurrentValue = UnFormatDateTime($this->updatedAt->CurrentValue, 0);
 	}
 
 	// Load recordset
@@ -2766,6 +2848,8 @@ class trip_info_list extends trip_info
 		$this->user_id->setDbValue($row['user_id']);
 		$this->flight_number->setDbValue($row['flight_number']);
 		$this->date->setDbValue($row['date']);
+		$this->createdAt->setDbValue($row['createdAt']);
+		$this->updatedAt->setDbValue($row['updatedAt']);
 	}
 
 	// Return a row with default values
@@ -2780,6 +2864,8 @@ class trip_info_list extends trip_info
 		$row['user_id'] = $this->user_id->CurrentValue;
 		$row['flight_number'] = $this->flight_number->CurrentValue;
 		$row['date'] = $this->date->CurrentValue;
+		$row['createdAt'] = $this->createdAt->CurrentValue;
+		$row['updatedAt'] = $this->updatedAt->CurrentValue;
 		return $row;
 	}
 
@@ -2830,6 +2916,8 @@ class trip_info_list extends trip_info
 		// user_id
 		// flight_number
 		// date
+		// createdAt
+		// updatedAt
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
@@ -2882,6 +2970,16 @@ class trip_info_list extends trip_info
 			$this->date->ViewValue = FormatDateTime($this->date->ViewValue, 0);
 			$this->date->ViewCustomAttributes = "";
 
+			// createdAt
+			$this->createdAt->ViewValue = $this->createdAt->CurrentValue;
+			$this->createdAt->ViewValue = FormatDateTime($this->createdAt->ViewValue, 0);
+			$this->createdAt->ViewCustomAttributes = "";
+
+			// updatedAt
+			$this->updatedAt->ViewValue = $this->updatedAt->CurrentValue;
+			$this->updatedAt->ViewValue = FormatDateTime($this->updatedAt->ViewValue, 0);
+			$this->updatedAt->ViewCustomAttributes = "";
+
 			// from_place
 			$this->from_place->LinkCustomAttributes = "";
 			$this->from_place->HrefValue = "";
@@ -2911,6 +3009,16 @@ class trip_info_list extends trip_info
 			$this->date->LinkCustomAttributes = "";
 			$this->date->HrefValue = "";
 			$this->date->TooltipValue = "";
+
+			// createdAt
+			$this->createdAt->LinkCustomAttributes = "";
+			$this->createdAt->HrefValue = "";
+			$this->createdAt->TooltipValue = "";
+
+			// updatedAt
+			$this->updatedAt->LinkCustomAttributes = "";
+			$this->updatedAt->HrefValue = "";
+			$this->updatedAt->TooltipValue = "";
 		} elseif ($this->RowType == ROWTYPE_ADD) { // Add row
 
 			// from_place
@@ -2996,6 +3104,18 @@ class trip_info_list extends trip_info
 			$this->date->EditValue = HtmlEncode(FormatDateTime($this->date->CurrentValue, 8));
 			$this->date->PlaceHolder = RemoveHtml($this->date->caption());
 
+			// createdAt
+			$this->createdAt->EditAttrs["class"] = "form-control";
+			$this->createdAt->EditCustomAttributes = "";
+			$this->createdAt->EditValue = HtmlEncode(FormatDateTime($this->createdAt->CurrentValue, 8));
+			$this->createdAt->PlaceHolder = RemoveHtml($this->createdAt->caption());
+
+			// updatedAt
+			$this->updatedAt->EditAttrs["class"] = "form-control";
+			$this->updatedAt->EditCustomAttributes = "";
+			$this->updatedAt->EditValue = HtmlEncode(FormatDateTime($this->updatedAt->CurrentValue, 8));
+			$this->updatedAt->PlaceHolder = RemoveHtml($this->updatedAt->caption());
+
 			// Add refer script
 			// from_place
 
@@ -3021,6 +3141,14 @@ class trip_info_list extends trip_info
 			// date
 			$this->date->LinkCustomAttributes = "";
 			$this->date->HrefValue = "";
+
+			// createdAt
+			$this->createdAt->LinkCustomAttributes = "";
+			$this->createdAt->HrefValue = "";
+
+			// updatedAt
+			$this->updatedAt->LinkCustomAttributes = "";
+			$this->updatedAt->HrefValue = "";
 		} elseif ($this->RowType == ROWTYPE_EDIT) { // Edit row
 
 			// from_place
@@ -3106,6 +3234,18 @@ class trip_info_list extends trip_info
 			$this->date->EditValue = HtmlEncode(FormatDateTime($this->date->CurrentValue, 8));
 			$this->date->PlaceHolder = RemoveHtml($this->date->caption());
 
+			// createdAt
+			$this->createdAt->EditAttrs["class"] = "form-control";
+			$this->createdAt->EditCustomAttributes = "";
+			$this->createdAt->EditValue = HtmlEncode(FormatDateTime($this->createdAt->CurrentValue, 8));
+			$this->createdAt->PlaceHolder = RemoveHtml($this->createdAt->caption());
+
+			// updatedAt
+			$this->updatedAt->EditAttrs["class"] = "form-control";
+			$this->updatedAt->EditCustomAttributes = "";
+			$this->updatedAt->EditValue = HtmlEncode(FormatDateTime($this->updatedAt->CurrentValue, 8));
+			$this->updatedAt->PlaceHolder = RemoveHtml($this->updatedAt->caption());
+
 			// Edit refer script
 			// from_place
 
@@ -3131,6 +3271,14 @@ class trip_info_list extends trip_info
 			// date
 			$this->date->LinkCustomAttributes = "";
 			$this->date->HrefValue = "";
+
+			// createdAt
+			$this->createdAt->LinkCustomAttributes = "";
+			$this->createdAt->HrefValue = "";
+
+			// updatedAt
+			$this->updatedAt->LinkCustomAttributes = "";
+			$this->updatedAt->HrefValue = "";
 		}
 		if ($this->RowType == ROWTYPE_ADD || $this->RowType == ROWTYPE_EDIT || $this->RowType == ROWTYPE_SEARCH) // Add/Edit/Search row
 			$this->setupFieldTitles();
@@ -3215,6 +3363,22 @@ class trip_info_list extends trip_info
 		}
 		if (!CheckDate($this->date->FormValue)) {
 			AddMessage($FormError, $this->date->errorMessage());
+		}
+		if ($this->createdAt->Required) {
+			if (!$this->createdAt->IsDetailKey && $this->createdAt->FormValue != NULL && $this->createdAt->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->createdAt->caption(), $this->createdAt->RequiredErrorMessage));
+			}
+		}
+		if (!CheckDate($this->createdAt->FormValue)) {
+			AddMessage($FormError, $this->createdAt->errorMessage());
+		}
+		if ($this->updatedAt->Required) {
+			if (!$this->updatedAt->IsDetailKey && $this->updatedAt->FormValue != NULL && $this->updatedAt->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->updatedAt->caption(), $this->updatedAt->RequiredErrorMessage));
+			}
+		}
+		if (!CheckDate($this->updatedAt->FormValue)) {
+			AddMessage($FormError, $this->updatedAt->errorMessage());
 		}
 
 		// Return validate result
@@ -3360,6 +3524,12 @@ class trip_info_list extends trip_info
 
 			// date
 			$this->date->setDbValueDef($rsnew, UnFormatDateTime($this->date->CurrentValue, 0), CurrentDate(), $this->date->ReadOnly);
+
+			// createdAt
+			$this->createdAt->setDbValueDef($rsnew, UnFormatDateTime($this->createdAt->CurrentValue, 0), NULL, $this->createdAt->ReadOnly);
+
+			// updatedAt
+			$this->updatedAt->setDbValueDef($rsnew, UnFormatDateTime($this->updatedAt->CurrentValue, 0), NULL, $this->updatedAt->ReadOnly);
 
 			// Call Row Updating event
 			$updateRow = $this->Row_Updating($rsold, $rsnew);
@@ -3719,6 +3889,8 @@ class trip_info_list extends trip_info
 		$hash .= GetFieldHash($rs->fields('user_id')); // user_id
 		$hash .= GetFieldHash($rs->fields('flight_number')); // flight_number
 		$hash .= GetFieldHash($rs->fields('date')); // date
+		$hash .= GetFieldHash($rs->fields('createdAt')); // createdAt
+		$hash .= GetFieldHash($rs->fields('updatedAt')); // updatedAt
 		return md5($hash);
 	}
 
@@ -3751,6 +3923,12 @@ class trip_info_list extends trip_info
 
 		// date
 		$this->date->setDbValueDef($rsnew, UnFormatDateTime($this->date->CurrentValue, 0), CurrentDate(), FALSE);
+
+		// createdAt
+		$this->createdAt->setDbValueDef($rsnew, UnFormatDateTime($this->createdAt->CurrentValue, 0), NULL, FALSE);
+
+		// updatedAt
+		$this->updatedAt->setDbValueDef($rsnew, UnFormatDateTime($this->updatedAt->CurrentValue, 0), NULL, FALSE);
 
 		// Call Row Inserting event
 		$rs = ($rsold) ? $rsold->fields : NULL;
@@ -3798,6 +3976,8 @@ class trip_info_list extends trip_info
 		$this->user_id->AdvancedSearch->load();
 		$this->flight_number->AdvancedSearch->load();
 		$this->date->AdvancedSearch->load();
+		$this->createdAt->AdvancedSearch->load();
+		$this->updatedAt->AdvancedSearch->load();
 	}
 
 	// Set up export options

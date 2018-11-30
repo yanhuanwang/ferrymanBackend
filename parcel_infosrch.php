@@ -57,8 +57,6 @@ fparcel_infosearch.validateRequired = <?php echo json_encode(CLIENT_VALIDATE) ?>
 fparcel_infosearch.lists["x_user_id"] = <?php echo $parcel_info_search->user_id->Lookup->toClientList() ?>;
 fparcel_infosearch.lists["x_user_id"].options = <?php echo JsonEncode($parcel_info_search->user_id->lookupOptions()) ?>;
 fparcel_infosearch.autoSuggests["x_user_id"] = <?php echo json_encode(["data" => "ajax=autosuggest"]) ?>;
-fparcel_infosearch.lists["x_category"] = <?php echo $parcel_info_search->category->Lookup->toClientList() ?>;
-fparcel_infosearch.lists["x_category"].options = <?php echo JsonEncode($parcel_info_search->category->lookupOptions()) ?>;
 
 // Form object for search
 // Validate function for search
@@ -74,6 +72,18 @@ fparcel_infosearch.validate = function(fobj) {
 	elm = this.getElements("x" + infix + "_user_id");
 	if (elm && !ew.checkInteger(elm.value))
 		return this.onError(elm, "<?php echo JsEncode($parcel_info->user_id->errorMessage()) ?>");
+	elm = this.getElements("x" + infix + "_categoty");
+	if (elm && !ew.checkInteger(elm.value))
+		return this.onError(elm, "<?php echo JsEncode($parcel_info->categoty->errorMessage()) ?>");
+	elm = this.getElements("x" + infix + "_status");
+	if (elm && !ew.checkInteger(elm.value))
+		return this.onError(elm, "<?php echo JsEncode($parcel_info->status->errorMessage()) ?>");
+	elm = this.getElements("x" + infix + "_createdAt");
+	if (elm && !ew.checkDateDef(elm.value))
+		return this.onError(elm, "<?php echo JsEncode($parcel_info->createdAt->errorMessage()) ?>");
+	elm = this.getElements("x" + infix + "_updatedAt");
+	if (elm && !ew.checkDateDef(elm.value))
+		return this.onError(elm, "<?php echo JsEncode($parcel_info->updatedAt->errorMessage()) ?>");
 
 	// Fire Form_CustomValidate event
 	if (!this.Form_CustomValidate(fobj))
@@ -168,23 +178,6 @@ fparcel_infosearch.createAutoSuggest({"id":"x_user_id","forceSelect":false});
 		</div></div>
 	</div>
 <?php } ?>
-<?php if ($parcel_info->category->Visible) { // category ?>
-	<div id="r_category" class="form-group row">
-		<label for="x_category" class="<?php echo $parcel_info_search->LeftColumnClass ?>"><span id="elh_parcel_info_category"><?php echo $parcel_info->category->caption() ?></span>
-		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_category" id="z_category" value="="></span>
-		</label>
-		<div class="<?php echo $parcel_info_search->RightColumnClass ?>"><div<?php echo $parcel_info->category->cellAttributes() ?>>
-			<span id="el_parcel_info_category">
-<div class="input-group">
-	<select class="custom-select ew-custom-select" data-table="parcel_info" data-field="x_category" data-value-separator="<?php echo $parcel_info->category->displayValueSeparatorAttribute() ?>" id="x_category" name="x_category"<?php echo $parcel_info->category->editAttributes() ?>>
-		<?php echo $parcel_info->category->selectOptionListHtml("x_category") ?>
-	</select>
-<?php echo $parcel_info->category->Lookup->getParamTag("p_x_category") ?>
-</div>
-</span>
-		</div></div>
-	</div>
-<?php } ?>
 <?php if ($parcel_info->name->Visible) { // name ?>
 	<div id="r_name" class="form-group row">
 		<label for="x_name" class="<?php echo $parcel_info_search->LeftColumnClass ?>"><span id="elh_parcel_info_name"><?php echo $parcel_info->name->caption() ?></span>
@@ -193,6 +186,64 @@ fparcel_infosearch.createAutoSuggest({"id":"x_user_id","forceSelect":false});
 		<div class="<?php echo $parcel_info_search->RightColumnClass ?>"><div<?php echo $parcel_info->name->cellAttributes() ?>>
 			<span id="el_parcel_info_name">
 <input type="text" data-table="parcel_info" data-field="x_name" name="x_name" id="x_name" size="30" maxlength="100" placeholder="<?php echo HtmlEncode($parcel_info->name->getPlaceHolder()) ?>" value="<?php echo $parcel_info->name->EditValue ?>"<?php echo $parcel_info->name->editAttributes() ?>>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($parcel_info->categoty->Visible) { // categoty ?>
+	<div id="r_categoty" class="form-group row">
+		<label for="x_categoty" class="<?php echo $parcel_info_search->LeftColumnClass ?>"><span id="elh_parcel_info_categoty"><?php echo $parcel_info->categoty->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_categoty" id="z_categoty" value="="></span>
+		</label>
+		<div class="<?php echo $parcel_info_search->RightColumnClass ?>"><div<?php echo $parcel_info->categoty->cellAttributes() ?>>
+			<span id="el_parcel_info_categoty">
+<input type="text" data-table="parcel_info" data-field="x_categoty" name="x_categoty" id="x_categoty" size="30" placeholder="<?php echo HtmlEncode($parcel_info->categoty->getPlaceHolder()) ?>" value="<?php echo $parcel_info->categoty->EditValue ?>"<?php echo $parcel_info->categoty->editAttributes() ?>>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($parcel_info->status->Visible) { // status ?>
+	<div id="r_status" class="form-group row">
+		<label for="x_status" class="<?php echo $parcel_info_search->LeftColumnClass ?>"><span id="elh_parcel_info_status"><?php echo $parcel_info->status->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_status" id="z_status" value="="></span>
+		</label>
+		<div class="<?php echo $parcel_info_search->RightColumnClass ?>"><div<?php echo $parcel_info->status->cellAttributes() ?>>
+			<span id="el_parcel_info_status">
+<input type="text" data-table="parcel_info" data-field="x_status" name="x_status" id="x_status" size="30" placeholder="<?php echo HtmlEncode($parcel_info->status->getPlaceHolder()) ?>" value="<?php echo $parcel_info->status->EditValue ?>"<?php echo $parcel_info->status->editAttributes() ?>>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($parcel_info->createdAt->Visible) { // createdAt ?>
+	<div id="r_createdAt" class="form-group row">
+		<label for="x_createdAt" class="<?php echo $parcel_info_search->LeftColumnClass ?>"><span id="elh_parcel_info_createdAt"><?php echo $parcel_info->createdAt->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_createdAt" id="z_createdAt" value="="></span>
+		</label>
+		<div class="<?php echo $parcel_info_search->RightColumnClass ?>"><div<?php echo $parcel_info->createdAt->cellAttributes() ?>>
+			<span id="el_parcel_info_createdAt">
+<input type="text" data-table="parcel_info" data-field="x_createdAt" name="x_createdAt" id="x_createdAt" placeholder="<?php echo HtmlEncode($parcel_info->createdAt->getPlaceHolder()) ?>" value="<?php echo $parcel_info->createdAt->EditValue ?>"<?php echo $parcel_info->createdAt->editAttributes() ?>>
+<?php if (!$parcel_info->createdAt->ReadOnly && !$parcel_info->createdAt->Disabled && !isset($parcel_info->createdAt->EditAttrs["readonly"]) && !isset($parcel_info->createdAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("fparcel_infosearch", "x_createdAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($parcel_info->updatedAt->Visible) { // updatedAt ?>
+	<div id="r_updatedAt" class="form-group row">
+		<label for="x_updatedAt" class="<?php echo $parcel_info_search->LeftColumnClass ?>"><span id="elh_parcel_info_updatedAt"><?php echo $parcel_info->updatedAt->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_updatedAt" id="z_updatedAt" value="="></span>
+		</label>
+		<div class="<?php echo $parcel_info_search->RightColumnClass ?>"><div<?php echo $parcel_info->updatedAt->cellAttributes() ?>>
+			<span id="el_parcel_info_updatedAt">
+<input type="text" data-table="parcel_info" data-field="x_updatedAt" name="x_updatedAt" id="x_updatedAt" placeholder="<?php echo HtmlEncode($parcel_info->updatedAt->getPlaceHolder()) ?>" value="<?php echo $parcel_info->updatedAt->EditValue ?>"<?php echo $parcel_info->updatedAt->editAttributes() ?>>
+<?php if (!$parcel_info->updatedAt->ReadOnly && !$parcel_info->updatedAt->Disabled && !isset($parcel_info->updatedAt->EditAttrs["readonly"]) && !isset($parcel_info->updatedAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("fparcel_infosearch", "x_updatedAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
 </span>
 		</div></div>
 	</div>

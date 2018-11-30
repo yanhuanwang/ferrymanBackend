@@ -54,8 +54,6 @@ fparcel_infoview.validateRequired = <?php echo json_encode(CLIENT_VALIDATE) ?>;
 fparcel_infoview.lists["x_user_id"] = <?php echo $parcel_info_view->user_id->Lookup->toClientList() ?>;
 fparcel_infoview.lists["x_user_id"].options = <?php echo JsonEncode($parcel_info_view->user_id->lookupOptions()) ?>;
 fparcel_infoview.autoSuggests["x_user_id"] = <?php echo json_encode(["data" => "ajax=autosuggest"]) ?>;
-fparcel_infoview.lists["x_category"] = <?php echo $parcel_info_view->category->Lookup->toClientList() ?>;
-fparcel_infoview.lists["x_category"].options = <?php echo JsonEncode($parcel_info_view->category->lookupOptions()) ?>;
 fparcel_infoview.lists["x_image_id"] = <?php echo $parcel_info_view->image_id->Lookup->toClientList() ?>;
 fparcel_infoview.lists["x_image_id"].options = <?php echo JsonEncode($parcel_info_view->image_id->lookupOptions()) ?>;
 fparcel_infoview.autoSuggests["x_image_id"] = <?php echo json_encode(["data" => "ajax=autosuggest"]) ?>;
@@ -172,17 +170,6 @@ $parcel_info_view->showMessage();
 </td>
 	</tr>
 <?php } ?>
-<?php if ($parcel_info->category->Visible) { // category ?>
-	<tr id="r_category">
-		<td class="<?php echo $parcel_info_view->TableLeftColumnClass ?>"><span id="elh_parcel_info_category"><?php echo $parcel_info->category->caption() ?></span></td>
-		<td data-name="category"<?php echo $parcel_info->category->cellAttributes() ?>>
-<span id="el_parcel_info_category">
-<span<?php echo $parcel_info->category->viewAttributes() ?>>
-<?php echo $parcel_info->category->getViewValue() ?></span>
-</span>
-</td>
-	</tr>
-<?php } ?>
 <?php if ($parcel_info->image_id->Visible) { // image_id ?>
 	<tr id="r_image_id">
 		<td class="<?php echo $parcel_info_view->TableLeftColumnClass ?>"><span id="elh_parcel_info_image_id"><?php echo $parcel_info->image_id->caption() ?></span></td>
@@ -206,6 +193,50 @@ $parcel_info_view->showMessage();
 <span id="el_parcel_info_name">
 <span<?php echo $parcel_info->name->viewAttributes() ?>>
 <?php echo $parcel_info->name->getViewValue() ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($parcel_info->categoty->Visible) { // categoty ?>
+	<tr id="r_categoty">
+		<td class="<?php echo $parcel_info_view->TableLeftColumnClass ?>"><span id="elh_parcel_info_categoty"><?php echo $parcel_info->categoty->caption() ?></span></td>
+		<td data-name="categoty"<?php echo $parcel_info->categoty->cellAttributes() ?>>
+<span id="el_parcel_info_categoty">
+<span<?php echo $parcel_info->categoty->viewAttributes() ?>>
+<?php echo $parcel_info->categoty->getViewValue() ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($parcel_info->status->Visible) { // status ?>
+	<tr id="r_status">
+		<td class="<?php echo $parcel_info_view->TableLeftColumnClass ?>"><span id="elh_parcel_info_status"><?php echo $parcel_info->status->caption() ?></span></td>
+		<td data-name="status"<?php echo $parcel_info->status->cellAttributes() ?>>
+<span id="el_parcel_info_status">
+<span<?php echo $parcel_info->status->viewAttributes() ?>>
+<?php echo $parcel_info->status->getViewValue() ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($parcel_info->createdAt->Visible) { // createdAt ?>
+	<tr id="r_createdAt">
+		<td class="<?php echo $parcel_info_view->TableLeftColumnClass ?>"><span id="elh_parcel_info_createdAt"><?php echo $parcel_info->createdAt->caption() ?></span></td>
+		<td data-name="createdAt"<?php echo $parcel_info->createdAt->cellAttributes() ?>>
+<span id="el_parcel_info_createdAt">
+<span<?php echo $parcel_info->createdAt->viewAttributes() ?>>
+<?php echo $parcel_info->createdAt->getViewValue() ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($parcel_info->updatedAt->Visible) { // updatedAt ?>
+	<tr id="r_updatedAt">
+		<td class="<?php echo $parcel_info_view->TableLeftColumnClass ?>"><span id="elh_parcel_info_updatedAt"><?php echo $parcel_info->updatedAt->caption() ?></span></td>
+		<td data-name="updatedAt"<?php echo $parcel_info->updatedAt->cellAttributes() ?>>
+<span id="el_parcel_info_updatedAt">
+<span<?php echo $parcel_info->updatedAt->viewAttributes() ?>>
+<?php echo $parcel_info->updatedAt->getViewValue() ?></span>
 </span>
 </td>
 	</tr>
@@ -237,14 +268,6 @@ $parcel_info_view->showMessage();
 <?php } ?>
 <div class="clearfix"></div>
 <?php } ?>
-<?php } ?>
-<?php
-	if (in_array("orders", explode(",", $parcel_info->getCurrentDetailTable())) && $orders->DetailView) {
-?>
-<?php if ($parcel_info->getCurrentDetailTable() <> "") { ?>
-<h4 class="ew-detail-caption"><?php echo $Language->TablePhrase("orders", "TblCaption") ?>&nbsp;<?php echo str_replace("%c", $parcel_info_view->orders_Count, $Language->Phrase("DetailCount")) ?></h4>
-<?php } ?>
-<?php include_once "ordersgrid.php" ?>
 <?php } ?>
 </form>
 <?php

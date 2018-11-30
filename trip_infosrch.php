@@ -75,6 +75,12 @@ ftrip_infosearch.validate = function(fobj) {
 	elm = this.getElements("x" + infix + "_date");
 	if (elm && !ew.checkDateDef(elm.value))
 		return this.onError(elm, "<?php echo JsEncode($trip_info->date->errorMessage()) ?>");
+	elm = this.getElements("x" + infix + "_createdAt");
+	if (elm && !ew.checkDateDef(elm.value))
+		return this.onError(elm, "<?php echo JsEncode($trip_info->createdAt->errorMessage()) ?>");
+	elm = this.getElements("x" + infix + "_updatedAt");
+	if (elm && !ew.checkDateDef(elm.value))
+		return this.onError(elm, "<?php echo JsEncode($trip_info->updatedAt->errorMessage()) ?>");
 
 	// Fire Form_CustomValidate event
 	if (!this.Form_CustomValidate(fobj))
@@ -192,6 +198,40 @@ ftrip_infosearch.createAutoSuggest({"id":"x_user_id","forceSelect":false});
 <?php if (!$trip_info->date->ReadOnly && !$trip_info->date->Disabled && !isset($trip_info->date->EditAttrs["readonly"]) && !isset($trip_info->date->EditAttrs["disabled"])) { ?>
 <script>
 ew.createDateTimePicker("ftrip_infosearch", "x_date", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($trip_info->createdAt->Visible) { // createdAt ?>
+	<div id="r_createdAt" class="form-group row">
+		<label for="x_createdAt" class="<?php echo $trip_info_search->LeftColumnClass ?>"><span id="elh_trip_info_createdAt"><?php echo $trip_info->createdAt->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_createdAt" id="z_createdAt" value="="></span>
+		</label>
+		<div class="<?php echo $trip_info_search->RightColumnClass ?>"><div<?php echo $trip_info->createdAt->cellAttributes() ?>>
+			<span id="el_trip_info_createdAt">
+<input type="text" data-table="trip_info" data-field="x_createdAt" name="x_createdAt" id="x_createdAt" placeholder="<?php echo HtmlEncode($trip_info->createdAt->getPlaceHolder()) ?>" value="<?php echo $trip_info->createdAt->EditValue ?>"<?php echo $trip_info->createdAt->editAttributes() ?>>
+<?php if (!$trip_info->createdAt->ReadOnly && !$trip_info->createdAt->Disabled && !isset($trip_info->createdAt->EditAttrs["readonly"]) && !isset($trip_info->createdAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("ftrip_infosearch", "x_createdAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($trip_info->updatedAt->Visible) { // updatedAt ?>
+	<div id="r_updatedAt" class="form-group row">
+		<label for="x_updatedAt" class="<?php echo $trip_info_search->LeftColumnClass ?>"><span id="elh_trip_info_updatedAt"><?php echo $trip_info->updatedAt->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_updatedAt" id="z_updatedAt" value="="></span>
+		</label>
+		<div class="<?php echo $trip_info_search->RightColumnClass ?>"><div<?php echo $trip_info->updatedAt->cellAttributes() ?>>
+			<span id="el_trip_info_updatedAt">
+<input type="text" data-table="trip_info" data-field="x_updatedAt" name="x_updatedAt" id="x_updatedAt" placeholder="<?php echo HtmlEncode($trip_info->updatedAt->getPlaceHolder()) ?>" value="<?php echo $trip_info->updatedAt->EditValue ?>"<?php echo $trip_info->updatedAt->editAttributes() ?>>
+<?php if (!$trip_info->updatedAt->ReadOnly && !$trip_info->updatedAt->Disabled && !isset($trip_info->updatedAt->EditAttrs["readonly"]) && !isset($trip_info->updatedAt->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("ftrip_infosearch", "x_updatedAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
 </script>
 <?php } ?>
 </span>

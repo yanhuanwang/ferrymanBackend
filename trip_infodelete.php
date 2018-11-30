@@ -97,6 +97,12 @@ $trip_info_delete->showMessage();
 <?php if ($trip_info->date->Visible) { // date ?>
 		<th class="<?php echo $trip_info->date->headerCellClass() ?>"><span id="elh_trip_info_date" class="trip_info_date"><?php echo $trip_info->date->caption() ?></span></th>
 <?php } ?>
+<?php if ($trip_info->createdAt->Visible) { // createdAt ?>
+		<th class="<?php echo $trip_info->createdAt->headerCellClass() ?>"><span id="elh_trip_info_createdAt" class="trip_info_createdAt"><?php echo $trip_info->createdAt->caption() ?></span></th>
+<?php } ?>
+<?php if ($trip_info->updatedAt->Visible) { // updatedAt ?>
+		<th class="<?php echo $trip_info->updatedAt->headerCellClass() ?>"><span id="elh_trip_info_updatedAt" class="trip_info_updatedAt"><?php echo $trip_info->updatedAt->caption() ?></span></th>
+<?php } ?>
 	</tr>
 	</thead>
 	<tbody>
@@ -163,6 +169,22 @@ while (!$trip_info_delete->Recordset->EOF) {
 <span id="el<?php echo $trip_info_delete->RowCnt ?>_trip_info_date" class="trip_info_date">
 <span<?php echo $trip_info->date->viewAttributes() ?>>
 <?php echo $trip_info->date->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($trip_info->createdAt->Visible) { // createdAt ?>
+		<td<?php echo $trip_info->createdAt->cellAttributes() ?>>
+<span id="el<?php echo $trip_info_delete->RowCnt ?>_trip_info_createdAt" class="trip_info_createdAt">
+<span<?php echo $trip_info->createdAt->viewAttributes() ?>>
+<?php echo $trip_info->createdAt->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($trip_info->updatedAt->Visible) { // updatedAt ?>
+		<td<?php echo $trip_info->updatedAt->cellAttributes() ?>>
+<span id="el<?php echo $trip_info_delete->RowCnt ?>_trip_info_updatedAt" class="trip_info_updatedAt">
+<span<?php echo $trip_info->updatedAt->viewAttributes() ?>>
+<?php echo $trip_info->updatedAt->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>
