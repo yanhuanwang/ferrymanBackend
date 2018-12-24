@@ -34,7 +34,7 @@ define(PROJECT_NAMESPACE . "UNFORMAT_YEAR", 50); // Unformat year
 define(PROJECT_NAMESPACE . "PROJECT_NAME", "ferryman"); // Project name
 define(PROJECT_NAMESPACE . "CONFIG_FILE_FOLDER", PROJECT_NAME); // Config file name
 define(PROJECT_NAMESPACE . "PROJECT_ID", "{D49A959E-F136-47C9-B9D7-6B34755F62D4}"); // Project ID (GUID)
-define(PROJECT_NAMESPACE . "RANDOM_KEY", 'bNj6KuU0TE8JypVG'); // Random key for encryption
+define(PROJECT_NAMESPACE . "RANDOM_KEY", 'hXKv4fX59l1Oua8m'); // Random key for encryption
 define(PROJECT_NAMESPACE . "ENCRYPTION_KEY", ''); // Encryption key for data protection
 define(PROJECT_NAMESPACE . "PROJECT_STYLESHEET_FILENAME", "phpcss/ferryman.css"); // Project stylesheet file name
 define(PROJECT_NAMESPACE . "PROJECT_CHARSET", "utf-8"); // Project charset
@@ -51,7 +51,7 @@ $RELATED_PROJECT_ID = "";
 $BODY_CLASS = "hold-transition";
 $SIDEBAR_CLASS = "main-sidebar sidebar-dark-danger";
 $NAVBAR_CLASS = "main-header navbar navbar-expand navbar-dark bg-danger";
-$RESET_HEIGHT = TRUE; // Reset layout height
+$RESET_HEIGHT = FALSE; // Reset layout height
 
 // Font path
 $FONT_PATH = realpath('./phpfont'); // No trailing delimiter
