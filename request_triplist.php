@@ -114,14 +114,78 @@ frequest_triplist.validate = function() {
 			elm = this.getElements("x" + infix + "_updatedAt");
 			if (elm && !ew.checkDateDef(elm.value))
 				return this.onError(elm, "<?php echo JsEncode($request_trip->updatedAt->errorMessage()) ?>");
-		<?php if ($request_trip_list->category->Required) { ?>
-			elm = this.getElements("x" + infix + "_category");
+		<?php if ($request_trip_list->labor_fee->Required) { ?>
+			elm = this.getElements("x" + infix + "_labor_fee");
 			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
-				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $request_trip->category->caption(), $request_trip->category->RequiredErrorMessage)) ?>");
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $request_trip->labor_fee->caption(), $request_trip->labor_fee->RequiredErrorMessage)) ?>");
 		<?php } ?>
-			elm = this.getElements("x" + infix + "_category");
+			elm = this.getElements("x" + infix + "_labor_fee");
 			if (elm && !ew.checkInteger(elm.value))
-				return this.onError(elm, "<?php echo JsEncode($request_trip->category->errorMessage()) ?>");
+				return this.onError(elm, "<?php echo JsEncode($request_trip->labor_fee->errorMessage()) ?>");
+		<?php if ($request_trip_list->applicable->Required) { ?>
+			elm = this.getElements("x" + infix + "_applicable");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $request_trip->applicable->caption(), $request_trip->applicable->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_applicable");
+			if (elm && !ew.checkInteger(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($request_trip->applicable->errorMessage()) ?>");
+		<?php if ($request_trip_list->service_type->Required) { ?>
+			elm = this.getElements("x" + infix + "_service_type");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $request_trip->service_type->caption(), $request_trip->service_type->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_service_type");
+			if (elm && !ew.checkInteger(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($request_trip->service_type->errorMessage()) ?>");
+		<?php if ($request_trip_list->goods_category->Required) { ?>
+			elm = this.getElements("x" + infix + "_goods_category");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $request_trip->goods_category->caption(), $request_trip->goods_category->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_goods_category");
+			if (elm && !ew.checkInteger(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($request_trip->goods_category->errorMessage()) ?>");
+		<?php if ($request_trip_list->goods_weight->Required) { ?>
+			elm = this.getElements("x" + infix + "_goods_weight");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $request_trip->goods_weight->caption(), $request_trip->goods_weight->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_goods_weight");
+			if (elm && !ew.checkInteger(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($request_trip->goods_weight->errorMessage()) ?>");
+		<?php if ($request_trip_list->image1_id->Required) { ?>
+			elm = this.getElements("x" + infix + "_image1_id");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $request_trip->image1_id->caption(), $request_trip->image1_id->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_image1_id");
+			if (elm && !ew.checkInteger(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($request_trip->image1_id->errorMessage()) ?>");
+		<?php if ($request_trip_list->image2_id->Required) { ?>
+			elm = this.getElements("x" + infix + "_image2_id");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $request_trip->image2_id->caption(), $request_trip->image2_id->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_image2_id");
+			if (elm && !ew.checkInteger(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($request_trip->image2_id->errorMessage()) ?>");
+		<?php if ($request_trip_list->image3_id->Required) { ?>
+			elm = this.getElements("x" + infix + "_image3_id");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $request_trip->image3_id->caption(), $request_trip->image3_id->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_image3_id");
+			if (elm && !ew.checkInteger(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($request_trip->image3_id->errorMessage()) ?>");
+		<?php if ($request_trip_list->image4_id->Required) { ?>
+			elm = this.getElements("x" + infix + "_image4_id");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $request_trip->image4_id->caption(), $request_trip->image4_id->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_image4_id");
+			if (elm && !ew.checkInteger(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($request_trip->image4_id->errorMessage()) ?>");
 
 			// Fire Form_CustomValidate event
 			if (!this.Form_CustomValidate(fobj))
@@ -146,7 +210,15 @@ frequest_triplist.emptyRow = function(infix) {
 	if (ew.valueChanged(fobj, infix, "to_date", false)) return false;
 	if (ew.valueChanged(fobj, infix, "createdAt", false)) return false;
 	if (ew.valueChanged(fobj, infix, "updatedAt", false)) return false;
-	if (ew.valueChanged(fobj, infix, "category", false)) return false;
+	if (ew.valueChanged(fobj, infix, "labor_fee", false)) return false;
+	if (ew.valueChanged(fobj, infix, "applicable", false)) return false;
+	if (ew.valueChanged(fobj, infix, "service_type", false)) return false;
+	if (ew.valueChanged(fobj, infix, "goods_category", false)) return false;
+	if (ew.valueChanged(fobj, infix, "goods_weight", false)) return false;
+	if (ew.valueChanged(fobj, infix, "image1_id", false)) return false;
+	if (ew.valueChanged(fobj, infix, "image2_id", false)) return false;
+	if (ew.valueChanged(fobj, infix, "image3_id", false)) return false;
+	if (ew.valueChanged(fobj, infix, "image4_id", false)) return false;
 	return true;
 }
 
@@ -374,12 +446,84 @@ $request_trip_list->ListOptions->render("header", "left");
 		</div></div></th>
 	<?php } ?>
 <?php } ?>
-<?php if ($request_trip->category->Visible) { // category ?>
-	<?php if ($request_trip->sortUrl($request_trip->category) == "") { ?>
-		<th data-name="category" class="<?php echo $request_trip->category->headerCellClass() ?>"><div id="elh_request_trip_category" class="request_trip_category"><div class="ew-table-header-caption"><?php echo $request_trip->category->caption() ?></div></div></th>
+<?php if ($request_trip->labor_fee->Visible) { // labor_fee ?>
+	<?php if ($request_trip->sortUrl($request_trip->labor_fee) == "") { ?>
+		<th data-name="labor_fee" class="<?php echo $request_trip->labor_fee->headerCellClass() ?>"><div id="elh_request_trip_labor_fee" class="request_trip_labor_fee"><div class="ew-table-header-caption"><?php echo $request_trip->labor_fee->caption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="category" class="<?php echo $request_trip->category->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $request_trip->SortUrl($request_trip->category) ?>',1);"><div id="elh_request_trip_category" class="request_trip_category">
-			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $request_trip->category->caption() ?></span><span class="ew-table-header-sort"><?php if ($request_trip->category->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($request_trip->category->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
+		<th data-name="labor_fee" class="<?php echo $request_trip->labor_fee->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $request_trip->SortUrl($request_trip->labor_fee) ?>',1);"><div id="elh_request_trip_labor_fee" class="request_trip_labor_fee">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $request_trip->labor_fee->caption() ?></span><span class="ew-table-header-sort"><?php if ($request_trip->labor_fee->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($request_trip->labor_fee->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
+		</div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($request_trip->applicable->Visible) { // applicable ?>
+	<?php if ($request_trip->sortUrl($request_trip->applicable) == "") { ?>
+		<th data-name="applicable" class="<?php echo $request_trip->applicable->headerCellClass() ?>"><div id="elh_request_trip_applicable" class="request_trip_applicable"><div class="ew-table-header-caption"><?php echo $request_trip->applicable->caption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="applicable" class="<?php echo $request_trip->applicable->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $request_trip->SortUrl($request_trip->applicable) ?>',1);"><div id="elh_request_trip_applicable" class="request_trip_applicable">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $request_trip->applicable->caption() ?></span><span class="ew-table-header-sort"><?php if ($request_trip->applicable->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($request_trip->applicable->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
+		</div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($request_trip->service_type->Visible) { // service_type ?>
+	<?php if ($request_trip->sortUrl($request_trip->service_type) == "") { ?>
+		<th data-name="service_type" class="<?php echo $request_trip->service_type->headerCellClass() ?>"><div id="elh_request_trip_service_type" class="request_trip_service_type"><div class="ew-table-header-caption"><?php echo $request_trip->service_type->caption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="service_type" class="<?php echo $request_trip->service_type->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $request_trip->SortUrl($request_trip->service_type) ?>',1);"><div id="elh_request_trip_service_type" class="request_trip_service_type">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $request_trip->service_type->caption() ?></span><span class="ew-table-header-sort"><?php if ($request_trip->service_type->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($request_trip->service_type->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
+		</div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($request_trip->goods_category->Visible) { // goods_category ?>
+	<?php if ($request_trip->sortUrl($request_trip->goods_category) == "") { ?>
+		<th data-name="goods_category" class="<?php echo $request_trip->goods_category->headerCellClass() ?>"><div id="elh_request_trip_goods_category" class="request_trip_goods_category"><div class="ew-table-header-caption"><?php echo $request_trip->goods_category->caption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="goods_category" class="<?php echo $request_trip->goods_category->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $request_trip->SortUrl($request_trip->goods_category) ?>',1);"><div id="elh_request_trip_goods_category" class="request_trip_goods_category">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $request_trip->goods_category->caption() ?></span><span class="ew-table-header-sort"><?php if ($request_trip->goods_category->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($request_trip->goods_category->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
+		</div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($request_trip->goods_weight->Visible) { // goods_weight ?>
+	<?php if ($request_trip->sortUrl($request_trip->goods_weight) == "") { ?>
+		<th data-name="goods_weight" class="<?php echo $request_trip->goods_weight->headerCellClass() ?>"><div id="elh_request_trip_goods_weight" class="request_trip_goods_weight"><div class="ew-table-header-caption"><?php echo $request_trip->goods_weight->caption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="goods_weight" class="<?php echo $request_trip->goods_weight->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $request_trip->SortUrl($request_trip->goods_weight) ?>',1);"><div id="elh_request_trip_goods_weight" class="request_trip_goods_weight">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $request_trip->goods_weight->caption() ?></span><span class="ew-table-header-sort"><?php if ($request_trip->goods_weight->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($request_trip->goods_weight->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
+		</div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($request_trip->image1_id->Visible) { // image1_id ?>
+	<?php if ($request_trip->sortUrl($request_trip->image1_id) == "") { ?>
+		<th data-name="image1_id" class="<?php echo $request_trip->image1_id->headerCellClass() ?>"><div id="elh_request_trip_image1_id" class="request_trip_image1_id"><div class="ew-table-header-caption"><?php echo $request_trip->image1_id->caption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="image1_id" class="<?php echo $request_trip->image1_id->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $request_trip->SortUrl($request_trip->image1_id) ?>',1);"><div id="elh_request_trip_image1_id" class="request_trip_image1_id">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $request_trip->image1_id->caption() ?></span><span class="ew-table-header-sort"><?php if ($request_trip->image1_id->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($request_trip->image1_id->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
+		</div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($request_trip->image2_id->Visible) { // image2_id ?>
+	<?php if ($request_trip->sortUrl($request_trip->image2_id) == "") { ?>
+		<th data-name="image2_id" class="<?php echo $request_trip->image2_id->headerCellClass() ?>"><div id="elh_request_trip_image2_id" class="request_trip_image2_id"><div class="ew-table-header-caption"><?php echo $request_trip->image2_id->caption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="image2_id" class="<?php echo $request_trip->image2_id->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $request_trip->SortUrl($request_trip->image2_id) ?>',1);"><div id="elh_request_trip_image2_id" class="request_trip_image2_id">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $request_trip->image2_id->caption() ?></span><span class="ew-table-header-sort"><?php if ($request_trip->image2_id->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($request_trip->image2_id->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
+		</div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($request_trip->image3_id->Visible) { // image3_id ?>
+	<?php if ($request_trip->sortUrl($request_trip->image3_id) == "") { ?>
+		<th data-name="image3_id" class="<?php echo $request_trip->image3_id->headerCellClass() ?>"><div id="elh_request_trip_image3_id" class="request_trip_image3_id"><div class="ew-table-header-caption"><?php echo $request_trip->image3_id->caption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="image3_id" class="<?php echo $request_trip->image3_id->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $request_trip->SortUrl($request_trip->image3_id) ?>',1);"><div id="elh_request_trip_image3_id" class="request_trip_image3_id">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $request_trip->image3_id->caption() ?></span><span class="ew-table-header-sort"><?php if ($request_trip->image3_id->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($request_trip->image3_id->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
+		</div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($request_trip->image4_id->Visible) { // image4_id ?>
+	<?php if ($request_trip->sortUrl($request_trip->image4_id) == "") { ?>
+		<th data-name="image4_id" class="<?php echo $request_trip->image4_id->headerCellClass() ?>"><div id="elh_request_trip_image4_id" class="request_trip_image4_id"><div class="ew-table-header-caption"><?php echo $request_trip->image4_id->caption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="image4_id" class="<?php echo $request_trip->image4_id->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $request_trip->SortUrl($request_trip->image4_id) ?>',1);"><div id="elh_request_trip_image4_id" class="request_trip_image4_id">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $request_trip->image4_id->caption() ?></span><span class="ew-table-header-sort"><?php if ($request_trip->image4_id->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($request_trip->image4_id->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
 		</div></div></th>
 	<?php } ?>
 <?php } ?>
@@ -504,12 +648,76 @@ ew.createDateTimePicker("frequest_triplist", "x<?php echo $request_trip_list->Ro
 <input type="hidden" data-table="request_trip" data-field="x_updatedAt" name="o<?php echo $request_trip_list->RowIndex ?>_updatedAt" id="o<?php echo $request_trip_list->RowIndex ?>_updatedAt" value="<?php echo HtmlEncode($request_trip->updatedAt->OldValue) ?>">
 </td>
 	<?php } ?>
-	<?php if ($request_trip->category->Visible) { // category ?>
-		<td data-name="category">
-<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_category" class="form-group request_trip_category">
-<input type="text" data-table="request_trip" data-field="x_category" name="x<?php echo $request_trip_list->RowIndex ?>_category" id="x<?php echo $request_trip_list->RowIndex ?>_category" size="30" placeholder="<?php echo HtmlEncode($request_trip->category->getPlaceHolder()) ?>" value="<?php echo $request_trip->category->EditValue ?>"<?php echo $request_trip->category->editAttributes() ?>>
+	<?php if ($request_trip->labor_fee->Visible) { // labor_fee ?>
+		<td data-name="labor_fee">
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_labor_fee" class="form-group request_trip_labor_fee">
+<input type="text" data-table="request_trip" data-field="x_labor_fee" name="x<?php echo $request_trip_list->RowIndex ?>_labor_fee" id="x<?php echo $request_trip_list->RowIndex ?>_labor_fee" size="30" placeholder="<?php echo HtmlEncode($request_trip->labor_fee->getPlaceHolder()) ?>" value="<?php echo $request_trip->labor_fee->EditValue ?>"<?php echo $request_trip->labor_fee->editAttributes() ?>>
 </span>
-<input type="hidden" data-table="request_trip" data-field="x_category" name="o<?php echo $request_trip_list->RowIndex ?>_category" id="o<?php echo $request_trip_list->RowIndex ?>_category" value="<?php echo HtmlEncode($request_trip->category->OldValue) ?>">
+<input type="hidden" data-table="request_trip" data-field="x_labor_fee" name="o<?php echo $request_trip_list->RowIndex ?>_labor_fee" id="o<?php echo $request_trip_list->RowIndex ?>_labor_fee" value="<?php echo HtmlEncode($request_trip->labor_fee->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($request_trip->applicable->Visible) { // applicable ?>
+		<td data-name="applicable">
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_applicable" class="form-group request_trip_applicable">
+<input type="text" data-table="request_trip" data-field="x_applicable" name="x<?php echo $request_trip_list->RowIndex ?>_applicable" id="x<?php echo $request_trip_list->RowIndex ?>_applicable" size="30" placeholder="<?php echo HtmlEncode($request_trip->applicable->getPlaceHolder()) ?>" value="<?php echo $request_trip->applicable->EditValue ?>"<?php echo $request_trip->applicable->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="request_trip" data-field="x_applicable" name="o<?php echo $request_trip_list->RowIndex ?>_applicable" id="o<?php echo $request_trip_list->RowIndex ?>_applicable" value="<?php echo HtmlEncode($request_trip->applicable->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($request_trip->service_type->Visible) { // service_type ?>
+		<td data-name="service_type">
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_service_type" class="form-group request_trip_service_type">
+<input type="text" data-table="request_trip" data-field="x_service_type" name="x<?php echo $request_trip_list->RowIndex ?>_service_type" id="x<?php echo $request_trip_list->RowIndex ?>_service_type" size="30" placeholder="<?php echo HtmlEncode($request_trip->service_type->getPlaceHolder()) ?>" value="<?php echo $request_trip->service_type->EditValue ?>"<?php echo $request_trip->service_type->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="request_trip" data-field="x_service_type" name="o<?php echo $request_trip_list->RowIndex ?>_service_type" id="o<?php echo $request_trip_list->RowIndex ?>_service_type" value="<?php echo HtmlEncode($request_trip->service_type->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($request_trip->goods_category->Visible) { // goods_category ?>
+		<td data-name="goods_category">
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_goods_category" class="form-group request_trip_goods_category">
+<input type="text" data-table="request_trip" data-field="x_goods_category" name="x<?php echo $request_trip_list->RowIndex ?>_goods_category" id="x<?php echo $request_trip_list->RowIndex ?>_goods_category" size="30" placeholder="<?php echo HtmlEncode($request_trip->goods_category->getPlaceHolder()) ?>" value="<?php echo $request_trip->goods_category->EditValue ?>"<?php echo $request_trip->goods_category->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="request_trip" data-field="x_goods_category" name="o<?php echo $request_trip_list->RowIndex ?>_goods_category" id="o<?php echo $request_trip_list->RowIndex ?>_goods_category" value="<?php echo HtmlEncode($request_trip->goods_category->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($request_trip->goods_weight->Visible) { // goods_weight ?>
+		<td data-name="goods_weight">
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_goods_weight" class="form-group request_trip_goods_weight">
+<input type="text" data-table="request_trip" data-field="x_goods_weight" name="x<?php echo $request_trip_list->RowIndex ?>_goods_weight" id="x<?php echo $request_trip_list->RowIndex ?>_goods_weight" size="30" placeholder="<?php echo HtmlEncode($request_trip->goods_weight->getPlaceHolder()) ?>" value="<?php echo $request_trip->goods_weight->EditValue ?>"<?php echo $request_trip->goods_weight->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="request_trip" data-field="x_goods_weight" name="o<?php echo $request_trip_list->RowIndex ?>_goods_weight" id="o<?php echo $request_trip_list->RowIndex ?>_goods_weight" value="<?php echo HtmlEncode($request_trip->goods_weight->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($request_trip->image1_id->Visible) { // image1_id ?>
+		<td data-name="image1_id">
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_image1_id" class="form-group request_trip_image1_id">
+<input type="text" data-table="request_trip" data-field="x_image1_id" name="x<?php echo $request_trip_list->RowIndex ?>_image1_id" id="x<?php echo $request_trip_list->RowIndex ?>_image1_id" size="30" placeholder="<?php echo HtmlEncode($request_trip->image1_id->getPlaceHolder()) ?>" value="<?php echo $request_trip->image1_id->EditValue ?>"<?php echo $request_trip->image1_id->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="request_trip" data-field="x_image1_id" name="o<?php echo $request_trip_list->RowIndex ?>_image1_id" id="o<?php echo $request_trip_list->RowIndex ?>_image1_id" value="<?php echo HtmlEncode($request_trip->image1_id->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($request_trip->image2_id->Visible) { // image2_id ?>
+		<td data-name="image2_id">
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_image2_id" class="form-group request_trip_image2_id">
+<input type="text" data-table="request_trip" data-field="x_image2_id" name="x<?php echo $request_trip_list->RowIndex ?>_image2_id" id="x<?php echo $request_trip_list->RowIndex ?>_image2_id" size="30" placeholder="<?php echo HtmlEncode($request_trip->image2_id->getPlaceHolder()) ?>" value="<?php echo $request_trip->image2_id->EditValue ?>"<?php echo $request_trip->image2_id->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="request_trip" data-field="x_image2_id" name="o<?php echo $request_trip_list->RowIndex ?>_image2_id" id="o<?php echo $request_trip_list->RowIndex ?>_image2_id" value="<?php echo HtmlEncode($request_trip->image2_id->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($request_trip->image3_id->Visible) { // image3_id ?>
+		<td data-name="image3_id">
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_image3_id" class="form-group request_trip_image3_id">
+<input type="text" data-table="request_trip" data-field="x_image3_id" name="x<?php echo $request_trip_list->RowIndex ?>_image3_id" id="x<?php echo $request_trip_list->RowIndex ?>_image3_id" size="30" placeholder="<?php echo HtmlEncode($request_trip->image3_id->getPlaceHolder()) ?>" value="<?php echo $request_trip->image3_id->EditValue ?>"<?php echo $request_trip->image3_id->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="request_trip" data-field="x_image3_id" name="o<?php echo $request_trip_list->RowIndex ?>_image3_id" id="o<?php echo $request_trip_list->RowIndex ?>_image3_id" value="<?php echo HtmlEncode($request_trip->image3_id->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($request_trip->image4_id->Visible) { // image4_id ?>
+		<td data-name="image4_id">
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_image4_id" class="form-group request_trip_image4_id">
+<input type="text" data-table="request_trip" data-field="x_image4_id" name="x<?php echo $request_trip_list->RowIndex ?>_image4_id" id="x<?php echo $request_trip_list->RowIndex ?>_image4_id" size="30" placeholder="<?php echo HtmlEncode($request_trip->image4_id->getPlaceHolder()) ?>" value="<?php echo $request_trip->image4_id->EditValue ?>"<?php echo $request_trip->image4_id->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="request_trip" data-field="x_image4_id" name="o<?php echo $request_trip_list->RowIndex ?>_image4_id" id="o<?php echo $request_trip_list->RowIndex ?>_image4_id" value="<?php echo HtmlEncode($request_trip->image4_id->OldValue) ?>">
 </td>
 	<?php } ?>
 <?php
@@ -851,23 +1059,191 @@ ew.createDateTimePicker("frequest_triplist", "x<?php echo $request_trip_list->Ro
 <?php } ?>
 </td>
 	<?php } ?>
-	<?php if ($request_trip->category->Visible) { // category ?>
-		<td data-name="category"<?php echo $request_trip->category->cellAttributes() ?>>
+	<?php if ($request_trip->labor_fee->Visible) { // labor_fee ?>
+		<td data-name="labor_fee"<?php echo $request_trip->labor_fee->cellAttributes() ?>>
 <?php if ($request_trip->RowType == ROWTYPE_ADD) { // Add record ?>
-<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_category" class="form-group request_trip_category">
-<input type="text" data-table="request_trip" data-field="x_category" name="x<?php echo $request_trip_list->RowIndex ?>_category" id="x<?php echo $request_trip_list->RowIndex ?>_category" size="30" placeholder="<?php echo HtmlEncode($request_trip->category->getPlaceHolder()) ?>" value="<?php echo $request_trip->category->EditValue ?>"<?php echo $request_trip->category->editAttributes() ?>>
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_labor_fee" class="form-group request_trip_labor_fee">
+<input type="text" data-table="request_trip" data-field="x_labor_fee" name="x<?php echo $request_trip_list->RowIndex ?>_labor_fee" id="x<?php echo $request_trip_list->RowIndex ?>_labor_fee" size="30" placeholder="<?php echo HtmlEncode($request_trip->labor_fee->getPlaceHolder()) ?>" value="<?php echo $request_trip->labor_fee->EditValue ?>"<?php echo $request_trip->labor_fee->editAttributes() ?>>
 </span>
-<input type="hidden" data-table="request_trip" data-field="x_category" name="o<?php echo $request_trip_list->RowIndex ?>_category" id="o<?php echo $request_trip_list->RowIndex ?>_category" value="<?php echo HtmlEncode($request_trip->category->OldValue) ?>">
+<input type="hidden" data-table="request_trip" data-field="x_labor_fee" name="o<?php echo $request_trip_list->RowIndex ?>_labor_fee" id="o<?php echo $request_trip_list->RowIndex ?>_labor_fee" value="<?php echo HtmlEncode($request_trip->labor_fee->OldValue) ?>">
 <?php } ?>
 <?php if ($request_trip->RowType == ROWTYPE_EDIT) { // Edit record ?>
-<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_category" class="form-group request_trip_category">
-<input type="text" data-table="request_trip" data-field="x_category" name="x<?php echo $request_trip_list->RowIndex ?>_category" id="x<?php echo $request_trip_list->RowIndex ?>_category" size="30" placeholder="<?php echo HtmlEncode($request_trip->category->getPlaceHolder()) ?>" value="<?php echo $request_trip->category->EditValue ?>"<?php echo $request_trip->category->editAttributes() ?>>
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_labor_fee" class="form-group request_trip_labor_fee">
+<input type="text" data-table="request_trip" data-field="x_labor_fee" name="x<?php echo $request_trip_list->RowIndex ?>_labor_fee" id="x<?php echo $request_trip_list->RowIndex ?>_labor_fee" size="30" placeholder="<?php echo HtmlEncode($request_trip->labor_fee->getPlaceHolder()) ?>" value="<?php echo $request_trip->labor_fee->EditValue ?>"<?php echo $request_trip->labor_fee->editAttributes() ?>>
 </span>
 <?php } ?>
 <?php if ($request_trip->RowType == ROWTYPE_VIEW) { // View record ?>
-<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_category" class="request_trip_category">
-<span<?php echo $request_trip->category->viewAttributes() ?>>
-<?php echo $request_trip->category->getViewValue() ?></span>
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_labor_fee" class="request_trip_labor_fee">
+<span<?php echo $request_trip->labor_fee->viewAttributes() ?>>
+<?php echo $request_trip->labor_fee->getViewValue() ?></span>
+</span>
+<?php } ?>
+</td>
+	<?php } ?>
+	<?php if ($request_trip->applicable->Visible) { // applicable ?>
+		<td data-name="applicable"<?php echo $request_trip->applicable->cellAttributes() ?>>
+<?php if ($request_trip->RowType == ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_applicable" class="form-group request_trip_applicable">
+<input type="text" data-table="request_trip" data-field="x_applicable" name="x<?php echo $request_trip_list->RowIndex ?>_applicable" id="x<?php echo $request_trip_list->RowIndex ?>_applicable" size="30" placeholder="<?php echo HtmlEncode($request_trip->applicable->getPlaceHolder()) ?>" value="<?php echo $request_trip->applicable->EditValue ?>"<?php echo $request_trip->applicable->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="request_trip" data-field="x_applicable" name="o<?php echo $request_trip_list->RowIndex ?>_applicable" id="o<?php echo $request_trip_list->RowIndex ?>_applicable" value="<?php echo HtmlEncode($request_trip->applicable->OldValue) ?>">
+<?php } ?>
+<?php if ($request_trip->RowType == ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_applicable" class="form-group request_trip_applicable">
+<input type="text" data-table="request_trip" data-field="x_applicable" name="x<?php echo $request_trip_list->RowIndex ?>_applicable" id="x<?php echo $request_trip_list->RowIndex ?>_applicable" size="30" placeholder="<?php echo HtmlEncode($request_trip->applicable->getPlaceHolder()) ?>" value="<?php echo $request_trip->applicable->EditValue ?>"<?php echo $request_trip->applicable->editAttributes() ?>>
+</span>
+<?php } ?>
+<?php if ($request_trip->RowType == ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_applicable" class="request_trip_applicable">
+<span<?php echo $request_trip->applicable->viewAttributes() ?>>
+<?php echo $request_trip->applicable->getViewValue() ?></span>
+</span>
+<?php } ?>
+</td>
+	<?php } ?>
+	<?php if ($request_trip->service_type->Visible) { // service_type ?>
+		<td data-name="service_type"<?php echo $request_trip->service_type->cellAttributes() ?>>
+<?php if ($request_trip->RowType == ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_service_type" class="form-group request_trip_service_type">
+<input type="text" data-table="request_trip" data-field="x_service_type" name="x<?php echo $request_trip_list->RowIndex ?>_service_type" id="x<?php echo $request_trip_list->RowIndex ?>_service_type" size="30" placeholder="<?php echo HtmlEncode($request_trip->service_type->getPlaceHolder()) ?>" value="<?php echo $request_trip->service_type->EditValue ?>"<?php echo $request_trip->service_type->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="request_trip" data-field="x_service_type" name="o<?php echo $request_trip_list->RowIndex ?>_service_type" id="o<?php echo $request_trip_list->RowIndex ?>_service_type" value="<?php echo HtmlEncode($request_trip->service_type->OldValue) ?>">
+<?php } ?>
+<?php if ($request_trip->RowType == ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_service_type" class="form-group request_trip_service_type">
+<input type="text" data-table="request_trip" data-field="x_service_type" name="x<?php echo $request_trip_list->RowIndex ?>_service_type" id="x<?php echo $request_trip_list->RowIndex ?>_service_type" size="30" placeholder="<?php echo HtmlEncode($request_trip->service_type->getPlaceHolder()) ?>" value="<?php echo $request_trip->service_type->EditValue ?>"<?php echo $request_trip->service_type->editAttributes() ?>>
+</span>
+<?php } ?>
+<?php if ($request_trip->RowType == ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_service_type" class="request_trip_service_type">
+<span<?php echo $request_trip->service_type->viewAttributes() ?>>
+<?php echo $request_trip->service_type->getViewValue() ?></span>
+</span>
+<?php } ?>
+</td>
+	<?php } ?>
+	<?php if ($request_trip->goods_category->Visible) { // goods_category ?>
+		<td data-name="goods_category"<?php echo $request_trip->goods_category->cellAttributes() ?>>
+<?php if ($request_trip->RowType == ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_goods_category" class="form-group request_trip_goods_category">
+<input type="text" data-table="request_trip" data-field="x_goods_category" name="x<?php echo $request_trip_list->RowIndex ?>_goods_category" id="x<?php echo $request_trip_list->RowIndex ?>_goods_category" size="30" placeholder="<?php echo HtmlEncode($request_trip->goods_category->getPlaceHolder()) ?>" value="<?php echo $request_trip->goods_category->EditValue ?>"<?php echo $request_trip->goods_category->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="request_trip" data-field="x_goods_category" name="o<?php echo $request_trip_list->RowIndex ?>_goods_category" id="o<?php echo $request_trip_list->RowIndex ?>_goods_category" value="<?php echo HtmlEncode($request_trip->goods_category->OldValue) ?>">
+<?php } ?>
+<?php if ($request_trip->RowType == ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_goods_category" class="form-group request_trip_goods_category">
+<input type="text" data-table="request_trip" data-field="x_goods_category" name="x<?php echo $request_trip_list->RowIndex ?>_goods_category" id="x<?php echo $request_trip_list->RowIndex ?>_goods_category" size="30" placeholder="<?php echo HtmlEncode($request_trip->goods_category->getPlaceHolder()) ?>" value="<?php echo $request_trip->goods_category->EditValue ?>"<?php echo $request_trip->goods_category->editAttributes() ?>>
+</span>
+<?php } ?>
+<?php if ($request_trip->RowType == ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_goods_category" class="request_trip_goods_category">
+<span<?php echo $request_trip->goods_category->viewAttributes() ?>>
+<?php echo $request_trip->goods_category->getViewValue() ?></span>
+</span>
+<?php } ?>
+</td>
+	<?php } ?>
+	<?php if ($request_trip->goods_weight->Visible) { // goods_weight ?>
+		<td data-name="goods_weight"<?php echo $request_trip->goods_weight->cellAttributes() ?>>
+<?php if ($request_trip->RowType == ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_goods_weight" class="form-group request_trip_goods_weight">
+<input type="text" data-table="request_trip" data-field="x_goods_weight" name="x<?php echo $request_trip_list->RowIndex ?>_goods_weight" id="x<?php echo $request_trip_list->RowIndex ?>_goods_weight" size="30" placeholder="<?php echo HtmlEncode($request_trip->goods_weight->getPlaceHolder()) ?>" value="<?php echo $request_trip->goods_weight->EditValue ?>"<?php echo $request_trip->goods_weight->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="request_trip" data-field="x_goods_weight" name="o<?php echo $request_trip_list->RowIndex ?>_goods_weight" id="o<?php echo $request_trip_list->RowIndex ?>_goods_weight" value="<?php echo HtmlEncode($request_trip->goods_weight->OldValue) ?>">
+<?php } ?>
+<?php if ($request_trip->RowType == ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_goods_weight" class="form-group request_trip_goods_weight">
+<input type="text" data-table="request_trip" data-field="x_goods_weight" name="x<?php echo $request_trip_list->RowIndex ?>_goods_weight" id="x<?php echo $request_trip_list->RowIndex ?>_goods_weight" size="30" placeholder="<?php echo HtmlEncode($request_trip->goods_weight->getPlaceHolder()) ?>" value="<?php echo $request_trip->goods_weight->EditValue ?>"<?php echo $request_trip->goods_weight->editAttributes() ?>>
+</span>
+<?php } ?>
+<?php if ($request_trip->RowType == ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_goods_weight" class="request_trip_goods_weight">
+<span<?php echo $request_trip->goods_weight->viewAttributes() ?>>
+<?php echo $request_trip->goods_weight->getViewValue() ?></span>
+</span>
+<?php } ?>
+</td>
+	<?php } ?>
+	<?php if ($request_trip->image1_id->Visible) { // image1_id ?>
+		<td data-name="image1_id"<?php echo $request_trip->image1_id->cellAttributes() ?>>
+<?php if ($request_trip->RowType == ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_image1_id" class="form-group request_trip_image1_id">
+<input type="text" data-table="request_trip" data-field="x_image1_id" name="x<?php echo $request_trip_list->RowIndex ?>_image1_id" id="x<?php echo $request_trip_list->RowIndex ?>_image1_id" size="30" placeholder="<?php echo HtmlEncode($request_trip->image1_id->getPlaceHolder()) ?>" value="<?php echo $request_trip->image1_id->EditValue ?>"<?php echo $request_trip->image1_id->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="request_trip" data-field="x_image1_id" name="o<?php echo $request_trip_list->RowIndex ?>_image1_id" id="o<?php echo $request_trip_list->RowIndex ?>_image1_id" value="<?php echo HtmlEncode($request_trip->image1_id->OldValue) ?>">
+<?php } ?>
+<?php if ($request_trip->RowType == ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_image1_id" class="form-group request_trip_image1_id">
+<input type="text" data-table="request_trip" data-field="x_image1_id" name="x<?php echo $request_trip_list->RowIndex ?>_image1_id" id="x<?php echo $request_trip_list->RowIndex ?>_image1_id" size="30" placeholder="<?php echo HtmlEncode($request_trip->image1_id->getPlaceHolder()) ?>" value="<?php echo $request_trip->image1_id->EditValue ?>"<?php echo $request_trip->image1_id->editAttributes() ?>>
+</span>
+<?php } ?>
+<?php if ($request_trip->RowType == ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_image1_id" class="request_trip_image1_id">
+<span<?php echo $request_trip->image1_id->viewAttributes() ?>>
+<?php echo $request_trip->image1_id->getViewValue() ?></span>
+</span>
+<?php } ?>
+</td>
+	<?php } ?>
+	<?php if ($request_trip->image2_id->Visible) { // image2_id ?>
+		<td data-name="image2_id"<?php echo $request_trip->image2_id->cellAttributes() ?>>
+<?php if ($request_trip->RowType == ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_image2_id" class="form-group request_trip_image2_id">
+<input type="text" data-table="request_trip" data-field="x_image2_id" name="x<?php echo $request_trip_list->RowIndex ?>_image2_id" id="x<?php echo $request_trip_list->RowIndex ?>_image2_id" size="30" placeholder="<?php echo HtmlEncode($request_trip->image2_id->getPlaceHolder()) ?>" value="<?php echo $request_trip->image2_id->EditValue ?>"<?php echo $request_trip->image2_id->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="request_trip" data-field="x_image2_id" name="o<?php echo $request_trip_list->RowIndex ?>_image2_id" id="o<?php echo $request_trip_list->RowIndex ?>_image2_id" value="<?php echo HtmlEncode($request_trip->image2_id->OldValue) ?>">
+<?php } ?>
+<?php if ($request_trip->RowType == ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_image2_id" class="form-group request_trip_image2_id">
+<input type="text" data-table="request_trip" data-field="x_image2_id" name="x<?php echo $request_trip_list->RowIndex ?>_image2_id" id="x<?php echo $request_trip_list->RowIndex ?>_image2_id" size="30" placeholder="<?php echo HtmlEncode($request_trip->image2_id->getPlaceHolder()) ?>" value="<?php echo $request_trip->image2_id->EditValue ?>"<?php echo $request_trip->image2_id->editAttributes() ?>>
+</span>
+<?php } ?>
+<?php if ($request_trip->RowType == ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_image2_id" class="request_trip_image2_id">
+<span<?php echo $request_trip->image2_id->viewAttributes() ?>>
+<?php echo $request_trip->image2_id->getViewValue() ?></span>
+</span>
+<?php } ?>
+</td>
+	<?php } ?>
+	<?php if ($request_trip->image3_id->Visible) { // image3_id ?>
+		<td data-name="image3_id"<?php echo $request_trip->image3_id->cellAttributes() ?>>
+<?php if ($request_trip->RowType == ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_image3_id" class="form-group request_trip_image3_id">
+<input type="text" data-table="request_trip" data-field="x_image3_id" name="x<?php echo $request_trip_list->RowIndex ?>_image3_id" id="x<?php echo $request_trip_list->RowIndex ?>_image3_id" size="30" placeholder="<?php echo HtmlEncode($request_trip->image3_id->getPlaceHolder()) ?>" value="<?php echo $request_trip->image3_id->EditValue ?>"<?php echo $request_trip->image3_id->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="request_trip" data-field="x_image3_id" name="o<?php echo $request_trip_list->RowIndex ?>_image3_id" id="o<?php echo $request_trip_list->RowIndex ?>_image3_id" value="<?php echo HtmlEncode($request_trip->image3_id->OldValue) ?>">
+<?php } ?>
+<?php if ($request_trip->RowType == ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_image3_id" class="form-group request_trip_image3_id">
+<input type="text" data-table="request_trip" data-field="x_image3_id" name="x<?php echo $request_trip_list->RowIndex ?>_image3_id" id="x<?php echo $request_trip_list->RowIndex ?>_image3_id" size="30" placeholder="<?php echo HtmlEncode($request_trip->image3_id->getPlaceHolder()) ?>" value="<?php echo $request_trip->image3_id->EditValue ?>"<?php echo $request_trip->image3_id->editAttributes() ?>>
+</span>
+<?php } ?>
+<?php if ($request_trip->RowType == ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_image3_id" class="request_trip_image3_id">
+<span<?php echo $request_trip->image3_id->viewAttributes() ?>>
+<?php echo $request_trip->image3_id->getViewValue() ?></span>
+</span>
+<?php } ?>
+</td>
+	<?php } ?>
+	<?php if ($request_trip->image4_id->Visible) { // image4_id ?>
+		<td data-name="image4_id"<?php echo $request_trip->image4_id->cellAttributes() ?>>
+<?php if ($request_trip->RowType == ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_image4_id" class="form-group request_trip_image4_id">
+<input type="text" data-table="request_trip" data-field="x_image4_id" name="x<?php echo $request_trip_list->RowIndex ?>_image4_id" id="x<?php echo $request_trip_list->RowIndex ?>_image4_id" size="30" placeholder="<?php echo HtmlEncode($request_trip->image4_id->getPlaceHolder()) ?>" value="<?php echo $request_trip->image4_id->EditValue ?>"<?php echo $request_trip->image4_id->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="request_trip" data-field="x_image4_id" name="o<?php echo $request_trip_list->RowIndex ?>_image4_id" id="o<?php echo $request_trip_list->RowIndex ?>_image4_id" value="<?php echo HtmlEncode($request_trip->image4_id->OldValue) ?>">
+<?php } ?>
+<?php if ($request_trip->RowType == ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_image4_id" class="form-group request_trip_image4_id">
+<input type="text" data-table="request_trip" data-field="x_image4_id" name="x<?php echo $request_trip_list->RowIndex ?>_image4_id" id="x<?php echo $request_trip_list->RowIndex ?>_image4_id" size="30" placeholder="<?php echo HtmlEncode($request_trip->image4_id->getPlaceHolder()) ?>" value="<?php echo $request_trip->image4_id->EditValue ?>"<?php echo $request_trip->image4_id->editAttributes() ?>>
+</span>
+<?php } ?>
+<?php if ($request_trip->RowType == ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $request_trip_list->RowCnt ?>_request_trip_image4_id" class="request_trip_image4_id">
+<span<?php echo $request_trip->image4_id->viewAttributes() ?>>
+<?php echo $request_trip->image4_id->getViewValue() ?></span>
 </span>
 <?php } ?>
 </td>
@@ -999,12 +1375,76 @@ ew.createDateTimePicker("frequest_triplist", "x<?php echo $request_trip_list->Ro
 <input type="hidden" data-table="request_trip" data-field="x_updatedAt" name="o<?php echo $request_trip_list->RowIndex ?>_updatedAt" id="o<?php echo $request_trip_list->RowIndex ?>_updatedAt" value="<?php echo HtmlEncode($request_trip->updatedAt->OldValue) ?>">
 </td>
 	<?php } ?>
-	<?php if ($request_trip->category->Visible) { // category ?>
-		<td data-name="category">
-<span id="el$rowindex$_request_trip_category" class="form-group request_trip_category">
-<input type="text" data-table="request_trip" data-field="x_category" name="x<?php echo $request_trip_list->RowIndex ?>_category" id="x<?php echo $request_trip_list->RowIndex ?>_category" size="30" placeholder="<?php echo HtmlEncode($request_trip->category->getPlaceHolder()) ?>" value="<?php echo $request_trip->category->EditValue ?>"<?php echo $request_trip->category->editAttributes() ?>>
+	<?php if ($request_trip->labor_fee->Visible) { // labor_fee ?>
+		<td data-name="labor_fee">
+<span id="el$rowindex$_request_trip_labor_fee" class="form-group request_trip_labor_fee">
+<input type="text" data-table="request_trip" data-field="x_labor_fee" name="x<?php echo $request_trip_list->RowIndex ?>_labor_fee" id="x<?php echo $request_trip_list->RowIndex ?>_labor_fee" size="30" placeholder="<?php echo HtmlEncode($request_trip->labor_fee->getPlaceHolder()) ?>" value="<?php echo $request_trip->labor_fee->EditValue ?>"<?php echo $request_trip->labor_fee->editAttributes() ?>>
 </span>
-<input type="hidden" data-table="request_trip" data-field="x_category" name="o<?php echo $request_trip_list->RowIndex ?>_category" id="o<?php echo $request_trip_list->RowIndex ?>_category" value="<?php echo HtmlEncode($request_trip->category->OldValue) ?>">
+<input type="hidden" data-table="request_trip" data-field="x_labor_fee" name="o<?php echo $request_trip_list->RowIndex ?>_labor_fee" id="o<?php echo $request_trip_list->RowIndex ?>_labor_fee" value="<?php echo HtmlEncode($request_trip->labor_fee->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($request_trip->applicable->Visible) { // applicable ?>
+		<td data-name="applicable">
+<span id="el$rowindex$_request_trip_applicable" class="form-group request_trip_applicable">
+<input type="text" data-table="request_trip" data-field="x_applicable" name="x<?php echo $request_trip_list->RowIndex ?>_applicable" id="x<?php echo $request_trip_list->RowIndex ?>_applicable" size="30" placeholder="<?php echo HtmlEncode($request_trip->applicable->getPlaceHolder()) ?>" value="<?php echo $request_trip->applicable->EditValue ?>"<?php echo $request_trip->applicable->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="request_trip" data-field="x_applicable" name="o<?php echo $request_trip_list->RowIndex ?>_applicable" id="o<?php echo $request_trip_list->RowIndex ?>_applicable" value="<?php echo HtmlEncode($request_trip->applicable->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($request_trip->service_type->Visible) { // service_type ?>
+		<td data-name="service_type">
+<span id="el$rowindex$_request_trip_service_type" class="form-group request_trip_service_type">
+<input type="text" data-table="request_trip" data-field="x_service_type" name="x<?php echo $request_trip_list->RowIndex ?>_service_type" id="x<?php echo $request_trip_list->RowIndex ?>_service_type" size="30" placeholder="<?php echo HtmlEncode($request_trip->service_type->getPlaceHolder()) ?>" value="<?php echo $request_trip->service_type->EditValue ?>"<?php echo $request_trip->service_type->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="request_trip" data-field="x_service_type" name="o<?php echo $request_trip_list->RowIndex ?>_service_type" id="o<?php echo $request_trip_list->RowIndex ?>_service_type" value="<?php echo HtmlEncode($request_trip->service_type->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($request_trip->goods_category->Visible) { // goods_category ?>
+		<td data-name="goods_category">
+<span id="el$rowindex$_request_trip_goods_category" class="form-group request_trip_goods_category">
+<input type="text" data-table="request_trip" data-field="x_goods_category" name="x<?php echo $request_trip_list->RowIndex ?>_goods_category" id="x<?php echo $request_trip_list->RowIndex ?>_goods_category" size="30" placeholder="<?php echo HtmlEncode($request_trip->goods_category->getPlaceHolder()) ?>" value="<?php echo $request_trip->goods_category->EditValue ?>"<?php echo $request_trip->goods_category->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="request_trip" data-field="x_goods_category" name="o<?php echo $request_trip_list->RowIndex ?>_goods_category" id="o<?php echo $request_trip_list->RowIndex ?>_goods_category" value="<?php echo HtmlEncode($request_trip->goods_category->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($request_trip->goods_weight->Visible) { // goods_weight ?>
+		<td data-name="goods_weight">
+<span id="el$rowindex$_request_trip_goods_weight" class="form-group request_trip_goods_weight">
+<input type="text" data-table="request_trip" data-field="x_goods_weight" name="x<?php echo $request_trip_list->RowIndex ?>_goods_weight" id="x<?php echo $request_trip_list->RowIndex ?>_goods_weight" size="30" placeholder="<?php echo HtmlEncode($request_trip->goods_weight->getPlaceHolder()) ?>" value="<?php echo $request_trip->goods_weight->EditValue ?>"<?php echo $request_trip->goods_weight->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="request_trip" data-field="x_goods_weight" name="o<?php echo $request_trip_list->RowIndex ?>_goods_weight" id="o<?php echo $request_trip_list->RowIndex ?>_goods_weight" value="<?php echo HtmlEncode($request_trip->goods_weight->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($request_trip->image1_id->Visible) { // image1_id ?>
+		<td data-name="image1_id">
+<span id="el$rowindex$_request_trip_image1_id" class="form-group request_trip_image1_id">
+<input type="text" data-table="request_trip" data-field="x_image1_id" name="x<?php echo $request_trip_list->RowIndex ?>_image1_id" id="x<?php echo $request_trip_list->RowIndex ?>_image1_id" size="30" placeholder="<?php echo HtmlEncode($request_trip->image1_id->getPlaceHolder()) ?>" value="<?php echo $request_trip->image1_id->EditValue ?>"<?php echo $request_trip->image1_id->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="request_trip" data-field="x_image1_id" name="o<?php echo $request_trip_list->RowIndex ?>_image1_id" id="o<?php echo $request_trip_list->RowIndex ?>_image1_id" value="<?php echo HtmlEncode($request_trip->image1_id->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($request_trip->image2_id->Visible) { // image2_id ?>
+		<td data-name="image2_id">
+<span id="el$rowindex$_request_trip_image2_id" class="form-group request_trip_image2_id">
+<input type="text" data-table="request_trip" data-field="x_image2_id" name="x<?php echo $request_trip_list->RowIndex ?>_image2_id" id="x<?php echo $request_trip_list->RowIndex ?>_image2_id" size="30" placeholder="<?php echo HtmlEncode($request_trip->image2_id->getPlaceHolder()) ?>" value="<?php echo $request_trip->image2_id->EditValue ?>"<?php echo $request_trip->image2_id->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="request_trip" data-field="x_image2_id" name="o<?php echo $request_trip_list->RowIndex ?>_image2_id" id="o<?php echo $request_trip_list->RowIndex ?>_image2_id" value="<?php echo HtmlEncode($request_trip->image2_id->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($request_trip->image3_id->Visible) { // image3_id ?>
+		<td data-name="image3_id">
+<span id="el$rowindex$_request_trip_image3_id" class="form-group request_trip_image3_id">
+<input type="text" data-table="request_trip" data-field="x_image3_id" name="x<?php echo $request_trip_list->RowIndex ?>_image3_id" id="x<?php echo $request_trip_list->RowIndex ?>_image3_id" size="30" placeholder="<?php echo HtmlEncode($request_trip->image3_id->getPlaceHolder()) ?>" value="<?php echo $request_trip->image3_id->EditValue ?>"<?php echo $request_trip->image3_id->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="request_trip" data-field="x_image3_id" name="o<?php echo $request_trip_list->RowIndex ?>_image3_id" id="o<?php echo $request_trip_list->RowIndex ?>_image3_id" value="<?php echo HtmlEncode($request_trip->image3_id->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($request_trip->image4_id->Visible) { // image4_id ?>
+		<td data-name="image4_id">
+<span id="el$rowindex$_request_trip_image4_id" class="form-group request_trip_image4_id">
+<input type="text" data-table="request_trip" data-field="x_image4_id" name="x<?php echo $request_trip_list->RowIndex ?>_image4_id" id="x<?php echo $request_trip_list->RowIndex ?>_image4_id" size="30" placeholder="<?php echo HtmlEncode($request_trip->image4_id->getPlaceHolder()) ?>" value="<?php echo $request_trip->image4_id->EditValue ?>"<?php echo $request_trip->image4_id->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="request_trip" data-field="x_image4_id" name="o<?php echo $request_trip_list->RowIndex ?>_image4_id" id="o<?php echo $request_trip_list->RowIndex ?>_image4_id" value="<?php echo HtmlEncode($request_trip->image4_id->OldValue) ?>">
 </td>
 	<?php } ?>
 <?php

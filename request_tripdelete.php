@@ -100,8 +100,32 @@ $request_trip_delete->showMessage();
 <?php if ($request_trip->updatedAt->Visible) { // updatedAt ?>
 		<th class="<?php echo $request_trip->updatedAt->headerCellClass() ?>"><span id="elh_request_trip_updatedAt" class="request_trip_updatedAt"><?php echo $request_trip->updatedAt->caption() ?></span></th>
 <?php } ?>
-<?php if ($request_trip->category->Visible) { // category ?>
-		<th class="<?php echo $request_trip->category->headerCellClass() ?>"><span id="elh_request_trip_category" class="request_trip_category"><?php echo $request_trip->category->caption() ?></span></th>
+<?php if ($request_trip->labor_fee->Visible) { // labor_fee ?>
+		<th class="<?php echo $request_trip->labor_fee->headerCellClass() ?>"><span id="elh_request_trip_labor_fee" class="request_trip_labor_fee"><?php echo $request_trip->labor_fee->caption() ?></span></th>
+<?php } ?>
+<?php if ($request_trip->applicable->Visible) { // applicable ?>
+		<th class="<?php echo $request_trip->applicable->headerCellClass() ?>"><span id="elh_request_trip_applicable" class="request_trip_applicable"><?php echo $request_trip->applicable->caption() ?></span></th>
+<?php } ?>
+<?php if ($request_trip->service_type->Visible) { // service_type ?>
+		<th class="<?php echo $request_trip->service_type->headerCellClass() ?>"><span id="elh_request_trip_service_type" class="request_trip_service_type"><?php echo $request_trip->service_type->caption() ?></span></th>
+<?php } ?>
+<?php if ($request_trip->goods_category->Visible) { // goods_category ?>
+		<th class="<?php echo $request_trip->goods_category->headerCellClass() ?>"><span id="elh_request_trip_goods_category" class="request_trip_goods_category"><?php echo $request_trip->goods_category->caption() ?></span></th>
+<?php } ?>
+<?php if ($request_trip->goods_weight->Visible) { // goods_weight ?>
+		<th class="<?php echo $request_trip->goods_weight->headerCellClass() ?>"><span id="elh_request_trip_goods_weight" class="request_trip_goods_weight"><?php echo $request_trip->goods_weight->caption() ?></span></th>
+<?php } ?>
+<?php if ($request_trip->image1_id->Visible) { // image1_id ?>
+		<th class="<?php echo $request_trip->image1_id->headerCellClass() ?>"><span id="elh_request_trip_image1_id" class="request_trip_image1_id"><?php echo $request_trip->image1_id->caption() ?></span></th>
+<?php } ?>
+<?php if ($request_trip->image2_id->Visible) { // image2_id ?>
+		<th class="<?php echo $request_trip->image2_id->headerCellClass() ?>"><span id="elh_request_trip_image2_id" class="request_trip_image2_id"><?php echo $request_trip->image2_id->caption() ?></span></th>
+<?php } ?>
+<?php if ($request_trip->image3_id->Visible) { // image3_id ?>
+		<th class="<?php echo $request_trip->image3_id->headerCellClass() ?>"><span id="elh_request_trip_image3_id" class="request_trip_image3_id"><?php echo $request_trip->image3_id->caption() ?></span></th>
+<?php } ?>
+<?php if ($request_trip->image4_id->Visible) { // image4_id ?>
+		<th class="<?php echo $request_trip->image4_id->headerCellClass() ?>"><span id="elh_request_trip_image4_id" class="request_trip_image4_id"><?php echo $request_trip->image4_id->caption() ?></span></th>
 <?php } ?>
 	</tr>
 	</thead>
@@ -188,11 +212,75 @@ while (!$request_trip_delete->Recordset->EOF) {
 </span>
 </td>
 <?php } ?>
-<?php if ($request_trip->category->Visible) { // category ?>
-		<td<?php echo $request_trip->category->cellAttributes() ?>>
-<span id="el<?php echo $request_trip_delete->RowCnt ?>_request_trip_category" class="request_trip_category">
-<span<?php echo $request_trip->category->viewAttributes() ?>>
-<?php echo $request_trip->category->getViewValue() ?></span>
+<?php if ($request_trip->labor_fee->Visible) { // labor_fee ?>
+		<td<?php echo $request_trip->labor_fee->cellAttributes() ?>>
+<span id="el<?php echo $request_trip_delete->RowCnt ?>_request_trip_labor_fee" class="request_trip_labor_fee">
+<span<?php echo $request_trip->labor_fee->viewAttributes() ?>>
+<?php echo $request_trip->labor_fee->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($request_trip->applicable->Visible) { // applicable ?>
+		<td<?php echo $request_trip->applicable->cellAttributes() ?>>
+<span id="el<?php echo $request_trip_delete->RowCnt ?>_request_trip_applicable" class="request_trip_applicable">
+<span<?php echo $request_trip->applicable->viewAttributes() ?>>
+<?php echo $request_trip->applicable->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($request_trip->service_type->Visible) { // service_type ?>
+		<td<?php echo $request_trip->service_type->cellAttributes() ?>>
+<span id="el<?php echo $request_trip_delete->RowCnt ?>_request_trip_service_type" class="request_trip_service_type">
+<span<?php echo $request_trip->service_type->viewAttributes() ?>>
+<?php echo $request_trip->service_type->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($request_trip->goods_category->Visible) { // goods_category ?>
+		<td<?php echo $request_trip->goods_category->cellAttributes() ?>>
+<span id="el<?php echo $request_trip_delete->RowCnt ?>_request_trip_goods_category" class="request_trip_goods_category">
+<span<?php echo $request_trip->goods_category->viewAttributes() ?>>
+<?php echo $request_trip->goods_category->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($request_trip->goods_weight->Visible) { // goods_weight ?>
+		<td<?php echo $request_trip->goods_weight->cellAttributes() ?>>
+<span id="el<?php echo $request_trip_delete->RowCnt ?>_request_trip_goods_weight" class="request_trip_goods_weight">
+<span<?php echo $request_trip->goods_weight->viewAttributes() ?>>
+<?php echo $request_trip->goods_weight->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($request_trip->image1_id->Visible) { // image1_id ?>
+		<td<?php echo $request_trip->image1_id->cellAttributes() ?>>
+<span id="el<?php echo $request_trip_delete->RowCnt ?>_request_trip_image1_id" class="request_trip_image1_id">
+<span<?php echo $request_trip->image1_id->viewAttributes() ?>>
+<?php echo $request_trip->image1_id->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($request_trip->image2_id->Visible) { // image2_id ?>
+		<td<?php echo $request_trip->image2_id->cellAttributes() ?>>
+<span id="el<?php echo $request_trip_delete->RowCnt ?>_request_trip_image2_id" class="request_trip_image2_id">
+<span<?php echo $request_trip->image2_id->viewAttributes() ?>>
+<?php echo $request_trip->image2_id->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($request_trip->image3_id->Visible) { // image3_id ?>
+		<td<?php echo $request_trip->image3_id->cellAttributes() ?>>
+<span id="el<?php echo $request_trip_delete->RowCnt ?>_request_trip_image3_id" class="request_trip_image3_id">
+<span<?php echo $request_trip->image3_id->viewAttributes() ?>>
+<?php echo $request_trip->image3_id->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($request_trip->image4_id->Visible) { // image4_id ?>
+		<td<?php echo $request_trip->image4_id->cellAttributes() ?>>
+<span id="el<?php echo $request_trip_delete->RowCnt ?>_request_trip_image4_id" class="request_trip_image4_id">
+<span<?php echo $request_trip->image4_id->viewAttributes() ?>>
+<?php echo $request_trip->image4_id->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

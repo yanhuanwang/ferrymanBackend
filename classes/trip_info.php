@@ -31,9 +31,14 @@ class trip_info extends DbTable
 	public $description;
 	public $user_id;
 	public $flight_number;
-	public $date;
 	public $createdAt;
 	public $updatedAt;
+	public $from_date;
+	public $to_date;
+	public $labor_fee;
+	public $available;
+	public $service_type;
+	public $max_carrying_weight;
 
 	// Constructor
 	public function __construct()
@@ -91,7 +96,6 @@ class trip_info extends DbTable
 
 		// description
 		$this->description = new DbField('trip_info', 'trip_info', 'x_description', 'description', '`description`', '`description`', 200, -1, FALSE, '`description`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->description->Nullable = FALSE; // NOT NULL field
 		$this->description->Required = TRUE; // Required field
 		$this->description->Sortable = TRUE; // Allow sort
 		$this->fields['description'] = &$this->description;
@@ -120,14 +124,6 @@ class trip_info extends DbTable
 		$this->flight_number->Sortable = TRUE; // Allow sort
 		$this->fields['flight_number'] = &$this->flight_number;
 
-		// date
-		$this->date = new DbField('trip_info', 'trip_info', 'x_date', 'date', '`date`', CastDateFieldForLike('`date`', 0, "DB"), 133, 0, FALSE, '`date`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->date->Nullable = FALSE; // NOT NULL field
-		$this->date->Required = TRUE; // Required field
-		$this->date->Sortable = TRUE; // Allow sort
-		$this->date->DefaultErrorMessage = str_replace("%s", $GLOBALS["DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
-		$this->fields['date'] = &$this->date;
-
 		// createdAt
 		$this->createdAt = new DbField('trip_info', 'trip_info', 'x_createdAt', 'createdAt', '`createdAt`', CastDateFieldForLike('`createdAt`', 0, "DB"), 135, 0, FALSE, '`createdAt`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->createdAt->Sortable = TRUE; // Allow sort
@@ -139,6 +135,45 @@ class trip_info extends DbTable
 		$this->updatedAt->Sortable = TRUE; // Allow sort
 		$this->updatedAt->DefaultErrorMessage = str_replace("%s", $GLOBALS["DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
 		$this->fields['updatedAt'] = &$this->updatedAt;
+
+		// from_date
+		$this->from_date = new DbField('trip_info', 'trip_info', 'x_from_date', 'from_date', '`from_date`', CastDateFieldForLike('`from_date`', 0, "DB"), 133, 0, FALSE, '`from_date`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->from_date->Nullable = FALSE; // NOT NULL field
+		$this->from_date->Required = TRUE; // Required field
+		$this->from_date->Sortable = TRUE; // Allow sort
+		$this->from_date->DefaultErrorMessage = str_replace("%s", $GLOBALS["DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
+		$this->fields['from_date'] = &$this->from_date;
+
+		// to_date
+		$this->to_date = new DbField('trip_info', 'trip_info', 'x_to_date', 'to_date', '`to_date`', CastDateFieldForLike('`to_date`', 0, "DB"), 133, 0, FALSE, '`to_date`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->to_date->Sortable = TRUE; // Allow sort
+		$this->to_date->DefaultErrorMessage = str_replace("%s", $GLOBALS["DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
+		$this->fields['to_date'] = &$this->to_date;
+
+		// labor_fee
+		$this->labor_fee = new DbField('trip_info', 'trip_info', 'x_labor_fee', 'labor_fee', '`labor_fee`', '`labor_fee`', 3, -1, FALSE, '`labor_fee`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->labor_fee->Sortable = TRUE; // Allow sort
+		$this->labor_fee->DefaultErrorMessage = $Language->Phrase("IncorrectInteger");
+		$this->fields['labor_fee'] = &$this->labor_fee;
+
+		// available
+		$this->available = new DbField('trip_info', 'trip_info', 'x_available', 'available', '`available`', '`available`', 3, -1, FALSE, '`available`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->available->Sortable = TRUE; // Allow sort
+		$this->available->DefaultErrorMessage = $Language->Phrase("IncorrectInteger");
+		$this->fields['available'] = &$this->available;
+
+		// service_type
+		$this->service_type = new DbField('trip_info', 'trip_info', 'x_service_type', 'service_type', '`service_type`', '`service_type`', 3, -1, FALSE, '`service_type`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->service_type->Nullable = FALSE; // NOT NULL field
+		$this->service_type->Sortable = TRUE; // Allow sort
+		$this->service_type->DefaultErrorMessage = $Language->Phrase("IncorrectInteger");
+		$this->fields['service_type'] = &$this->service_type;
+
+		// max_carrying_weight
+		$this->max_carrying_weight = new DbField('trip_info', 'trip_info', 'x_max_carrying_weight', 'max_carrying_weight', '`max_carrying_weight`', '`max_carrying_weight`', 3, -1, FALSE, '`max_carrying_weight`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->max_carrying_weight->Sortable = TRUE; // Allow sort
+		$this->max_carrying_weight->DefaultErrorMessage = $Language->Phrase("IncorrectInteger");
+		$this->fields['max_carrying_weight'] = &$this->max_carrying_weight;
 	}
 
 	// Field Visibility
@@ -539,9 +574,14 @@ class trip_info extends DbTable
 		$this->description->DbValue = $row['description'];
 		$this->user_id->DbValue = $row['user_id'];
 		$this->flight_number->DbValue = $row['flight_number'];
-		$this->date->DbValue = $row['date'];
 		$this->createdAt->DbValue = $row['createdAt'];
 		$this->updatedAt->DbValue = $row['updatedAt'];
+		$this->from_date->DbValue = $row['from_date'];
+		$this->to_date->DbValue = $row['to_date'];
+		$this->labor_fee->DbValue = $row['labor_fee'];
+		$this->available->DbValue = $row['available'];
+		$this->service_type->DbValue = $row['service_type'];
+		$this->max_carrying_weight->DbValue = $row['max_carrying_weight'];
 	}
 
 	// Delete uploaded files
@@ -777,9 +817,14 @@ class trip_info extends DbTable
 		$this->description->setDbValue($rs->fields('description'));
 		$this->user_id->setDbValue($rs->fields('user_id'));
 		$this->flight_number->setDbValue($rs->fields('flight_number'));
-		$this->date->setDbValue($rs->fields('date'));
 		$this->createdAt->setDbValue($rs->fields('createdAt'));
 		$this->updatedAt->setDbValue($rs->fields('updatedAt'));
+		$this->from_date->setDbValue($rs->fields('from_date'));
+		$this->to_date->setDbValue($rs->fields('to_date'));
+		$this->labor_fee->setDbValue($rs->fields('labor_fee'));
+		$this->available->setDbValue($rs->fields('available'));
+		$this->service_type->setDbValue($rs->fields('service_type'));
+		$this->max_carrying_weight->setDbValue($rs->fields('max_carrying_weight'));
 	}
 
 	// Render list row values
@@ -797,9 +842,14 @@ class trip_info extends DbTable
 		// description
 		// user_id
 		// flight_number
-		// date
 		// createdAt
 		// updatedAt
+		// from_date
+		// to_date
+		// labor_fee
+		// available
+		// service_type
+		// max_carrying_weight
 		// id
 
 		$this->id->ViewValue = $this->id->CurrentValue;
@@ -845,11 +895,6 @@ class trip_info extends DbTable
 		$this->flight_number->ViewValue = $this->flight_number->CurrentValue;
 		$this->flight_number->ViewCustomAttributes = "";
 
-		// date
-		$this->date->ViewValue = $this->date->CurrentValue;
-		$this->date->ViewValue = FormatDateTime($this->date->ViewValue, 0);
-		$this->date->ViewCustomAttributes = "";
-
 		// createdAt
 		$this->createdAt->ViewValue = $this->createdAt->CurrentValue;
 		$this->createdAt->ViewValue = FormatDateTime($this->createdAt->ViewValue, 0);
@@ -859,6 +904,36 @@ class trip_info extends DbTable
 		$this->updatedAt->ViewValue = $this->updatedAt->CurrentValue;
 		$this->updatedAt->ViewValue = FormatDateTime($this->updatedAt->ViewValue, 0);
 		$this->updatedAt->ViewCustomAttributes = "";
+
+		// from_date
+		$this->from_date->ViewValue = $this->from_date->CurrentValue;
+		$this->from_date->ViewValue = FormatDateTime($this->from_date->ViewValue, 0);
+		$this->from_date->ViewCustomAttributes = "";
+
+		// to_date
+		$this->to_date->ViewValue = $this->to_date->CurrentValue;
+		$this->to_date->ViewValue = FormatDateTime($this->to_date->ViewValue, 0);
+		$this->to_date->ViewCustomAttributes = "";
+
+		// labor_fee
+		$this->labor_fee->ViewValue = $this->labor_fee->CurrentValue;
+		$this->labor_fee->ViewValue = FormatNumber($this->labor_fee->ViewValue, 0, -2, -2, -2);
+		$this->labor_fee->ViewCustomAttributes = "";
+
+		// available
+		$this->available->ViewValue = $this->available->CurrentValue;
+		$this->available->ViewValue = FormatNumber($this->available->ViewValue, 0, -2, -2, -2);
+		$this->available->ViewCustomAttributes = "";
+
+		// service_type
+		$this->service_type->ViewValue = $this->service_type->CurrentValue;
+		$this->service_type->ViewValue = FormatNumber($this->service_type->ViewValue, 0, -2, -2, -2);
+		$this->service_type->ViewCustomAttributes = "";
+
+		// max_carrying_weight
+		$this->max_carrying_weight->ViewValue = $this->max_carrying_weight->CurrentValue;
+		$this->max_carrying_weight->ViewValue = FormatNumber($this->max_carrying_weight->ViewValue, 0, -2, -2, -2);
+		$this->max_carrying_weight->ViewCustomAttributes = "";
 
 		// id
 		$this->id->LinkCustomAttributes = "";
@@ -890,11 +965,6 @@ class trip_info extends DbTable
 		$this->flight_number->HrefValue = "";
 		$this->flight_number->TooltipValue = "";
 
-		// date
-		$this->date->LinkCustomAttributes = "";
-		$this->date->HrefValue = "";
-		$this->date->TooltipValue = "";
-
 		// createdAt
 		$this->createdAt->LinkCustomAttributes = "";
 		$this->createdAt->HrefValue = "";
@@ -904,6 +974,36 @@ class trip_info extends DbTable
 		$this->updatedAt->LinkCustomAttributes = "";
 		$this->updatedAt->HrefValue = "";
 		$this->updatedAt->TooltipValue = "";
+
+		// from_date
+		$this->from_date->LinkCustomAttributes = "";
+		$this->from_date->HrefValue = "";
+		$this->from_date->TooltipValue = "";
+
+		// to_date
+		$this->to_date->LinkCustomAttributes = "";
+		$this->to_date->HrefValue = "";
+		$this->to_date->TooltipValue = "";
+
+		// labor_fee
+		$this->labor_fee->LinkCustomAttributes = "";
+		$this->labor_fee->HrefValue = "";
+		$this->labor_fee->TooltipValue = "";
+
+		// available
+		$this->available->LinkCustomAttributes = "";
+		$this->available->HrefValue = "";
+		$this->available->TooltipValue = "";
+
+		// service_type
+		$this->service_type->LinkCustomAttributes = "";
+		$this->service_type->HrefValue = "";
+		$this->service_type->TooltipValue = "";
+
+		// max_carrying_weight
+		$this->max_carrying_weight->LinkCustomAttributes = "";
+		$this->max_carrying_weight->HrefValue = "";
+		$this->max_carrying_weight->TooltipValue = "";
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -982,12 +1082,6 @@ class trip_info extends DbTable
 		$this->flight_number->EditValue = $this->flight_number->CurrentValue;
 		$this->flight_number->PlaceHolder = RemoveHtml($this->flight_number->caption());
 
-		// date
-		$this->date->EditAttrs["class"] = "form-control";
-		$this->date->EditCustomAttributes = "";
-		$this->date->EditValue = FormatDateTime($this->date->CurrentValue, 8);
-		$this->date->PlaceHolder = RemoveHtml($this->date->caption());
-
 		// createdAt
 		$this->createdAt->EditAttrs["class"] = "form-control";
 		$this->createdAt->EditCustomAttributes = "";
@@ -999,6 +1093,42 @@ class trip_info extends DbTable
 		$this->updatedAt->EditCustomAttributes = "";
 		$this->updatedAt->EditValue = FormatDateTime($this->updatedAt->CurrentValue, 8);
 		$this->updatedAt->PlaceHolder = RemoveHtml($this->updatedAt->caption());
+
+		// from_date
+		$this->from_date->EditAttrs["class"] = "form-control";
+		$this->from_date->EditCustomAttributes = "";
+		$this->from_date->EditValue = FormatDateTime($this->from_date->CurrentValue, 8);
+		$this->from_date->PlaceHolder = RemoveHtml($this->from_date->caption());
+
+		// to_date
+		$this->to_date->EditAttrs["class"] = "form-control";
+		$this->to_date->EditCustomAttributes = "";
+		$this->to_date->EditValue = FormatDateTime($this->to_date->CurrentValue, 8);
+		$this->to_date->PlaceHolder = RemoveHtml($this->to_date->caption());
+
+		// labor_fee
+		$this->labor_fee->EditAttrs["class"] = "form-control";
+		$this->labor_fee->EditCustomAttributes = "";
+		$this->labor_fee->EditValue = $this->labor_fee->CurrentValue;
+		$this->labor_fee->PlaceHolder = RemoveHtml($this->labor_fee->caption());
+
+		// available
+		$this->available->EditAttrs["class"] = "form-control";
+		$this->available->EditCustomAttributes = "";
+		$this->available->EditValue = $this->available->CurrentValue;
+		$this->available->PlaceHolder = RemoveHtml($this->available->caption());
+
+		// service_type
+		$this->service_type->EditAttrs["class"] = "form-control";
+		$this->service_type->EditCustomAttributes = "";
+		$this->service_type->EditValue = $this->service_type->CurrentValue;
+		$this->service_type->PlaceHolder = RemoveHtml($this->service_type->caption());
+
+		// max_carrying_weight
+		$this->max_carrying_weight->EditAttrs["class"] = "form-control";
+		$this->max_carrying_weight->EditCustomAttributes = "";
+		$this->max_carrying_weight->EditValue = $this->max_carrying_weight->CurrentValue;
+		$this->max_carrying_weight->PlaceHolder = RemoveHtml($this->max_carrying_weight->caption());
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -1041,12 +1171,22 @@ class trip_info extends DbTable
 						$doc->exportCaption($this->user_id);
 					if ($this->flight_number->Exportable)
 						$doc->exportCaption($this->flight_number);
-					if ($this->date->Exportable)
-						$doc->exportCaption($this->date);
 					if ($this->createdAt->Exportable)
 						$doc->exportCaption($this->createdAt);
 					if ($this->updatedAt->Exportable)
 						$doc->exportCaption($this->updatedAt);
+					if ($this->from_date->Exportable)
+						$doc->exportCaption($this->from_date);
+					if ($this->to_date->Exportable)
+						$doc->exportCaption($this->to_date);
+					if ($this->labor_fee->Exportable)
+						$doc->exportCaption($this->labor_fee);
+					if ($this->available->Exportable)
+						$doc->exportCaption($this->available);
+					if ($this->service_type->Exportable)
+						$doc->exportCaption($this->service_type);
+					if ($this->max_carrying_weight->Exportable)
+						$doc->exportCaption($this->max_carrying_weight);
 				} else {
 					if ($this->id->Exportable)
 						$doc->exportCaption($this->id);
@@ -1060,12 +1200,22 @@ class trip_info extends DbTable
 						$doc->exportCaption($this->user_id);
 					if ($this->flight_number->Exportable)
 						$doc->exportCaption($this->flight_number);
-					if ($this->date->Exportable)
-						$doc->exportCaption($this->date);
 					if ($this->createdAt->Exportable)
 						$doc->exportCaption($this->createdAt);
 					if ($this->updatedAt->Exportable)
 						$doc->exportCaption($this->updatedAt);
+					if ($this->from_date->Exportable)
+						$doc->exportCaption($this->from_date);
+					if ($this->to_date->Exportable)
+						$doc->exportCaption($this->to_date);
+					if ($this->labor_fee->Exportable)
+						$doc->exportCaption($this->labor_fee);
+					if ($this->available->Exportable)
+						$doc->exportCaption($this->available);
+					if ($this->service_type->Exportable)
+						$doc->exportCaption($this->service_type);
+					if ($this->max_carrying_weight->Exportable)
+						$doc->exportCaption($this->max_carrying_weight);
 				}
 				$doc->endExportRow();
 			}
@@ -1109,12 +1259,22 @@ class trip_info extends DbTable
 							$doc->exportField($this->user_id);
 						if ($this->flight_number->Exportable)
 							$doc->exportField($this->flight_number);
-						if ($this->date->Exportable)
-							$doc->exportField($this->date);
 						if ($this->createdAt->Exportable)
 							$doc->exportField($this->createdAt);
 						if ($this->updatedAt->Exportable)
 							$doc->exportField($this->updatedAt);
+						if ($this->from_date->Exportable)
+							$doc->exportField($this->from_date);
+						if ($this->to_date->Exportable)
+							$doc->exportField($this->to_date);
+						if ($this->labor_fee->Exportable)
+							$doc->exportField($this->labor_fee);
+						if ($this->available->Exportable)
+							$doc->exportField($this->available);
+						if ($this->service_type->Exportable)
+							$doc->exportField($this->service_type);
+						if ($this->max_carrying_weight->Exportable)
+							$doc->exportField($this->max_carrying_weight);
 					} else {
 						if ($this->id->Exportable)
 							$doc->exportField($this->id);
@@ -1128,12 +1288,22 @@ class trip_info extends DbTable
 							$doc->exportField($this->user_id);
 						if ($this->flight_number->Exportable)
 							$doc->exportField($this->flight_number);
-						if ($this->date->Exportable)
-							$doc->exportField($this->date);
 						if ($this->createdAt->Exportable)
 							$doc->exportField($this->createdAt);
 						if ($this->updatedAt->Exportable)
 							$doc->exportField($this->updatedAt);
+						if ($this->from_date->Exportable)
+							$doc->exportField($this->from_date);
+						if ($this->to_date->Exportable)
+							$doc->exportField($this->to_date);
+						if ($this->labor_fee->Exportable)
+							$doc->exportField($this->labor_fee);
+						if ($this->available->Exportable)
+							$doc->exportField($this->available);
+						if ($this->service_type->Exportable)
+							$doc->exportField($this->service_type);
+						if ($this->max_carrying_weight->Exportable)
+							$doc->exportField($this->max_carrying_weight);
 					}
 					$doc->endExportRow($rowCnt);
 				}

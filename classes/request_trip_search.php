@@ -561,7 +561,15 @@ class request_trip_search extends request_trip
 		$this->to_date->setVisibility();
 		$this->createdAt->setVisibility();
 		$this->updatedAt->setVisibility();
-		$this->category->setVisibility();
+		$this->labor_fee->setVisibility();
+		$this->applicable->setVisibility();
+		$this->service_type->setVisibility();
+		$this->goods_category->setVisibility();
+		$this->goods_weight->setVisibility();
+		$this->image1_id->setVisibility();
+		$this->image2_id->setVisibility();
+		$this->image3_id->setVisibility();
+		$this->image4_id->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Global Page Loading event (in userfn*.php)
@@ -633,7 +641,15 @@ class request_trip_search extends request_trip
 		$this->buildSearchUrl($srchUrl, $this->to_date); // to_date
 		$this->buildSearchUrl($srchUrl, $this->createdAt); // createdAt
 		$this->buildSearchUrl($srchUrl, $this->updatedAt); // updatedAt
-		$this->buildSearchUrl($srchUrl, $this->category); // category
+		$this->buildSearchUrl($srchUrl, $this->labor_fee); // labor_fee
+		$this->buildSearchUrl($srchUrl, $this->applicable); // applicable
+		$this->buildSearchUrl($srchUrl, $this->service_type); // service_type
+		$this->buildSearchUrl($srchUrl, $this->goods_category); // goods_category
+		$this->buildSearchUrl($srchUrl, $this->goods_weight); // goods_weight
+		$this->buildSearchUrl($srchUrl, $this->image1_id); // image1_id
+		$this->buildSearchUrl($srchUrl, $this->image2_id); // image2_id
+		$this->buildSearchUrl($srchUrl, $this->image3_id); // image3_id
+		$this->buildSearchUrl($srchUrl, $this->image4_id); // image4_id
 		if ($srchUrl <> "")
 			$srchUrl .= "&";
 		$srchUrl .= "cmd=search";
@@ -743,9 +759,41 @@ class request_trip_search extends request_trip
 		$this->updatedAt->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_updatedAt"));
 		$this->updatedAt->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_updatedAt"));
 
-		// category
-		$this->category->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_category"));
-		$this->category->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_category"));
+		// labor_fee
+		$this->labor_fee->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_labor_fee"));
+		$this->labor_fee->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_labor_fee"));
+
+		// applicable
+		$this->applicable->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_applicable"));
+		$this->applicable->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_applicable"));
+
+		// service_type
+		$this->service_type->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_service_type"));
+		$this->service_type->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_service_type"));
+
+		// goods_category
+		$this->goods_category->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_goods_category"));
+		$this->goods_category->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_goods_category"));
+
+		// goods_weight
+		$this->goods_weight->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_goods_weight"));
+		$this->goods_weight->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_goods_weight"));
+
+		// image1_id
+		$this->image1_id->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_image1_id"));
+		$this->image1_id->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_image1_id"));
+
+		// image2_id
+		$this->image2_id->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_image2_id"));
+		$this->image2_id->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_image2_id"));
+
+		// image3_id
+		$this->image3_id->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_image3_id"));
+		$this->image3_id->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_image3_id"));
+
+		// image4_id
+		$this->image4_id->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_image4_id"));
+		$this->image4_id->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_image4_id"));
 	}
 
 	// Render row values based on field settings
@@ -768,7 +816,15 @@ class request_trip_search extends request_trip
 		// to_date
 		// createdAt
 		// updatedAt
-		// category
+		// labor_fee
+		// applicable
+		// service_type
+		// goods_category
+		// goods_weight
+		// image1_id
+		// image2_id
+		// image3_id
+		// image4_id
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
@@ -813,10 +869,50 @@ class request_trip_search extends request_trip
 			$this->updatedAt->ViewValue = FormatDateTime($this->updatedAt->ViewValue, 0);
 			$this->updatedAt->ViewCustomAttributes = "";
 
-			// category
-			$this->category->ViewValue = $this->category->CurrentValue;
-			$this->category->ViewValue = FormatNumber($this->category->ViewValue, 0, -2, -2, -2);
-			$this->category->ViewCustomAttributes = "";
+			// labor_fee
+			$this->labor_fee->ViewValue = $this->labor_fee->CurrentValue;
+			$this->labor_fee->ViewValue = FormatNumber($this->labor_fee->ViewValue, 0, -2, -2, -2);
+			$this->labor_fee->ViewCustomAttributes = "";
+
+			// applicable
+			$this->applicable->ViewValue = $this->applicable->CurrentValue;
+			$this->applicable->ViewValue = FormatNumber($this->applicable->ViewValue, 0, -2, -2, -2);
+			$this->applicable->ViewCustomAttributes = "";
+
+			// service_type
+			$this->service_type->ViewValue = $this->service_type->CurrentValue;
+			$this->service_type->ViewValue = FormatNumber($this->service_type->ViewValue, 0, -2, -2, -2);
+			$this->service_type->ViewCustomAttributes = "";
+
+			// goods_category
+			$this->goods_category->ViewValue = $this->goods_category->CurrentValue;
+			$this->goods_category->ViewValue = FormatNumber($this->goods_category->ViewValue, 0, -2, -2, -2);
+			$this->goods_category->ViewCustomAttributes = "";
+
+			// goods_weight
+			$this->goods_weight->ViewValue = $this->goods_weight->CurrentValue;
+			$this->goods_weight->ViewValue = FormatNumber($this->goods_weight->ViewValue, 0, -2, -2, -2);
+			$this->goods_weight->ViewCustomAttributes = "";
+
+			// image1_id
+			$this->image1_id->ViewValue = $this->image1_id->CurrentValue;
+			$this->image1_id->ViewValue = FormatNumber($this->image1_id->ViewValue, 0, -2, -2, -2);
+			$this->image1_id->ViewCustomAttributes = "";
+
+			// image2_id
+			$this->image2_id->ViewValue = $this->image2_id->CurrentValue;
+			$this->image2_id->ViewValue = FormatNumber($this->image2_id->ViewValue, 0, -2, -2, -2);
+			$this->image2_id->ViewCustomAttributes = "";
+
+			// image3_id
+			$this->image3_id->ViewValue = $this->image3_id->CurrentValue;
+			$this->image3_id->ViewValue = FormatNumber($this->image3_id->ViewValue, 0, -2, -2, -2);
+			$this->image3_id->ViewCustomAttributes = "";
+
+			// image4_id
+			$this->image4_id->ViewValue = $this->image4_id->CurrentValue;
+			$this->image4_id->ViewValue = FormatNumber($this->image4_id->ViewValue, 0, -2, -2, -2);
+			$this->image4_id->ViewCustomAttributes = "";
 
 			// id
 			$this->id->LinkCustomAttributes = "";
@@ -863,10 +959,50 @@ class request_trip_search extends request_trip
 			$this->updatedAt->HrefValue = "";
 			$this->updatedAt->TooltipValue = "";
 
-			// category
-			$this->category->LinkCustomAttributes = "";
-			$this->category->HrefValue = "";
-			$this->category->TooltipValue = "";
+			// labor_fee
+			$this->labor_fee->LinkCustomAttributes = "";
+			$this->labor_fee->HrefValue = "";
+			$this->labor_fee->TooltipValue = "";
+
+			// applicable
+			$this->applicable->LinkCustomAttributes = "";
+			$this->applicable->HrefValue = "";
+			$this->applicable->TooltipValue = "";
+
+			// service_type
+			$this->service_type->LinkCustomAttributes = "";
+			$this->service_type->HrefValue = "";
+			$this->service_type->TooltipValue = "";
+
+			// goods_category
+			$this->goods_category->LinkCustomAttributes = "";
+			$this->goods_category->HrefValue = "";
+			$this->goods_category->TooltipValue = "";
+
+			// goods_weight
+			$this->goods_weight->LinkCustomAttributes = "";
+			$this->goods_weight->HrefValue = "";
+			$this->goods_weight->TooltipValue = "";
+
+			// image1_id
+			$this->image1_id->LinkCustomAttributes = "";
+			$this->image1_id->HrefValue = "";
+			$this->image1_id->TooltipValue = "";
+
+			// image2_id
+			$this->image2_id->LinkCustomAttributes = "";
+			$this->image2_id->HrefValue = "";
+			$this->image2_id->TooltipValue = "";
+
+			// image3_id
+			$this->image3_id->LinkCustomAttributes = "";
+			$this->image3_id->HrefValue = "";
+			$this->image3_id->TooltipValue = "";
+
+			// image4_id
+			$this->image4_id->LinkCustomAttributes = "";
+			$this->image4_id->HrefValue = "";
+			$this->image4_id->TooltipValue = "";
 		} elseif ($this->RowType == ROWTYPE_SEARCH) { // Search row
 
 			// id
@@ -923,11 +1059,59 @@ class request_trip_search extends request_trip
 			$this->updatedAt->EditValue = HtmlEncode(FormatDateTime(UnFormatDateTime($this->updatedAt->AdvancedSearch->SearchValue, 0), 8));
 			$this->updatedAt->PlaceHolder = RemoveHtml($this->updatedAt->caption());
 
-			// category
-			$this->category->EditAttrs["class"] = "form-control";
-			$this->category->EditCustomAttributes = "";
-			$this->category->EditValue = HtmlEncode($this->category->AdvancedSearch->SearchValue);
-			$this->category->PlaceHolder = RemoveHtml($this->category->caption());
+			// labor_fee
+			$this->labor_fee->EditAttrs["class"] = "form-control";
+			$this->labor_fee->EditCustomAttributes = "";
+			$this->labor_fee->EditValue = HtmlEncode($this->labor_fee->AdvancedSearch->SearchValue);
+			$this->labor_fee->PlaceHolder = RemoveHtml($this->labor_fee->caption());
+
+			// applicable
+			$this->applicable->EditAttrs["class"] = "form-control";
+			$this->applicable->EditCustomAttributes = "";
+			$this->applicable->EditValue = HtmlEncode($this->applicable->AdvancedSearch->SearchValue);
+			$this->applicable->PlaceHolder = RemoveHtml($this->applicable->caption());
+
+			// service_type
+			$this->service_type->EditAttrs["class"] = "form-control";
+			$this->service_type->EditCustomAttributes = "";
+			$this->service_type->EditValue = HtmlEncode($this->service_type->AdvancedSearch->SearchValue);
+			$this->service_type->PlaceHolder = RemoveHtml($this->service_type->caption());
+
+			// goods_category
+			$this->goods_category->EditAttrs["class"] = "form-control";
+			$this->goods_category->EditCustomAttributes = "";
+			$this->goods_category->EditValue = HtmlEncode($this->goods_category->AdvancedSearch->SearchValue);
+			$this->goods_category->PlaceHolder = RemoveHtml($this->goods_category->caption());
+
+			// goods_weight
+			$this->goods_weight->EditAttrs["class"] = "form-control";
+			$this->goods_weight->EditCustomAttributes = "";
+			$this->goods_weight->EditValue = HtmlEncode($this->goods_weight->AdvancedSearch->SearchValue);
+			$this->goods_weight->PlaceHolder = RemoveHtml($this->goods_weight->caption());
+
+			// image1_id
+			$this->image1_id->EditAttrs["class"] = "form-control";
+			$this->image1_id->EditCustomAttributes = "";
+			$this->image1_id->EditValue = HtmlEncode($this->image1_id->AdvancedSearch->SearchValue);
+			$this->image1_id->PlaceHolder = RemoveHtml($this->image1_id->caption());
+
+			// image2_id
+			$this->image2_id->EditAttrs["class"] = "form-control";
+			$this->image2_id->EditCustomAttributes = "";
+			$this->image2_id->EditValue = HtmlEncode($this->image2_id->AdvancedSearch->SearchValue);
+			$this->image2_id->PlaceHolder = RemoveHtml($this->image2_id->caption());
+
+			// image3_id
+			$this->image3_id->EditAttrs["class"] = "form-control";
+			$this->image3_id->EditCustomAttributes = "";
+			$this->image3_id->EditValue = HtmlEncode($this->image3_id->AdvancedSearch->SearchValue);
+			$this->image3_id->PlaceHolder = RemoveHtml($this->image3_id->caption());
+
+			// image4_id
+			$this->image4_id->EditAttrs["class"] = "form-control";
+			$this->image4_id->EditCustomAttributes = "";
+			$this->image4_id->EditValue = HtmlEncode($this->image4_id->AdvancedSearch->SearchValue);
+			$this->image4_id->PlaceHolder = RemoveHtml($this->image4_id->caption());
 		}
 		if ($this->RowType == ROWTYPE_ADD || $this->RowType == ROWTYPE_EDIT || $this->RowType == ROWTYPE_SEARCH) // Add/Edit/Search row
 			$this->setupFieldTitles();
@@ -966,8 +1150,32 @@ class request_trip_search extends request_trip
 		if (!CheckDate($this->updatedAt->AdvancedSearch->SearchValue)) {
 			AddMessage($SearchError, $this->updatedAt->errorMessage());
 		}
-		if (!CheckInteger($this->category->AdvancedSearch->SearchValue)) {
-			AddMessage($SearchError, $this->category->errorMessage());
+		if (!CheckInteger($this->labor_fee->AdvancedSearch->SearchValue)) {
+			AddMessage($SearchError, $this->labor_fee->errorMessage());
+		}
+		if (!CheckInteger($this->applicable->AdvancedSearch->SearchValue)) {
+			AddMessage($SearchError, $this->applicable->errorMessage());
+		}
+		if (!CheckInteger($this->service_type->AdvancedSearch->SearchValue)) {
+			AddMessage($SearchError, $this->service_type->errorMessage());
+		}
+		if (!CheckInteger($this->goods_category->AdvancedSearch->SearchValue)) {
+			AddMessage($SearchError, $this->goods_category->errorMessage());
+		}
+		if (!CheckInteger($this->goods_weight->AdvancedSearch->SearchValue)) {
+			AddMessage($SearchError, $this->goods_weight->errorMessage());
+		}
+		if (!CheckInteger($this->image1_id->AdvancedSearch->SearchValue)) {
+			AddMessage($SearchError, $this->image1_id->errorMessage());
+		}
+		if (!CheckInteger($this->image2_id->AdvancedSearch->SearchValue)) {
+			AddMessage($SearchError, $this->image2_id->errorMessage());
+		}
+		if (!CheckInteger($this->image3_id->AdvancedSearch->SearchValue)) {
+			AddMessage($SearchError, $this->image3_id->errorMessage());
+		}
+		if (!CheckInteger($this->image4_id->AdvancedSearch->SearchValue)) {
+			AddMessage($SearchError, $this->image4_id->errorMessage());
 		}
 
 		// Return validate result
@@ -994,7 +1202,15 @@ class request_trip_search extends request_trip
 		$this->to_date->AdvancedSearch->load();
 		$this->createdAt->AdvancedSearch->load();
 		$this->updatedAt->AdvancedSearch->load();
-		$this->category->AdvancedSearch->load();
+		$this->labor_fee->AdvancedSearch->load();
+		$this->applicable->AdvancedSearch->load();
+		$this->service_type->AdvancedSearch->load();
+		$this->goods_category->AdvancedSearch->load();
+		$this->goods_weight->AdvancedSearch->load();
+		$this->image1_id->AdvancedSearch->load();
+		$this->image2_id->AdvancedSearch->load();
+		$this->image3_id->AdvancedSearch->load();
+		$this->image4_id->AdvancedSearch->load();
 	}
 
 	// Set up Breadcrumb

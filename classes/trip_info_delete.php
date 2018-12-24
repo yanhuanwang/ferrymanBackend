@@ -543,9 +543,14 @@ class trip_info_delete extends trip_info
 		$this->description->setVisibility();
 		$this->user_id->setVisibility();
 		$this->flight_number->setVisibility();
-		$this->date->setVisibility();
 		$this->createdAt->setVisibility();
 		$this->updatedAt->setVisibility();
+		$this->from_date->setVisibility();
+		$this->to_date->setVisibility();
+		$this->labor_fee->setVisibility();
+		$this->available->setVisibility();
+		$this->service_type->setVisibility();
+		$this->max_carrying_weight->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Global Page Loading event (in userfn*.php)
@@ -685,9 +690,14 @@ class trip_info_delete extends trip_info
 		$this->description->setDbValue($row['description']);
 		$this->user_id->setDbValue($row['user_id']);
 		$this->flight_number->setDbValue($row['flight_number']);
-		$this->date->setDbValue($row['date']);
 		$this->createdAt->setDbValue($row['createdAt']);
 		$this->updatedAt->setDbValue($row['updatedAt']);
+		$this->from_date->setDbValue($row['from_date']);
+		$this->to_date->setDbValue($row['to_date']);
+		$this->labor_fee->setDbValue($row['labor_fee']);
+		$this->available->setDbValue($row['available']);
+		$this->service_type->setDbValue($row['service_type']);
+		$this->max_carrying_weight->setDbValue($row['max_carrying_weight']);
 	}
 
 	// Return a row with default values
@@ -700,9 +710,14 @@ class trip_info_delete extends trip_info
 		$row['description'] = NULL;
 		$row['user_id'] = NULL;
 		$row['flight_number'] = NULL;
-		$row['date'] = NULL;
 		$row['createdAt'] = NULL;
 		$row['updatedAt'] = NULL;
+		$row['from_date'] = NULL;
+		$row['to_date'] = NULL;
+		$row['labor_fee'] = NULL;
+		$row['available'] = NULL;
+		$row['service_type'] = NULL;
+		$row['max_carrying_weight'] = NULL;
 		return $row;
 	}
 
@@ -723,9 +738,14 @@ class trip_info_delete extends trip_info
 		// description
 		// user_id
 		// flight_number
-		// date
 		// createdAt
 		// updatedAt
+		// from_date
+		// to_date
+		// labor_fee
+		// available
+		// service_type
+		// max_carrying_weight
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
@@ -773,11 +793,6 @@ class trip_info_delete extends trip_info
 			$this->flight_number->ViewValue = $this->flight_number->CurrentValue;
 			$this->flight_number->ViewCustomAttributes = "";
 
-			// date
-			$this->date->ViewValue = $this->date->CurrentValue;
-			$this->date->ViewValue = FormatDateTime($this->date->ViewValue, 0);
-			$this->date->ViewCustomAttributes = "";
-
 			// createdAt
 			$this->createdAt->ViewValue = $this->createdAt->CurrentValue;
 			$this->createdAt->ViewValue = FormatDateTime($this->createdAt->ViewValue, 0);
@@ -787,6 +802,36 @@ class trip_info_delete extends trip_info
 			$this->updatedAt->ViewValue = $this->updatedAt->CurrentValue;
 			$this->updatedAt->ViewValue = FormatDateTime($this->updatedAt->ViewValue, 0);
 			$this->updatedAt->ViewCustomAttributes = "";
+
+			// from_date
+			$this->from_date->ViewValue = $this->from_date->CurrentValue;
+			$this->from_date->ViewValue = FormatDateTime($this->from_date->ViewValue, 0);
+			$this->from_date->ViewCustomAttributes = "";
+
+			// to_date
+			$this->to_date->ViewValue = $this->to_date->CurrentValue;
+			$this->to_date->ViewValue = FormatDateTime($this->to_date->ViewValue, 0);
+			$this->to_date->ViewCustomAttributes = "";
+
+			// labor_fee
+			$this->labor_fee->ViewValue = $this->labor_fee->CurrentValue;
+			$this->labor_fee->ViewValue = FormatNumber($this->labor_fee->ViewValue, 0, -2, -2, -2);
+			$this->labor_fee->ViewCustomAttributes = "";
+
+			// available
+			$this->available->ViewValue = $this->available->CurrentValue;
+			$this->available->ViewValue = FormatNumber($this->available->ViewValue, 0, -2, -2, -2);
+			$this->available->ViewCustomAttributes = "";
+
+			// service_type
+			$this->service_type->ViewValue = $this->service_type->CurrentValue;
+			$this->service_type->ViewValue = FormatNumber($this->service_type->ViewValue, 0, -2, -2, -2);
+			$this->service_type->ViewCustomAttributes = "";
+
+			// max_carrying_weight
+			$this->max_carrying_weight->ViewValue = $this->max_carrying_weight->CurrentValue;
+			$this->max_carrying_weight->ViewValue = FormatNumber($this->max_carrying_weight->ViewValue, 0, -2, -2, -2);
+			$this->max_carrying_weight->ViewCustomAttributes = "";
 
 			// from_place
 			$this->from_place->LinkCustomAttributes = "";
@@ -813,11 +858,6 @@ class trip_info_delete extends trip_info
 			$this->flight_number->HrefValue = "";
 			$this->flight_number->TooltipValue = "";
 
-			// date
-			$this->date->LinkCustomAttributes = "";
-			$this->date->HrefValue = "";
-			$this->date->TooltipValue = "";
-
 			// createdAt
 			$this->createdAt->LinkCustomAttributes = "";
 			$this->createdAt->HrefValue = "";
@@ -827,6 +867,36 @@ class trip_info_delete extends trip_info
 			$this->updatedAt->LinkCustomAttributes = "";
 			$this->updatedAt->HrefValue = "";
 			$this->updatedAt->TooltipValue = "";
+
+			// from_date
+			$this->from_date->LinkCustomAttributes = "";
+			$this->from_date->HrefValue = "";
+			$this->from_date->TooltipValue = "";
+
+			// to_date
+			$this->to_date->LinkCustomAttributes = "";
+			$this->to_date->HrefValue = "";
+			$this->to_date->TooltipValue = "";
+
+			// labor_fee
+			$this->labor_fee->LinkCustomAttributes = "";
+			$this->labor_fee->HrefValue = "";
+			$this->labor_fee->TooltipValue = "";
+
+			// available
+			$this->available->LinkCustomAttributes = "";
+			$this->available->HrefValue = "";
+			$this->available->TooltipValue = "";
+
+			// service_type
+			$this->service_type->LinkCustomAttributes = "";
+			$this->service_type->HrefValue = "";
+			$this->service_type->TooltipValue = "";
+
+			// max_carrying_weight
+			$this->max_carrying_weight->LinkCustomAttributes = "";
+			$this->max_carrying_weight->HrefValue = "";
+			$this->max_carrying_weight->TooltipValue = "";
 		}
 
 		// Call Row Rendered event

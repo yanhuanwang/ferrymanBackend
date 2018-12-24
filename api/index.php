@@ -15,7 +15,7 @@ $Api->run();
 //
 class Api
 {
-	protected $SecretKey = 'K7dn8LyZkF1yxcBK';
+	protected $SecretKey = 'qWEecCv6FaTNJ7r6';
 	protected $Algorithm = 'HS512';
 
 	// For some reason, the "Authorization" header is removed by IIS, changed to "X-Authorization"

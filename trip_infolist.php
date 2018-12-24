@@ -87,14 +87,6 @@ ftrip_infolist.validate = function() {
 			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
 				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $trip_info->flight_number->caption(), $trip_info->flight_number->RequiredErrorMessage)) ?>");
 		<?php } ?>
-		<?php if ($trip_info_list->date->Required) { ?>
-			elm = this.getElements("x" + infix + "_date");
-			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
-				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $trip_info->date->caption(), $trip_info->date->RequiredErrorMessage)) ?>");
-		<?php } ?>
-			elm = this.getElements("x" + infix + "_date");
-			if (elm && !ew.checkDateDef(elm.value))
-				return this.onError(elm, "<?php echo JsEncode($trip_info->date->errorMessage()) ?>");
 		<?php if ($trip_info_list->createdAt->Required) { ?>
 			elm = this.getElements("x" + infix + "_createdAt");
 			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
@@ -111,6 +103,54 @@ ftrip_infolist.validate = function() {
 			elm = this.getElements("x" + infix + "_updatedAt");
 			if (elm && !ew.checkDateDef(elm.value))
 				return this.onError(elm, "<?php echo JsEncode($trip_info->updatedAt->errorMessage()) ?>");
+		<?php if ($trip_info_list->from_date->Required) { ?>
+			elm = this.getElements("x" + infix + "_from_date");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $trip_info->from_date->caption(), $trip_info->from_date->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_from_date");
+			if (elm && !ew.checkDateDef(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($trip_info->from_date->errorMessage()) ?>");
+		<?php if ($trip_info_list->to_date->Required) { ?>
+			elm = this.getElements("x" + infix + "_to_date");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $trip_info->to_date->caption(), $trip_info->to_date->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_to_date");
+			if (elm && !ew.checkDateDef(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($trip_info->to_date->errorMessage()) ?>");
+		<?php if ($trip_info_list->labor_fee->Required) { ?>
+			elm = this.getElements("x" + infix + "_labor_fee");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $trip_info->labor_fee->caption(), $trip_info->labor_fee->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_labor_fee");
+			if (elm && !ew.checkInteger(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($trip_info->labor_fee->errorMessage()) ?>");
+		<?php if ($trip_info_list->available->Required) { ?>
+			elm = this.getElements("x" + infix + "_available");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $trip_info->available->caption(), $trip_info->available->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_available");
+			if (elm && !ew.checkInteger(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($trip_info->available->errorMessage()) ?>");
+		<?php if ($trip_info_list->service_type->Required) { ?>
+			elm = this.getElements("x" + infix + "_service_type");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $trip_info->service_type->caption(), $trip_info->service_type->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_service_type");
+			if (elm && !ew.checkInteger(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($trip_info->service_type->errorMessage()) ?>");
+		<?php if ($trip_info_list->max_carrying_weight->Required) { ?>
+			elm = this.getElements("x" + infix + "_max_carrying_weight");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $trip_info->max_carrying_weight->caption(), $trip_info->max_carrying_weight->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_max_carrying_weight");
+			if (elm && !ew.checkInteger(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($trip_info->max_carrying_weight->errorMessage()) ?>");
 
 			// Fire Form_CustomValidate event
 			if (!this.Form_CustomValidate(fobj))
@@ -132,9 +172,14 @@ ftrip_infolist.emptyRow = function(infix) {
 	if (ew.valueChanged(fobj, infix, "description", false)) return false;
 	if (ew.valueChanged(fobj, infix, "user_id", false)) return false;
 	if (ew.valueChanged(fobj, infix, "flight_number", false)) return false;
-	if (ew.valueChanged(fobj, infix, "date", false)) return false;
 	if (ew.valueChanged(fobj, infix, "createdAt", false)) return false;
 	if (ew.valueChanged(fobj, infix, "updatedAt", false)) return false;
+	if (ew.valueChanged(fobj, infix, "from_date", false)) return false;
+	if (ew.valueChanged(fobj, infix, "to_date", false)) return false;
+	if (ew.valueChanged(fobj, infix, "labor_fee", false)) return false;
+	if (ew.valueChanged(fobj, infix, "available", false)) return false;
+	if (ew.valueChanged(fobj, infix, "service_type", false)) return false;
+	if (ew.valueChanged(fobj, infix, "max_carrying_weight", false)) return false;
 	return true;
 }
 
@@ -351,15 +396,6 @@ $trip_info_list->ListOptions->render("header", "left");
 		</div></div></th>
 	<?php } ?>
 <?php } ?>
-<?php if ($trip_info->date->Visible) { // date ?>
-	<?php if ($trip_info->sortUrl($trip_info->date) == "") { ?>
-		<th data-name="date" class="<?php echo $trip_info->date->headerCellClass() ?>"><div id="elh_trip_info_date" class="trip_info_date"><div class="ew-table-header-caption"><?php echo $trip_info->date->caption() ?></div></div></th>
-	<?php } else { ?>
-		<th data-name="date" class="<?php echo $trip_info->date->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $trip_info->SortUrl($trip_info->date) ?>',1);"><div id="elh_trip_info_date" class="trip_info_date">
-			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $trip_info->date->caption() ?></span><span class="ew-table-header-sort"><?php if ($trip_info->date->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($trip_info->date->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
-		</div></div></th>
-	<?php } ?>
-<?php } ?>
 <?php if ($trip_info->createdAt->Visible) { // createdAt ?>
 	<?php if ($trip_info->sortUrl($trip_info->createdAt) == "") { ?>
 		<th data-name="createdAt" class="<?php echo $trip_info->createdAt->headerCellClass() ?>"><div id="elh_trip_info_createdAt" class="trip_info_createdAt"><div class="ew-table-header-caption"><?php echo $trip_info->createdAt->caption() ?></div></div></th>
@@ -375,6 +411,60 @@ $trip_info_list->ListOptions->render("header", "left");
 	<?php } else { ?>
 		<th data-name="updatedAt" class="<?php echo $trip_info->updatedAt->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $trip_info->SortUrl($trip_info->updatedAt) ?>',1);"><div id="elh_trip_info_updatedAt" class="trip_info_updatedAt">
 			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $trip_info->updatedAt->caption() ?></span><span class="ew-table-header-sort"><?php if ($trip_info->updatedAt->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($trip_info->updatedAt->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
+		</div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($trip_info->from_date->Visible) { // from_date ?>
+	<?php if ($trip_info->sortUrl($trip_info->from_date) == "") { ?>
+		<th data-name="from_date" class="<?php echo $trip_info->from_date->headerCellClass() ?>"><div id="elh_trip_info_from_date" class="trip_info_from_date"><div class="ew-table-header-caption"><?php echo $trip_info->from_date->caption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="from_date" class="<?php echo $trip_info->from_date->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $trip_info->SortUrl($trip_info->from_date) ?>',1);"><div id="elh_trip_info_from_date" class="trip_info_from_date">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $trip_info->from_date->caption() ?></span><span class="ew-table-header-sort"><?php if ($trip_info->from_date->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($trip_info->from_date->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
+		</div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($trip_info->to_date->Visible) { // to_date ?>
+	<?php if ($trip_info->sortUrl($trip_info->to_date) == "") { ?>
+		<th data-name="to_date" class="<?php echo $trip_info->to_date->headerCellClass() ?>"><div id="elh_trip_info_to_date" class="trip_info_to_date"><div class="ew-table-header-caption"><?php echo $trip_info->to_date->caption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="to_date" class="<?php echo $trip_info->to_date->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $trip_info->SortUrl($trip_info->to_date) ?>',1);"><div id="elh_trip_info_to_date" class="trip_info_to_date">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $trip_info->to_date->caption() ?></span><span class="ew-table-header-sort"><?php if ($trip_info->to_date->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($trip_info->to_date->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
+		</div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($trip_info->labor_fee->Visible) { // labor_fee ?>
+	<?php if ($trip_info->sortUrl($trip_info->labor_fee) == "") { ?>
+		<th data-name="labor_fee" class="<?php echo $trip_info->labor_fee->headerCellClass() ?>"><div id="elh_trip_info_labor_fee" class="trip_info_labor_fee"><div class="ew-table-header-caption"><?php echo $trip_info->labor_fee->caption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="labor_fee" class="<?php echo $trip_info->labor_fee->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $trip_info->SortUrl($trip_info->labor_fee) ?>',1);"><div id="elh_trip_info_labor_fee" class="trip_info_labor_fee">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $trip_info->labor_fee->caption() ?></span><span class="ew-table-header-sort"><?php if ($trip_info->labor_fee->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($trip_info->labor_fee->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
+		</div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($trip_info->available->Visible) { // available ?>
+	<?php if ($trip_info->sortUrl($trip_info->available) == "") { ?>
+		<th data-name="available" class="<?php echo $trip_info->available->headerCellClass() ?>"><div id="elh_trip_info_available" class="trip_info_available"><div class="ew-table-header-caption"><?php echo $trip_info->available->caption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="available" class="<?php echo $trip_info->available->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $trip_info->SortUrl($trip_info->available) ?>',1);"><div id="elh_trip_info_available" class="trip_info_available">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $trip_info->available->caption() ?></span><span class="ew-table-header-sort"><?php if ($trip_info->available->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($trip_info->available->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
+		</div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($trip_info->service_type->Visible) { // service_type ?>
+	<?php if ($trip_info->sortUrl($trip_info->service_type) == "") { ?>
+		<th data-name="service_type" class="<?php echo $trip_info->service_type->headerCellClass() ?>"><div id="elh_trip_info_service_type" class="trip_info_service_type"><div class="ew-table-header-caption"><?php echo $trip_info->service_type->caption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="service_type" class="<?php echo $trip_info->service_type->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $trip_info->SortUrl($trip_info->service_type) ?>',1);"><div id="elh_trip_info_service_type" class="trip_info_service_type">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $trip_info->service_type->caption() ?></span><span class="ew-table-header-sort"><?php if ($trip_info->service_type->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($trip_info->service_type->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
+		</div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($trip_info->max_carrying_weight->Visible) { // max_carrying_weight ?>
+	<?php if ($trip_info->sortUrl($trip_info->max_carrying_weight) == "") { ?>
+		<th data-name="max_carrying_weight" class="<?php echo $trip_info->max_carrying_weight->headerCellClass() ?>"><div id="elh_trip_info_max_carrying_weight" class="trip_info_max_carrying_weight"><div class="ew-table-header-caption"><?php echo $trip_info->max_carrying_weight->caption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="max_carrying_weight" class="<?php echo $trip_info->max_carrying_weight->headerCellClass() ?>"><div class="ew-pointer" onclick="ew.sort(event,'<?php echo $trip_info->SortUrl($trip_info->max_carrying_weight) ?>',1);"><div id="elh_trip_info_max_carrying_weight" class="trip_info_max_carrying_weight">
+			<div class="ew-table-header-btn"><span class="ew-table-header-caption"><?php echo $trip_info->max_carrying_weight->caption() ?></span><span class="ew-table-header-sort"><?php if ($trip_info->max_carrying_weight->getSort() == "ASC") { ?><i class="fa fa-sort-up"></i><?php } elseif ($trip_info->max_carrying_weight->getSort() == "DESC") { ?><i class="fa fa-sort-down"></i><?php } ?></span></div>
 		</div></div></th>
 	<?php } ?>
 <?php } ?>
@@ -474,19 +564,6 @@ ftrip_infolist.createAutoSuggest({"id":"x<?php echo $trip_info_list->RowIndex ?>
 <input type="hidden" data-table="trip_info" data-field="x_flight_number" name="o<?php echo $trip_info_list->RowIndex ?>_flight_number" id="o<?php echo $trip_info_list->RowIndex ?>_flight_number" value="<?php echo HtmlEncode($trip_info->flight_number->OldValue) ?>">
 </td>
 	<?php } ?>
-	<?php if ($trip_info->date->Visible) { // date ?>
-		<td data-name="date">
-<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_date" class="form-group trip_info_date">
-<input type="text" data-table="trip_info" data-field="x_date" name="x<?php echo $trip_info_list->RowIndex ?>_date" id="x<?php echo $trip_info_list->RowIndex ?>_date" placeholder="<?php echo HtmlEncode($trip_info->date->getPlaceHolder()) ?>" value="<?php echo $trip_info->date->EditValue ?>"<?php echo $trip_info->date->editAttributes() ?>>
-<?php if (!$trip_info->date->ReadOnly && !$trip_info->date->Disabled && !isset($trip_info->date->EditAttrs["readonly"]) && !isset($trip_info->date->EditAttrs["disabled"])) { ?>
-<script>
-ew.createDateTimePicker("ftrip_infolist", "x<?php echo $trip_info_list->RowIndex ?>_date", {"ignoreReadonly":true,"useCurrent":false,"format":0});
-</script>
-<?php } ?>
-</span>
-<input type="hidden" data-table="trip_info" data-field="x_date" name="o<?php echo $trip_info_list->RowIndex ?>_date" id="o<?php echo $trip_info_list->RowIndex ?>_date" value="<?php echo HtmlEncode($trip_info->date->OldValue) ?>">
-</td>
-	<?php } ?>
 	<?php if ($trip_info->createdAt->Visible) { // createdAt ?>
 		<td data-name="createdAt">
 <span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_createdAt" class="form-group trip_info_createdAt">
@@ -511,6 +588,64 @@ ew.createDateTimePicker("ftrip_infolist", "x<?php echo $trip_info_list->RowIndex
 <?php } ?>
 </span>
 <input type="hidden" data-table="trip_info" data-field="x_updatedAt" name="o<?php echo $trip_info_list->RowIndex ?>_updatedAt" id="o<?php echo $trip_info_list->RowIndex ?>_updatedAt" value="<?php echo HtmlEncode($trip_info->updatedAt->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($trip_info->from_date->Visible) { // from_date ?>
+		<td data-name="from_date">
+<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_from_date" class="form-group trip_info_from_date">
+<input type="text" data-table="trip_info" data-field="x_from_date" name="x<?php echo $trip_info_list->RowIndex ?>_from_date" id="x<?php echo $trip_info_list->RowIndex ?>_from_date" placeholder="<?php echo HtmlEncode($trip_info->from_date->getPlaceHolder()) ?>" value="<?php echo $trip_info->from_date->EditValue ?>"<?php echo $trip_info->from_date->editAttributes() ?>>
+<?php if (!$trip_info->from_date->ReadOnly && !$trip_info->from_date->Disabled && !isset($trip_info->from_date->EditAttrs["readonly"]) && !isset($trip_info->from_date->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("ftrip_infolist", "x<?php echo $trip_info_list->RowIndex ?>_from_date", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<input type="hidden" data-table="trip_info" data-field="x_from_date" name="o<?php echo $trip_info_list->RowIndex ?>_from_date" id="o<?php echo $trip_info_list->RowIndex ?>_from_date" value="<?php echo HtmlEncode($trip_info->from_date->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($trip_info->to_date->Visible) { // to_date ?>
+		<td data-name="to_date">
+<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_to_date" class="form-group trip_info_to_date">
+<input type="text" data-table="trip_info" data-field="x_to_date" name="x<?php echo $trip_info_list->RowIndex ?>_to_date" id="x<?php echo $trip_info_list->RowIndex ?>_to_date" placeholder="<?php echo HtmlEncode($trip_info->to_date->getPlaceHolder()) ?>" value="<?php echo $trip_info->to_date->EditValue ?>"<?php echo $trip_info->to_date->editAttributes() ?>>
+<?php if (!$trip_info->to_date->ReadOnly && !$trip_info->to_date->Disabled && !isset($trip_info->to_date->EditAttrs["readonly"]) && !isset($trip_info->to_date->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("ftrip_infolist", "x<?php echo $trip_info_list->RowIndex ?>_to_date", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<input type="hidden" data-table="trip_info" data-field="x_to_date" name="o<?php echo $trip_info_list->RowIndex ?>_to_date" id="o<?php echo $trip_info_list->RowIndex ?>_to_date" value="<?php echo HtmlEncode($trip_info->to_date->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($trip_info->labor_fee->Visible) { // labor_fee ?>
+		<td data-name="labor_fee">
+<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_labor_fee" class="form-group trip_info_labor_fee">
+<input type="text" data-table="trip_info" data-field="x_labor_fee" name="x<?php echo $trip_info_list->RowIndex ?>_labor_fee" id="x<?php echo $trip_info_list->RowIndex ?>_labor_fee" size="30" placeholder="<?php echo HtmlEncode($trip_info->labor_fee->getPlaceHolder()) ?>" value="<?php echo $trip_info->labor_fee->EditValue ?>"<?php echo $trip_info->labor_fee->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="trip_info" data-field="x_labor_fee" name="o<?php echo $trip_info_list->RowIndex ?>_labor_fee" id="o<?php echo $trip_info_list->RowIndex ?>_labor_fee" value="<?php echo HtmlEncode($trip_info->labor_fee->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($trip_info->available->Visible) { // available ?>
+		<td data-name="available">
+<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_available" class="form-group trip_info_available">
+<input type="text" data-table="trip_info" data-field="x_available" name="x<?php echo $trip_info_list->RowIndex ?>_available" id="x<?php echo $trip_info_list->RowIndex ?>_available" size="30" placeholder="<?php echo HtmlEncode($trip_info->available->getPlaceHolder()) ?>" value="<?php echo $trip_info->available->EditValue ?>"<?php echo $trip_info->available->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="trip_info" data-field="x_available" name="o<?php echo $trip_info_list->RowIndex ?>_available" id="o<?php echo $trip_info_list->RowIndex ?>_available" value="<?php echo HtmlEncode($trip_info->available->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($trip_info->service_type->Visible) { // service_type ?>
+		<td data-name="service_type">
+<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_service_type" class="form-group trip_info_service_type">
+<input type="text" data-table="trip_info" data-field="x_service_type" name="x<?php echo $trip_info_list->RowIndex ?>_service_type" id="x<?php echo $trip_info_list->RowIndex ?>_service_type" size="30" placeholder="<?php echo HtmlEncode($trip_info->service_type->getPlaceHolder()) ?>" value="<?php echo $trip_info->service_type->EditValue ?>"<?php echo $trip_info->service_type->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="trip_info" data-field="x_service_type" name="o<?php echo $trip_info_list->RowIndex ?>_service_type" id="o<?php echo $trip_info_list->RowIndex ?>_service_type" value="<?php echo HtmlEncode($trip_info->service_type->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($trip_info->max_carrying_weight->Visible) { // max_carrying_weight ?>
+		<td data-name="max_carrying_weight">
+<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_max_carrying_weight" class="form-group trip_info_max_carrying_weight">
+<input type="text" data-table="trip_info" data-field="x_max_carrying_weight" name="x<?php echo $trip_info_list->RowIndex ?>_max_carrying_weight" id="x<?php echo $trip_info_list->RowIndex ?>_max_carrying_weight" size="30" placeholder="<?php echo HtmlEncode($trip_info->max_carrying_weight->getPlaceHolder()) ?>" value="<?php echo $trip_info->max_carrying_weight->EditValue ?>"<?php echo $trip_info->max_carrying_weight->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="trip_info" data-field="x_max_carrying_weight" name="o<?php echo $trip_info_list->RowIndex ?>_max_carrying_weight" id="o<?php echo $trip_info_list->RowIndex ?>_max_carrying_weight" value="<?php echo HtmlEncode($trip_info->max_carrying_weight->OldValue) ?>">
 </td>
 	<?php } ?>
 <?php
@@ -787,37 +922,6 @@ ftrip_infolist.createAutoSuggest({"id":"x<?php echo $trip_info_list->RowIndex ?>
 <?php } ?>
 </td>
 	<?php } ?>
-	<?php if ($trip_info->date->Visible) { // date ?>
-		<td data-name="date"<?php echo $trip_info->date->cellAttributes() ?>>
-<?php if ($trip_info->RowType == ROWTYPE_ADD) { // Add record ?>
-<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_date" class="form-group trip_info_date">
-<input type="text" data-table="trip_info" data-field="x_date" name="x<?php echo $trip_info_list->RowIndex ?>_date" id="x<?php echo $trip_info_list->RowIndex ?>_date" placeholder="<?php echo HtmlEncode($trip_info->date->getPlaceHolder()) ?>" value="<?php echo $trip_info->date->EditValue ?>"<?php echo $trip_info->date->editAttributes() ?>>
-<?php if (!$trip_info->date->ReadOnly && !$trip_info->date->Disabled && !isset($trip_info->date->EditAttrs["readonly"]) && !isset($trip_info->date->EditAttrs["disabled"])) { ?>
-<script>
-ew.createDateTimePicker("ftrip_infolist", "x<?php echo $trip_info_list->RowIndex ?>_date", {"ignoreReadonly":true,"useCurrent":false,"format":0});
-</script>
-<?php } ?>
-</span>
-<input type="hidden" data-table="trip_info" data-field="x_date" name="o<?php echo $trip_info_list->RowIndex ?>_date" id="o<?php echo $trip_info_list->RowIndex ?>_date" value="<?php echo HtmlEncode($trip_info->date->OldValue) ?>">
-<?php } ?>
-<?php if ($trip_info->RowType == ROWTYPE_EDIT) { // Edit record ?>
-<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_date" class="form-group trip_info_date">
-<input type="text" data-table="trip_info" data-field="x_date" name="x<?php echo $trip_info_list->RowIndex ?>_date" id="x<?php echo $trip_info_list->RowIndex ?>_date" placeholder="<?php echo HtmlEncode($trip_info->date->getPlaceHolder()) ?>" value="<?php echo $trip_info->date->EditValue ?>"<?php echo $trip_info->date->editAttributes() ?>>
-<?php if (!$trip_info->date->ReadOnly && !$trip_info->date->Disabled && !isset($trip_info->date->EditAttrs["readonly"]) && !isset($trip_info->date->EditAttrs["disabled"])) { ?>
-<script>
-ew.createDateTimePicker("ftrip_infolist", "x<?php echo $trip_info_list->RowIndex ?>_date", {"ignoreReadonly":true,"useCurrent":false,"format":0});
-</script>
-<?php } ?>
-</span>
-<?php } ?>
-<?php if ($trip_info->RowType == ROWTYPE_VIEW) { // View record ?>
-<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_date" class="trip_info_date">
-<span<?php echo $trip_info->date->viewAttributes() ?>>
-<?php echo $trip_info->date->getViewValue() ?></span>
-</span>
-<?php } ?>
-</td>
-	<?php } ?>
 	<?php if ($trip_info->createdAt->Visible) { // createdAt ?>
 		<td data-name="createdAt"<?php echo $trip_info->createdAt->cellAttributes() ?>>
 <?php if ($trip_info->RowType == ROWTYPE_ADD) { // Add record ?>
@@ -876,6 +980,152 @@ ew.createDateTimePicker("ftrip_infolist", "x<?php echo $trip_info_list->RowIndex
 <span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_updatedAt" class="trip_info_updatedAt">
 <span<?php echo $trip_info->updatedAt->viewAttributes() ?>>
 <?php echo $trip_info->updatedAt->getViewValue() ?></span>
+</span>
+<?php } ?>
+</td>
+	<?php } ?>
+	<?php if ($trip_info->from_date->Visible) { // from_date ?>
+		<td data-name="from_date"<?php echo $trip_info->from_date->cellAttributes() ?>>
+<?php if ($trip_info->RowType == ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_from_date" class="form-group trip_info_from_date">
+<input type="text" data-table="trip_info" data-field="x_from_date" name="x<?php echo $trip_info_list->RowIndex ?>_from_date" id="x<?php echo $trip_info_list->RowIndex ?>_from_date" placeholder="<?php echo HtmlEncode($trip_info->from_date->getPlaceHolder()) ?>" value="<?php echo $trip_info->from_date->EditValue ?>"<?php echo $trip_info->from_date->editAttributes() ?>>
+<?php if (!$trip_info->from_date->ReadOnly && !$trip_info->from_date->Disabled && !isset($trip_info->from_date->EditAttrs["readonly"]) && !isset($trip_info->from_date->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("ftrip_infolist", "x<?php echo $trip_info_list->RowIndex ?>_from_date", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<input type="hidden" data-table="trip_info" data-field="x_from_date" name="o<?php echo $trip_info_list->RowIndex ?>_from_date" id="o<?php echo $trip_info_list->RowIndex ?>_from_date" value="<?php echo HtmlEncode($trip_info->from_date->OldValue) ?>">
+<?php } ?>
+<?php if ($trip_info->RowType == ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_from_date" class="form-group trip_info_from_date">
+<input type="text" data-table="trip_info" data-field="x_from_date" name="x<?php echo $trip_info_list->RowIndex ?>_from_date" id="x<?php echo $trip_info_list->RowIndex ?>_from_date" placeholder="<?php echo HtmlEncode($trip_info->from_date->getPlaceHolder()) ?>" value="<?php echo $trip_info->from_date->EditValue ?>"<?php echo $trip_info->from_date->editAttributes() ?>>
+<?php if (!$trip_info->from_date->ReadOnly && !$trip_info->from_date->Disabled && !isset($trip_info->from_date->EditAttrs["readonly"]) && !isset($trip_info->from_date->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("ftrip_infolist", "x<?php echo $trip_info_list->RowIndex ?>_from_date", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<?php } ?>
+<?php if ($trip_info->RowType == ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_from_date" class="trip_info_from_date">
+<span<?php echo $trip_info->from_date->viewAttributes() ?>>
+<?php echo $trip_info->from_date->getViewValue() ?></span>
+</span>
+<?php } ?>
+</td>
+	<?php } ?>
+	<?php if ($trip_info->to_date->Visible) { // to_date ?>
+		<td data-name="to_date"<?php echo $trip_info->to_date->cellAttributes() ?>>
+<?php if ($trip_info->RowType == ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_to_date" class="form-group trip_info_to_date">
+<input type="text" data-table="trip_info" data-field="x_to_date" name="x<?php echo $trip_info_list->RowIndex ?>_to_date" id="x<?php echo $trip_info_list->RowIndex ?>_to_date" placeholder="<?php echo HtmlEncode($trip_info->to_date->getPlaceHolder()) ?>" value="<?php echo $trip_info->to_date->EditValue ?>"<?php echo $trip_info->to_date->editAttributes() ?>>
+<?php if (!$trip_info->to_date->ReadOnly && !$trip_info->to_date->Disabled && !isset($trip_info->to_date->EditAttrs["readonly"]) && !isset($trip_info->to_date->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("ftrip_infolist", "x<?php echo $trip_info_list->RowIndex ?>_to_date", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<input type="hidden" data-table="trip_info" data-field="x_to_date" name="o<?php echo $trip_info_list->RowIndex ?>_to_date" id="o<?php echo $trip_info_list->RowIndex ?>_to_date" value="<?php echo HtmlEncode($trip_info->to_date->OldValue) ?>">
+<?php } ?>
+<?php if ($trip_info->RowType == ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_to_date" class="form-group trip_info_to_date">
+<input type="text" data-table="trip_info" data-field="x_to_date" name="x<?php echo $trip_info_list->RowIndex ?>_to_date" id="x<?php echo $trip_info_list->RowIndex ?>_to_date" placeholder="<?php echo HtmlEncode($trip_info->to_date->getPlaceHolder()) ?>" value="<?php echo $trip_info->to_date->EditValue ?>"<?php echo $trip_info->to_date->editAttributes() ?>>
+<?php if (!$trip_info->to_date->ReadOnly && !$trip_info->to_date->Disabled && !isset($trip_info->to_date->EditAttrs["readonly"]) && !isset($trip_info->to_date->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("ftrip_infolist", "x<?php echo $trip_info_list->RowIndex ?>_to_date", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<?php } ?>
+<?php if ($trip_info->RowType == ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_to_date" class="trip_info_to_date">
+<span<?php echo $trip_info->to_date->viewAttributes() ?>>
+<?php echo $trip_info->to_date->getViewValue() ?></span>
+</span>
+<?php } ?>
+</td>
+	<?php } ?>
+	<?php if ($trip_info->labor_fee->Visible) { // labor_fee ?>
+		<td data-name="labor_fee"<?php echo $trip_info->labor_fee->cellAttributes() ?>>
+<?php if ($trip_info->RowType == ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_labor_fee" class="form-group trip_info_labor_fee">
+<input type="text" data-table="trip_info" data-field="x_labor_fee" name="x<?php echo $trip_info_list->RowIndex ?>_labor_fee" id="x<?php echo $trip_info_list->RowIndex ?>_labor_fee" size="30" placeholder="<?php echo HtmlEncode($trip_info->labor_fee->getPlaceHolder()) ?>" value="<?php echo $trip_info->labor_fee->EditValue ?>"<?php echo $trip_info->labor_fee->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="trip_info" data-field="x_labor_fee" name="o<?php echo $trip_info_list->RowIndex ?>_labor_fee" id="o<?php echo $trip_info_list->RowIndex ?>_labor_fee" value="<?php echo HtmlEncode($trip_info->labor_fee->OldValue) ?>">
+<?php } ?>
+<?php if ($trip_info->RowType == ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_labor_fee" class="form-group trip_info_labor_fee">
+<input type="text" data-table="trip_info" data-field="x_labor_fee" name="x<?php echo $trip_info_list->RowIndex ?>_labor_fee" id="x<?php echo $trip_info_list->RowIndex ?>_labor_fee" size="30" placeholder="<?php echo HtmlEncode($trip_info->labor_fee->getPlaceHolder()) ?>" value="<?php echo $trip_info->labor_fee->EditValue ?>"<?php echo $trip_info->labor_fee->editAttributes() ?>>
+</span>
+<?php } ?>
+<?php if ($trip_info->RowType == ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_labor_fee" class="trip_info_labor_fee">
+<span<?php echo $trip_info->labor_fee->viewAttributes() ?>>
+<?php echo $trip_info->labor_fee->getViewValue() ?></span>
+</span>
+<?php } ?>
+</td>
+	<?php } ?>
+	<?php if ($trip_info->available->Visible) { // available ?>
+		<td data-name="available"<?php echo $trip_info->available->cellAttributes() ?>>
+<?php if ($trip_info->RowType == ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_available" class="form-group trip_info_available">
+<input type="text" data-table="trip_info" data-field="x_available" name="x<?php echo $trip_info_list->RowIndex ?>_available" id="x<?php echo $trip_info_list->RowIndex ?>_available" size="30" placeholder="<?php echo HtmlEncode($trip_info->available->getPlaceHolder()) ?>" value="<?php echo $trip_info->available->EditValue ?>"<?php echo $trip_info->available->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="trip_info" data-field="x_available" name="o<?php echo $trip_info_list->RowIndex ?>_available" id="o<?php echo $trip_info_list->RowIndex ?>_available" value="<?php echo HtmlEncode($trip_info->available->OldValue) ?>">
+<?php } ?>
+<?php if ($trip_info->RowType == ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_available" class="form-group trip_info_available">
+<input type="text" data-table="trip_info" data-field="x_available" name="x<?php echo $trip_info_list->RowIndex ?>_available" id="x<?php echo $trip_info_list->RowIndex ?>_available" size="30" placeholder="<?php echo HtmlEncode($trip_info->available->getPlaceHolder()) ?>" value="<?php echo $trip_info->available->EditValue ?>"<?php echo $trip_info->available->editAttributes() ?>>
+</span>
+<?php } ?>
+<?php if ($trip_info->RowType == ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_available" class="trip_info_available">
+<span<?php echo $trip_info->available->viewAttributes() ?>>
+<?php echo $trip_info->available->getViewValue() ?></span>
+</span>
+<?php } ?>
+</td>
+	<?php } ?>
+	<?php if ($trip_info->service_type->Visible) { // service_type ?>
+		<td data-name="service_type"<?php echo $trip_info->service_type->cellAttributes() ?>>
+<?php if ($trip_info->RowType == ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_service_type" class="form-group trip_info_service_type">
+<input type="text" data-table="trip_info" data-field="x_service_type" name="x<?php echo $trip_info_list->RowIndex ?>_service_type" id="x<?php echo $trip_info_list->RowIndex ?>_service_type" size="30" placeholder="<?php echo HtmlEncode($trip_info->service_type->getPlaceHolder()) ?>" value="<?php echo $trip_info->service_type->EditValue ?>"<?php echo $trip_info->service_type->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="trip_info" data-field="x_service_type" name="o<?php echo $trip_info_list->RowIndex ?>_service_type" id="o<?php echo $trip_info_list->RowIndex ?>_service_type" value="<?php echo HtmlEncode($trip_info->service_type->OldValue) ?>">
+<?php } ?>
+<?php if ($trip_info->RowType == ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_service_type" class="form-group trip_info_service_type">
+<input type="text" data-table="trip_info" data-field="x_service_type" name="x<?php echo $trip_info_list->RowIndex ?>_service_type" id="x<?php echo $trip_info_list->RowIndex ?>_service_type" size="30" placeholder="<?php echo HtmlEncode($trip_info->service_type->getPlaceHolder()) ?>" value="<?php echo $trip_info->service_type->EditValue ?>"<?php echo $trip_info->service_type->editAttributes() ?>>
+</span>
+<?php } ?>
+<?php if ($trip_info->RowType == ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_service_type" class="trip_info_service_type">
+<span<?php echo $trip_info->service_type->viewAttributes() ?>>
+<?php echo $trip_info->service_type->getViewValue() ?></span>
+</span>
+<?php } ?>
+</td>
+	<?php } ?>
+	<?php if ($trip_info->max_carrying_weight->Visible) { // max_carrying_weight ?>
+		<td data-name="max_carrying_weight"<?php echo $trip_info->max_carrying_weight->cellAttributes() ?>>
+<?php if ($trip_info->RowType == ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_max_carrying_weight" class="form-group trip_info_max_carrying_weight">
+<input type="text" data-table="trip_info" data-field="x_max_carrying_weight" name="x<?php echo $trip_info_list->RowIndex ?>_max_carrying_weight" id="x<?php echo $trip_info_list->RowIndex ?>_max_carrying_weight" size="30" placeholder="<?php echo HtmlEncode($trip_info->max_carrying_weight->getPlaceHolder()) ?>" value="<?php echo $trip_info->max_carrying_weight->EditValue ?>"<?php echo $trip_info->max_carrying_weight->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="trip_info" data-field="x_max_carrying_weight" name="o<?php echo $trip_info_list->RowIndex ?>_max_carrying_weight" id="o<?php echo $trip_info_list->RowIndex ?>_max_carrying_weight" value="<?php echo HtmlEncode($trip_info->max_carrying_weight->OldValue) ?>">
+<?php } ?>
+<?php if ($trip_info->RowType == ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_max_carrying_weight" class="form-group trip_info_max_carrying_weight">
+<input type="text" data-table="trip_info" data-field="x_max_carrying_weight" name="x<?php echo $trip_info_list->RowIndex ?>_max_carrying_weight" id="x<?php echo $trip_info_list->RowIndex ?>_max_carrying_weight" size="30" placeholder="<?php echo HtmlEncode($trip_info->max_carrying_weight->getPlaceHolder()) ?>" value="<?php echo $trip_info->max_carrying_weight->EditValue ?>"<?php echo $trip_info->max_carrying_weight->editAttributes() ?>>
+</span>
+<?php } ?>
+<?php if ($trip_info->RowType == ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $trip_info_list->RowCnt ?>_trip_info_max_carrying_weight" class="trip_info_max_carrying_weight">
+<span<?php echo $trip_info->max_carrying_weight->viewAttributes() ?>>
+<?php echo $trip_info->max_carrying_weight->getViewValue() ?></span>
 </span>
 <?php } ?>
 </td>
@@ -982,19 +1232,6 @@ ftrip_infolist.createAutoSuggest({"id":"x<?php echo $trip_info_list->RowIndex ?>
 <input type="hidden" data-table="trip_info" data-field="x_flight_number" name="o<?php echo $trip_info_list->RowIndex ?>_flight_number" id="o<?php echo $trip_info_list->RowIndex ?>_flight_number" value="<?php echo HtmlEncode($trip_info->flight_number->OldValue) ?>">
 </td>
 	<?php } ?>
-	<?php if ($trip_info->date->Visible) { // date ?>
-		<td data-name="date">
-<span id="el$rowindex$_trip_info_date" class="form-group trip_info_date">
-<input type="text" data-table="trip_info" data-field="x_date" name="x<?php echo $trip_info_list->RowIndex ?>_date" id="x<?php echo $trip_info_list->RowIndex ?>_date" placeholder="<?php echo HtmlEncode($trip_info->date->getPlaceHolder()) ?>" value="<?php echo $trip_info->date->EditValue ?>"<?php echo $trip_info->date->editAttributes() ?>>
-<?php if (!$trip_info->date->ReadOnly && !$trip_info->date->Disabled && !isset($trip_info->date->EditAttrs["readonly"]) && !isset($trip_info->date->EditAttrs["disabled"])) { ?>
-<script>
-ew.createDateTimePicker("ftrip_infolist", "x<?php echo $trip_info_list->RowIndex ?>_date", {"ignoreReadonly":true,"useCurrent":false,"format":0});
-</script>
-<?php } ?>
-</span>
-<input type="hidden" data-table="trip_info" data-field="x_date" name="o<?php echo $trip_info_list->RowIndex ?>_date" id="o<?php echo $trip_info_list->RowIndex ?>_date" value="<?php echo HtmlEncode($trip_info->date->OldValue) ?>">
-</td>
-	<?php } ?>
 	<?php if ($trip_info->createdAt->Visible) { // createdAt ?>
 		<td data-name="createdAt">
 <span id="el$rowindex$_trip_info_createdAt" class="form-group trip_info_createdAt">
@@ -1019,6 +1256,64 @@ ew.createDateTimePicker("ftrip_infolist", "x<?php echo $trip_info_list->RowIndex
 <?php } ?>
 </span>
 <input type="hidden" data-table="trip_info" data-field="x_updatedAt" name="o<?php echo $trip_info_list->RowIndex ?>_updatedAt" id="o<?php echo $trip_info_list->RowIndex ?>_updatedAt" value="<?php echo HtmlEncode($trip_info->updatedAt->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($trip_info->from_date->Visible) { // from_date ?>
+		<td data-name="from_date">
+<span id="el$rowindex$_trip_info_from_date" class="form-group trip_info_from_date">
+<input type="text" data-table="trip_info" data-field="x_from_date" name="x<?php echo $trip_info_list->RowIndex ?>_from_date" id="x<?php echo $trip_info_list->RowIndex ?>_from_date" placeholder="<?php echo HtmlEncode($trip_info->from_date->getPlaceHolder()) ?>" value="<?php echo $trip_info->from_date->EditValue ?>"<?php echo $trip_info->from_date->editAttributes() ?>>
+<?php if (!$trip_info->from_date->ReadOnly && !$trip_info->from_date->Disabled && !isset($trip_info->from_date->EditAttrs["readonly"]) && !isset($trip_info->from_date->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("ftrip_infolist", "x<?php echo $trip_info_list->RowIndex ?>_from_date", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<input type="hidden" data-table="trip_info" data-field="x_from_date" name="o<?php echo $trip_info_list->RowIndex ?>_from_date" id="o<?php echo $trip_info_list->RowIndex ?>_from_date" value="<?php echo HtmlEncode($trip_info->from_date->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($trip_info->to_date->Visible) { // to_date ?>
+		<td data-name="to_date">
+<span id="el$rowindex$_trip_info_to_date" class="form-group trip_info_to_date">
+<input type="text" data-table="trip_info" data-field="x_to_date" name="x<?php echo $trip_info_list->RowIndex ?>_to_date" id="x<?php echo $trip_info_list->RowIndex ?>_to_date" placeholder="<?php echo HtmlEncode($trip_info->to_date->getPlaceHolder()) ?>" value="<?php echo $trip_info->to_date->EditValue ?>"<?php echo $trip_info->to_date->editAttributes() ?>>
+<?php if (!$trip_info->to_date->ReadOnly && !$trip_info->to_date->Disabled && !isset($trip_info->to_date->EditAttrs["readonly"]) && !isset($trip_info->to_date->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("ftrip_infolist", "x<?php echo $trip_info_list->RowIndex ?>_to_date", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<input type="hidden" data-table="trip_info" data-field="x_to_date" name="o<?php echo $trip_info_list->RowIndex ?>_to_date" id="o<?php echo $trip_info_list->RowIndex ?>_to_date" value="<?php echo HtmlEncode($trip_info->to_date->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($trip_info->labor_fee->Visible) { // labor_fee ?>
+		<td data-name="labor_fee">
+<span id="el$rowindex$_trip_info_labor_fee" class="form-group trip_info_labor_fee">
+<input type="text" data-table="trip_info" data-field="x_labor_fee" name="x<?php echo $trip_info_list->RowIndex ?>_labor_fee" id="x<?php echo $trip_info_list->RowIndex ?>_labor_fee" size="30" placeholder="<?php echo HtmlEncode($trip_info->labor_fee->getPlaceHolder()) ?>" value="<?php echo $trip_info->labor_fee->EditValue ?>"<?php echo $trip_info->labor_fee->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="trip_info" data-field="x_labor_fee" name="o<?php echo $trip_info_list->RowIndex ?>_labor_fee" id="o<?php echo $trip_info_list->RowIndex ?>_labor_fee" value="<?php echo HtmlEncode($trip_info->labor_fee->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($trip_info->available->Visible) { // available ?>
+		<td data-name="available">
+<span id="el$rowindex$_trip_info_available" class="form-group trip_info_available">
+<input type="text" data-table="trip_info" data-field="x_available" name="x<?php echo $trip_info_list->RowIndex ?>_available" id="x<?php echo $trip_info_list->RowIndex ?>_available" size="30" placeholder="<?php echo HtmlEncode($trip_info->available->getPlaceHolder()) ?>" value="<?php echo $trip_info->available->EditValue ?>"<?php echo $trip_info->available->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="trip_info" data-field="x_available" name="o<?php echo $trip_info_list->RowIndex ?>_available" id="o<?php echo $trip_info_list->RowIndex ?>_available" value="<?php echo HtmlEncode($trip_info->available->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($trip_info->service_type->Visible) { // service_type ?>
+		<td data-name="service_type">
+<span id="el$rowindex$_trip_info_service_type" class="form-group trip_info_service_type">
+<input type="text" data-table="trip_info" data-field="x_service_type" name="x<?php echo $trip_info_list->RowIndex ?>_service_type" id="x<?php echo $trip_info_list->RowIndex ?>_service_type" size="30" placeholder="<?php echo HtmlEncode($trip_info->service_type->getPlaceHolder()) ?>" value="<?php echo $trip_info->service_type->EditValue ?>"<?php echo $trip_info->service_type->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="trip_info" data-field="x_service_type" name="o<?php echo $trip_info_list->RowIndex ?>_service_type" id="o<?php echo $trip_info_list->RowIndex ?>_service_type" value="<?php echo HtmlEncode($trip_info->service_type->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($trip_info->max_carrying_weight->Visible) { // max_carrying_weight ?>
+		<td data-name="max_carrying_weight">
+<span id="el$rowindex$_trip_info_max_carrying_weight" class="form-group trip_info_max_carrying_weight">
+<input type="text" data-table="trip_info" data-field="x_max_carrying_weight" name="x<?php echo $trip_info_list->RowIndex ?>_max_carrying_weight" id="x<?php echo $trip_info_list->RowIndex ?>_max_carrying_weight" size="30" placeholder="<?php echo HtmlEncode($trip_info->max_carrying_weight->getPlaceHolder()) ?>" value="<?php echo $trip_info->max_carrying_weight->EditValue ?>"<?php echo $trip_info->max_carrying_weight->editAttributes() ?>>
+</span>
+<input type="hidden" data-table="trip_info" data-field="x_max_carrying_weight" name="o<?php echo $trip_info_list->RowIndex ?>_max_carrying_weight" id="o<?php echo $trip_info_list->RowIndex ?>_max_carrying_weight" value="<?php echo HtmlEncode($trip_info->max_carrying_weight->OldValue) ?>">
 </td>
 	<?php } ?>
 <?php

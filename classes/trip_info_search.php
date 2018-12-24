@@ -561,9 +561,14 @@ class trip_info_search extends trip_info
 		$this->description->setVisibility();
 		$this->user_id->setVisibility();
 		$this->flight_number->setVisibility();
-		$this->date->setVisibility();
 		$this->createdAt->setVisibility();
 		$this->updatedAt->setVisibility();
+		$this->from_date->setVisibility();
+		$this->to_date->setVisibility();
+		$this->labor_fee->setVisibility();
+		$this->available->setVisibility();
+		$this->service_type->setVisibility();
+		$this->max_carrying_weight->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Global Page Loading event (in userfn*.php)
@@ -633,9 +638,14 @@ class trip_info_search extends trip_info
 		$this->buildSearchUrl($srchUrl, $this->description); // description
 		$this->buildSearchUrl($srchUrl, $this->user_id); // user_id
 		$this->buildSearchUrl($srchUrl, $this->flight_number); // flight_number
-		$this->buildSearchUrl($srchUrl, $this->date); // date
 		$this->buildSearchUrl($srchUrl, $this->createdAt); // createdAt
 		$this->buildSearchUrl($srchUrl, $this->updatedAt); // updatedAt
+		$this->buildSearchUrl($srchUrl, $this->from_date); // from_date
+		$this->buildSearchUrl($srchUrl, $this->to_date); // to_date
+		$this->buildSearchUrl($srchUrl, $this->labor_fee); // labor_fee
+		$this->buildSearchUrl($srchUrl, $this->available); // available
+		$this->buildSearchUrl($srchUrl, $this->service_type); // service_type
+		$this->buildSearchUrl($srchUrl, $this->max_carrying_weight); // max_carrying_weight
 		if ($srchUrl <> "")
 			$srchUrl .= "&";
 		$srchUrl .= "cmd=search";
@@ -733,10 +743,6 @@ class trip_info_search extends trip_info
 		$this->flight_number->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_flight_number"));
 		$this->flight_number->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_flight_number"));
 
-		// date
-		$this->date->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_date"));
-		$this->date->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_date"));
-
 		// createdAt
 		$this->createdAt->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_createdAt"));
 		$this->createdAt->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_createdAt"));
@@ -744,6 +750,30 @@ class trip_info_search extends trip_info
 		// updatedAt
 		$this->updatedAt->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_updatedAt"));
 		$this->updatedAt->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_updatedAt"));
+
+		// from_date
+		$this->from_date->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_from_date"));
+		$this->from_date->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_from_date"));
+
+		// to_date
+		$this->to_date->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_to_date"));
+		$this->to_date->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_to_date"));
+
+		// labor_fee
+		$this->labor_fee->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_labor_fee"));
+		$this->labor_fee->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_labor_fee"));
+
+		// available
+		$this->available->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_available"));
+		$this->available->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_available"));
+
+		// service_type
+		$this->service_type->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_service_type"));
+		$this->service_type->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_service_type"));
+
+		// max_carrying_weight
+		$this->max_carrying_weight->AdvancedSearch->setSearchValue($CurrentForm->getValue("x_max_carrying_weight"));
+		$this->max_carrying_weight->AdvancedSearch->setSearchOperator($CurrentForm->getValue("z_max_carrying_weight"));
 	}
 
 	// Render row values based on field settings
@@ -763,9 +793,14 @@ class trip_info_search extends trip_info
 		// description
 		// user_id
 		// flight_number
-		// date
 		// createdAt
 		// updatedAt
+		// from_date
+		// to_date
+		// labor_fee
+		// available
+		// service_type
+		// max_carrying_weight
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
@@ -813,11 +848,6 @@ class trip_info_search extends trip_info
 			$this->flight_number->ViewValue = $this->flight_number->CurrentValue;
 			$this->flight_number->ViewCustomAttributes = "";
 
-			// date
-			$this->date->ViewValue = $this->date->CurrentValue;
-			$this->date->ViewValue = FormatDateTime($this->date->ViewValue, 0);
-			$this->date->ViewCustomAttributes = "";
-
 			// createdAt
 			$this->createdAt->ViewValue = $this->createdAt->CurrentValue;
 			$this->createdAt->ViewValue = FormatDateTime($this->createdAt->ViewValue, 0);
@@ -827,6 +857,36 @@ class trip_info_search extends trip_info
 			$this->updatedAt->ViewValue = $this->updatedAt->CurrentValue;
 			$this->updatedAt->ViewValue = FormatDateTime($this->updatedAt->ViewValue, 0);
 			$this->updatedAt->ViewCustomAttributes = "";
+
+			// from_date
+			$this->from_date->ViewValue = $this->from_date->CurrentValue;
+			$this->from_date->ViewValue = FormatDateTime($this->from_date->ViewValue, 0);
+			$this->from_date->ViewCustomAttributes = "";
+
+			// to_date
+			$this->to_date->ViewValue = $this->to_date->CurrentValue;
+			$this->to_date->ViewValue = FormatDateTime($this->to_date->ViewValue, 0);
+			$this->to_date->ViewCustomAttributes = "";
+
+			// labor_fee
+			$this->labor_fee->ViewValue = $this->labor_fee->CurrentValue;
+			$this->labor_fee->ViewValue = FormatNumber($this->labor_fee->ViewValue, 0, -2, -2, -2);
+			$this->labor_fee->ViewCustomAttributes = "";
+
+			// available
+			$this->available->ViewValue = $this->available->CurrentValue;
+			$this->available->ViewValue = FormatNumber($this->available->ViewValue, 0, -2, -2, -2);
+			$this->available->ViewCustomAttributes = "";
+
+			// service_type
+			$this->service_type->ViewValue = $this->service_type->CurrentValue;
+			$this->service_type->ViewValue = FormatNumber($this->service_type->ViewValue, 0, -2, -2, -2);
+			$this->service_type->ViewCustomAttributes = "";
+
+			// max_carrying_weight
+			$this->max_carrying_weight->ViewValue = $this->max_carrying_weight->CurrentValue;
+			$this->max_carrying_weight->ViewValue = FormatNumber($this->max_carrying_weight->ViewValue, 0, -2, -2, -2);
+			$this->max_carrying_weight->ViewCustomAttributes = "";
 
 			// id
 			$this->id->LinkCustomAttributes = "";
@@ -858,11 +918,6 @@ class trip_info_search extends trip_info
 			$this->flight_number->HrefValue = "";
 			$this->flight_number->TooltipValue = "";
 
-			// date
-			$this->date->LinkCustomAttributes = "";
-			$this->date->HrefValue = "";
-			$this->date->TooltipValue = "";
-
 			// createdAt
 			$this->createdAt->LinkCustomAttributes = "";
 			$this->createdAt->HrefValue = "";
@@ -872,6 +927,36 @@ class trip_info_search extends trip_info
 			$this->updatedAt->LinkCustomAttributes = "";
 			$this->updatedAt->HrefValue = "";
 			$this->updatedAt->TooltipValue = "";
+
+			// from_date
+			$this->from_date->LinkCustomAttributes = "";
+			$this->from_date->HrefValue = "";
+			$this->from_date->TooltipValue = "";
+
+			// to_date
+			$this->to_date->LinkCustomAttributes = "";
+			$this->to_date->HrefValue = "";
+			$this->to_date->TooltipValue = "";
+
+			// labor_fee
+			$this->labor_fee->LinkCustomAttributes = "";
+			$this->labor_fee->HrefValue = "";
+			$this->labor_fee->TooltipValue = "";
+
+			// available
+			$this->available->LinkCustomAttributes = "";
+			$this->available->HrefValue = "";
+			$this->available->TooltipValue = "";
+
+			// service_type
+			$this->service_type->LinkCustomAttributes = "";
+			$this->service_type->HrefValue = "";
+			$this->service_type->TooltipValue = "";
+
+			// max_carrying_weight
+			$this->max_carrying_weight->LinkCustomAttributes = "";
+			$this->max_carrying_weight->HrefValue = "";
+			$this->max_carrying_weight->TooltipValue = "";
 		} elseif ($this->RowType == ROWTYPE_SEARCH) { // Search row
 
 			// id
@@ -930,12 +1015,6 @@ class trip_info_search extends trip_info
 			$this->flight_number->EditValue = HtmlEncode($this->flight_number->AdvancedSearch->SearchValue);
 			$this->flight_number->PlaceHolder = RemoveHtml($this->flight_number->caption());
 
-			// date
-			$this->date->EditAttrs["class"] = "form-control";
-			$this->date->EditCustomAttributes = "";
-			$this->date->EditValue = HtmlEncode(FormatDateTime(UnFormatDateTime($this->date->AdvancedSearch->SearchValue, 0), 8));
-			$this->date->PlaceHolder = RemoveHtml($this->date->caption());
-
 			// createdAt
 			$this->createdAt->EditAttrs["class"] = "form-control";
 			$this->createdAt->EditCustomAttributes = "";
@@ -947,6 +1026,42 @@ class trip_info_search extends trip_info
 			$this->updatedAt->EditCustomAttributes = "";
 			$this->updatedAt->EditValue = HtmlEncode(FormatDateTime(UnFormatDateTime($this->updatedAt->AdvancedSearch->SearchValue, 0), 8));
 			$this->updatedAt->PlaceHolder = RemoveHtml($this->updatedAt->caption());
+
+			// from_date
+			$this->from_date->EditAttrs["class"] = "form-control";
+			$this->from_date->EditCustomAttributes = "";
+			$this->from_date->EditValue = HtmlEncode(FormatDateTime(UnFormatDateTime($this->from_date->AdvancedSearch->SearchValue, 0), 8));
+			$this->from_date->PlaceHolder = RemoveHtml($this->from_date->caption());
+
+			// to_date
+			$this->to_date->EditAttrs["class"] = "form-control";
+			$this->to_date->EditCustomAttributes = "";
+			$this->to_date->EditValue = HtmlEncode(FormatDateTime(UnFormatDateTime($this->to_date->AdvancedSearch->SearchValue, 0), 8));
+			$this->to_date->PlaceHolder = RemoveHtml($this->to_date->caption());
+
+			// labor_fee
+			$this->labor_fee->EditAttrs["class"] = "form-control";
+			$this->labor_fee->EditCustomAttributes = "";
+			$this->labor_fee->EditValue = HtmlEncode($this->labor_fee->AdvancedSearch->SearchValue);
+			$this->labor_fee->PlaceHolder = RemoveHtml($this->labor_fee->caption());
+
+			// available
+			$this->available->EditAttrs["class"] = "form-control";
+			$this->available->EditCustomAttributes = "";
+			$this->available->EditValue = HtmlEncode($this->available->AdvancedSearch->SearchValue);
+			$this->available->PlaceHolder = RemoveHtml($this->available->caption());
+
+			// service_type
+			$this->service_type->EditAttrs["class"] = "form-control";
+			$this->service_type->EditCustomAttributes = "";
+			$this->service_type->EditValue = HtmlEncode($this->service_type->AdvancedSearch->SearchValue);
+			$this->service_type->PlaceHolder = RemoveHtml($this->service_type->caption());
+
+			// max_carrying_weight
+			$this->max_carrying_weight->EditAttrs["class"] = "form-control";
+			$this->max_carrying_weight->EditCustomAttributes = "";
+			$this->max_carrying_weight->EditValue = HtmlEncode($this->max_carrying_weight->AdvancedSearch->SearchValue);
+			$this->max_carrying_weight->PlaceHolder = RemoveHtml($this->max_carrying_weight->caption());
 		}
 		if ($this->RowType == ROWTYPE_ADD || $this->RowType == ROWTYPE_EDIT || $this->RowType == ROWTYPE_SEARCH) // Add/Edit/Search row
 			$this->setupFieldTitles();
@@ -973,14 +1088,29 @@ class trip_info_search extends trip_info
 		if (!CheckInteger($this->user_id->AdvancedSearch->SearchValue)) {
 			AddMessage($SearchError, $this->user_id->errorMessage());
 		}
-		if (!CheckDate($this->date->AdvancedSearch->SearchValue)) {
-			AddMessage($SearchError, $this->date->errorMessage());
-		}
 		if (!CheckDate($this->createdAt->AdvancedSearch->SearchValue)) {
 			AddMessage($SearchError, $this->createdAt->errorMessage());
 		}
 		if (!CheckDate($this->updatedAt->AdvancedSearch->SearchValue)) {
 			AddMessage($SearchError, $this->updatedAt->errorMessage());
+		}
+		if (!CheckDate($this->from_date->AdvancedSearch->SearchValue)) {
+			AddMessage($SearchError, $this->from_date->errorMessage());
+		}
+		if (!CheckDate($this->to_date->AdvancedSearch->SearchValue)) {
+			AddMessage($SearchError, $this->to_date->errorMessage());
+		}
+		if (!CheckInteger($this->labor_fee->AdvancedSearch->SearchValue)) {
+			AddMessage($SearchError, $this->labor_fee->errorMessage());
+		}
+		if (!CheckInteger($this->available->AdvancedSearch->SearchValue)) {
+			AddMessage($SearchError, $this->available->errorMessage());
+		}
+		if (!CheckInteger($this->service_type->AdvancedSearch->SearchValue)) {
+			AddMessage($SearchError, $this->service_type->errorMessage());
+		}
+		if (!CheckInteger($this->max_carrying_weight->AdvancedSearch->SearchValue)) {
+			AddMessage($SearchError, $this->max_carrying_weight->errorMessage());
 		}
 
 		// Return validate result
@@ -1004,9 +1134,14 @@ class trip_info_search extends trip_info
 		$this->description->AdvancedSearch->load();
 		$this->user_id->AdvancedSearch->load();
 		$this->flight_number->AdvancedSearch->load();
-		$this->date->AdvancedSearch->load();
 		$this->createdAt->AdvancedSearch->load();
 		$this->updatedAt->AdvancedSearch->load();
+		$this->from_date->AdvancedSearch->load();
+		$this->to_date->AdvancedSearch->load();
+		$this->labor_fee->AdvancedSearch->load();
+		$this->available->AdvancedSearch->load();
+		$this->service_type->AdvancedSearch->load();
+		$this->max_carrying_weight->AdvancedSearch->load();
 	}
 
 	// Set up Breadcrumb

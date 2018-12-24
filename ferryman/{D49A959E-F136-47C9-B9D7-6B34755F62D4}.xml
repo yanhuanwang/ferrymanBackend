@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<configuration date="2018/11/30" author="e.World Technology Ltd.">
-  <project id="{D49A959E-F136-47C9-B9D7-6B34755F62D4}" file="C:\Users\ecaiyan\Documents\PHPMaker\Projects\ferryman.pmp" name="ferryman" product="PHPMaker" version="15.0" datetime="2018/11/30 16:15:41" languagefolder="phplang" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0">
+<configuration date="2018/12/24" author="e.World Technology Ltd.">
+  <project id="{D49A959E-F136-47C9-B9D7-6B34755F62D4}" file="C:\Users\ecaiyan\Documents\PHPMaker\Projects\ferryman.pmp" name="ferryman" product="PHPMaker" version="15.0" datetime="2018/12/24 18:00:22" languagefolder="phplang" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0">
     <table id="user" name="user" caption="用户" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="admin" name="admin" caption="管理员" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="category" name="category" caption="分类" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />

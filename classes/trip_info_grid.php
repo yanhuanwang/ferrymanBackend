@@ -608,9 +608,14 @@ class trip_info_grid extends trip_info
 		$this->description->setVisibility();
 		$this->user_id->setVisibility();
 		$this->flight_number->setVisibility();
-		$this->date->setVisibility();
 		$this->createdAt->setVisibility();
 		$this->updatedAt->setVisibility();
+		$this->from_date->setVisibility();
+		$this->to_date->setVisibility();
+		$this->labor_fee->setVisibility();
+		$this->available->setVisibility();
+		$this->service_type->setVisibility();
+		$this->max_carrying_weight->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Global Page Loading event (in userfn*.php)
@@ -1061,11 +1066,21 @@ class trip_info_grid extends trip_info
 			return FALSE;
 		if ($CurrentForm->hasValue("x_flight_number") && $CurrentForm->hasValue("o_flight_number") && $this->flight_number->CurrentValue <> $this->flight_number->OldValue)
 			return FALSE;
-		if ($CurrentForm->hasValue("x_date") && $CurrentForm->hasValue("o_date") && $this->date->CurrentValue <> $this->date->OldValue)
-			return FALSE;
 		if ($CurrentForm->hasValue("x_createdAt") && $CurrentForm->hasValue("o_createdAt") && $this->createdAt->CurrentValue <> $this->createdAt->OldValue)
 			return FALSE;
 		if ($CurrentForm->hasValue("x_updatedAt") && $CurrentForm->hasValue("o_updatedAt") && $this->updatedAt->CurrentValue <> $this->updatedAt->OldValue)
+			return FALSE;
+		if ($CurrentForm->hasValue("x_from_date") && $CurrentForm->hasValue("o_from_date") && $this->from_date->CurrentValue <> $this->from_date->OldValue)
+			return FALSE;
+		if ($CurrentForm->hasValue("x_to_date") && $CurrentForm->hasValue("o_to_date") && $this->to_date->CurrentValue <> $this->to_date->OldValue)
+			return FALSE;
+		if ($CurrentForm->hasValue("x_labor_fee") && $CurrentForm->hasValue("o_labor_fee") && $this->labor_fee->CurrentValue <> $this->labor_fee->OldValue)
+			return FALSE;
+		if ($CurrentForm->hasValue("x_available") && $CurrentForm->hasValue("o_available") && $this->available->CurrentValue <> $this->available->OldValue)
+			return FALSE;
+		if ($CurrentForm->hasValue("x_service_type") && $CurrentForm->hasValue("o_service_type") && $this->service_type->CurrentValue <> $this->service_type->OldValue)
+			return FALSE;
+		if ($CurrentForm->hasValue("x_max_carrying_weight") && $CurrentForm->hasValue("o_max_carrying_weight") && $this->max_carrying_weight->CurrentValue <> $this->max_carrying_weight->OldValue)
 			return FALSE;
 		return TRUE;
 	}
@@ -1469,12 +1484,22 @@ class trip_info_grid extends trip_info
 		$this->user_id->OldValue = $this->user_id->CurrentValue;
 		$this->flight_number->CurrentValue = NULL;
 		$this->flight_number->OldValue = $this->flight_number->CurrentValue;
-		$this->date->CurrentValue = NULL;
-		$this->date->OldValue = $this->date->CurrentValue;
 		$this->createdAt->CurrentValue = NULL;
 		$this->createdAt->OldValue = $this->createdAt->CurrentValue;
 		$this->updatedAt->CurrentValue = NULL;
 		$this->updatedAt->OldValue = $this->updatedAt->CurrentValue;
+		$this->from_date->CurrentValue = NULL;
+		$this->from_date->OldValue = $this->from_date->CurrentValue;
+		$this->to_date->CurrentValue = NULL;
+		$this->to_date->OldValue = $this->to_date->CurrentValue;
+		$this->labor_fee->CurrentValue = NULL;
+		$this->labor_fee->OldValue = $this->labor_fee->CurrentValue;
+		$this->available->CurrentValue = NULL;
+		$this->available->OldValue = $this->available->CurrentValue;
+		$this->service_type->CurrentValue = 1;
+		$this->service_type->OldValue = $this->service_type->CurrentValue;
+		$this->max_carrying_weight->CurrentValue = NULL;
+		$this->max_carrying_weight->OldValue = $this->max_carrying_weight->CurrentValue;
 	}
 
 	// Load form values
@@ -1535,17 +1560,6 @@ class trip_info_grid extends trip_info
 		}
 		$this->flight_number->setOldValue($CurrentForm->getValue("o_flight_number"));
 
-		// Check field name 'date' first before field var 'x_date'
-		$val = $CurrentForm->hasValue("date") ? $CurrentForm->getValue("date") : $CurrentForm->getValue("x_date");
-		if (!$this->date->IsDetailKey) {
-			if (IsApi() && $val == NULL)
-				$this->date->Visible = FALSE; // Disable update for API request
-			else
-				$this->date->setFormValue($val);
-			$this->date->CurrentValue = UnFormatDateTime($this->date->CurrentValue, 0);
-		}
-		$this->date->setOldValue($CurrentForm->getValue("o_date"));
-
 		// Check field name 'createdAt' first before field var 'x_createdAt'
 		$val = $CurrentForm->hasValue("createdAt") ? $CurrentForm->getValue("createdAt") : $CurrentForm->getValue("x_createdAt");
 		if (!$this->createdAt->IsDetailKey) {
@@ -1568,6 +1582,68 @@ class trip_info_grid extends trip_info
 		}
 		$this->updatedAt->setOldValue($CurrentForm->getValue("o_updatedAt"));
 
+		// Check field name 'from_date' first before field var 'x_from_date'
+		$val = $CurrentForm->hasValue("from_date") ? $CurrentForm->getValue("from_date") : $CurrentForm->getValue("x_from_date");
+		if (!$this->from_date->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->from_date->Visible = FALSE; // Disable update for API request
+			else
+				$this->from_date->setFormValue($val);
+			$this->from_date->CurrentValue = UnFormatDateTime($this->from_date->CurrentValue, 0);
+		}
+		$this->from_date->setOldValue($CurrentForm->getValue("o_from_date"));
+
+		// Check field name 'to_date' first before field var 'x_to_date'
+		$val = $CurrentForm->hasValue("to_date") ? $CurrentForm->getValue("to_date") : $CurrentForm->getValue("x_to_date");
+		if (!$this->to_date->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->to_date->Visible = FALSE; // Disable update for API request
+			else
+				$this->to_date->setFormValue($val);
+			$this->to_date->CurrentValue = UnFormatDateTime($this->to_date->CurrentValue, 0);
+		}
+		$this->to_date->setOldValue($CurrentForm->getValue("o_to_date"));
+
+		// Check field name 'labor_fee' first before field var 'x_labor_fee'
+		$val = $CurrentForm->hasValue("labor_fee") ? $CurrentForm->getValue("labor_fee") : $CurrentForm->getValue("x_labor_fee");
+		if (!$this->labor_fee->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->labor_fee->Visible = FALSE; // Disable update for API request
+			else
+				$this->labor_fee->setFormValue($val);
+		}
+		$this->labor_fee->setOldValue($CurrentForm->getValue("o_labor_fee"));
+
+		// Check field name 'available' first before field var 'x_available'
+		$val = $CurrentForm->hasValue("available") ? $CurrentForm->getValue("available") : $CurrentForm->getValue("x_available");
+		if (!$this->available->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->available->Visible = FALSE; // Disable update for API request
+			else
+				$this->available->setFormValue($val);
+		}
+		$this->available->setOldValue($CurrentForm->getValue("o_available"));
+
+		// Check field name 'service_type' first before field var 'x_service_type'
+		$val = $CurrentForm->hasValue("service_type") ? $CurrentForm->getValue("service_type") : $CurrentForm->getValue("x_service_type");
+		if (!$this->service_type->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->service_type->Visible = FALSE; // Disable update for API request
+			else
+				$this->service_type->setFormValue($val);
+		}
+		$this->service_type->setOldValue($CurrentForm->getValue("o_service_type"));
+
+		// Check field name 'max_carrying_weight' first before field var 'x_max_carrying_weight'
+		$val = $CurrentForm->hasValue("max_carrying_weight") ? $CurrentForm->getValue("max_carrying_weight") : $CurrentForm->getValue("x_max_carrying_weight");
+		if (!$this->max_carrying_weight->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->max_carrying_weight->Visible = FALSE; // Disable update for API request
+			else
+				$this->max_carrying_weight->setFormValue($val);
+		}
+		$this->max_carrying_weight->setOldValue($CurrentForm->getValue("o_max_carrying_weight"));
+
 		// Check field name 'id' first before field var 'x_id'
 		$val = $CurrentForm->hasValue("id") ? $CurrentForm->getValue("id") : $CurrentForm->getValue("x_id");
 		if (!$this->id->IsDetailKey && !$this->isGridAdd() && !$this->isAdd())
@@ -1585,12 +1661,18 @@ class trip_info_grid extends trip_info
 		$this->description->CurrentValue = $this->description->FormValue;
 		$this->user_id->CurrentValue = $this->user_id->FormValue;
 		$this->flight_number->CurrentValue = $this->flight_number->FormValue;
-		$this->date->CurrentValue = $this->date->FormValue;
-		$this->date->CurrentValue = UnFormatDateTime($this->date->CurrentValue, 0);
 		$this->createdAt->CurrentValue = $this->createdAt->FormValue;
 		$this->createdAt->CurrentValue = UnFormatDateTime($this->createdAt->CurrentValue, 0);
 		$this->updatedAt->CurrentValue = $this->updatedAt->FormValue;
 		$this->updatedAt->CurrentValue = UnFormatDateTime($this->updatedAt->CurrentValue, 0);
+		$this->from_date->CurrentValue = $this->from_date->FormValue;
+		$this->from_date->CurrentValue = UnFormatDateTime($this->from_date->CurrentValue, 0);
+		$this->to_date->CurrentValue = $this->to_date->FormValue;
+		$this->to_date->CurrentValue = UnFormatDateTime($this->to_date->CurrentValue, 0);
+		$this->labor_fee->CurrentValue = $this->labor_fee->FormValue;
+		$this->available->CurrentValue = $this->available->FormValue;
+		$this->service_type->CurrentValue = $this->service_type->FormValue;
+		$this->max_carrying_weight->CurrentValue = $this->max_carrying_weight->FormValue;
 	}
 
 	// Load recordset
@@ -1661,9 +1743,14 @@ class trip_info_grid extends trip_info
 		$this->description->setDbValue($row['description']);
 		$this->user_id->setDbValue($row['user_id']);
 		$this->flight_number->setDbValue($row['flight_number']);
-		$this->date->setDbValue($row['date']);
 		$this->createdAt->setDbValue($row['createdAt']);
 		$this->updatedAt->setDbValue($row['updatedAt']);
+		$this->from_date->setDbValue($row['from_date']);
+		$this->to_date->setDbValue($row['to_date']);
+		$this->labor_fee->setDbValue($row['labor_fee']);
+		$this->available->setDbValue($row['available']);
+		$this->service_type->setDbValue($row['service_type']);
+		$this->max_carrying_weight->setDbValue($row['max_carrying_weight']);
 	}
 
 	// Return a row with default values
@@ -1677,9 +1764,14 @@ class trip_info_grid extends trip_info
 		$row['description'] = $this->description->CurrentValue;
 		$row['user_id'] = $this->user_id->CurrentValue;
 		$row['flight_number'] = $this->flight_number->CurrentValue;
-		$row['date'] = $this->date->CurrentValue;
 		$row['createdAt'] = $this->createdAt->CurrentValue;
 		$row['updatedAt'] = $this->updatedAt->CurrentValue;
+		$row['from_date'] = $this->from_date->CurrentValue;
+		$row['to_date'] = $this->to_date->CurrentValue;
+		$row['labor_fee'] = $this->labor_fee->CurrentValue;
+		$row['available'] = $this->available->CurrentValue;
+		$row['service_type'] = $this->service_type->CurrentValue;
+		$row['max_carrying_weight'] = $this->max_carrying_weight->CurrentValue;
 		return $row;
 	}
 
@@ -1733,9 +1825,14 @@ class trip_info_grid extends trip_info
 		// description
 		// user_id
 		// flight_number
-		// date
 		// createdAt
 		// updatedAt
+		// from_date
+		// to_date
+		// labor_fee
+		// available
+		// service_type
+		// max_carrying_weight
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
@@ -1783,11 +1880,6 @@ class trip_info_grid extends trip_info
 			$this->flight_number->ViewValue = $this->flight_number->CurrentValue;
 			$this->flight_number->ViewCustomAttributes = "";
 
-			// date
-			$this->date->ViewValue = $this->date->CurrentValue;
-			$this->date->ViewValue = FormatDateTime($this->date->ViewValue, 0);
-			$this->date->ViewCustomAttributes = "";
-
 			// createdAt
 			$this->createdAt->ViewValue = $this->createdAt->CurrentValue;
 			$this->createdAt->ViewValue = FormatDateTime($this->createdAt->ViewValue, 0);
@@ -1797,6 +1889,36 @@ class trip_info_grid extends trip_info
 			$this->updatedAt->ViewValue = $this->updatedAt->CurrentValue;
 			$this->updatedAt->ViewValue = FormatDateTime($this->updatedAt->ViewValue, 0);
 			$this->updatedAt->ViewCustomAttributes = "";
+
+			// from_date
+			$this->from_date->ViewValue = $this->from_date->CurrentValue;
+			$this->from_date->ViewValue = FormatDateTime($this->from_date->ViewValue, 0);
+			$this->from_date->ViewCustomAttributes = "";
+
+			// to_date
+			$this->to_date->ViewValue = $this->to_date->CurrentValue;
+			$this->to_date->ViewValue = FormatDateTime($this->to_date->ViewValue, 0);
+			$this->to_date->ViewCustomAttributes = "";
+
+			// labor_fee
+			$this->labor_fee->ViewValue = $this->labor_fee->CurrentValue;
+			$this->labor_fee->ViewValue = FormatNumber($this->labor_fee->ViewValue, 0, -2, -2, -2);
+			$this->labor_fee->ViewCustomAttributes = "";
+
+			// available
+			$this->available->ViewValue = $this->available->CurrentValue;
+			$this->available->ViewValue = FormatNumber($this->available->ViewValue, 0, -2, -2, -2);
+			$this->available->ViewCustomAttributes = "";
+
+			// service_type
+			$this->service_type->ViewValue = $this->service_type->CurrentValue;
+			$this->service_type->ViewValue = FormatNumber($this->service_type->ViewValue, 0, -2, -2, -2);
+			$this->service_type->ViewCustomAttributes = "";
+
+			// max_carrying_weight
+			$this->max_carrying_weight->ViewValue = $this->max_carrying_weight->CurrentValue;
+			$this->max_carrying_weight->ViewValue = FormatNumber($this->max_carrying_weight->ViewValue, 0, -2, -2, -2);
+			$this->max_carrying_weight->ViewCustomAttributes = "";
 
 			// from_place
 			$this->from_place->LinkCustomAttributes = "";
@@ -1823,11 +1945,6 @@ class trip_info_grid extends trip_info
 			$this->flight_number->HrefValue = "";
 			$this->flight_number->TooltipValue = "";
 
-			// date
-			$this->date->LinkCustomAttributes = "";
-			$this->date->HrefValue = "";
-			$this->date->TooltipValue = "";
-
 			// createdAt
 			$this->createdAt->LinkCustomAttributes = "";
 			$this->createdAt->HrefValue = "";
@@ -1837,6 +1954,36 @@ class trip_info_grid extends trip_info
 			$this->updatedAt->LinkCustomAttributes = "";
 			$this->updatedAt->HrefValue = "";
 			$this->updatedAt->TooltipValue = "";
+
+			// from_date
+			$this->from_date->LinkCustomAttributes = "";
+			$this->from_date->HrefValue = "";
+			$this->from_date->TooltipValue = "";
+
+			// to_date
+			$this->to_date->LinkCustomAttributes = "";
+			$this->to_date->HrefValue = "";
+			$this->to_date->TooltipValue = "";
+
+			// labor_fee
+			$this->labor_fee->LinkCustomAttributes = "";
+			$this->labor_fee->HrefValue = "";
+			$this->labor_fee->TooltipValue = "";
+
+			// available
+			$this->available->LinkCustomAttributes = "";
+			$this->available->HrefValue = "";
+			$this->available->TooltipValue = "";
+
+			// service_type
+			$this->service_type->LinkCustomAttributes = "";
+			$this->service_type->HrefValue = "";
+			$this->service_type->TooltipValue = "";
+
+			// max_carrying_weight
+			$this->max_carrying_weight->LinkCustomAttributes = "";
+			$this->max_carrying_weight->HrefValue = "";
+			$this->max_carrying_weight->TooltipValue = "";
 		} elseif ($this->RowType == ROWTYPE_ADD) { // Add row
 
 			// from_place
@@ -1916,12 +2063,6 @@ class trip_info_grid extends trip_info
 			$this->flight_number->EditValue = HtmlEncode($this->flight_number->CurrentValue);
 			$this->flight_number->PlaceHolder = RemoveHtml($this->flight_number->caption());
 
-			// date
-			$this->date->EditAttrs["class"] = "form-control";
-			$this->date->EditCustomAttributes = "";
-			$this->date->EditValue = HtmlEncode(FormatDateTime($this->date->CurrentValue, 8));
-			$this->date->PlaceHolder = RemoveHtml($this->date->caption());
-
 			// createdAt
 			$this->createdAt->EditAttrs["class"] = "form-control";
 			$this->createdAt->EditCustomAttributes = "";
@@ -1933,6 +2074,42 @@ class trip_info_grid extends trip_info
 			$this->updatedAt->EditCustomAttributes = "";
 			$this->updatedAt->EditValue = HtmlEncode(FormatDateTime($this->updatedAt->CurrentValue, 8));
 			$this->updatedAt->PlaceHolder = RemoveHtml($this->updatedAt->caption());
+
+			// from_date
+			$this->from_date->EditAttrs["class"] = "form-control";
+			$this->from_date->EditCustomAttributes = "";
+			$this->from_date->EditValue = HtmlEncode(FormatDateTime($this->from_date->CurrentValue, 8));
+			$this->from_date->PlaceHolder = RemoveHtml($this->from_date->caption());
+
+			// to_date
+			$this->to_date->EditAttrs["class"] = "form-control";
+			$this->to_date->EditCustomAttributes = "";
+			$this->to_date->EditValue = HtmlEncode(FormatDateTime($this->to_date->CurrentValue, 8));
+			$this->to_date->PlaceHolder = RemoveHtml($this->to_date->caption());
+
+			// labor_fee
+			$this->labor_fee->EditAttrs["class"] = "form-control";
+			$this->labor_fee->EditCustomAttributes = "";
+			$this->labor_fee->EditValue = HtmlEncode($this->labor_fee->CurrentValue);
+			$this->labor_fee->PlaceHolder = RemoveHtml($this->labor_fee->caption());
+
+			// available
+			$this->available->EditAttrs["class"] = "form-control";
+			$this->available->EditCustomAttributes = "";
+			$this->available->EditValue = HtmlEncode($this->available->CurrentValue);
+			$this->available->PlaceHolder = RemoveHtml($this->available->caption());
+
+			// service_type
+			$this->service_type->EditAttrs["class"] = "form-control";
+			$this->service_type->EditCustomAttributes = "";
+			$this->service_type->EditValue = HtmlEncode($this->service_type->CurrentValue);
+			$this->service_type->PlaceHolder = RemoveHtml($this->service_type->caption());
+
+			// max_carrying_weight
+			$this->max_carrying_weight->EditAttrs["class"] = "form-control";
+			$this->max_carrying_weight->EditCustomAttributes = "";
+			$this->max_carrying_weight->EditValue = HtmlEncode($this->max_carrying_weight->CurrentValue);
+			$this->max_carrying_weight->PlaceHolder = RemoveHtml($this->max_carrying_weight->caption());
 
 			// Add refer script
 			// from_place
@@ -1956,10 +2133,6 @@ class trip_info_grid extends trip_info
 			$this->flight_number->LinkCustomAttributes = "";
 			$this->flight_number->HrefValue = "";
 
-			// date
-			$this->date->LinkCustomAttributes = "";
-			$this->date->HrefValue = "";
-
 			// createdAt
 			$this->createdAt->LinkCustomAttributes = "";
 			$this->createdAt->HrefValue = "";
@@ -1967,6 +2140,30 @@ class trip_info_grid extends trip_info
 			// updatedAt
 			$this->updatedAt->LinkCustomAttributes = "";
 			$this->updatedAt->HrefValue = "";
+
+			// from_date
+			$this->from_date->LinkCustomAttributes = "";
+			$this->from_date->HrefValue = "";
+
+			// to_date
+			$this->to_date->LinkCustomAttributes = "";
+			$this->to_date->HrefValue = "";
+
+			// labor_fee
+			$this->labor_fee->LinkCustomAttributes = "";
+			$this->labor_fee->HrefValue = "";
+
+			// available
+			$this->available->LinkCustomAttributes = "";
+			$this->available->HrefValue = "";
+
+			// service_type
+			$this->service_type->LinkCustomAttributes = "";
+			$this->service_type->HrefValue = "";
+
+			// max_carrying_weight
+			$this->max_carrying_weight->LinkCustomAttributes = "";
+			$this->max_carrying_weight->HrefValue = "";
 		} elseif ($this->RowType == ROWTYPE_EDIT) { // Edit row
 
 			// from_place
@@ -2046,12 +2243,6 @@ class trip_info_grid extends trip_info
 			$this->flight_number->EditValue = HtmlEncode($this->flight_number->CurrentValue);
 			$this->flight_number->PlaceHolder = RemoveHtml($this->flight_number->caption());
 
-			// date
-			$this->date->EditAttrs["class"] = "form-control";
-			$this->date->EditCustomAttributes = "";
-			$this->date->EditValue = HtmlEncode(FormatDateTime($this->date->CurrentValue, 8));
-			$this->date->PlaceHolder = RemoveHtml($this->date->caption());
-
 			// createdAt
 			$this->createdAt->EditAttrs["class"] = "form-control";
 			$this->createdAt->EditCustomAttributes = "";
@@ -2063,6 +2254,42 @@ class trip_info_grid extends trip_info
 			$this->updatedAt->EditCustomAttributes = "";
 			$this->updatedAt->EditValue = HtmlEncode(FormatDateTime($this->updatedAt->CurrentValue, 8));
 			$this->updatedAt->PlaceHolder = RemoveHtml($this->updatedAt->caption());
+
+			// from_date
+			$this->from_date->EditAttrs["class"] = "form-control";
+			$this->from_date->EditCustomAttributes = "";
+			$this->from_date->EditValue = HtmlEncode(FormatDateTime($this->from_date->CurrentValue, 8));
+			$this->from_date->PlaceHolder = RemoveHtml($this->from_date->caption());
+
+			// to_date
+			$this->to_date->EditAttrs["class"] = "form-control";
+			$this->to_date->EditCustomAttributes = "";
+			$this->to_date->EditValue = HtmlEncode(FormatDateTime($this->to_date->CurrentValue, 8));
+			$this->to_date->PlaceHolder = RemoveHtml($this->to_date->caption());
+
+			// labor_fee
+			$this->labor_fee->EditAttrs["class"] = "form-control";
+			$this->labor_fee->EditCustomAttributes = "";
+			$this->labor_fee->EditValue = HtmlEncode($this->labor_fee->CurrentValue);
+			$this->labor_fee->PlaceHolder = RemoveHtml($this->labor_fee->caption());
+
+			// available
+			$this->available->EditAttrs["class"] = "form-control";
+			$this->available->EditCustomAttributes = "";
+			$this->available->EditValue = HtmlEncode($this->available->CurrentValue);
+			$this->available->PlaceHolder = RemoveHtml($this->available->caption());
+
+			// service_type
+			$this->service_type->EditAttrs["class"] = "form-control";
+			$this->service_type->EditCustomAttributes = "";
+			$this->service_type->EditValue = HtmlEncode($this->service_type->CurrentValue);
+			$this->service_type->PlaceHolder = RemoveHtml($this->service_type->caption());
+
+			// max_carrying_weight
+			$this->max_carrying_weight->EditAttrs["class"] = "form-control";
+			$this->max_carrying_weight->EditCustomAttributes = "";
+			$this->max_carrying_weight->EditValue = HtmlEncode($this->max_carrying_weight->CurrentValue);
+			$this->max_carrying_weight->PlaceHolder = RemoveHtml($this->max_carrying_weight->caption());
 
 			// Edit refer script
 			// from_place
@@ -2086,10 +2313,6 @@ class trip_info_grid extends trip_info
 			$this->flight_number->LinkCustomAttributes = "";
 			$this->flight_number->HrefValue = "";
 
-			// date
-			$this->date->LinkCustomAttributes = "";
-			$this->date->HrefValue = "";
-
 			// createdAt
 			$this->createdAt->LinkCustomAttributes = "";
 			$this->createdAt->HrefValue = "";
@@ -2097,6 +2320,30 @@ class trip_info_grid extends trip_info
 			// updatedAt
 			$this->updatedAt->LinkCustomAttributes = "";
 			$this->updatedAt->HrefValue = "";
+
+			// from_date
+			$this->from_date->LinkCustomAttributes = "";
+			$this->from_date->HrefValue = "";
+
+			// to_date
+			$this->to_date->LinkCustomAttributes = "";
+			$this->to_date->HrefValue = "";
+
+			// labor_fee
+			$this->labor_fee->LinkCustomAttributes = "";
+			$this->labor_fee->HrefValue = "";
+
+			// available
+			$this->available->LinkCustomAttributes = "";
+			$this->available->HrefValue = "";
+
+			// service_type
+			$this->service_type->LinkCustomAttributes = "";
+			$this->service_type->HrefValue = "";
+
+			// max_carrying_weight
+			$this->max_carrying_weight->LinkCustomAttributes = "";
+			$this->max_carrying_weight->HrefValue = "";
 		}
 		if ($this->RowType == ROWTYPE_ADD || $this->RowType == ROWTYPE_EDIT || $this->RowType == ROWTYPE_SEARCH) // Add/Edit/Search row
 			$this->setupFieldTitles();
@@ -2147,14 +2394,6 @@ class trip_info_grid extends trip_info
 				AddMessage($FormError, str_replace("%s", $this->flight_number->caption(), $this->flight_number->RequiredErrorMessage));
 			}
 		}
-		if ($this->date->Required) {
-			if (!$this->date->IsDetailKey && $this->date->FormValue != NULL && $this->date->FormValue == "") {
-				AddMessage($FormError, str_replace("%s", $this->date->caption(), $this->date->RequiredErrorMessage));
-			}
-		}
-		if (!CheckDate($this->date->FormValue)) {
-			AddMessage($FormError, $this->date->errorMessage());
-		}
 		if ($this->createdAt->Required) {
 			if (!$this->createdAt->IsDetailKey && $this->createdAt->FormValue != NULL && $this->createdAt->FormValue == "") {
 				AddMessage($FormError, str_replace("%s", $this->createdAt->caption(), $this->createdAt->RequiredErrorMessage));
@@ -2170,6 +2409,54 @@ class trip_info_grid extends trip_info
 		}
 		if (!CheckDate($this->updatedAt->FormValue)) {
 			AddMessage($FormError, $this->updatedAt->errorMessage());
+		}
+		if ($this->from_date->Required) {
+			if (!$this->from_date->IsDetailKey && $this->from_date->FormValue != NULL && $this->from_date->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->from_date->caption(), $this->from_date->RequiredErrorMessage));
+			}
+		}
+		if (!CheckDate($this->from_date->FormValue)) {
+			AddMessage($FormError, $this->from_date->errorMessage());
+		}
+		if ($this->to_date->Required) {
+			if (!$this->to_date->IsDetailKey && $this->to_date->FormValue != NULL && $this->to_date->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->to_date->caption(), $this->to_date->RequiredErrorMessage));
+			}
+		}
+		if (!CheckDate($this->to_date->FormValue)) {
+			AddMessage($FormError, $this->to_date->errorMessage());
+		}
+		if ($this->labor_fee->Required) {
+			if (!$this->labor_fee->IsDetailKey && $this->labor_fee->FormValue != NULL && $this->labor_fee->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->labor_fee->caption(), $this->labor_fee->RequiredErrorMessage));
+			}
+		}
+		if (!CheckInteger($this->labor_fee->FormValue)) {
+			AddMessage($FormError, $this->labor_fee->errorMessage());
+		}
+		if ($this->available->Required) {
+			if (!$this->available->IsDetailKey && $this->available->FormValue != NULL && $this->available->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->available->caption(), $this->available->RequiredErrorMessage));
+			}
+		}
+		if (!CheckInteger($this->available->FormValue)) {
+			AddMessage($FormError, $this->available->errorMessage());
+		}
+		if ($this->service_type->Required) {
+			if (!$this->service_type->IsDetailKey && $this->service_type->FormValue != NULL && $this->service_type->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->service_type->caption(), $this->service_type->RequiredErrorMessage));
+			}
+		}
+		if (!CheckInteger($this->service_type->FormValue)) {
+			AddMessage($FormError, $this->service_type->errorMessage());
+		}
+		if ($this->max_carrying_weight->Required) {
+			if (!$this->max_carrying_weight->IsDetailKey && $this->max_carrying_weight->FormValue != NULL && $this->max_carrying_weight->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->max_carrying_weight->caption(), $this->max_carrying_weight->RequiredErrorMessage));
+			}
+		}
+		if (!CheckInteger($this->max_carrying_weight->FormValue)) {
+			AddMessage($FormError, $this->max_carrying_weight->errorMessage());
 		}
 
 		// Return validate result
@@ -2305,7 +2592,7 @@ class trip_info_grid extends trip_info
 			$this->to_place->setDbValueDef($rsnew, $this->to_place->CurrentValue, "", $this->to_place->ReadOnly);
 
 			// description
-			$this->description->setDbValueDef($rsnew, $this->description->CurrentValue, "", $this->description->ReadOnly);
+			$this->description->setDbValueDef($rsnew, $this->description->CurrentValue, NULL, $this->description->ReadOnly);
 
 			// user_id
 			$this->user_id->setDbValueDef($rsnew, $this->user_id->CurrentValue, 0, $this->user_id->ReadOnly);
@@ -2313,14 +2600,29 @@ class trip_info_grid extends trip_info
 			// flight_number
 			$this->flight_number->setDbValueDef($rsnew, $this->flight_number->CurrentValue, "", $this->flight_number->ReadOnly);
 
-			// date
-			$this->date->setDbValueDef($rsnew, UnFormatDateTime($this->date->CurrentValue, 0), CurrentDate(), $this->date->ReadOnly);
-
 			// createdAt
 			$this->createdAt->setDbValueDef($rsnew, UnFormatDateTime($this->createdAt->CurrentValue, 0), NULL, $this->createdAt->ReadOnly);
 
 			// updatedAt
 			$this->updatedAt->setDbValueDef($rsnew, UnFormatDateTime($this->updatedAt->CurrentValue, 0), NULL, $this->updatedAt->ReadOnly);
+
+			// from_date
+			$this->from_date->setDbValueDef($rsnew, UnFormatDateTime($this->from_date->CurrentValue, 0), CurrentDate(), $this->from_date->ReadOnly);
+
+			// to_date
+			$this->to_date->setDbValueDef($rsnew, UnFormatDateTime($this->to_date->CurrentValue, 0), NULL, $this->to_date->ReadOnly);
+
+			// labor_fee
+			$this->labor_fee->setDbValueDef($rsnew, $this->labor_fee->CurrentValue, NULL, $this->labor_fee->ReadOnly);
+
+			// available
+			$this->available->setDbValueDef($rsnew, $this->available->CurrentValue, NULL, $this->available->ReadOnly);
+
+			// service_type
+			$this->service_type->setDbValueDef($rsnew, $this->service_type->CurrentValue, 0, $this->service_type->ReadOnly);
+
+			// max_carrying_weight
+			$this->max_carrying_weight->setDbValueDef($rsnew, $this->max_carrying_weight->CurrentValue, NULL, $this->max_carrying_weight->ReadOnly);
 
 			// Call Row Updating event
 			$updateRow = $this->Row_Updating($rsold, $rsnew);
@@ -2384,7 +2686,7 @@ class trip_info_grid extends trip_info
 		$this->to_place->setDbValueDef($rsnew, $this->to_place->CurrentValue, "", FALSE);
 
 		// description
-		$this->description->setDbValueDef($rsnew, $this->description->CurrentValue, "", FALSE);
+		$this->description->setDbValueDef($rsnew, $this->description->CurrentValue, NULL, FALSE);
 
 		// user_id
 		$this->user_id->setDbValueDef($rsnew, $this->user_id->CurrentValue, 0, FALSE);
@@ -2392,14 +2694,29 @@ class trip_info_grid extends trip_info
 		// flight_number
 		$this->flight_number->setDbValueDef($rsnew, $this->flight_number->CurrentValue, "", FALSE);
 
-		// date
-		$this->date->setDbValueDef($rsnew, UnFormatDateTime($this->date->CurrentValue, 0), CurrentDate(), FALSE);
-
 		// createdAt
 		$this->createdAt->setDbValueDef($rsnew, UnFormatDateTime($this->createdAt->CurrentValue, 0), NULL, FALSE);
 
 		// updatedAt
 		$this->updatedAt->setDbValueDef($rsnew, UnFormatDateTime($this->updatedAt->CurrentValue, 0), NULL, FALSE);
+
+		// from_date
+		$this->from_date->setDbValueDef($rsnew, UnFormatDateTime($this->from_date->CurrentValue, 0), CurrentDate(), FALSE);
+
+		// to_date
+		$this->to_date->setDbValueDef($rsnew, UnFormatDateTime($this->to_date->CurrentValue, 0), NULL, FALSE);
+
+		// labor_fee
+		$this->labor_fee->setDbValueDef($rsnew, $this->labor_fee->CurrentValue, NULL, FALSE);
+
+		// available
+		$this->available->setDbValueDef($rsnew, $this->available->CurrentValue, NULL, FALSE);
+
+		// service_type
+		$this->service_type->setDbValueDef($rsnew, $this->service_type->CurrentValue, 0, strval($this->service_type->CurrentValue) == "");
+
+		// max_carrying_weight
+		$this->max_carrying_weight->setDbValueDef($rsnew, $this->max_carrying_weight->CurrentValue, NULL, FALSE);
 
 		// Call Row Inserting event
 		$rs = ($rsold) ? $rsold->fields : NULL;

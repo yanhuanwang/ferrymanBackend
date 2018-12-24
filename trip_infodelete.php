@@ -94,14 +94,29 @@ $trip_info_delete->showMessage();
 <?php if ($trip_info->flight_number->Visible) { // flight_number ?>
 		<th class="<?php echo $trip_info->flight_number->headerCellClass() ?>"><span id="elh_trip_info_flight_number" class="trip_info_flight_number"><?php echo $trip_info->flight_number->caption() ?></span></th>
 <?php } ?>
-<?php if ($trip_info->date->Visible) { // date ?>
-		<th class="<?php echo $trip_info->date->headerCellClass() ?>"><span id="elh_trip_info_date" class="trip_info_date"><?php echo $trip_info->date->caption() ?></span></th>
-<?php } ?>
 <?php if ($trip_info->createdAt->Visible) { // createdAt ?>
 		<th class="<?php echo $trip_info->createdAt->headerCellClass() ?>"><span id="elh_trip_info_createdAt" class="trip_info_createdAt"><?php echo $trip_info->createdAt->caption() ?></span></th>
 <?php } ?>
 <?php if ($trip_info->updatedAt->Visible) { // updatedAt ?>
 		<th class="<?php echo $trip_info->updatedAt->headerCellClass() ?>"><span id="elh_trip_info_updatedAt" class="trip_info_updatedAt"><?php echo $trip_info->updatedAt->caption() ?></span></th>
+<?php } ?>
+<?php if ($trip_info->from_date->Visible) { // from_date ?>
+		<th class="<?php echo $trip_info->from_date->headerCellClass() ?>"><span id="elh_trip_info_from_date" class="trip_info_from_date"><?php echo $trip_info->from_date->caption() ?></span></th>
+<?php } ?>
+<?php if ($trip_info->to_date->Visible) { // to_date ?>
+		<th class="<?php echo $trip_info->to_date->headerCellClass() ?>"><span id="elh_trip_info_to_date" class="trip_info_to_date"><?php echo $trip_info->to_date->caption() ?></span></th>
+<?php } ?>
+<?php if ($trip_info->labor_fee->Visible) { // labor_fee ?>
+		<th class="<?php echo $trip_info->labor_fee->headerCellClass() ?>"><span id="elh_trip_info_labor_fee" class="trip_info_labor_fee"><?php echo $trip_info->labor_fee->caption() ?></span></th>
+<?php } ?>
+<?php if ($trip_info->available->Visible) { // available ?>
+		<th class="<?php echo $trip_info->available->headerCellClass() ?>"><span id="elh_trip_info_available" class="trip_info_available"><?php echo $trip_info->available->caption() ?></span></th>
+<?php } ?>
+<?php if ($trip_info->service_type->Visible) { // service_type ?>
+		<th class="<?php echo $trip_info->service_type->headerCellClass() ?>"><span id="elh_trip_info_service_type" class="trip_info_service_type"><?php echo $trip_info->service_type->caption() ?></span></th>
+<?php } ?>
+<?php if ($trip_info->max_carrying_weight->Visible) { // max_carrying_weight ?>
+		<th class="<?php echo $trip_info->max_carrying_weight->headerCellClass() ?>"><span id="elh_trip_info_max_carrying_weight" class="trip_info_max_carrying_weight"><?php echo $trip_info->max_carrying_weight->caption() ?></span></th>
 <?php } ?>
 	</tr>
 	</thead>
@@ -164,14 +179,6 @@ while (!$trip_info_delete->Recordset->EOF) {
 </span>
 </td>
 <?php } ?>
-<?php if ($trip_info->date->Visible) { // date ?>
-		<td<?php echo $trip_info->date->cellAttributes() ?>>
-<span id="el<?php echo $trip_info_delete->RowCnt ?>_trip_info_date" class="trip_info_date">
-<span<?php echo $trip_info->date->viewAttributes() ?>>
-<?php echo $trip_info->date->getViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
 <?php if ($trip_info->createdAt->Visible) { // createdAt ?>
 		<td<?php echo $trip_info->createdAt->cellAttributes() ?>>
 <span id="el<?php echo $trip_info_delete->RowCnt ?>_trip_info_createdAt" class="trip_info_createdAt">
@@ -185,6 +192,54 @@ while (!$trip_info_delete->Recordset->EOF) {
 <span id="el<?php echo $trip_info_delete->RowCnt ?>_trip_info_updatedAt" class="trip_info_updatedAt">
 <span<?php echo $trip_info->updatedAt->viewAttributes() ?>>
 <?php echo $trip_info->updatedAt->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($trip_info->from_date->Visible) { // from_date ?>
+		<td<?php echo $trip_info->from_date->cellAttributes() ?>>
+<span id="el<?php echo $trip_info_delete->RowCnt ?>_trip_info_from_date" class="trip_info_from_date">
+<span<?php echo $trip_info->from_date->viewAttributes() ?>>
+<?php echo $trip_info->from_date->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($trip_info->to_date->Visible) { // to_date ?>
+		<td<?php echo $trip_info->to_date->cellAttributes() ?>>
+<span id="el<?php echo $trip_info_delete->RowCnt ?>_trip_info_to_date" class="trip_info_to_date">
+<span<?php echo $trip_info->to_date->viewAttributes() ?>>
+<?php echo $trip_info->to_date->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($trip_info->labor_fee->Visible) { // labor_fee ?>
+		<td<?php echo $trip_info->labor_fee->cellAttributes() ?>>
+<span id="el<?php echo $trip_info_delete->RowCnt ?>_trip_info_labor_fee" class="trip_info_labor_fee">
+<span<?php echo $trip_info->labor_fee->viewAttributes() ?>>
+<?php echo $trip_info->labor_fee->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($trip_info->available->Visible) { // available ?>
+		<td<?php echo $trip_info->available->cellAttributes() ?>>
+<span id="el<?php echo $trip_info_delete->RowCnt ?>_trip_info_available" class="trip_info_available">
+<span<?php echo $trip_info->available->viewAttributes() ?>>
+<?php echo $trip_info->available->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($trip_info->service_type->Visible) { // service_type ?>
+		<td<?php echo $trip_info->service_type->cellAttributes() ?>>
+<span id="el<?php echo $trip_info_delete->RowCnt ?>_trip_info_service_type" class="trip_info_service_type">
+<span<?php echo $trip_info->service_type->viewAttributes() ?>>
+<?php echo $trip_info->service_type->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($trip_info->max_carrying_weight->Visible) { // max_carrying_weight ?>
+		<td<?php echo $trip_info->max_carrying_weight->cellAttributes() ?>>
+<span id="el<?php echo $trip_info_delete->RowCnt ?>_trip_info_max_carrying_weight" class="trip_info_max_carrying_weight">
+<span<?php echo $trip_info->max_carrying_weight->viewAttributes() ?>>
+<?php echo $trip_info->max_carrying_weight->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

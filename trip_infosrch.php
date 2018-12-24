@@ -72,15 +72,30 @@ ftrip_infosearch.validate = function(fobj) {
 	elm = this.getElements("x" + infix + "_user_id");
 	if (elm && !ew.checkInteger(elm.value))
 		return this.onError(elm, "<?php echo JsEncode($trip_info->user_id->errorMessage()) ?>");
-	elm = this.getElements("x" + infix + "_date");
-	if (elm && !ew.checkDateDef(elm.value))
-		return this.onError(elm, "<?php echo JsEncode($trip_info->date->errorMessage()) ?>");
 	elm = this.getElements("x" + infix + "_createdAt");
 	if (elm && !ew.checkDateDef(elm.value))
 		return this.onError(elm, "<?php echo JsEncode($trip_info->createdAt->errorMessage()) ?>");
 	elm = this.getElements("x" + infix + "_updatedAt");
 	if (elm && !ew.checkDateDef(elm.value))
 		return this.onError(elm, "<?php echo JsEncode($trip_info->updatedAt->errorMessage()) ?>");
+	elm = this.getElements("x" + infix + "_from_date");
+	if (elm && !ew.checkDateDef(elm.value))
+		return this.onError(elm, "<?php echo JsEncode($trip_info->from_date->errorMessage()) ?>");
+	elm = this.getElements("x" + infix + "_to_date");
+	if (elm && !ew.checkDateDef(elm.value))
+		return this.onError(elm, "<?php echo JsEncode($trip_info->to_date->errorMessage()) ?>");
+	elm = this.getElements("x" + infix + "_labor_fee");
+	if (elm && !ew.checkInteger(elm.value))
+		return this.onError(elm, "<?php echo JsEncode($trip_info->labor_fee->errorMessage()) ?>");
+	elm = this.getElements("x" + infix + "_available");
+	if (elm && !ew.checkInteger(elm.value))
+		return this.onError(elm, "<?php echo JsEncode($trip_info->available->errorMessage()) ?>");
+	elm = this.getElements("x" + infix + "_service_type");
+	if (elm && !ew.checkInteger(elm.value))
+		return this.onError(elm, "<?php echo JsEncode($trip_info->service_type->errorMessage()) ?>");
+	elm = this.getElements("x" + infix + "_max_carrying_weight");
+	if (elm && !ew.checkInteger(elm.value))
+		return this.onError(elm, "<?php echo JsEncode($trip_info->max_carrying_weight->errorMessage()) ?>");
 
 	// Fire Form_CustomValidate event
 	if (!this.Form_CustomValidate(fobj))
@@ -187,23 +202,6 @@ ftrip_infosearch.createAutoSuggest({"id":"x_user_id","forceSelect":false});
 		</div></div>
 	</div>
 <?php } ?>
-<?php if ($trip_info->date->Visible) { // date ?>
-	<div id="r_date" class="form-group row">
-		<label for="x_date" class="<?php echo $trip_info_search->LeftColumnClass ?>"><span id="elh_trip_info_date"><?php echo $trip_info->date->caption() ?></span>
-		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_date" id="z_date" value="="></span>
-		</label>
-		<div class="<?php echo $trip_info_search->RightColumnClass ?>"><div<?php echo $trip_info->date->cellAttributes() ?>>
-			<span id="el_trip_info_date">
-<input type="text" data-table="trip_info" data-field="x_date" name="x_date" id="x_date" placeholder="<?php echo HtmlEncode($trip_info->date->getPlaceHolder()) ?>" value="<?php echo $trip_info->date->EditValue ?>"<?php echo $trip_info->date->editAttributes() ?>>
-<?php if (!$trip_info->date->ReadOnly && !$trip_info->date->Disabled && !isset($trip_info->date->EditAttrs["readonly"]) && !isset($trip_info->date->EditAttrs["disabled"])) { ?>
-<script>
-ew.createDateTimePicker("ftrip_infosearch", "x_date", {"ignoreReadonly":true,"useCurrent":false,"format":0});
-</script>
-<?php } ?>
-</span>
-		</div></div>
-	</div>
-<?php } ?>
 <?php if ($trip_info->createdAt->Visible) { // createdAt ?>
 	<div id="r_createdAt" class="form-group row">
 		<label for="x_createdAt" class="<?php echo $trip_info_search->LeftColumnClass ?>"><span id="elh_trip_info_createdAt"><?php echo $trip_info->createdAt->caption() ?></span>
@@ -234,6 +232,88 @@ ew.createDateTimePicker("ftrip_infosearch", "x_createdAt", {"ignoreReadonly":tru
 ew.createDateTimePicker("ftrip_infosearch", "x_updatedAt", {"ignoreReadonly":true,"useCurrent":false,"format":0});
 </script>
 <?php } ?>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($trip_info->from_date->Visible) { // from_date ?>
+	<div id="r_from_date" class="form-group row">
+		<label for="x_from_date" class="<?php echo $trip_info_search->LeftColumnClass ?>"><span id="elh_trip_info_from_date"><?php echo $trip_info->from_date->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_from_date" id="z_from_date" value="="></span>
+		</label>
+		<div class="<?php echo $trip_info_search->RightColumnClass ?>"><div<?php echo $trip_info->from_date->cellAttributes() ?>>
+			<span id="el_trip_info_from_date">
+<input type="text" data-table="trip_info" data-field="x_from_date" name="x_from_date" id="x_from_date" placeholder="<?php echo HtmlEncode($trip_info->from_date->getPlaceHolder()) ?>" value="<?php echo $trip_info->from_date->EditValue ?>"<?php echo $trip_info->from_date->editAttributes() ?>>
+<?php if (!$trip_info->from_date->ReadOnly && !$trip_info->from_date->Disabled && !isset($trip_info->from_date->EditAttrs["readonly"]) && !isset($trip_info->from_date->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("ftrip_infosearch", "x_from_date", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($trip_info->to_date->Visible) { // to_date ?>
+	<div id="r_to_date" class="form-group row">
+		<label for="x_to_date" class="<?php echo $trip_info_search->LeftColumnClass ?>"><span id="elh_trip_info_to_date"><?php echo $trip_info->to_date->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_to_date" id="z_to_date" value="="></span>
+		</label>
+		<div class="<?php echo $trip_info_search->RightColumnClass ?>"><div<?php echo $trip_info->to_date->cellAttributes() ?>>
+			<span id="el_trip_info_to_date">
+<input type="text" data-table="trip_info" data-field="x_to_date" name="x_to_date" id="x_to_date" placeholder="<?php echo HtmlEncode($trip_info->to_date->getPlaceHolder()) ?>" value="<?php echo $trip_info->to_date->EditValue ?>"<?php echo $trip_info->to_date->editAttributes() ?>>
+<?php if (!$trip_info->to_date->ReadOnly && !$trip_info->to_date->Disabled && !isset($trip_info->to_date->EditAttrs["readonly"]) && !isset($trip_info->to_date->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("ftrip_infosearch", "x_to_date", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($trip_info->labor_fee->Visible) { // labor_fee ?>
+	<div id="r_labor_fee" class="form-group row">
+		<label for="x_labor_fee" class="<?php echo $trip_info_search->LeftColumnClass ?>"><span id="elh_trip_info_labor_fee"><?php echo $trip_info->labor_fee->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_labor_fee" id="z_labor_fee" value="="></span>
+		</label>
+		<div class="<?php echo $trip_info_search->RightColumnClass ?>"><div<?php echo $trip_info->labor_fee->cellAttributes() ?>>
+			<span id="el_trip_info_labor_fee">
+<input type="text" data-table="trip_info" data-field="x_labor_fee" name="x_labor_fee" id="x_labor_fee" size="30" placeholder="<?php echo HtmlEncode($trip_info->labor_fee->getPlaceHolder()) ?>" value="<?php echo $trip_info->labor_fee->EditValue ?>"<?php echo $trip_info->labor_fee->editAttributes() ?>>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($trip_info->available->Visible) { // available ?>
+	<div id="r_available" class="form-group row">
+		<label for="x_available" class="<?php echo $trip_info_search->LeftColumnClass ?>"><span id="elh_trip_info_available"><?php echo $trip_info->available->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_available" id="z_available" value="="></span>
+		</label>
+		<div class="<?php echo $trip_info_search->RightColumnClass ?>"><div<?php echo $trip_info->available->cellAttributes() ?>>
+			<span id="el_trip_info_available">
+<input type="text" data-table="trip_info" data-field="x_available" name="x_available" id="x_available" size="30" placeholder="<?php echo HtmlEncode($trip_info->available->getPlaceHolder()) ?>" value="<?php echo $trip_info->available->EditValue ?>"<?php echo $trip_info->available->editAttributes() ?>>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($trip_info->service_type->Visible) { // service_type ?>
+	<div id="r_service_type" class="form-group row">
+		<label for="x_service_type" class="<?php echo $trip_info_search->LeftColumnClass ?>"><span id="elh_trip_info_service_type"><?php echo $trip_info->service_type->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_service_type" id="z_service_type" value="="></span>
+		</label>
+		<div class="<?php echo $trip_info_search->RightColumnClass ?>"><div<?php echo $trip_info->service_type->cellAttributes() ?>>
+			<span id="el_trip_info_service_type">
+<input type="text" data-table="trip_info" data-field="x_service_type" name="x_service_type" id="x_service_type" size="30" placeholder="<?php echo HtmlEncode($trip_info->service_type->getPlaceHolder()) ?>" value="<?php echo $trip_info->service_type->EditValue ?>"<?php echo $trip_info->service_type->editAttributes() ?>>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($trip_info->max_carrying_weight->Visible) { // max_carrying_weight ?>
+	<div id="r_max_carrying_weight" class="form-group row">
+		<label for="x_max_carrying_weight" class="<?php echo $trip_info_search->LeftColumnClass ?>"><span id="elh_trip_info_max_carrying_weight"><?php echo $trip_info->max_carrying_weight->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_max_carrying_weight" id="z_max_carrying_weight" value="="></span>
+		</label>
+		<div class="<?php echo $trip_info_search->RightColumnClass ?>"><div<?php echo $trip_info->max_carrying_weight->cellAttributes() ?>>
+			<span id="el_trip_info_max_carrying_weight">
+<input type="text" data-table="trip_info" data-field="x_max_carrying_weight" name="x_max_carrying_weight" id="x_max_carrying_weight" size="30" placeholder="<?php echo HtmlEncode($trip_info->max_carrying_weight->getPlaceHolder()) ?>" value="<?php echo $trip_info->max_carrying_weight->EditValue ?>"<?php echo $trip_info->max_carrying_weight->editAttributes() ?>>
 </span>
 		</div></div>
 	</div>

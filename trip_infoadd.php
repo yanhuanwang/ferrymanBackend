@@ -82,14 +82,6 @@ ftrip_infoadd.validate = function() {
 			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
 				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $trip_info->flight_number->caption(), $trip_info->flight_number->RequiredErrorMessage)) ?>");
 		<?php } ?>
-		<?php if ($trip_info_add->date->Required) { ?>
-			elm = this.getElements("x" + infix + "_date");
-			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
-				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $trip_info->date->caption(), $trip_info->date->RequiredErrorMessage)) ?>");
-		<?php } ?>
-			elm = this.getElements("x" + infix + "_date");
-			if (elm && !ew.checkDateDef(elm.value))
-				return this.onError(elm, "<?php echo JsEncode($trip_info->date->errorMessage()) ?>");
 		<?php if ($trip_info_add->createdAt->Required) { ?>
 			elm = this.getElements("x" + infix + "_createdAt");
 			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
@@ -106,6 +98,54 @@ ftrip_infoadd.validate = function() {
 			elm = this.getElements("x" + infix + "_updatedAt");
 			if (elm && !ew.checkDateDef(elm.value))
 				return this.onError(elm, "<?php echo JsEncode($trip_info->updatedAt->errorMessage()) ?>");
+		<?php if ($trip_info_add->from_date->Required) { ?>
+			elm = this.getElements("x" + infix + "_from_date");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $trip_info->from_date->caption(), $trip_info->from_date->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_from_date");
+			if (elm && !ew.checkDateDef(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($trip_info->from_date->errorMessage()) ?>");
+		<?php if ($trip_info_add->to_date->Required) { ?>
+			elm = this.getElements("x" + infix + "_to_date");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $trip_info->to_date->caption(), $trip_info->to_date->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_to_date");
+			if (elm && !ew.checkDateDef(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($trip_info->to_date->errorMessage()) ?>");
+		<?php if ($trip_info_add->labor_fee->Required) { ?>
+			elm = this.getElements("x" + infix + "_labor_fee");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $trip_info->labor_fee->caption(), $trip_info->labor_fee->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_labor_fee");
+			if (elm && !ew.checkInteger(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($trip_info->labor_fee->errorMessage()) ?>");
+		<?php if ($trip_info_add->available->Required) { ?>
+			elm = this.getElements("x" + infix + "_available");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $trip_info->available->caption(), $trip_info->available->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_available");
+			if (elm && !ew.checkInteger(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($trip_info->available->errorMessage()) ?>");
+		<?php if ($trip_info_add->service_type->Required) { ?>
+			elm = this.getElements("x" + infix + "_service_type");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $trip_info->service_type->caption(), $trip_info->service_type->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_service_type");
+			if (elm && !ew.checkInteger(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($trip_info->service_type->errorMessage()) ?>");
+		<?php if ($trip_info_add->max_carrying_weight->Required) { ?>
+			elm = this.getElements("x" + infix + "_max_carrying_weight");
+			if (elm && !ew.isHidden(elm) && !ew.hasValue(elm))
+				return this.onError(elm, "<?php echo JsEncode(str_replace("%s", $trip_info->max_carrying_weight->caption(), $trip_info->max_carrying_weight->RequiredErrorMessage)) ?>");
+		<?php } ?>
+			elm = this.getElements("x" + infix + "_max_carrying_weight");
+			if (elm && !ew.checkInteger(elm.value))
+				return this.onError(elm, "<?php echo JsEncode($trip_info->max_carrying_weight->errorMessage()) ?>");
 
 			// Fire Form_CustomValidate event
 			if (!this.Form_CustomValidate(fobj))
@@ -229,21 +269,6 @@ ftrip_infoadd.createAutoSuggest({"id":"x_user_id","forceSelect":false});
 <?php echo $trip_info->flight_number->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
-<?php if ($trip_info->date->Visible) { // date ?>
-	<div id="r_date" class="form-group row">
-		<label id="elh_trip_info_date" for="x_date" class="<?php echo $trip_info_add->LeftColumnClass ?>"><?php echo $trip_info->date->caption() ?><?php echo ($trip_info->date->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
-		<div class="<?php echo $trip_info_add->RightColumnClass ?>"><div<?php echo $trip_info->date->cellAttributes() ?>>
-<span id="el_trip_info_date">
-<input type="text" data-table="trip_info" data-field="x_date" name="x_date" id="x_date" placeholder="<?php echo HtmlEncode($trip_info->date->getPlaceHolder()) ?>" value="<?php echo $trip_info->date->EditValue ?>"<?php echo $trip_info->date->editAttributes() ?>>
-<?php if (!$trip_info->date->ReadOnly && !$trip_info->date->Disabled && !isset($trip_info->date->EditAttrs["readonly"]) && !isset($trip_info->date->EditAttrs["disabled"])) { ?>
-<script>
-ew.createDateTimePicker("ftrip_infoadd", "x_date", {"ignoreReadonly":true,"useCurrent":false,"format":0});
-</script>
-<?php } ?>
-</span>
-<?php echo $trip_info->date->CustomMsg ?></div></div>
-	</div>
-<?php } ?>
 <?php if ($trip_info->createdAt->Visible) { // createdAt ?>
 	<div id="r_createdAt" class="form-group row">
 		<label id="elh_trip_info_createdAt" for="x_createdAt" class="<?php echo $trip_info_add->LeftColumnClass ?>"><?php echo $trip_info->createdAt->caption() ?><?php echo ($trip_info->createdAt->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
@@ -272,6 +297,76 @@ ew.createDateTimePicker("ftrip_infoadd", "x_updatedAt", {"ignoreReadonly":true,"
 <?php } ?>
 </span>
 <?php echo $trip_info->updatedAt->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($trip_info->from_date->Visible) { // from_date ?>
+	<div id="r_from_date" class="form-group row">
+		<label id="elh_trip_info_from_date" for="x_from_date" class="<?php echo $trip_info_add->LeftColumnClass ?>"><?php echo $trip_info->from_date->caption() ?><?php echo ($trip_info->from_date->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
+		<div class="<?php echo $trip_info_add->RightColumnClass ?>"><div<?php echo $trip_info->from_date->cellAttributes() ?>>
+<span id="el_trip_info_from_date">
+<input type="text" data-table="trip_info" data-field="x_from_date" name="x_from_date" id="x_from_date" placeholder="<?php echo HtmlEncode($trip_info->from_date->getPlaceHolder()) ?>" value="<?php echo $trip_info->from_date->EditValue ?>"<?php echo $trip_info->from_date->editAttributes() ?>>
+<?php if (!$trip_info->from_date->ReadOnly && !$trip_info->from_date->Disabled && !isset($trip_info->from_date->EditAttrs["readonly"]) && !isset($trip_info->from_date->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("ftrip_infoadd", "x_from_date", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<?php echo $trip_info->from_date->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($trip_info->to_date->Visible) { // to_date ?>
+	<div id="r_to_date" class="form-group row">
+		<label id="elh_trip_info_to_date" for="x_to_date" class="<?php echo $trip_info_add->LeftColumnClass ?>"><?php echo $trip_info->to_date->caption() ?><?php echo ($trip_info->to_date->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
+		<div class="<?php echo $trip_info_add->RightColumnClass ?>"><div<?php echo $trip_info->to_date->cellAttributes() ?>>
+<span id="el_trip_info_to_date">
+<input type="text" data-table="trip_info" data-field="x_to_date" name="x_to_date" id="x_to_date" placeholder="<?php echo HtmlEncode($trip_info->to_date->getPlaceHolder()) ?>" value="<?php echo $trip_info->to_date->EditValue ?>"<?php echo $trip_info->to_date->editAttributes() ?>>
+<?php if (!$trip_info->to_date->ReadOnly && !$trip_info->to_date->Disabled && !isset($trip_info->to_date->EditAttrs["readonly"]) && !isset($trip_info->to_date->EditAttrs["disabled"])) { ?>
+<script>
+ew.createDateTimePicker("ftrip_infoadd", "x_to_date", {"ignoreReadonly":true,"useCurrent":false,"format":0});
+</script>
+<?php } ?>
+</span>
+<?php echo $trip_info->to_date->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($trip_info->labor_fee->Visible) { // labor_fee ?>
+	<div id="r_labor_fee" class="form-group row">
+		<label id="elh_trip_info_labor_fee" for="x_labor_fee" class="<?php echo $trip_info_add->LeftColumnClass ?>"><?php echo $trip_info->labor_fee->caption() ?><?php echo ($trip_info->labor_fee->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
+		<div class="<?php echo $trip_info_add->RightColumnClass ?>"><div<?php echo $trip_info->labor_fee->cellAttributes() ?>>
+<span id="el_trip_info_labor_fee">
+<input type="text" data-table="trip_info" data-field="x_labor_fee" name="x_labor_fee" id="x_labor_fee" size="30" placeholder="<?php echo HtmlEncode($trip_info->labor_fee->getPlaceHolder()) ?>" value="<?php echo $trip_info->labor_fee->EditValue ?>"<?php echo $trip_info->labor_fee->editAttributes() ?>>
+</span>
+<?php echo $trip_info->labor_fee->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($trip_info->available->Visible) { // available ?>
+	<div id="r_available" class="form-group row">
+		<label id="elh_trip_info_available" for="x_available" class="<?php echo $trip_info_add->LeftColumnClass ?>"><?php echo $trip_info->available->caption() ?><?php echo ($trip_info->available->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
+		<div class="<?php echo $trip_info_add->RightColumnClass ?>"><div<?php echo $trip_info->available->cellAttributes() ?>>
+<span id="el_trip_info_available">
+<input type="text" data-table="trip_info" data-field="x_available" name="x_available" id="x_available" size="30" placeholder="<?php echo HtmlEncode($trip_info->available->getPlaceHolder()) ?>" value="<?php echo $trip_info->available->EditValue ?>"<?php echo $trip_info->available->editAttributes() ?>>
+</span>
+<?php echo $trip_info->available->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($trip_info->service_type->Visible) { // service_type ?>
+	<div id="r_service_type" class="form-group row">
+		<label id="elh_trip_info_service_type" for="x_service_type" class="<?php echo $trip_info_add->LeftColumnClass ?>"><?php echo $trip_info->service_type->caption() ?><?php echo ($trip_info->service_type->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
+		<div class="<?php echo $trip_info_add->RightColumnClass ?>"><div<?php echo $trip_info->service_type->cellAttributes() ?>>
+<span id="el_trip_info_service_type">
+<input type="text" data-table="trip_info" data-field="x_service_type" name="x_service_type" id="x_service_type" size="30" placeholder="<?php echo HtmlEncode($trip_info->service_type->getPlaceHolder()) ?>" value="<?php echo $trip_info->service_type->EditValue ?>"<?php echo $trip_info->service_type->editAttributes() ?>>
+</span>
+<?php echo $trip_info->service_type->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($trip_info->max_carrying_weight->Visible) { // max_carrying_weight ?>
+	<div id="r_max_carrying_weight" class="form-group row">
+		<label id="elh_trip_info_max_carrying_weight" for="x_max_carrying_weight" class="<?php echo $trip_info_add->LeftColumnClass ?>"><?php echo $trip_info->max_carrying_weight->caption() ?><?php echo ($trip_info->max_carrying_weight->Required) ? $Language->Phrase("FieldRequiredIndicator") : "" ?></label>
+		<div class="<?php echo $trip_info_add->RightColumnClass ?>"><div<?php echo $trip_info->max_carrying_weight->cellAttributes() ?>>
+<span id="el_trip_info_max_carrying_weight">
+<input type="text" data-table="trip_info" data-field="x_max_carrying_weight" name="x_max_carrying_weight" id="x_max_carrying_weight" size="30" placeholder="<?php echo HtmlEncode($trip_info->max_carrying_weight->getPlaceHolder()) ?>" value="<?php echo $trip_info->max_carrying_weight->EditValue ?>"<?php echo $trip_info->max_carrying_weight->editAttributes() ?>>
+</span>
+<?php echo $trip_info->max_carrying_weight->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
 </div><!-- /page* -->

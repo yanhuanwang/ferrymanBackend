@@ -34,7 +34,15 @@ class request_trip extends DbTable
 	public $to_date;
 	public $createdAt;
 	public $updatedAt;
-	public $category;
+	public $labor_fee;
+	public $applicable;
+	public $service_type;
+	public $goods_category;
+	public $goods_weight;
+	public $image1_id;
+	public $image2_id;
+	public $image3_id;
+	public $image4_id;
 
 	// Constructor
 	public function __construct()
@@ -132,13 +140,61 @@ class request_trip extends DbTable
 		$this->updatedAt->DefaultErrorMessage = str_replace("%s", $GLOBALS["DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
 		$this->fields['updatedAt'] = &$this->updatedAt;
 
-		// category
-		$this->category = new DbField('request_trip', 'request_trip', 'x_category', 'category', '`category`', '`category`', 3, -1, FALSE, '`category`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->category->Nullable = FALSE; // NOT NULL field
-		$this->category->Required = TRUE; // Required field
-		$this->category->Sortable = TRUE; // Allow sort
-		$this->category->DefaultErrorMessage = $Language->Phrase("IncorrectInteger");
-		$this->fields['category'] = &$this->category;
+		// labor_fee
+		$this->labor_fee = new DbField('request_trip', 'request_trip', 'x_labor_fee', 'labor_fee', '`labor_fee`', '`labor_fee`', 3, -1, FALSE, '`labor_fee`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->labor_fee->Sortable = TRUE; // Allow sort
+		$this->labor_fee->DefaultErrorMessage = $Language->Phrase("IncorrectInteger");
+		$this->fields['labor_fee'] = &$this->labor_fee;
+
+		// applicable
+		$this->applicable = new DbField('request_trip', 'request_trip', 'x_applicable', 'applicable', '`applicable`', '`applicable`', 3, -1, FALSE, '`applicable`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->applicable->Nullable = FALSE; // NOT NULL field
+		$this->applicable->Sortable = TRUE; // Allow sort
+		$this->applicable->DefaultErrorMessage = $Language->Phrase("IncorrectInteger");
+		$this->fields['applicable'] = &$this->applicable;
+
+		// service_type
+		$this->service_type = new DbField('request_trip', 'request_trip', 'x_service_type', 'service_type', '`service_type`', '`service_type`', 3, -1, FALSE, '`service_type`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->service_type->Nullable = FALSE; // NOT NULL field
+		$this->service_type->Sortable = TRUE; // Allow sort
+		$this->service_type->DefaultErrorMessage = $Language->Phrase("IncorrectInteger");
+		$this->fields['service_type'] = &$this->service_type;
+
+		// goods_category
+		$this->goods_category = new DbField('request_trip', 'request_trip', 'x_goods_category', 'goods_category', '`goods_category`', '`goods_category`', 3, -1, FALSE, '`goods_category`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->goods_category->Sortable = TRUE; // Allow sort
+		$this->goods_category->DefaultErrorMessage = $Language->Phrase("IncorrectInteger");
+		$this->fields['goods_category'] = &$this->goods_category;
+
+		// goods_weight
+		$this->goods_weight = new DbField('request_trip', 'request_trip', 'x_goods_weight', 'goods_weight', '`goods_weight`', '`goods_weight`', 3, -1, FALSE, '`goods_weight`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->goods_weight->Sortable = TRUE; // Allow sort
+		$this->goods_weight->DefaultErrorMessage = $Language->Phrase("IncorrectInteger");
+		$this->fields['goods_weight'] = &$this->goods_weight;
+
+		// image1_id
+		$this->image1_id = new DbField('request_trip', 'request_trip', 'x_image1_id', 'image1_id', '`image1_id`', '`image1_id`', 3, -1, FALSE, '`image1_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->image1_id->Sortable = TRUE; // Allow sort
+		$this->image1_id->DefaultErrorMessage = $Language->Phrase("IncorrectInteger");
+		$this->fields['image1_id'] = &$this->image1_id;
+
+		// image2_id
+		$this->image2_id = new DbField('request_trip', 'request_trip', 'x_image2_id', 'image2_id', '`image2_id`', '`image2_id`', 3, -1, FALSE, '`image2_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->image2_id->Sortable = TRUE; // Allow sort
+		$this->image2_id->DefaultErrorMessage = $Language->Phrase("IncorrectInteger");
+		$this->fields['image2_id'] = &$this->image2_id;
+
+		// image3_id
+		$this->image3_id = new DbField('request_trip', 'request_trip', 'x_image3_id', 'image3_id', '`image3_id`', '`image3_id`', 3, -1, FALSE, '`image3_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->image3_id->Sortable = TRUE; // Allow sort
+		$this->image3_id->DefaultErrorMessage = $Language->Phrase("IncorrectInteger");
+		$this->fields['image3_id'] = &$this->image3_id;
+
+		// image4_id
+		$this->image4_id = new DbField('request_trip', 'request_trip', 'x_image4_id', 'image4_id', '`image4_id`', '`image4_id`', 3, -1, FALSE, '`image4_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->image4_id->Sortable = TRUE; // Allow sort
+		$this->image4_id->DefaultErrorMessage = $Language->Phrase("IncorrectInteger");
+		$this->fields['image4_id'] = &$this->image4_id;
 	}
 
 	// Field Visibility
@@ -490,7 +546,15 @@ class request_trip extends DbTable
 		$this->to_date->DbValue = $row['to_date'];
 		$this->createdAt->DbValue = $row['createdAt'];
 		$this->updatedAt->DbValue = $row['updatedAt'];
-		$this->category->DbValue = $row['category'];
+		$this->labor_fee->DbValue = $row['labor_fee'];
+		$this->applicable->DbValue = $row['applicable'];
+		$this->service_type->DbValue = $row['service_type'];
+		$this->goods_category->DbValue = $row['goods_category'];
+		$this->goods_weight->DbValue = $row['goods_weight'];
+		$this->image1_id->DbValue = $row['image1_id'];
+		$this->image2_id->DbValue = $row['image2_id'];
+		$this->image3_id->DbValue = $row['image3_id'];
+		$this->image4_id->DbValue = $row['image4_id'];
 	}
 
 	// Delete uploaded files
@@ -725,7 +789,15 @@ class request_trip extends DbTable
 		$this->to_date->setDbValue($rs->fields('to_date'));
 		$this->createdAt->setDbValue($rs->fields('createdAt'));
 		$this->updatedAt->setDbValue($rs->fields('updatedAt'));
-		$this->category->setDbValue($rs->fields('category'));
+		$this->labor_fee->setDbValue($rs->fields('labor_fee'));
+		$this->applicable->setDbValue($rs->fields('applicable'));
+		$this->service_type->setDbValue($rs->fields('service_type'));
+		$this->goods_category->setDbValue($rs->fields('goods_category'));
+		$this->goods_weight->setDbValue($rs->fields('goods_weight'));
+		$this->image1_id->setDbValue($rs->fields('image1_id'));
+		$this->image2_id->setDbValue($rs->fields('image2_id'));
+		$this->image3_id->setDbValue($rs->fields('image3_id'));
+		$this->image4_id->setDbValue($rs->fields('image4_id'));
 	}
 
 	// Render list row values
@@ -746,7 +818,15 @@ class request_trip extends DbTable
 		// to_date
 		// createdAt
 		// updatedAt
-		// category
+		// labor_fee
+		// applicable
+		// service_type
+		// goods_category
+		// goods_weight
+		// image1_id
+		// image2_id
+		// image3_id
+		// image4_id
 		// id
 
 		$this->id->ViewValue = $this->id->CurrentValue;
@@ -789,10 +869,50 @@ class request_trip extends DbTable
 		$this->updatedAt->ViewValue = FormatDateTime($this->updatedAt->ViewValue, 0);
 		$this->updatedAt->ViewCustomAttributes = "";
 
-		// category
-		$this->category->ViewValue = $this->category->CurrentValue;
-		$this->category->ViewValue = FormatNumber($this->category->ViewValue, 0, -2, -2, -2);
-		$this->category->ViewCustomAttributes = "";
+		// labor_fee
+		$this->labor_fee->ViewValue = $this->labor_fee->CurrentValue;
+		$this->labor_fee->ViewValue = FormatNumber($this->labor_fee->ViewValue, 0, -2, -2, -2);
+		$this->labor_fee->ViewCustomAttributes = "";
+
+		// applicable
+		$this->applicable->ViewValue = $this->applicable->CurrentValue;
+		$this->applicable->ViewValue = FormatNumber($this->applicable->ViewValue, 0, -2, -2, -2);
+		$this->applicable->ViewCustomAttributes = "";
+
+		// service_type
+		$this->service_type->ViewValue = $this->service_type->CurrentValue;
+		$this->service_type->ViewValue = FormatNumber($this->service_type->ViewValue, 0, -2, -2, -2);
+		$this->service_type->ViewCustomAttributes = "";
+
+		// goods_category
+		$this->goods_category->ViewValue = $this->goods_category->CurrentValue;
+		$this->goods_category->ViewValue = FormatNumber($this->goods_category->ViewValue, 0, -2, -2, -2);
+		$this->goods_category->ViewCustomAttributes = "";
+
+		// goods_weight
+		$this->goods_weight->ViewValue = $this->goods_weight->CurrentValue;
+		$this->goods_weight->ViewValue = FormatNumber($this->goods_weight->ViewValue, 0, -2, -2, -2);
+		$this->goods_weight->ViewCustomAttributes = "";
+
+		// image1_id
+		$this->image1_id->ViewValue = $this->image1_id->CurrentValue;
+		$this->image1_id->ViewValue = FormatNumber($this->image1_id->ViewValue, 0, -2, -2, -2);
+		$this->image1_id->ViewCustomAttributes = "";
+
+		// image2_id
+		$this->image2_id->ViewValue = $this->image2_id->CurrentValue;
+		$this->image2_id->ViewValue = FormatNumber($this->image2_id->ViewValue, 0, -2, -2, -2);
+		$this->image2_id->ViewCustomAttributes = "";
+
+		// image3_id
+		$this->image3_id->ViewValue = $this->image3_id->CurrentValue;
+		$this->image3_id->ViewValue = FormatNumber($this->image3_id->ViewValue, 0, -2, -2, -2);
+		$this->image3_id->ViewCustomAttributes = "";
+
+		// image4_id
+		$this->image4_id->ViewValue = $this->image4_id->CurrentValue;
+		$this->image4_id->ViewValue = FormatNumber($this->image4_id->ViewValue, 0, -2, -2, -2);
+		$this->image4_id->ViewCustomAttributes = "";
 
 		// id
 		$this->id->LinkCustomAttributes = "";
@@ -839,10 +959,50 @@ class request_trip extends DbTable
 		$this->updatedAt->HrefValue = "";
 		$this->updatedAt->TooltipValue = "";
 
-		// category
-		$this->category->LinkCustomAttributes = "";
-		$this->category->HrefValue = "";
-		$this->category->TooltipValue = "";
+		// labor_fee
+		$this->labor_fee->LinkCustomAttributes = "";
+		$this->labor_fee->HrefValue = "";
+		$this->labor_fee->TooltipValue = "";
+
+		// applicable
+		$this->applicable->LinkCustomAttributes = "";
+		$this->applicable->HrefValue = "";
+		$this->applicable->TooltipValue = "";
+
+		// service_type
+		$this->service_type->LinkCustomAttributes = "";
+		$this->service_type->HrefValue = "";
+		$this->service_type->TooltipValue = "";
+
+		// goods_category
+		$this->goods_category->LinkCustomAttributes = "";
+		$this->goods_category->HrefValue = "";
+		$this->goods_category->TooltipValue = "";
+
+		// goods_weight
+		$this->goods_weight->LinkCustomAttributes = "";
+		$this->goods_weight->HrefValue = "";
+		$this->goods_weight->TooltipValue = "";
+
+		// image1_id
+		$this->image1_id->LinkCustomAttributes = "";
+		$this->image1_id->HrefValue = "";
+		$this->image1_id->TooltipValue = "";
+
+		// image2_id
+		$this->image2_id->LinkCustomAttributes = "";
+		$this->image2_id->HrefValue = "";
+		$this->image2_id->TooltipValue = "";
+
+		// image3_id
+		$this->image3_id->LinkCustomAttributes = "";
+		$this->image3_id->HrefValue = "";
+		$this->image3_id->TooltipValue = "";
+
+		// image4_id
+		$this->image4_id->LinkCustomAttributes = "";
+		$this->image4_id->HrefValue = "";
+		$this->image4_id->TooltipValue = "";
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -913,11 +1073,59 @@ class request_trip extends DbTable
 		$this->updatedAt->EditValue = FormatDateTime($this->updatedAt->CurrentValue, 8);
 		$this->updatedAt->PlaceHolder = RemoveHtml($this->updatedAt->caption());
 
-		// category
-		$this->category->EditAttrs["class"] = "form-control";
-		$this->category->EditCustomAttributes = "";
-		$this->category->EditValue = $this->category->CurrentValue;
-		$this->category->PlaceHolder = RemoveHtml($this->category->caption());
+		// labor_fee
+		$this->labor_fee->EditAttrs["class"] = "form-control";
+		$this->labor_fee->EditCustomAttributes = "";
+		$this->labor_fee->EditValue = $this->labor_fee->CurrentValue;
+		$this->labor_fee->PlaceHolder = RemoveHtml($this->labor_fee->caption());
+
+		// applicable
+		$this->applicable->EditAttrs["class"] = "form-control";
+		$this->applicable->EditCustomAttributes = "";
+		$this->applicable->EditValue = $this->applicable->CurrentValue;
+		$this->applicable->PlaceHolder = RemoveHtml($this->applicable->caption());
+
+		// service_type
+		$this->service_type->EditAttrs["class"] = "form-control";
+		$this->service_type->EditCustomAttributes = "";
+		$this->service_type->EditValue = $this->service_type->CurrentValue;
+		$this->service_type->PlaceHolder = RemoveHtml($this->service_type->caption());
+
+		// goods_category
+		$this->goods_category->EditAttrs["class"] = "form-control";
+		$this->goods_category->EditCustomAttributes = "";
+		$this->goods_category->EditValue = $this->goods_category->CurrentValue;
+		$this->goods_category->PlaceHolder = RemoveHtml($this->goods_category->caption());
+
+		// goods_weight
+		$this->goods_weight->EditAttrs["class"] = "form-control";
+		$this->goods_weight->EditCustomAttributes = "";
+		$this->goods_weight->EditValue = $this->goods_weight->CurrentValue;
+		$this->goods_weight->PlaceHolder = RemoveHtml($this->goods_weight->caption());
+
+		// image1_id
+		$this->image1_id->EditAttrs["class"] = "form-control";
+		$this->image1_id->EditCustomAttributes = "";
+		$this->image1_id->EditValue = $this->image1_id->CurrentValue;
+		$this->image1_id->PlaceHolder = RemoveHtml($this->image1_id->caption());
+
+		// image2_id
+		$this->image2_id->EditAttrs["class"] = "form-control";
+		$this->image2_id->EditCustomAttributes = "";
+		$this->image2_id->EditValue = $this->image2_id->CurrentValue;
+		$this->image2_id->PlaceHolder = RemoveHtml($this->image2_id->caption());
+
+		// image3_id
+		$this->image3_id->EditAttrs["class"] = "form-control";
+		$this->image3_id->EditCustomAttributes = "";
+		$this->image3_id->EditValue = $this->image3_id->CurrentValue;
+		$this->image3_id->PlaceHolder = RemoveHtml($this->image3_id->caption());
+
+		// image4_id
+		$this->image4_id->EditAttrs["class"] = "form-control";
+		$this->image4_id->EditCustomAttributes = "";
+		$this->image4_id->EditValue = $this->image4_id->CurrentValue;
+		$this->image4_id->PlaceHolder = RemoveHtml($this->image4_id->caption());
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -966,8 +1174,24 @@ class request_trip extends DbTable
 						$doc->exportCaption($this->createdAt);
 					if ($this->updatedAt->Exportable)
 						$doc->exportCaption($this->updatedAt);
-					if ($this->category->Exportable)
-						$doc->exportCaption($this->category);
+					if ($this->labor_fee->Exportable)
+						$doc->exportCaption($this->labor_fee);
+					if ($this->applicable->Exportable)
+						$doc->exportCaption($this->applicable);
+					if ($this->service_type->Exportable)
+						$doc->exportCaption($this->service_type);
+					if ($this->goods_category->Exportable)
+						$doc->exportCaption($this->goods_category);
+					if ($this->goods_weight->Exportable)
+						$doc->exportCaption($this->goods_weight);
+					if ($this->image1_id->Exportable)
+						$doc->exportCaption($this->image1_id);
+					if ($this->image2_id->Exportable)
+						$doc->exportCaption($this->image2_id);
+					if ($this->image3_id->Exportable)
+						$doc->exportCaption($this->image3_id);
+					if ($this->image4_id->Exportable)
+						$doc->exportCaption($this->image4_id);
 				} else {
 					if ($this->id->Exportable)
 						$doc->exportCaption($this->id);
@@ -987,8 +1211,24 @@ class request_trip extends DbTable
 						$doc->exportCaption($this->createdAt);
 					if ($this->updatedAt->Exportable)
 						$doc->exportCaption($this->updatedAt);
-					if ($this->category->Exportable)
-						$doc->exportCaption($this->category);
+					if ($this->labor_fee->Exportable)
+						$doc->exportCaption($this->labor_fee);
+					if ($this->applicable->Exportable)
+						$doc->exportCaption($this->applicable);
+					if ($this->service_type->Exportable)
+						$doc->exportCaption($this->service_type);
+					if ($this->goods_category->Exportable)
+						$doc->exportCaption($this->goods_category);
+					if ($this->goods_weight->Exportable)
+						$doc->exportCaption($this->goods_weight);
+					if ($this->image1_id->Exportable)
+						$doc->exportCaption($this->image1_id);
+					if ($this->image2_id->Exportable)
+						$doc->exportCaption($this->image2_id);
+					if ($this->image3_id->Exportable)
+						$doc->exportCaption($this->image3_id);
+					if ($this->image4_id->Exportable)
+						$doc->exportCaption($this->image4_id);
 				}
 				$doc->endExportRow();
 			}
@@ -1038,8 +1278,24 @@ class request_trip extends DbTable
 							$doc->exportField($this->createdAt);
 						if ($this->updatedAt->Exportable)
 							$doc->exportField($this->updatedAt);
-						if ($this->category->Exportable)
-							$doc->exportField($this->category);
+						if ($this->labor_fee->Exportable)
+							$doc->exportField($this->labor_fee);
+						if ($this->applicable->Exportable)
+							$doc->exportField($this->applicable);
+						if ($this->service_type->Exportable)
+							$doc->exportField($this->service_type);
+						if ($this->goods_category->Exportable)
+							$doc->exportField($this->goods_category);
+						if ($this->goods_weight->Exportable)
+							$doc->exportField($this->goods_weight);
+						if ($this->image1_id->Exportable)
+							$doc->exportField($this->image1_id);
+						if ($this->image2_id->Exportable)
+							$doc->exportField($this->image2_id);
+						if ($this->image3_id->Exportable)
+							$doc->exportField($this->image3_id);
+						if ($this->image4_id->Exportable)
+							$doc->exportField($this->image4_id);
 					} else {
 						if ($this->id->Exportable)
 							$doc->exportField($this->id);
@@ -1059,8 +1315,24 @@ class request_trip extends DbTable
 							$doc->exportField($this->createdAt);
 						if ($this->updatedAt->Exportable)
 							$doc->exportField($this->updatedAt);
-						if ($this->category->Exportable)
-							$doc->exportField($this->category);
+						if ($this->labor_fee->Exportable)
+							$doc->exportField($this->labor_fee);
+						if ($this->applicable->Exportable)
+							$doc->exportField($this->applicable);
+						if ($this->service_type->Exportable)
+							$doc->exportField($this->service_type);
+						if ($this->goods_category->Exportable)
+							$doc->exportField($this->goods_category);
+						if ($this->goods_weight->Exportable)
+							$doc->exportField($this->goods_weight);
+						if ($this->image1_id->Exportable)
+							$doc->exportField($this->image1_id);
+						if ($this->image2_id->Exportable)
+							$doc->exportField($this->image2_id);
+						if ($this->image3_id->Exportable)
+							$doc->exportField($this->image3_id);
+						if ($this->image4_id->Exportable)
+							$doc->exportField($this->image4_id);
 					}
 					$doc->endExportRow($rowCnt);
 				}

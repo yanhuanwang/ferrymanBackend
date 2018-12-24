@@ -543,7 +543,15 @@ class request_trip_delete extends request_trip
 		$this->to_date->setVisibility();
 		$this->createdAt->setVisibility();
 		$this->updatedAt->setVisibility();
-		$this->category->setVisibility();
+		$this->labor_fee->setVisibility();
+		$this->applicable->setVisibility();
+		$this->service_type->setVisibility();
+		$this->goods_category->setVisibility();
+		$this->goods_weight->setVisibility();
+		$this->image1_id->setVisibility();
+		$this->image2_id->setVisibility();
+		$this->image3_id->setVisibility();
+		$this->image4_id->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Global Page Loading event (in userfn*.php)
@@ -682,7 +690,15 @@ class request_trip_delete extends request_trip
 		$this->to_date->setDbValue($row['to_date']);
 		$this->createdAt->setDbValue($row['createdAt']);
 		$this->updatedAt->setDbValue($row['updatedAt']);
-		$this->category->setDbValue($row['category']);
+		$this->labor_fee->setDbValue($row['labor_fee']);
+		$this->applicable->setDbValue($row['applicable']);
+		$this->service_type->setDbValue($row['service_type']);
+		$this->goods_category->setDbValue($row['goods_category']);
+		$this->goods_weight->setDbValue($row['goods_weight']);
+		$this->image1_id->setDbValue($row['image1_id']);
+		$this->image2_id->setDbValue($row['image2_id']);
+		$this->image3_id->setDbValue($row['image3_id']);
+		$this->image4_id->setDbValue($row['image4_id']);
 	}
 
 	// Return a row with default values
@@ -698,7 +714,15 @@ class request_trip_delete extends request_trip
 		$row['to_date'] = NULL;
 		$row['createdAt'] = NULL;
 		$row['updatedAt'] = NULL;
-		$row['category'] = NULL;
+		$row['labor_fee'] = NULL;
+		$row['applicable'] = NULL;
+		$row['service_type'] = NULL;
+		$row['goods_category'] = NULL;
+		$row['goods_weight'] = NULL;
+		$row['image1_id'] = NULL;
+		$row['image2_id'] = NULL;
+		$row['image3_id'] = NULL;
+		$row['image4_id'] = NULL;
 		return $row;
 	}
 
@@ -722,7 +746,15 @@ class request_trip_delete extends request_trip
 		// to_date
 		// createdAt
 		// updatedAt
-		// category
+		// labor_fee
+		// applicable
+		// service_type
+		// goods_category
+		// goods_weight
+		// image1_id
+		// image2_id
+		// image3_id
+		// image4_id
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
@@ -767,10 +799,50 @@ class request_trip_delete extends request_trip
 			$this->updatedAt->ViewValue = FormatDateTime($this->updatedAt->ViewValue, 0);
 			$this->updatedAt->ViewCustomAttributes = "";
 
-			// category
-			$this->category->ViewValue = $this->category->CurrentValue;
-			$this->category->ViewValue = FormatNumber($this->category->ViewValue, 0, -2, -2, -2);
-			$this->category->ViewCustomAttributes = "";
+			// labor_fee
+			$this->labor_fee->ViewValue = $this->labor_fee->CurrentValue;
+			$this->labor_fee->ViewValue = FormatNumber($this->labor_fee->ViewValue, 0, -2, -2, -2);
+			$this->labor_fee->ViewCustomAttributes = "";
+
+			// applicable
+			$this->applicable->ViewValue = $this->applicable->CurrentValue;
+			$this->applicable->ViewValue = FormatNumber($this->applicable->ViewValue, 0, -2, -2, -2);
+			$this->applicable->ViewCustomAttributes = "";
+
+			// service_type
+			$this->service_type->ViewValue = $this->service_type->CurrentValue;
+			$this->service_type->ViewValue = FormatNumber($this->service_type->ViewValue, 0, -2, -2, -2);
+			$this->service_type->ViewCustomAttributes = "";
+
+			// goods_category
+			$this->goods_category->ViewValue = $this->goods_category->CurrentValue;
+			$this->goods_category->ViewValue = FormatNumber($this->goods_category->ViewValue, 0, -2, -2, -2);
+			$this->goods_category->ViewCustomAttributes = "";
+
+			// goods_weight
+			$this->goods_weight->ViewValue = $this->goods_weight->CurrentValue;
+			$this->goods_weight->ViewValue = FormatNumber($this->goods_weight->ViewValue, 0, -2, -2, -2);
+			$this->goods_weight->ViewCustomAttributes = "";
+
+			// image1_id
+			$this->image1_id->ViewValue = $this->image1_id->CurrentValue;
+			$this->image1_id->ViewValue = FormatNumber($this->image1_id->ViewValue, 0, -2, -2, -2);
+			$this->image1_id->ViewCustomAttributes = "";
+
+			// image2_id
+			$this->image2_id->ViewValue = $this->image2_id->CurrentValue;
+			$this->image2_id->ViewValue = FormatNumber($this->image2_id->ViewValue, 0, -2, -2, -2);
+			$this->image2_id->ViewCustomAttributes = "";
+
+			// image3_id
+			$this->image3_id->ViewValue = $this->image3_id->CurrentValue;
+			$this->image3_id->ViewValue = FormatNumber($this->image3_id->ViewValue, 0, -2, -2, -2);
+			$this->image3_id->ViewCustomAttributes = "";
+
+			// image4_id
+			$this->image4_id->ViewValue = $this->image4_id->CurrentValue;
+			$this->image4_id->ViewValue = FormatNumber($this->image4_id->ViewValue, 0, -2, -2, -2);
+			$this->image4_id->ViewCustomAttributes = "";
 
 			// from_place
 			$this->from_place->LinkCustomAttributes = "";
@@ -812,10 +884,50 @@ class request_trip_delete extends request_trip
 			$this->updatedAt->HrefValue = "";
 			$this->updatedAt->TooltipValue = "";
 
-			// category
-			$this->category->LinkCustomAttributes = "";
-			$this->category->HrefValue = "";
-			$this->category->TooltipValue = "";
+			// labor_fee
+			$this->labor_fee->LinkCustomAttributes = "";
+			$this->labor_fee->HrefValue = "";
+			$this->labor_fee->TooltipValue = "";
+
+			// applicable
+			$this->applicable->LinkCustomAttributes = "";
+			$this->applicable->HrefValue = "";
+			$this->applicable->TooltipValue = "";
+
+			// service_type
+			$this->service_type->LinkCustomAttributes = "";
+			$this->service_type->HrefValue = "";
+			$this->service_type->TooltipValue = "";
+
+			// goods_category
+			$this->goods_category->LinkCustomAttributes = "";
+			$this->goods_category->HrefValue = "";
+			$this->goods_category->TooltipValue = "";
+
+			// goods_weight
+			$this->goods_weight->LinkCustomAttributes = "";
+			$this->goods_weight->HrefValue = "";
+			$this->goods_weight->TooltipValue = "";
+
+			// image1_id
+			$this->image1_id->LinkCustomAttributes = "";
+			$this->image1_id->HrefValue = "";
+			$this->image1_id->TooltipValue = "";
+
+			// image2_id
+			$this->image2_id->LinkCustomAttributes = "";
+			$this->image2_id->HrefValue = "";
+			$this->image2_id->TooltipValue = "";
+
+			// image3_id
+			$this->image3_id->LinkCustomAttributes = "";
+			$this->image3_id->HrefValue = "";
+			$this->image3_id->TooltipValue = "";
+
+			// image4_id
+			$this->image4_id->LinkCustomAttributes = "";
+			$this->image4_id->HrefValue = "";
+			$this->image4_id->TooltipValue = "";
 		}
 
 		// Call Row Rendered event

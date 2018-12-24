@@ -80,9 +80,33 @@ frequest_tripsearch.validate = function(fobj) {
 	elm = this.getElements("x" + infix + "_updatedAt");
 	if (elm && !ew.checkDateDef(elm.value))
 		return this.onError(elm, "<?php echo JsEncode($request_trip->updatedAt->errorMessage()) ?>");
-	elm = this.getElements("x" + infix + "_category");
+	elm = this.getElements("x" + infix + "_labor_fee");
 	if (elm && !ew.checkInteger(elm.value))
-		return this.onError(elm, "<?php echo JsEncode($request_trip->category->errorMessage()) ?>");
+		return this.onError(elm, "<?php echo JsEncode($request_trip->labor_fee->errorMessage()) ?>");
+	elm = this.getElements("x" + infix + "_applicable");
+	if (elm && !ew.checkInteger(elm.value))
+		return this.onError(elm, "<?php echo JsEncode($request_trip->applicable->errorMessage()) ?>");
+	elm = this.getElements("x" + infix + "_service_type");
+	if (elm && !ew.checkInteger(elm.value))
+		return this.onError(elm, "<?php echo JsEncode($request_trip->service_type->errorMessage()) ?>");
+	elm = this.getElements("x" + infix + "_goods_category");
+	if (elm && !ew.checkInteger(elm.value))
+		return this.onError(elm, "<?php echo JsEncode($request_trip->goods_category->errorMessage()) ?>");
+	elm = this.getElements("x" + infix + "_goods_weight");
+	if (elm && !ew.checkInteger(elm.value))
+		return this.onError(elm, "<?php echo JsEncode($request_trip->goods_weight->errorMessage()) ?>");
+	elm = this.getElements("x" + infix + "_image1_id");
+	if (elm && !ew.checkInteger(elm.value))
+		return this.onError(elm, "<?php echo JsEncode($request_trip->image1_id->errorMessage()) ?>");
+	elm = this.getElements("x" + infix + "_image2_id");
+	if (elm && !ew.checkInteger(elm.value))
+		return this.onError(elm, "<?php echo JsEncode($request_trip->image2_id->errorMessage()) ?>");
+	elm = this.getElements("x" + infix + "_image3_id");
+	if (elm && !ew.checkInteger(elm.value))
+		return this.onError(elm, "<?php echo JsEncode($request_trip->image3_id->errorMessage()) ?>");
+	elm = this.getElements("x" + infix + "_image4_id");
+	if (elm && !ew.checkInteger(elm.value))
+		return this.onError(elm, "<?php echo JsEncode($request_trip->image4_id->errorMessage()) ?>");
 
 	// Fire Form_CustomValidate event
 	if (!this.Form_CustomValidate(fobj))
@@ -234,14 +258,110 @@ ew.createDateTimePicker("frequest_tripsearch", "x_updatedAt", {"ignoreReadonly":
 		</div></div>
 	</div>
 <?php } ?>
-<?php if ($request_trip->category->Visible) { // category ?>
-	<div id="r_category" class="form-group row">
-		<label for="x_category" class="<?php echo $request_trip_search->LeftColumnClass ?>"><span id="elh_request_trip_category"><?php echo $request_trip->category->caption() ?></span>
-		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_category" id="z_category" value="="></span>
+<?php if ($request_trip->labor_fee->Visible) { // labor_fee ?>
+	<div id="r_labor_fee" class="form-group row">
+		<label for="x_labor_fee" class="<?php echo $request_trip_search->LeftColumnClass ?>"><span id="elh_request_trip_labor_fee"><?php echo $request_trip->labor_fee->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_labor_fee" id="z_labor_fee" value="="></span>
 		</label>
-		<div class="<?php echo $request_trip_search->RightColumnClass ?>"><div<?php echo $request_trip->category->cellAttributes() ?>>
-			<span id="el_request_trip_category">
-<input type="text" data-table="request_trip" data-field="x_category" name="x_category" id="x_category" size="30" placeholder="<?php echo HtmlEncode($request_trip->category->getPlaceHolder()) ?>" value="<?php echo $request_trip->category->EditValue ?>"<?php echo $request_trip->category->editAttributes() ?>>
+		<div class="<?php echo $request_trip_search->RightColumnClass ?>"><div<?php echo $request_trip->labor_fee->cellAttributes() ?>>
+			<span id="el_request_trip_labor_fee">
+<input type="text" data-table="request_trip" data-field="x_labor_fee" name="x_labor_fee" id="x_labor_fee" size="30" placeholder="<?php echo HtmlEncode($request_trip->labor_fee->getPlaceHolder()) ?>" value="<?php echo $request_trip->labor_fee->EditValue ?>"<?php echo $request_trip->labor_fee->editAttributes() ?>>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($request_trip->applicable->Visible) { // applicable ?>
+	<div id="r_applicable" class="form-group row">
+		<label for="x_applicable" class="<?php echo $request_trip_search->LeftColumnClass ?>"><span id="elh_request_trip_applicable"><?php echo $request_trip->applicable->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_applicable" id="z_applicable" value="="></span>
+		</label>
+		<div class="<?php echo $request_trip_search->RightColumnClass ?>"><div<?php echo $request_trip->applicable->cellAttributes() ?>>
+			<span id="el_request_trip_applicable">
+<input type="text" data-table="request_trip" data-field="x_applicable" name="x_applicable" id="x_applicable" size="30" placeholder="<?php echo HtmlEncode($request_trip->applicable->getPlaceHolder()) ?>" value="<?php echo $request_trip->applicable->EditValue ?>"<?php echo $request_trip->applicable->editAttributes() ?>>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($request_trip->service_type->Visible) { // service_type ?>
+	<div id="r_service_type" class="form-group row">
+		<label for="x_service_type" class="<?php echo $request_trip_search->LeftColumnClass ?>"><span id="elh_request_trip_service_type"><?php echo $request_trip->service_type->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_service_type" id="z_service_type" value="="></span>
+		</label>
+		<div class="<?php echo $request_trip_search->RightColumnClass ?>"><div<?php echo $request_trip->service_type->cellAttributes() ?>>
+			<span id="el_request_trip_service_type">
+<input type="text" data-table="request_trip" data-field="x_service_type" name="x_service_type" id="x_service_type" size="30" placeholder="<?php echo HtmlEncode($request_trip->service_type->getPlaceHolder()) ?>" value="<?php echo $request_trip->service_type->EditValue ?>"<?php echo $request_trip->service_type->editAttributes() ?>>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($request_trip->goods_category->Visible) { // goods_category ?>
+	<div id="r_goods_category" class="form-group row">
+		<label for="x_goods_category" class="<?php echo $request_trip_search->LeftColumnClass ?>"><span id="elh_request_trip_goods_category"><?php echo $request_trip->goods_category->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_goods_category" id="z_goods_category" value="="></span>
+		</label>
+		<div class="<?php echo $request_trip_search->RightColumnClass ?>"><div<?php echo $request_trip->goods_category->cellAttributes() ?>>
+			<span id="el_request_trip_goods_category">
+<input type="text" data-table="request_trip" data-field="x_goods_category" name="x_goods_category" id="x_goods_category" size="30" placeholder="<?php echo HtmlEncode($request_trip->goods_category->getPlaceHolder()) ?>" value="<?php echo $request_trip->goods_category->EditValue ?>"<?php echo $request_trip->goods_category->editAttributes() ?>>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($request_trip->goods_weight->Visible) { // goods_weight ?>
+	<div id="r_goods_weight" class="form-group row">
+		<label for="x_goods_weight" class="<?php echo $request_trip_search->LeftColumnClass ?>"><span id="elh_request_trip_goods_weight"><?php echo $request_trip->goods_weight->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_goods_weight" id="z_goods_weight" value="="></span>
+		</label>
+		<div class="<?php echo $request_trip_search->RightColumnClass ?>"><div<?php echo $request_trip->goods_weight->cellAttributes() ?>>
+			<span id="el_request_trip_goods_weight">
+<input type="text" data-table="request_trip" data-field="x_goods_weight" name="x_goods_weight" id="x_goods_weight" size="30" placeholder="<?php echo HtmlEncode($request_trip->goods_weight->getPlaceHolder()) ?>" value="<?php echo $request_trip->goods_weight->EditValue ?>"<?php echo $request_trip->goods_weight->editAttributes() ?>>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($request_trip->image1_id->Visible) { // image1_id ?>
+	<div id="r_image1_id" class="form-group row">
+		<label for="x_image1_id" class="<?php echo $request_trip_search->LeftColumnClass ?>"><span id="elh_request_trip_image1_id"><?php echo $request_trip->image1_id->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_image1_id" id="z_image1_id" value="="></span>
+		</label>
+		<div class="<?php echo $request_trip_search->RightColumnClass ?>"><div<?php echo $request_trip->image1_id->cellAttributes() ?>>
+			<span id="el_request_trip_image1_id">
+<input type="text" data-table="request_trip" data-field="x_image1_id" name="x_image1_id" id="x_image1_id" size="30" placeholder="<?php echo HtmlEncode($request_trip->image1_id->getPlaceHolder()) ?>" value="<?php echo $request_trip->image1_id->EditValue ?>"<?php echo $request_trip->image1_id->editAttributes() ?>>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($request_trip->image2_id->Visible) { // image2_id ?>
+	<div id="r_image2_id" class="form-group row">
+		<label for="x_image2_id" class="<?php echo $request_trip_search->LeftColumnClass ?>"><span id="elh_request_trip_image2_id"><?php echo $request_trip->image2_id->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_image2_id" id="z_image2_id" value="="></span>
+		</label>
+		<div class="<?php echo $request_trip_search->RightColumnClass ?>"><div<?php echo $request_trip->image2_id->cellAttributes() ?>>
+			<span id="el_request_trip_image2_id">
+<input type="text" data-table="request_trip" data-field="x_image2_id" name="x_image2_id" id="x_image2_id" size="30" placeholder="<?php echo HtmlEncode($request_trip->image2_id->getPlaceHolder()) ?>" value="<?php echo $request_trip->image2_id->EditValue ?>"<?php echo $request_trip->image2_id->editAttributes() ?>>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($request_trip->image3_id->Visible) { // image3_id ?>
+	<div id="r_image3_id" class="form-group row">
+		<label for="x_image3_id" class="<?php echo $request_trip_search->LeftColumnClass ?>"><span id="elh_request_trip_image3_id"><?php echo $request_trip->image3_id->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_image3_id" id="z_image3_id" value="="></span>
+		</label>
+		<div class="<?php echo $request_trip_search->RightColumnClass ?>"><div<?php echo $request_trip->image3_id->cellAttributes() ?>>
+			<span id="el_request_trip_image3_id">
+<input type="text" data-table="request_trip" data-field="x_image3_id" name="x_image3_id" id="x_image3_id" size="30" placeholder="<?php echo HtmlEncode($request_trip->image3_id->getPlaceHolder()) ?>" value="<?php echo $request_trip->image3_id->EditValue ?>"<?php echo $request_trip->image3_id->editAttributes() ?>>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($request_trip->image4_id->Visible) { // image4_id ?>
+	<div id="r_image4_id" class="form-group row">
+		<label for="x_image4_id" class="<?php echo $request_trip_search->LeftColumnClass ?>"><span id="elh_request_trip_image4_id"><?php echo $request_trip->image4_id->caption() ?></span>
+		<span class="ew-search-operator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_image4_id" id="z_image4_id" value="="></span>
+		</label>
+		<div class="<?php echo $request_trip_search->RightColumnClass ?>"><div<?php echo $request_trip->image4_id->cellAttributes() ?>>
+			<span id="el_request_trip_image4_id">
+<input type="text" data-table="request_trip" data-field="x_image4_id" name="x_image4_id" id="x_image4_id" size="30" placeholder="<?php echo HtmlEncode($request_trip->image4_id->getPlaceHolder()) ?>" value="<?php echo $request_trip->image4_id->EditValue ?>"<?php echo $request_trip->image4_id->editAttributes() ?>>
 </span>
 		</div></div>
 	</div>

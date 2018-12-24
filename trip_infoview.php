@@ -178,17 +178,6 @@ $trip_info_view->showMessage();
 </td>
 	</tr>
 <?php } ?>
-<?php if ($trip_info->date->Visible) { // date ?>
-	<tr id="r_date">
-		<td class="<?php echo $trip_info_view->TableLeftColumnClass ?>"><span id="elh_trip_info_date"><?php echo $trip_info->date->caption() ?></span></td>
-		<td data-name="date"<?php echo $trip_info->date->cellAttributes() ?>>
-<span id="el_trip_info_date">
-<span<?php echo $trip_info->date->viewAttributes() ?>>
-<?php echo $trip_info->date->getViewValue() ?></span>
-</span>
-</td>
-	</tr>
-<?php } ?>
 <?php if ($trip_info->createdAt->Visible) { // createdAt ?>
 	<tr id="r_createdAt">
 		<td class="<?php echo $trip_info_view->TableLeftColumnClass ?>"><span id="elh_trip_info_createdAt"><?php echo $trip_info->createdAt->caption() ?></span></td>
@@ -207,6 +196,72 @@ $trip_info_view->showMessage();
 <span id="el_trip_info_updatedAt">
 <span<?php echo $trip_info->updatedAt->viewAttributes() ?>>
 <?php echo $trip_info->updatedAt->getViewValue() ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($trip_info->from_date->Visible) { // from_date ?>
+	<tr id="r_from_date">
+		<td class="<?php echo $trip_info_view->TableLeftColumnClass ?>"><span id="elh_trip_info_from_date"><?php echo $trip_info->from_date->caption() ?></span></td>
+		<td data-name="from_date"<?php echo $trip_info->from_date->cellAttributes() ?>>
+<span id="el_trip_info_from_date">
+<span<?php echo $trip_info->from_date->viewAttributes() ?>>
+<?php echo $trip_info->from_date->getViewValue() ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($trip_info->to_date->Visible) { // to_date ?>
+	<tr id="r_to_date">
+		<td class="<?php echo $trip_info_view->TableLeftColumnClass ?>"><span id="elh_trip_info_to_date"><?php echo $trip_info->to_date->caption() ?></span></td>
+		<td data-name="to_date"<?php echo $trip_info->to_date->cellAttributes() ?>>
+<span id="el_trip_info_to_date">
+<span<?php echo $trip_info->to_date->viewAttributes() ?>>
+<?php echo $trip_info->to_date->getViewValue() ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($trip_info->labor_fee->Visible) { // labor_fee ?>
+	<tr id="r_labor_fee">
+		<td class="<?php echo $trip_info_view->TableLeftColumnClass ?>"><span id="elh_trip_info_labor_fee"><?php echo $trip_info->labor_fee->caption() ?></span></td>
+		<td data-name="labor_fee"<?php echo $trip_info->labor_fee->cellAttributes() ?>>
+<span id="el_trip_info_labor_fee">
+<span<?php echo $trip_info->labor_fee->viewAttributes() ?>>
+<?php echo $trip_info->labor_fee->getViewValue() ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($trip_info->available->Visible) { // available ?>
+	<tr id="r_available">
+		<td class="<?php echo $trip_info_view->TableLeftColumnClass ?>"><span id="elh_trip_info_available"><?php echo $trip_info->available->caption() ?></span></td>
+		<td data-name="available"<?php echo $trip_info->available->cellAttributes() ?>>
+<span id="el_trip_info_available">
+<span<?php echo $trip_info->available->viewAttributes() ?>>
+<?php echo $trip_info->available->getViewValue() ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($trip_info->service_type->Visible) { // service_type ?>
+	<tr id="r_service_type">
+		<td class="<?php echo $trip_info_view->TableLeftColumnClass ?>"><span id="elh_trip_info_service_type"><?php echo $trip_info->service_type->caption() ?></span></td>
+		<td data-name="service_type"<?php echo $trip_info->service_type->cellAttributes() ?>>
+<span id="el_trip_info_service_type">
+<span<?php echo $trip_info->service_type->viewAttributes() ?>>
+<?php echo $trip_info->service_type->getViewValue() ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($trip_info->max_carrying_weight->Visible) { // max_carrying_weight ?>
+	<tr id="r_max_carrying_weight">
+		<td class="<?php echo $trip_info_view->TableLeftColumnClass ?>"><span id="elh_trip_info_max_carrying_weight"><?php echo $trip_info->max_carrying_weight->caption() ?></span></td>
+		<td data-name="max_carrying_weight"<?php echo $trip_info->max_carrying_weight->cellAttributes() ?>>
+<span id="el_trip_info_max_carrying_weight">
+<span<?php echo $trip_info->max_carrying_weight->viewAttributes() ?>>
+<?php echo $trip_info->max_carrying_weight->getViewValue() ?></span>
 </span>
 </td>
 	</tr>

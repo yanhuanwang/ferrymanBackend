@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<ew-language date="2018/11/30" version="15.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
+<ew-language date="2018/12/24" version="15.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
   <!-- 
 	*** Important Notes:
 	1. Language ID should follow: https://developers.google.com/recaptcha/docs/language,
@@ -916,14 +916,29 @@
       <field id="flight_number">
         <phrase id="fldcaption" value="flight number" />
       </field>
-      <field id="date">
-        <phrase id="fldcaption" value="date" />
-      </field>
       <field id="createdat">
         <phrase id="fldcaption" value="created At" />
       </field>
       <field id="updatedat">
         <phrase id="fldcaption" value="updated At" />
+      </field>
+      <field id="from_date">
+        <phrase id="fldcaption" value="from date" />
+      </field>
+      <field id="to_date">
+        <phrase id="fldcaption" value="to date" />
+      </field>
+      <field id="labor_fee">
+        <phrase id="fldcaption" value="labor fee" />
+      </field>
+      <field id="available">
+        <phrase id="fldcaption" value="available" />
+      </field>
+      <field id="service_type">
+        <phrase id="fldcaption" value="service type" />
+      </field>
+      <field id="max_carrying_weight">
+        <phrase id="fldcaption" value="max carrying weight" />
       </field>
     </table>
     <table id="request_trip">
@@ -955,8 +970,32 @@
       <field id="updatedat">
         <phrase id="fldcaption" value="updated At" />
       </field>
-      <field id="category">
-        <phrase id="fldcaption" value="category" />
+      <field id="labor_fee">
+        <phrase id="fldcaption" value="labor fee" />
+      </field>
+      <field id="applicable">
+        <phrase id="fldcaption" value="applicable" />
+      </field>
+      <field id="service_type">
+        <phrase id="fldcaption" value="service type" />
+      </field>
+      <field id="goods_category">
+        <phrase id="fldcaption" value="goods category" />
+      </field>
+      <field id="goods_weight">
+        <phrase id="fldcaption" value="goods weight" />
+      </field>
+      <field id="image1_id">
+        <phrase id="fldcaption" value="image 1 id" />
+      </field>
+      <field id="image2_id">
+        <phrase id="fldcaption" value="image 2 id" />
+      </field>
+      <field id="image3_id">
+        <phrase id="fldcaption" value="image 3 id" />
+      </field>
+      <field id="image4_id">
+        <phrase id="fldcaption" value="image 4 id" />
       </field>
     </table>
     <table id="log">

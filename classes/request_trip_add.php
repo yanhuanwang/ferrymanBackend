@@ -567,7 +567,15 @@ class request_trip_add extends request_trip
 		$this->to_date->setVisibility();
 		$this->createdAt->setVisibility();
 		$this->updatedAt->setVisibility();
-		$this->category->setVisibility();
+		$this->labor_fee->setVisibility();
+		$this->applicable->setVisibility();
+		$this->service_type->setVisibility();
+		$this->goods_category->setVisibility();
+		$this->goods_weight->setVisibility();
+		$this->image1_id->setVisibility();
+		$this->image2_id->setVisibility();
+		$this->image3_id->setVisibility();
+		$this->image4_id->setVisibility();
 		$this->hideFieldsForAddEdit();
 
 		// Global Page Loading event (in userfn*.php)
@@ -709,8 +717,22 @@ class request_trip_add extends request_trip
 		$this->createdAt->OldValue = $this->createdAt->CurrentValue;
 		$this->updatedAt->CurrentValue = NULL;
 		$this->updatedAt->OldValue = $this->updatedAt->CurrentValue;
-		$this->category->CurrentValue = NULL;
-		$this->category->OldValue = $this->category->CurrentValue;
+		$this->labor_fee->CurrentValue = NULL;
+		$this->labor_fee->OldValue = $this->labor_fee->CurrentValue;
+		$this->applicable->CurrentValue = 1;
+		$this->service_type->CurrentValue = 1;
+		$this->goods_category->CurrentValue = NULL;
+		$this->goods_category->OldValue = $this->goods_category->CurrentValue;
+		$this->goods_weight->CurrentValue = NULL;
+		$this->goods_weight->OldValue = $this->goods_weight->CurrentValue;
+		$this->image1_id->CurrentValue = NULL;
+		$this->image1_id->OldValue = $this->image1_id->CurrentValue;
+		$this->image2_id->CurrentValue = NULL;
+		$this->image2_id->OldValue = $this->image2_id->CurrentValue;
+		$this->image3_id->CurrentValue = NULL;
+		$this->image3_id->OldValue = $this->image3_id->CurrentValue;
+		$this->image4_id->CurrentValue = NULL;
+		$this->image4_id->OldValue = $this->image4_id->CurrentValue;
 	}
 
 	// Load form values
@@ -796,13 +818,85 @@ class request_trip_add extends request_trip
 			$this->updatedAt->CurrentValue = UnFormatDateTime($this->updatedAt->CurrentValue, 0);
 		}
 
-		// Check field name 'category' first before field var 'x_category'
-		$val = $CurrentForm->hasValue("category") ? $CurrentForm->getValue("category") : $CurrentForm->getValue("x_category");
-		if (!$this->category->IsDetailKey) {
+		// Check field name 'labor_fee' first before field var 'x_labor_fee'
+		$val = $CurrentForm->hasValue("labor_fee") ? $CurrentForm->getValue("labor_fee") : $CurrentForm->getValue("x_labor_fee");
+		if (!$this->labor_fee->IsDetailKey) {
 			if (IsApi() && $val == NULL)
-				$this->category->Visible = FALSE; // Disable update for API request
+				$this->labor_fee->Visible = FALSE; // Disable update for API request
 			else
-				$this->category->setFormValue($val);
+				$this->labor_fee->setFormValue($val);
+		}
+
+		// Check field name 'applicable' first before field var 'x_applicable'
+		$val = $CurrentForm->hasValue("applicable") ? $CurrentForm->getValue("applicable") : $CurrentForm->getValue("x_applicable");
+		if (!$this->applicable->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->applicable->Visible = FALSE; // Disable update for API request
+			else
+				$this->applicable->setFormValue($val);
+		}
+
+		// Check field name 'service_type' first before field var 'x_service_type'
+		$val = $CurrentForm->hasValue("service_type") ? $CurrentForm->getValue("service_type") : $CurrentForm->getValue("x_service_type");
+		if (!$this->service_type->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->service_type->Visible = FALSE; // Disable update for API request
+			else
+				$this->service_type->setFormValue($val);
+		}
+
+		// Check field name 'goods_category' first before field var 'x_goods_category'
+		$val = $CurrentForm->hasValue("goods_category") ? $CurrentForm->getValue("goods_category") : $CurrentForm->getValue("x_goods_category");
+		if (!$this->goods_category->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->goods_category->Visible = FALSE; // Disable update for API request
+			else
+				$this->goods_category->setFormValue($val);
+		}
+
+		// Check field name 'goods_weight' first before field var 'x_goods_weight'
+		$val = $CurrentForm->hasValue("goods_weight") ? $CurrentForm->getValue("goods_weight") : $CurrentForm->getValue("x_goods_weight");
+		if (!$this->goods_weight->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->goods_weight->Visible = FALSE; // Disable update for API request
+			else
+				$this->goods_weight->setFormValue($val);
+		}
+
+		// Check field name 'image1_id' first before field var 'x_image1_id'
+		$val = $CurrentForm->hasValue("image1_id") ? $CurrentForm->getValue("image1_id") : $CurrentForm->getValue("x_image1_id");
+		if (!$this->image1_id->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->image1_id->Visible = FALSE; // Disable update for API request
+			else
+				$this->image1_id->setFormValue($val);
+		}
+
+		// Check field name 'image2_id' first before field var 'x_image2_id'
+		$val = $CurrentForm->hasValue("image2_id") ? $CurrentForm->getValue("image2_id") : $CurrentForm->getValue("x_image2_id");
+		if (!$this->image2_id->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->image2_id->Visible = FALSE; // Disable update for API request
+			else
+				$this->image2_id->setFormValue($val);
+		}
+
+		// Check field name 'image3_id' first before field var 'x_image3_id'
+		$val = $CurrentForm->hasValue("image3_id") ? $CurrentForm->getValue("image3_id") : $CurrentForm->getValue("x_image3_id");
+		if (!$this->image3_id->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->image3_id->Visible = FALSE; // Disable update for API request
+			else
+				$this->image3_id->setFormValue($val);
+		}
+
+		// Check field name 'image4_id' first before field var 'x_image4_id'
+		$val = $CurrentForm->hasValue("image4_id") ? $CurrentForm->getValue("image4_id") : $CurrentForm->getValue("x_image4_id");
+		if (!$this->image4_id->IsDetailKey) {
+			if (IsApi() && $val == NULL)
+				$this->image4_id->Visible = FALSE; // Disable update for API request
+			else
+				$this->image4_id->setFormValue($val);
 		}
 
 		// Check field name 'id' first before field var 'x_id'
@@ -825,7 +919,15 @@ class request_trip_add extends request_trip
 		$this->createdAt->CurrentValue = UnFormatDateTime($this->createdAt->CurrentValue, 0);
 		$this->updatedAt->CurrentValue = $this->updatedAt->FormValue;
 		$this->updatedAt->CurrentValue = UnFormatDateTime($this->updatedAt->CurrentValue, 0);
-		$this->category->CurrentValue = $this->category->FormValue;
+		$this->labor_fee->CurrentValue = $this->labor_fee->FormValue;
+		$this->applicable->CurrentValue = $this->applicable->FormValue;
+		$this->service_type->CurrentValue = $this->service_type->FormValue;
+		$this->goods_category->CurrentValue = $this->goods_category->FormValue;
+		$this->goods_weight->CurrentValue = $this->goods_weight->FormValue;
+		$this->image1_id->CurrentValue = $this->image1_id->FormValue;
+		$this->image2_id->CurrentValue = $this->image2_id->FormValue;
+		$this->image3_id->CurrentValue = $this->image3_id->FormValue;
+		$this->image4_id->CurrentValue = $this->image4_id->FormValue;
 	}
 
 	// Load row based on key values
@@ -872,7 +974,15 @@ class request_trip_add extends request_trip
 		$this->to_date->setDbValue($row['to_date']);
 		$this->createdAt->setDbValue($row['createdAt']);
 		$this->updatedAt->setDbValue($row['updatedAt']);
-		$this->category->setDbValue($row['category']);
+		$this->labor_fee->setDbValue($row['labor_fee']);
+		$this->applicable->setDbValue($row['applicable']);
+		$this->service_type->setDbValue($row['service_type']);
+		$this->goods_category->setDbValue($row['goods_category']);
+		$this->goods_weight->setDbValue($row['goods_weight']);
+		$this->image1_id->setDbValue($row['image1_id']);
+		$this->image2_id->setDbValue($row['image2_id']);
+		$this->image3_id->setDbValue($row['image3_id']);
+		$this->image4_id->setDbValue($row['image4_id']);
 	}
 
 	// Return a row with default values
@@ -889,7 +999,15 @@ class request_trip_add extends request_trip
 		$row['to_date'] = $this->to_date->CurrentValue;
 		$row['createdAt'] = $this->createdAt->CurrentValue;
 		$row['updatedAt'] = $this->updatedAt->CurrentValue;
-		$row['category'] = $this->category->CurrentValue;
+		$row['labor_fee'] = $this->labor_fee->CurrentValue;
+		$row['applicable'] = $this->applicable->CurrentValue;
+		$row['service_type'] = $this->service_type->CurrentValue;
+		$row['goods_category'] = $this->goods_category->CurrentValue;
+		$row['goods_weight'] = $this->goods_weight->CurrentValue;
+		$row['image1_id'] = $this->image1_id->CurrentValue;
+		$row['image2_id'] = $this->image2_id->CurrentValue;
+		$row['image3_id'] = $this->image3_id->CurrentValue;
+		$row['image4_id'] = $this->image4_id->CurrentValue;
 		return $row;
 	}
 
@@ -936,7 +1054,15 @@ class request_trip_add extends request_trip
 		// to_date
 		// createdAt
 		// updatedAt
-		// category
+		// labor_fee
+		// applicable
+		// service_type
+		// goods_category
+		// goods_weight
+		// image1_id
+		// image2_id
+		// image3_id
+		// image4_id
 
 		if ($this->RowType == ROWTYPE_VIEW) { // View row
 
@@ -981,10 +1107,50 @@ class request_trip_add extends request_trip
 			$this->updatedAt->ViewValue = FormatDateTime($this->updatedAt->ViewValue, 0);
 			$this->updatedAt->ViewCustomAttributes = "";
 
-			// category
-			$this->category->ViewValue = $this->category->CurrentValue;
-			$this->category->ViewValue = FormatNumber($this->category->ViewValue, 0, -2, -2, -2);
-			$this->category->ViewCustomAttributes = "";
+			// labor_fee
+			$this->labor_fee->ViewValue = $this->labor_fee->CurrentValue;
+			$this->labor_fee->ViewValue = FormatNumber($this->labor_fee->ViewValue, 0, -2, -2, -2);
+			$this->labor_fee->ViewCustomAttributes = "";
+
+			// applicable
+			$this->applicable->ViewValue = $this->applicable->CurrentValue;
+			$this->applicable->ViewValue = FormatNumber($this->applicable->ViewValue, 0, -2, -2, -2);
+			$this->applicable->ViewCustomAttributes = "";
+
+			// service_type
+			$this->service_type->ViewValue = $this->service_type->CurrentValue;
+			$this->service_type->ViewValue = FormatNumber($this->service_type->ViewValue, 0, -2, -2, -2);
+			$this->service_type->ViewCustomAttributes = "";
+
+			// goods_category
+			$this->goods_category->ViewValue = $this->goods_category->CurrentValue;
+			$this->goods_category->ViewValue = FormatNumber($this->goods_category->ViewValue, 0, -2, -2, -2);
+			$this->goods_category->ViewCustomAttributes = "";
+
+			// goods_weight
+			$this->goods_weight->ViewValue = $this->goods_weight->CurrentValue;
+			$this->goods_weight->ViewValue = FormatNumber($this->goods_weight->ViewValue, 0, -2, -2, -2);
+			$this->goods_weight->ViewCustomAttributes = "";
+
+			// image1_id
+			$this->image1_id->ViewValue = $this->image1_id->CurrentValue;
+			$this->image1_id->ViewValue = FormatNumber($this->image1_id->ViewValue, 0, -2, -2, -2);
+			$this->image1_id->ViewCustomAttributes = "";
+
+			// image2_id
+			$this->image2_id->ViewValue = $this->image2_id->CurrentValue;
+			$this->image2_id->ViewValue = FormatNumber($this->image2_id->ViewValue, 0, -2, -2, -2);
+			$this->image2_id->ViewCustomAttributes = "";
+
+			// image3_id
+			$this->image3_id->ViewValue = $this->image3_id->CurrentValue;
+			$this->image3_id->ViewValue = FormatNumber($this->image3_id->ViewValue, 0, -2, -2, -2);
+			$this->image3_id->ViewCustomAttributes = "";
+
+			// image4_id
+			$this->image4_id->ViewValue = $this->image4_id->CurrentValue;
+			$this->image4_id->ViewValue = FormatNumber($this->image4_id->ViewValue, 0, -2, -2, -2);
+			$this->image4_id->ViewCustomAttributes = "";
 
 			// from_place
 			$this->from_place->LinkCustomAttributes = "";
@@ -1026,10 +1192,50 @@ class request_trip_add extends request_trip
 			$this->updatedAt->HrefValue = "";
 			$this->updatedAt->TooltipValue = "";
 
-			// category
-			$this->category->LinkCustomAttributes = "";
-			$this->category->HrefValue = "";
-			$this->category->TooltipValue = "";
+			// labor_fee
+			$this->labor_fee->LinkCustomAttributes = "";
+			$this->labor_fee->HrefValue = "";
+			$this->labor_fee->TooltipValue = "";
+
+			// applicable
+			$this->applicable->LinkCustomAttributes = "";
+			$this->applicable->HrefValue = "";
+			$this->applicable->TooltipValue = "";
+
+			// service_type
+			$this->service_type->LinkCustomAttributes = "";
+			$this->service_type->HrefValue = "";
+			$this->service_type->TooltipValue = "";
+
+			// goods_category
+			$this->goods_category->LinkCustomAttributes = "";
+			$this->goods_category->HrefValue = "";
+			$this->goods_category->TooltipValue = "";
+
+			// goods_weight
+			$this->goods_weight->LinkCustomAttributes = "";
+			$this->goods_weight->HrefValue = "";
+			$this->goods_weight->TooltipValue = "";
+
+			// image1_id
+			$this->image1_id->LinkCustomAttributes = "";
+			$this->image1_id->HrefValue = "";
+			$this->image1_id->TooltipValue = "";
+
+			// image2_id
+			$this->image2_id->LinkCustomAttributes = "";
+			$this->image2_id->HrefValue = "";
+			$this->image2_id->TooltipValue = "";
+
+			// image3_id
+			$this->image3_id->LinkCustomAttributes = "";
+			$this->image3_id->HrefValue = "";
+			$this->image3_id->TooltipValue = "";
+
+			// image4_id
+			$this->image4_id->LinkCustomAttributes = "";
+			$this->image4_id->HrefValue = "";
+			$this->image4_id->TooltipValue = "";
 		} elseif ($this->RowType == ROWTYPE_ADD) { // Add row
 
 			// from_place
@@ -1080,11 +1286,59 @@ class request_trip_add extends request_trip
 			$this->updatedAt->EditValue = HtmlEncode(FormatDateTime($this->updatedAt->CurrentValue, 8));
 			$this->updatedAt->PlaceHolder = RemoveHtml($this->updatedAt->caption());
 
-			// category
-			$this->category->EditAttrs["class"] = "form-control";
-			$this->category->EditCustomAttributes = "";
-			$this->category->EditValue = HtmlEncode($this->category->CurrentValue);
-			$this->category->PlaceHolder = RemoveHtml($this->category->caption());
+			// labor_fee
+			$this->labor_fee->EditAttrs["class"] = "form-control";
+			$this->labor_fee->EditCustomAttributes = "";
+			$this->labor_fee->EditValue = HtmlEncode($this->labor_fee->CurrentValue);
+			$this->labor_fee->PlaceHolder = RemoveHtml($this->labor_fee->caption());
+
+			// applicable
+			$this->applicable->EditAttrs["class"] = "form-control";
+			$this->applicable->EditCustomAttributes = "";
+			$this->applicable->EditValue = HtmlEncode($this->applicable->CurrentValue);
+			$this->applicable->PlaceHolder = RemoveHtml($this->applicable->caption());
+
+			// service_type
+			$this->service_type->EditAttrs["class"] = "form-control";
+			$this->service_type->EditCustomAttributes = "";
+			$this->service_type->EditValue = HtmlEncode($this->service_type->CurrentValue);
+			$this->service_type->PlaceHolder = RemoveHtml($this->service_type->caption());
+
+			// goods_category
+			$this->goods_category->EditAttrs["class"] = "form-control";
+			$this->goods_category->EditCustomAttributes = "";
+			$this->goods_category->EditValue = HtmlEncode($this->goods_category->CurrentValue);
+			$this->goods_category->PlaceHolder = RemoveHtml($this->goods_category->caption());
+
+			// goods_weight
+			$this->goods_weight->EditAttrs["class"] = "form-control";
+			$this->goods_weight->EditCustomAttributes = "";
+			$this->goods_weight->EditValue = HtmlEncode($this->goods_weight->CurrentValue);
+			$this->goods_weight->PlaceHolder = RemoveHtml($this->goods_weight->caption());
+
+			// image1_id
+			$this->image1_id->EditAttrs["class"] = "form-control";
+			$this->image1_id->EditCustomAttributes = "";
+			$this->image1_id->EditValue = HtmlEncode($this->image1_id->CurrentValue);
+			$this->image1_id->PlaceHolder = RemoveHtml($this->image1_id->caption());
+
+			// image2_id
+			$this->image2_id->EditAttrs["class"] = "form-control";
+			$this->image2_id->EditCustomAttributes = "";
+			$this->image2_id->EditValue = HtmlEncode($this->image2_id->CurrentValue);
+			$this->image2_id->PlaceHolder = RemoveHtml($this->image2_id->caption());
+
+			// image3_id
+			$this->image3_id->EditAttrs["class"] = "form-control";
+			$this->image3_id->EditCustomAttributes = "";
+			$this->image3_id->EditValue = HtmlEncode($this->image3_id->CurrentValue);
+			$this->image3_id->PlaceHolder = RemoveHtml($this->image3_id->caption());
+
+			// image4_id
+			$this->image4_id->EditAttrs["class"] = "form-control";
+			$this->image4_id->EditCustomAttributes = "";
+			$this->image4_id->EditValue = HtmlEncode($this->image4_id->CurrentValue);
+			$this->image4_id->PlaceHolder = RemoveHtml($this->image4_id->caption());
 
 			// Add refer script
 			// from_place
@@ -1120,9 +1374,41 @@ class request_trip_add extends request_trip
 			$this->updatedAt->LinkCustomAttributes = "";
 			$this->updatedAt->HrefValue = "";
 
-			// category
-			$this->category->LinkCustomAttributes = "";
-			$this->category->HrefValue = "";
+			// labor_fee
+			$this->labor_fee->LinkCustomAttributes = "";
+			$this->labor_fee->HrefValue = "";
+
+			// applicable
+			$this->applicable->LinkCustomAttributes = "";
+			$this->applicable->HrefValue = "";
+
+			// service_type
+			$this->service_type->LinkCustomAttributes = "";
+			$this->service_type->HrefValue = "";
+
+			// goods_category
+			$this->goods_category->LinkCustomAttributes = "";
+			$this->goods_category->HrefValue = "";
+
+			// goods_weight
+			$this->goods_weight->LinkCustomAttributes = "";
+			$this->goods_weight->HrefValue = "";
+
+			// image1_id
+			$this->image1_id->LinkCustomAttributes = "";
+			$this->image1_id->HrefValue = "";
+
+			// image2_id
+			$this->image2_id->LinkCustomAttributes = "";
+			$this->image2_id->HrefValue = "";
+
+			// image3_id
+			$this->image3_id->LinkCustomAttributes = "";
+			$this->image3_id->HrefValue = "";
+
+			// image4_id
+			$this->image4_id->LinkCustomAttributes = "";
+			$this->image4_id->HrefValue = "";
 		}
 		if ($this->RowType == ROWTYPE_ADD || $this->RowType == ROWTYPE_EDIT || $this->RowType == ROWTYPE_SEARCH) // Add/Edit/Search row
 			$this->setupFieldTitles();
@@ -1203,13 +1489,77 @@ class request_trip_add extends request_trip
 		if (!CheckDate($this->updatedAt->FormValue)) {
 			AddMessage($FormError, $this->updatedAt->errorMessage());
 		}
-		if ($this->category->Required) {
-			if (!$this->category->IsDetailKey && $this->category->FormValue != NULL && $this->category->FormValue == "") {
-				AddMessage($FormError, str_replace("%s", $this->category->caption(), $this->category->RequiredErrorMessage));
+		if ($this->labor_fee->Required) {
+			if (!$this->labor_fee->IsDetailKey && $this->labor_fee->FormValue != NULL && $this->labor_fee->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->labor_fee->caption(), $this->labor_fee->RequiredErrorMessage));
 			}
 		}
-		if (!CheckInteger($this->category->FormValue)) {
-			AddMessage($FormError, $this->category->errorMessage());
+		if (!CheckInteger($this->labor_fee->FormValue)) {
+			AddMessage($FormError, $this->labor_fee->errorMessage());
+		}
+		if ($this->applicable->Required) {
+			if (!$this->applicable->IsDetailKey && $this->applicable->FormValue != NULL && $this->applicable->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->applicable->caption(), $this->applicable->RequiredErrorMessage));
+			}
+		}
+		if (!CheckInteger($this->applicable->FormValue)) {
+			AddMessage($FormError, $this->applicable->errorMessage());
+		}
+		if ($this->service_type->Required) {
+			if (!$this->service_type->IsDetailKey && $this->service_type->FormValue != NULL && $this->service_type->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->service_type->caption(), $this->service_type->RequiredErrorMessage));
+			}
+		}
+		if (!CheckInteger($this->service_type->FormValue)) {
+			AddMessage($FormError, $this->service_type->errorMessage());
+		}
+		if ($this->goods_category->Required) {
+			if (!$this->goods_category->IsDetailKey && $this->goods_category->FormValue != NULL && $this->goods_category->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->goods_category->caption(), $this->goods_category->RequiredErrorMessage));
+			}
+		}
+		if (!CheckInteger($this->goods_category->FormValue)) {
+			AddMessage($FormError, $this->goods_category->errorMessage());
+		}
+		if ($this->goods_weight->Required) {
+			if (!$this->goods_weight->IsDetailKey && $this->goods_weight->FormValue != NULL && $this->goods_weight->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->goods_weight->caption(), $this->goods_weight->RequiredErrorMessage));
+			}
+		}
+		if (!CheckInteger($this->goods_weight->FormValue)) {
+			AddMessage($FormError, $this->goods_weight->errorMessage());
+		}
+		if ($this->image1_id->Required) {
+			if (!$this->image1_id->IsDetailKey && $this->image1_id->FormValue != NULL && $this->image1_id->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->image1_id->caption(), $this->image1_id->RequiredErrorMessage));
+			}
+		}
+		if (!CheckInteger($this->image1_id->FormValue)) {
+			AddMessage($FormError, $this->image1_id->errorMessage());
+		}
+		if ($this->image2_id->Required) {
+			if (!$this->image2_id->IsDetailKey && $this->image2_id->FormValue != NULL && $this->image2_id->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->image2_id->caption(), $this->image2_id->RequiredErrorMessage));
+			}
+		}
+		if (!CheckInteger($this->image2_id->FormValue)) {
+			AddMessage($FormError, $this->image2_id->errorMessage());
+		}
+		if ($this->image3_id->Required) {
+			if (!$this->image3_id->IsDetailKey && $this->image3_id->FormValue != NULL && $this->image3_id->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->image3_id->caption(), $this->image3_id->RequiredErrorMessage));
+			}
+		}
+		if (!CheckInteger($this->image3_id->FormValue)) {
+			AddMessage($FormError, $this->image3_id->errorMessage());
+		}
+		if ($this->image4_id->Required) {
+			if (!$this->image4_id->IsDetailKey && $this->image4_id->FormValue != NULL && $this->image4_id->FormValue == "") {
+				AddMessage($FormError, str_replace("%s", $this->image4_id->caption(), $this->image4_id->RequiredErrorMessage));
+			}
+		}
+		if (!CheckInteger($this->image4_id->FormValue)) {
+			AddMessage($FormError, $this->image4_id->errorMessage());
 		}
 
 		// Return validate result
@@ -1260,8 +1610,32 @@ class request_trip_add extends request_trip
 		// updatedAt
 		$this->updatedAt->setDbValueDef($rsnew, UnFormatDateTime($this->updatedAt->CurrentValue, 0), CurrentDate(), FALSE);
 
-		// category
-		$this->category->setDbValueDef($rsnew, $this->category->CurrentValue, 0, FALSE);
+		// labor_fee
+		$this->labor_fee->setDbValueDef($rsnew, $this->labor_fee->CurrentValue, NULL, FALSE);
+
+		// applicable
+		$this->applicable->setDbValueDef($rsnew, $this->applicable->CurrentValue, 0, strval($this->applicable->CurrentValue) == "");
+
+		// service_type
+		$this->service_type->setDbValueDef($rsnew, $this->service_type->CurrentValue, 0, strval($this->service_type->CurrentValue) == "");
+
+		// goods_category
+		$this->goods_category->setDbValueDef($rsnew, $this->goods_category->CurrentValue, NULL, FALSE);
+
+		// goods_weight
+		$this->goods_weight->setDbValueDef($rsnew, $this->goods_weight->CurrentValue, NULL, FALSE);
+
+		// image1_id
+		$this->image1_id->setDbValueDef($rsnew, $this->image1_id->CurrentValue, NULL, FALSE);
+
+		// image2_id
+		$this->image2_id->setDbValueDef($rsnew, $this->image2_id->CurrentValue, NULL, FALSE);
+
+		// image3_id
+		$this->image3_id->setDbValueDef($rsnew, $this->image3_id->CurrentValue, NULL, FALSE);
+
+		// image4_id
+		$this->image4_id->setDbValueDef($rsnew, $this->image4_id->CurrentValue, NULL, FALSE);
 
 		// Call Row Inserting event
 		$rs = ($rsold) ? $rsold->fields : NULL;
